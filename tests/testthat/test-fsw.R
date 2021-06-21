@@ -216,3 +216,290 @@ summary(modst)
 # APchi2  13.512347  166.53604
 # APchi2p  .00116367  6.873e-37
 # APr2  .03060469  .28011093
+
+# Code from Appendix A.3 of Sanderson and Windmeijer
+# clear
+# set obs 4000
+# set seed 12345 // added TP
+# gen w1 = rnormal()
+# gen w2 = rnormal()
+# gen z1 = rnormal()
+# gen z2 = rnormal()
+# gen z3 = rnormal()
+# gen z4 = rnormal()
+# gen z5 = rnormal()
+# mat covmat = (1, .5, .5 \ .5, 1, .5 \ .5, .5, 1)
+# drawnorm x1 x2 x3, cov(covmat)
+# ivregress 2sls x1 (x2 x3 = z1 z2 z3 z4 z5) w1 w2
+# predict res123, r
+# reg res123 z1 z2 z3 z4 z5 w1 w2
+# test z1 z2 z3 z4 z5
+# scalar Fsw = r(F)*r(df)/(r(df)-2)
+# di Fsw
+
+# . clear
+#
+# . set obs 4000
+# number of observations (_N) was 0, now 4,000
+#
+# . set seed 12345 // added TP
+#
+# . gen w1 = rnormal()
+#
+# . gen w2 = rnormal()
+#
+# . gen z1 = rnormal()
+#
+# . gen z2 = rnormal()
+#
+# . gen z3 = rnormal()
+#
+# . gen z4 = rnormal()
+#
+# . gen z5 = rnormal()
+#
+# . mat covmat = (1, .5, .5 \ .5, 1, .5 \ .5, .5, 1)
+#
+# . drawnorm x1 x2 x3, cov(covmat)
+#
+# .
+# . ivregress 2sls x1 (x2 x3 = z1 z2 z3 z4 z5) w1 w2
+#
+# Instrumental variables (2SLS) regression          Number of obs   =      4,000
+# Wald chi2(4)    =       4.90
+# Prob > chi2     =     0.2974
+# R-squared       =     0.1259
+# Root MSE        =     .94388
+#
+# ------------------------------------------------------------------------------
+#   x1 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   x2 |  -.1861774   .4125931    -0.45   0.652    -.9948449    .6224902
+# x3 |    .667248   .5329029     1.25   0.211    -.3772225    1.711718
+# w1 |     .02143   .0174925     1.23   0.221    -.0128547    .0557147
+# w2 |   .0146589    .016231     0.90   0.366    -.0171534    .0464711
+# _cons |    .000549    .015748     0.03   0.972    -.0303166    .0314145
+# ------------------------------------------------------------------------------
+#   Instrumented:  x2 x3
+# Instruments:   w1 w2 z1 z2 z3 z4 z5
+#
+# . predict res123, r
+#
+# . reg res123 z1 z2 z3 z4 z5 w1 w2
+#
+# Source |       SS           df       MS      Number of obs   =     4,000
+# -------------+----------------------------------   F(7, 3992)      =      0.22
+# Model |  1.35045648         7  .192922355   Prob > F        =    0.9818
+# Residual |  3562.27268     3,992  .892352877   R-squared       =    0.0004
+# -------------+----------------------------------   Adj R-squared   =   -0.0014
+# Total |  3563.62314     3,999  .891128567   Root MSE        =    .94464
+#
+# ------------------------------------------------------------------------------
+#   res123 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   z1 |     .00306   .0148837     0.21   0.837    -.0261203    .0322403
+# z2 |  -.0031092   .0150206    -0.21   0.836     -.032558    .0263396
+# z3 |   .0123012   .0146714     0.84   0.402    -.0164629    .0410653
+# z4 |   .0087919   .0148553     0.59   0.554    -.0203327    .0379166
+# z5 |  -.0088948   .0150712    -0.59   0.555    -.0384428    .0206531
+# w1 |   .0002732   .0149939     0.02   0.985    -.0291231    .0296695
+# w2 |   .0004532   .0149238     0.03   0.976    -.0288058    .0297123
+# _cons |  -.0002686   .0149467    -0.02   0.986    -.0295724    .0290353
+# ------------------------------------------------------------------------------
+#
+#   . test z1 z2 z3 z4 z5
+#
+# ( 1)  z1 = 0
+# ( 2)  z2 = 0
+# ( 3)  z3 = 0
+# ( 4)  z4 = 0
+# ( 5)  z5 = 0
+#
+# F(  5,  3992) =    0.30
+# Prob > F =    0.9115
+#
+# . scalar Fsw = r(F)*r(df)/(r(df)-2)
+#
+# . di Fsw
+# .50445533
+#
+# .
+# . ivreg2 x1 (x2 x3 = z1 z2 z3 z4 z5) w1 w2, first
+#
+# First-stage regressions
+# -----------------------
+#
+#
+#   First-stage regression of x2:
+#
+#   Statistics consistent for homoskedasticity only
+# Number of obs =                   4000
+# ------------------------------------------------------------------------------
+#   x2 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   z1 |  -.0019387   .0157783    -0.12   0.902     -.032873    .0289955
+# z2 |   .0325831   .0159235     2.05   0.041     .0013641     .063802
+# z3 |   .0023125   .0155533     0.15   0.882    -.0281806    .0328056
+# z4 |   .0164893   .0157482     1.05   0.295     -.014386    .0473645
+# z5 |   .0065758   .0159771     0.41   0.681    -.0247482    .0378998
+# w1 |   .0178871   .0158951     1.13   0.261    -.0132762    .0490504
+# w2 |  -.0006284   .0158209    -0.04   0.968    -.0316461    .0303894
+# _cons |  -.0133442   .0158451    -0.84   0.400    -.0444094     .017721
+# ------------------------------------------------------------------------------
+#   F test of excluded instruments:
+#   F(  5,  3992) =     1.08
+# Prob > F      =   0.3715
+# Sanderson-Windmeijer multivariate F test of excluded instruments:
+#   F(  4,  3992) =     1.59
+# Prob > F      =   0.1750
+#
+#
+# First-stage regression of x3:
+#
+#   Statistics consistent for homoskedasticity only
+# Number of obs =                   4000
+# ------------------------------------------------------------------------------
+#   x3 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   z1 |  -.0271183   .0157085    -1.73   0.084    -.0579157    .0036792
+# z2 |   .0049029   .0158531     0.31   0.757    -.0261779    .0359838
+# z3 |   .0021507   .0154845     0.14   0.890    -.0282075    .0325088
+# z4 |   .0015835   .0156785     0.10   0.920    -.0291552    .0323222
+# z5 |  -.0064682   .0159064    -0.41   0.684    -.0376536    .0247172
+# w1 |   .0127237   .0158248     0.80   0.421    -.0183018    .0437491
+# w2 |  -.0118418   .0157509    -0.75   0.452    -.0427223    .0190387
+# _cons |  -.0022251    .015775    -0.14   0.888    -.0331529    .0287027
+# ------------------------------------------------------------------------------
+#   F test of excluded instruments:
+#   F(  5,  3992) =     0.65
+# Prob > F      =   0.6610
+# Sanderson-Windmeijer multivariate F test of excluded instruments:
+#   F(  4,  3992) =     0.90
+# Prob > F      =   0.4654
+#
+#
+#
+# Summary results for first-stage regressions
+# -------------------------------------------
+#
+#   (Underid)            (Weak id)
+# Variable     | F(  5,  3992)  P-val | SW Chi-sq(  4) P-val | SW F(  4,  3992)
+# x2           |       1.08    0.3715 |        6.36   0.1739 |        1.59
+# x3           |       0.65    0.6610 |        3.59   0.4642 |        0.90
+#
+# Stock-Yogo weak ID F test critical values for single endogenous regressor:
+#   5% maximal IV relative bias    18.37
+# 10% maximal IV relative bias    10.83
+# 20% maximal IV relative bias     6.77
+# 30% maximal IV relative bias     5.25
+# 10% maximal IV size             26.87
+# 15% maximal IV size             15.09
+# 20% maximal IV size             10.98
+# 25% maximal IV size              8.84
+# Source: Stock-Yogo (2005).  Reproduced by permission.
+# NB: Critical values are for Sanderson-Windmeijer F statistic.
+#
+# Underidentification test
+# Ho: matrix of reduced form coefficients has rank=K1-1 (underidentified)
+# Ha: matrix has rank=K1 (identified)
+# Anderson canon. corr. LM statistic       Chi-sq(4)=2.99     P-val=0.5594
+#
+# Weak identification test
+# Ho: equation is weakly identified
+# Cragg-Donald Wald F statistic                                       0.60
+#
+# Stock-Yogo weak ID test critical values for K1=2 and L1=5:
+#   5% maximal IV relative bias    13.97
+# 10% maximal IV relative bias     8.78
+# 20% maximal IV relative bias     5.91
+# 30% maximal IV relative bias     4.79
+# 10% maximal IV size             19.45
+# 15% maximal IV size             11.22
+# 20% maximal IV size              8.38
+# 25% maximal IV size              6.89
+# Source: Stock-Yogo (2005).  Reproduced by permission.
+#
+# Weak-instrument-robust inference
+# Tests of joint significance of endogenous regressors B1 in main equation
+# Ho: B1=0 and orthogonality conditions are valid
+# Anderson-Rubin Wald test           F(5,3992)=      0.55     P-val=0.7395
+# Anderson-Rubin Wald test           Chi-sq(5)=      2.75     P-val=0.7386
+# Stock-Wright LM S statistic        Chi-sq(5)=      2.75     P-val=0.7389
+#
+# Number of observations               N  =       4000
+# Number of regressors                 K  =          5
+# Number of endogenous regressors      K1 =          2
+# Number of instruments                L  =          8
+# Number of excluded instruments       L1 =          5
+#
+# IV (2SLS) estimation
+# --------------------
+#
+#   Estimates efficient for homoskedasticity only
+# Statistics consistent for homoskedasticity only
+#
+# Number of obs =     4000
+# F(  4,  3995) =     1.22
+# Prob > F      =   0.2982
+# Total (centered) SS     =  4076.803985                Centered R2   =   0.1259
+# Total (uncentered) SS   =  4076.816472                Uncentered R2 =   0.1259
+# Residual SS             =  3563.623141                Root MSE      =    .9439
+#
+# ------------------------------------------------------------------------------
+#   x1 |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   x2 |  -.1861774   .4125931    -0.45   0.652    -.9948449    .6224902
+# x3 |    .667248   .5329029     1.25   0.211    -.3772225    1.711718
+# w1 |     .02143   .0174925     1.23   0.221    -.0128547    .0557147
+# w2 |   .0146589    .016231     0.90   0.366    -.0171534    .0464711
+# _cons |    .000549    .015748     0.03   0.972    -.0303166    .0314145
+# ------------------------------------------------------------------------------
+#   Underidentification test (Anderson canon. corr. LM statistic):           2.990
+# Chi-sq(4) P-val =    0.5594
+# ------------------------------------------------------------------------------
+#   Weak identification test (Cragg-Donald Wald F statistic):                0.597
+# Stock-Yogo weak ID test critical values:  5% maximal IV relative bias    13.97
+# 10% maximal IV relative bias     8.78
+# 20% maximal IV relative bias     5.91
+# 30% maximal IV relative bias     4.79
+# 10% maximal IV size             19.45
+# 15% maximal IV size             11.22
+# 20% maximal IV size              8.38
+# 25% maximal IV size              6.89
+# Source: Stock-Yogo (2005).  Reproduced by permission.
+# ------------------------------------------------------------------------------
+#   Sargan statistic (overidentification test of all instruments):           1.516
+# Chi-sq(3) P-val =    0.6786
+# ------------------------------------------------------------------------------
+#   Instrumented:         x2 x3
+# Included instruments: w1 w2
+# Excluded instruments: z1 z2 z3 z4 z5
+# ------------------------------------------------------------------------------
+#
+#   . mat list e(first)
+#
+# e(first)[21,2]
+# x2         x3
+# rmse  1.0014257  .99699546
+# sheapr2   .0017641  .00106746
+# pr2  .00134586  .00081439
+# F  1.0759845  .65073595
+# df          5          5
+# df_r       3992       3992
+# pvalue  .37147303  .66095627
+# SWF  1.5865039  .89590568
+# SWFdf1          4          4
+# SWFdf2       3992       3992
+# SWFp  .17498432  .46538383
+# SWchi2   6.358733  3.5908043
+# SWchi2p  .17391183  .46420632
+# SWr2  .00158716   .0008969
+# APF  1.3046394  .78902226
+# APFdf1          4          4
+# APFdf2       3992       3992
+# APFp  .26580003  .53212677
+# APchi2  5.2290154  3.1624138
+# APchi2p  .26459576  .53102306
+# APr2  .00130555  .00078998
+
+
