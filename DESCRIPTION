@@ -5,12 +5,11 @@ Authors@R:
     person(given = "Tom",
            family = "Palmer",
            role = c("aut", "cre"),
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
            email = "remlapmot@hotmail.com",
            comment = c(ORCID = "0000-0003-4655-4511"))
 Description: This package provides useful functions for one sample 
     Mendelian randomization and instrumental variable analyses.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
