@@ -37,9 +37,9 @@ summary(est$stage1, lhs='x2')
 ## End(Not run)
 
 # the joint significance of the instruments in both the first stages are ok:
-t(sapply(est$stage1$lhs, function(lh) waldtest(est$stage1, ~z1|z2, lhs=lh)))
+t(sapply(est$stage1$lhs, function(lh) waldtest(est$stage1, ~ z1|z2, lhs = lh)))
 # everything above looks fine, t-tests for instruments,
 # as well as F-tests for excluded instruments in the 1st stages.
 # The conditional F-test reveals that the instruments are jointly weak
 # (it's close to being only one instrument, z1+z2, for both x1 and x2)
-condfstat(est, quantiles=c(0.05, 0.95))
+condfstat(est, quantiles = c(0.05, 0.95))
