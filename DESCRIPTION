@@ -1,5 +1,5 @@
 Package: OneSampleMR
-Title: What the Package Does (One Line, Title Case)
+Title: Useful Functions for One Sample Mendelian Randomization Analyses
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "First",
