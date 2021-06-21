@@ -1,12 +1,22 @@
 Package: OneSampleMR
 Title: Useful Functions for One Sample Mendelian Randomization Analyses
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R: c(
     person(given = "Tom",
            family = "Palmer",
            role = c("aut", "cre"),
            email = "remlapmot@hotmail.com",
-           comment = c(ORCID = "0000-0003-4655-4511"))
+           comment = c(ORCID = "0000-0003-4655-4511")),
+    person(given = "Wes",
+          family = "Spiller",
+          role = c("aut"),
+          email = "wes.spiller@bristol.ac.uk",
+          comment = c(ORCID = "0000-0002-8169-5531")),
+    person(given = "Eleanor".
+          family = "Sanderson",
+          role = c("aut"),
+          email = "eleanor.sanderson@bristol.ac.uk",
+          comment = c(ORCID = "0000-0001-5188-5775")))
 Description: This package provides useful functions for one sample 
     Mendelian randomization and instrumental variable analyses.
 License: MIT + file LICENSE
