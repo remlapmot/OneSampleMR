@@ -54,8 +54,8 @@ library(lfe)
 url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
 dat <- haven::read_dta(url)
 
-modst <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
-summary(modst)
+mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
+summary(mod)
 # fsw(modst)
 
 # Using lfe package
