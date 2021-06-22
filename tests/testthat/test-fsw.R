@@ -48,12 +48,21 @@ condfstat(est, quantiles = c(0.05, 0.95))
 # Stata ivreg2 example
 
 library(haven)
+library(ivreg)
+library(lfe)
+
 url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
 dat <- haven::read_dta(url)
 
 modst <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
 summary(modst)
 # fsw(modst)
+
+# Using lfe package
+modst2 <- felm(lwage ~ 1 | 0 | (educ | exper ~ age + kidslt6 + kidsge6), data = dat)
+summary(modst2)
+t(sapply(modst2$stage1$lhs, function(lh) waldtest(modst2$stage1, ~ age | kidslt6 | kidsge6, lhs = lh)))
+condfstat(modst2, quantiles = c(0.025, 0.975))
 
 # . use http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear
 #
