@@ -512,3 +512,162 @@ condfstat(modst2, quantiles = c(0.025, 0.975))
 # APr2  .00130555  .00078998
 
 
+# . use http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear
+#
+# .
+# end of do-file
+#
+# . do "C:\Users\eptmp\AppData\Local\Temp\STD620_000000.tmp"
+#
+# . ivreg2 lwage (educ exper = age kidslt6), first
+#
+# First-stage regressions
+# -----------------------
+#
+#
+#   First-stage regression of educ:
+#
+#   Statistics consistent for homoskedasticity only
+# Number of obs =                    428
+# ------------------------------------------------------------------------------
+#   educ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   age |  -.0028069   .0151294    -0.19   0.853    -.0325446    .0269308
+# kidslt6 |   .7354883   .2980564     2.47   0.014     .1496402    1.321336
+# _cons |   12.67358   .6595434    19.22   0.000     11.37721    13.96996
+# ------------------------------------------------------------------------------
+#   F test of excluded instruments:
+#   F(  2,   425) =     3.63
+# Prob > F      =   0.0273
+# Sanderson-Windmeijer multivariate F test of excluded instruments:
+#   F(  1,   425) =     5.74
+# Prob > F      =   0.0170
+#
+#
+# First-stage regression of exper:
+#
+#   Statistics consistent for homoskedasticity only
+# Number of obs =                    428
+# ------------------------------------------------------------------------------
+#   exper |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   age |   .4958752   .0470592    10.54   0.000     .4033775    .5883729
+# kidslt6 |  -.5090499   .9270899    -0.55   0.583    -2.331302    1.313202
+# _cons |   -7.70411   2.051478    -3.76   0.000    -11.73642   -3.671804
+# ------------------------------------------------------------------------------
+#   F test of excluded instruments:
+#   F(  2,   425) =    65.08
+# Prob > F      =   0.0000
+# Sanderson-Windmeijer multivariate F test of excluded instruments:
+#   F(  1,   425) =    22.57
+# Prob > F      =   0.0000
+#
+#
+#
+# Summary results for first-stage regressions
+# -------------------------------------------
+#
+#   (Underid)            (Weak id)
+# Variable     | F(  2,   425)  P-val | SW Chi-sq(  1) P-val | SW F(  1,   425)
+# educ         |       3.63    0.0273 |        5.78   0.0162 |        5.74
+# exper        |      65.08    0.0000 |       22.73   0.0000 |       22.57
+#
+# Stock-Yogo weak ID F test critical values for single endogenous regressor:
+#   10% maximal IV size             19.93
+# 15% maximal IV size             11.59
+# 20% maximal IV size              8.75
+# 25% maximal IV size              7.25
+# Source: Stock-Yogo (2005).  Reproduced by permission.
+# NB: Critical values are for Sanderson-Windmeijer F statistic.
+#
+# Underidentification test
+# Ho: matrix of reduced form coefficients has rank=K1-1 (underidentified)
+# Ha: matrix has rank=K1 (identified)
+# Anderson canon. corr. LM statistic       Chi-sq(1)=5.70     P-val=0.0170
+#
+# Weak identification test
+# Ho: equation is weakly identified
+# Cragg-Donald Wald F statistic                                       2.87
+#
+# Stock-Yogo weak ID test critical values for K1=2 and L1=2:
+#   10% maximal IV size              7.03
+# 15% maximal IV size              4.58
+# 20% maximal IV size              3.95
+# 25% maximal IV size              3.63
+# Source: Stock-Yogo (2005).  Reproduced by permission.
+#
+# Weak-instrument-robust inference
+# Tests of joint significance of endogenous regressors B1 in main equation
+# Ho: B1=0 and orthogonality conditions are valid
+# Anderson-Rubin Wald test           F(2,425)=       0.64     P-val=0.5263
+# Anderson-Rubin Wald test           Chi-sq(2)=      1.29     P-val=0.5234
+# Stock-Wright LM S statistic        Chi-sq(2)=      1.29     P-val=0.5244
+#
+# Number of observations               N  =        428
+# Number of regressors                 K  =          3
+# Number of endogenous regressors      K1 =          2
+# Number of instruments                L  =          3
+# Number of excluded instruments       L1 =          2
+#
+# IV (2SLS) estimation
+# --------------------
+#
+#   Estimates efficient for homoskedasticity only
+# Statistics consistent for homoskedasticity only
+#
+# Number of obs =      428
+# F(  2,   425) =     0.67
+# Prob > F      =   0.5129
+# Total (centered) SS     =  223.3274513                Centered R2   =   0.0415
+# Total (uncentered) SS   =   829.594813                Uncentered R2 =   0.7420
+# Residual SS             =  214.0604775                Root MSE      =    .7072
+#
+# ------------------------------------------------------------------------------
+#   lwage |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   educ |   .0074314   .1290546     0.06   0.954    -.2455111    .2603738
+# exper |    .010421   .0098027     1.06   0.288     -.008792     .029634
+# _cons |   .9602385   1.694897     0.57   0.571    -2.361699    4.282176
+# ------------------------------------------------------------------------------
+#   Underidentification test (Anderson canon. corr. LM statistic):           5.699
+# Chi-sq(1) P-val =    0.0170
+# ------------------------------------------------------------------------------
+#   Weak identification test (Cragg-Donald Wald F statistic):                2.868
+# Stock-Yogo weak ID test critical values: 10% maximal IV size              7.03
+# 15% maximal IV size              4.58
+# 20% maximal IV size              3.95
+# 25% maximal IV size              3.63
+# Source: Stock-Yogo (2005).  Reproduced by permission.
+# ------------------------------------------------------------------------------
+#   Sargan statistic (overidentification test of all instruments):           0.000
+# (equation exactly identified)
+# ------------------------------------------------------------------------------
+#   Instrumented:         educ exper
+# Excluded instruments: age kidslt6
+# ------------------------------------------------------------------------------
+#
+#   . mat list e(first)
+#
+# e(first)[21,2]
+# educ      exper
+# rmse  2.2714133  7.0651217
+# sheapr2  .01346799  .18786232
+# pr2  .01680838  .23445676
+# F  3.6328429  65.080662
+# df          2          2
+# df_r        425        425
+# pvalue  .02726533  2.206e-25
+# SWF  5.7388476  22.573095
+# SWFdf1          1          1
+# SWFdf2        425        425
+# SWFp  .01702542  2.772e-06
+# SWchi2  5.7793571  22.732434
+# SWchi2p  .01621547  1.862e-06
+# SWr2  .01332326  .05043443
+# APF  5.8204037  104.26978
+# APFdf1          1          1
+# APFdf2        425        425
+# APFp  .01626387  4.869e-22
+# APchi2  5.8614889   105.0058
+# APchi2p   .0154757  1.218e-24
+# APr2  .01351005  .19700687
