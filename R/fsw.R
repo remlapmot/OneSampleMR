@@ -6,10 +6,30 @@ fsw.ivreg <- function(mod) {
   nendog <- length(mod$endogenous)
   ninstruments <- length(mod$instruments)
   namesendog <- names(mod$endogenous)
+  namesinstruments <- names(mod$instruments)
+
+
+m12 = ivreg::ivreg(educ ~ exper | age + kidslt6 + kidsge6, data = dat)
+r12 = m12$residuals
+lm12 = lm(r12 ~ age + kidslt6 + kidsge6, data = dat)
+lm12base = lm(r12 ~ 1, data = dat)
+wldt = lmtest::waldtest(lm12base, lm12)
+(wldt$F[2]*wldt$Df[2]) / (wldt$Df[2] - 1)
+
+
+m21 = ivreg::ivreg(exper ~ educ | age + kidslt6 + kidsge6, data = dat)
+r21 = m21$residuals
+lm21 = lm(r21 ~ age + kidslt6 + kidsge6, data = dat)
+lm21base = lm(r21 ~ 1, data = dat)
+wldt = lmtest::waldtest(lm21base, lm21)
+(wldt$F[2]*wldt$Df[2]) / (wldt$Df[2] - 1)
+
+
+
   n <- mod$n
   varmat <- (1/n) * t(mod$residuals1) %*% mod$residuals1
   fsw <- numeric(nendog)
-  namesinstruments <- names(mod$instruments)
+
   Zmat <- as.matrix(cbind(rep(1, n), mod$model[namesinstruments]))
 
   for (i in 1:nendog) {
