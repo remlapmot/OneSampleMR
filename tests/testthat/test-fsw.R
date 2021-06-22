@@ -671,3 +671,253 @@ condfstat(modst2, quantiles = c(0.025, 0.975))
 # APchi2  5.8614889   105.0058
 # APchi2p   .0154757  1.218e-24
 # APr2  .01351005  .19700687
+
+# // 2 endogenous variables
+#
+# . use http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear
+#
+# .
+# . ivreg2 lwage (educ exper = age kidslt6 kidsge6) if !missing(lwage,educ,exper,age,kidslt6,kidsge6), first
+#
+# First-stage regressions
+# -----------------------
+#
+#
+#   First-stage regression of educ:
+#
+#   Statistics consistent for homoskedasticity only
+# Number of obs =                    428
+# ------------------------------------------------------------------------------
+#   educ |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   age |  -.0185412   .0163449    -1.13   0.257    -.0506683    .0135859
+# kidslt6 |   .6984283   .2966854     2.35   0.019     .1152709    1.281586
+# kidsge6 |   -.222821   .0906154    -2.46   0.014    -.4009324   -.0447096
+# _cons |   13.64009   .7644499    17.84   0.000     12.13751    15.14268
+# ------------------------------------------------------------------------------
+#   F test of excluded instruments:
+#   F(  3,   424) =     4.47
+# Prob > F      =   0.0042
+# Sanderson-Windmeijer multivariate F test of excluded instruments:
+#   F(  2,   424) =     6.69
+# Prob > F      =   0.0014
+#
+#
+# First-stage regression of exper:
+#
+#   Statistics consistent for homoskedasticity only
+# Number of obs =                    428
+# ------------------------------------------------------------------------------
+#   exper |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   age |   .3948754   .0496446     7.95   0.000     .2972953    .4924555
+# kidslt6 |  -.7469412   .9011267    -0.83   0.408    -2.518173    1.024291
+# kidsge6 |  -1.430306   .2752275    -5.20   0.000    -1.971286   -.8893254
+# _cons |  -1.500019   2.321874    -0.65   0.519    -6.063837    3.063798
+# ------------------------------------------------------------------------------
+#   F test of excluded instruments:
+#   F(  3,   424) =    55.04
+# Prob > F      =   0.0000
+# Sanderson-Windmeijer multivariate F test of excluded instruments:
+#   F(  2,   424) =    81.81
+# Prob > F      =   0.0000
+#
+#
+#
+# Summary results for first-stage regressions
+# -------------------------------------------
+#
+#   (Underid)            (Weak id)
+# Variable     | F(  3,   424)  P-val | SW Chi-sq(  2) P-val | SW F(  2,   424)
+# educ         |       4.47    0.0042 |       13.51   0.0012 |        6.69
+# exper        |      55.04    0.0000 |      165.17   0.0000 |       81.81
+#
+# Stock-Yogo weak ID F test critical values for single endogenous regressor:
+#   5% maximal IV relative bias    13.91
+# 10% maximal IV relative bias     9.08
+# 20% maximal IV relative bias     6.46
+# 30% maximal IV relative bias     5.39
+# 10% maximal IV size             22.30
+# 15% maximal IV size             12.83
+# 20% maximal IV size              9.54
+# 25% maximal IV size              7.80
+# Source: Stock-Yogo (2005).  Reproduced by permission.
+# NB: Critical values are for Sanderson-Windmeijer F statistic.
+#
+# Underidentification test
+# Ho: matrix of reduced form coefficients has rank=K1-1 (underidentified)
+# Ha: matrix has rank=K1 (identified)
+# Anderson canon. corr. LM statistic       Chi-sq(2)=13.10    P-val=0.0014
+#
+# Weak identification test
+# Ho: equation is weakly identified
+# Cragg-Donald Wald F statistic                                       4.46
+#
+# Stock-Yogo weak ID test critical values for K1=2 and L1=3:
+#   10% maximal IV size             13.43
+# 15% maximal IV size              8.18
+# 20% maximal IV size              6.40
+# 25% maximal IV size              5.45
+# Source: Stock-Yogo (2005).  Reproduced by permission.
+#
+# Weak-instrument-robust inference
+# Tests of joint significance of endogenous regressors B1 in main equation
+# Ho: B1=0 and orthogonality conditions are valid
+# Anderson-Rubin Wald test           F(3,424)=       2.08     P-val=0.1025
+# Anderson-Rubin Wald test           Chi-sq(3)=      6.29     P-val=0.0983
+# Stock-Wright LM S statistic        Chi-sq(3)=      6.20     P-val=0.1023
+#
+# Number of observations               N  =        428
+# Number of regressors                 K  =          3
+# Number of endogenous regressors      K1 =          2
+# Number of instruments                L  =          4
+# Number of excluded instruments       L1 =          3
+#
+# IV (2SLS) estimation
+# --------------------
+#
+#   Estimates efficient for homoskedasticity only
+# Statistics consistent for homoskedasticity only
+#
+# Number of obs =      428
+# F(  2,   425) =     3.03
+# Prob > F      =   0.0492
+# Total (centered) SS     =  223.3274513                Centered R2   =   0.1482
+# Total (uncentered) SS   =   829.594813                Uncentered R2 =   0.7707
+# Residual SS             =  190.2315236                Root MSE      =    .6667
+#
+# ------------------------------------------------------------------------------
+#   lwage |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   educ |   .1058361   .0806975     1.31   0.190    -.0523281    .2640003
+# exper |   .0161527    .007568     2.13   0.033     .0013197    .0309858
+# _cons |  -.3601821   1.029787    -0.35   0.727    -2.378528    1.658164
+# ------------------------------------------------------------------------------
+#   Underidentification test (Anderson canon. corr. LM statistic):          13.101
+# Chi-sq(2) P-val =    0.0014
+# ------------------------------------------------------------------------------
+#   Weak identification test (Cragg-Donald Wald F statistic):                4.463
+# Stock-Yogo weak ID test critical values: 10% maximal IV size             13.43
+# 15% maximal IV size              8.18
+# 20% maximal IV size              6.40
+# 25% maximal IV size              5.45
+# Source: Stock-Yogo (2005).  Reproduced by permission.
+# ------------------------------------------------------------------------------
+#   Sargan statistic (overidentification test of all instruments):           1.168
+# Chi-sq(1) P-val =    0.2798
+# ------------------------------------------------------------------------------
+#   Instrumented:         educ exper
+# Excluded instruments: age kidslt6 kidsge6
+# ------------------------------------------------------------------------------
+#
+#   .
+# . ivregress 2sls educ (exper = age kidslt6 kidsge6) if !missing(lwage,educ,exper,age,kidslt6,kidsge6)
+#
+# Instrumental variables (2SLS) regression          Number of obs   =        428
+# Wald chi2(1)    =       0.01
+# Prob > chi2     =     0.9121
+# R-squared       =     0.0002
+# Root MSE        =     2.2825
+#
+# ------------------------------------------------------------------------------
+#   educ |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   exper |  -.0028589    .025898    -0.11   0.912     -.053618    .0479002
+# _cons |   12.69615   .3552098    35.74   0.000     11.99995    13.39235
+# ------------------------------------------------------------------------------
+#   Instrumented:  exper
+# Instruments:   age kidslt6 kidsge6
+#
+# . cap noi drop res12
+# variable res12 not found
+#
+# . predict res12 if !missing(lwage,educ,exper,age,kidslt6,kidsge6), r
+# (325 missing values generated)
+#
+# . reg res12 age kidslt6 kidsge6 if !missing(lwage,educ,exper,age,kidslt6,kidsge6)
+#
+# Source |       SS           df       MS      Number of obs   =       428
+# -------------+----------------------------------   F(3, 424)       =      4.46
+# Model |  68.2525159         3  22.7508386   Prob > F        =    0.0042
+# Residual |  2161.48673       424  5.09784606   R-squared       =    0.0306
+# -------------+----------------------------------   Adj R-squared   =    0.0238
+# Total |  2229.73925       427  5.22187177   Root MSE        =    2.2578
+#
+# ------------------------------------------------------------------------------
+#   res12 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   age |  -.0174123   .0163434    -1.07   0.287    -.0495365    .0147119
+# kidslt6 |   .6962929   .2966584     2.35   0.019     .1131886    1.279397
+# kidsge6 |  -.2269101   .0906072    -2.50   0.013    -.4050053   -.0488149
+# _cons |   .9396522   .7643804     1.23   0.220    -.5627945    2.442099
+# ------------------------------------------------------------------------------
+#
+#   . test age kidslt6 kidsge6
+#
+# ( 1)  age = 0
+# ( 2)  kidslt6 = 0
+# ( 3)  kidsge6 = 0
+#
+# F(  3,   424) =    4.46
+# Prob > F =    0.0042
+#
+# . scalar Fsw12 = r(F)*(r(df))/(r(df) - 1)
+#
+# . di Fsw12
+# 6.6942504
+#
+# .
+# . ivregress 2sls exper (educ = age kidslt6 kidsge6) if !missing(lwage,educ,exper,age,kidslt6,kidsge6)
+#
+# Instrumental variables (2SLS) regression          Number of obs   =        428
+# Wald chi2(1)    =       0.11
+# Prob > chi2     =     0.7392
+# R-squared       =          .
+# Root MSE        =     8.0694
+#
+# ------------------------------------------------------------------------------
+#   exper |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   educ |  -.3250531   .9762929    -0.33   0.739    -2.238552    1.588446
+# _cons |   17.15219   12.36493     1.39   0.165    -7.082621      41.387
+# ------------------------------------------------------------------------------
+#   Instrumented:  educ
+# Instruments:   age kidslt6 kidsge6
+#
+# . cap noi drop res21
+# variable res21 not found
+#
+# . predict res21 if !missing(lwage,educ,exper,age,kidslt6,kidsge6), r
+# (325 missing values generated)
+#
+# . reg res21 age kidslt6 kidsge6 if !missing(lwage,educ,exper,age,kidslt6,kidsge6)
+#
+# Source |       SS           df       MS      Number of obs   =       428
+# -------------+----------------------------------   F(3, 424)       =     54.54
+# Model |  7760.24452         3  2586.74817   Prob > F        =    0.0000
+# Residual |  20109.0836       424  47.4270839   R-squared       =    0.2785
+# -------------+----------------------------------   Adj R-squared   =    0.2733
+# Total |  27869.3281       427  65.2677473   Root MSE        =    6.8867
+#
+# ------------------------------------------------------------------------------
+#   res21 |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   age |   .3888485   .0498497     7.80   0.000     .2908652    .4868318
+# kidslt6 |  -.5199149   .9048498    -0.57   0.566    -2.298465    1.258635
+# kidsge6 |  -1.502734   .2763647    -5.44   0.000     -2.04595   -.9595189
+# _cons |  -14.21846   2.331468    -6.10   0.000    -18.80113   -9.635782
+# ------------------------------------------------------------------------------
+#
+#   . test age kidslt6 kidsge6
+#
+# ( 1)  age = 0
+# ( 2)  kidslt6 = 0
+# ( 3)  kidsge6 = 0
+#
+# F(  3,   424) =   54.54
+# Prob > F =    0.0000
+#
+# . scalar Fsw21 = r(F)*(r(df))/(r(df) - 1)
+#
+# . di Fsw21
+# 81.812373
