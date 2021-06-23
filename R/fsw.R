@@ -42,7 +42,8 @@ fsw.ivreg <- function(mod) {
   namesinstruments <- names(mod$instruments)
   n <- mod$n
   fsw <- numeric(nendog)
-  names(fsw) <- namesendog
+  fswp <- numeric(nendog)
+  names(fsw) <- names(fswp) <- namesendog
   instrplus <- paste(namesinstruments, collapse = " + ")
 
   for (i in 1:nendog) {
@@ -83,11 +84,16 @@ fsw.ivreg <- function(mod) {
     # summary(resbase)
     wldtst <- lmtest::waldtest(resbase, resmod)
     # wldtst
-    fsw[i] <- (wldtst$F[2] * wldtst$Df[2]) / (wldtst$Df[2] - (nendog - 1))
+    fsw[i] <- (wldtst$F[2L] * wldtst$Df[2L]) / (wldtst$Df[2L] - (nendog - 1))
+    fswp[i] <- pf(fsw[i], nendog, wldtst$Res.Df[2L], lower.tail= FALSE)
   }
 
-  output <- list(fsw = fsw)
-  class(output) <- append("fsw.ivreg", class(output))
+  output <- list(fsw = fsw,
+                 fswp = fswp,
+                 namesendog = namesendog,
+                 nendog = nendog,
+                 n = n)
+  class(output) <- append("fsw", class(output))
   return(output)
 }
 
