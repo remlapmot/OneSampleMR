@@ -98,7 +98,18 @@ fsw.ivreg <- function(mod) {
 }
 
 #' @export
-print.fsw.ivreg <- function(x, digits = getOption("digits"), ...) {
-  print(x, digits = digits, ...)
-  invisible(x)
+print.fsw <- function(x, digits = getOption("digits"), ...) {
+
+  cat("Model sample size: ", x$n, "\n")
+
+  cat("\nSanderson-Windmeijer conditional F-statistics for first stage model:\n")
+  for (i in 1:x$nendog) {
+    cat(paste0(x$namesendog[i], ":"),
+        format(signif(x$fsw[i], digits = digits)),
+        "Pr(>F)",
+        format(signif(x$fswp[i], digits = digits)),
+        "\n")
+  }
+  cat("\n")
+
 }
