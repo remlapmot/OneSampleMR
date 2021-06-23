@@ -107,7 +107,7 @@ print.fsw <- function(x, digits = getOption("digits"), ...) {
     cat(paste0(x$namesendog[i], ":"),
         format(signif(x$fsw[i], digits = digits)),
         "Pr(>F)",
-        format(signif(x$fswp[i], digits = digits)),
+        format.pval(signif(x$fswp[i], digits = digits)),
         "\n")
   }
   cat("\n")
