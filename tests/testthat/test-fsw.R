@@ -56,7 +56,8 @@ dat <- haven::read_dta(url)
 
 mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
 summary(mod)
-fsw(mod)
+condf <- fsw(mod)
+condf
 
 
 m12 = ivreg::ivreg(educ ~ exper | age + kidslt6 + kidsge6, data = dat)
