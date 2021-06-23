@@ -4,15 +4,22 @@
 \alias{fsw.ivreg}
 \title{Calculate the conditional F-statistic of Sanderson and Windmeijer (2016)}
 \usage{
-\method{fsw}{ivreg}(mod)
+\method{fsw}{ivreg}(object)
 }
 \arguments{
-\item{mod}{A fitted model from \code{ivreg::ivreg()}, i.e. an object of class ivreg.}
+\item{object}{A fitted model from \code{\link[ivreg:ivreg]{ivreg::ivreg()}}, i.e. an object of class
+\code{ivreg}.}
 }
 \value{
 An object of class fsw with the following elements:
-\itemize{
-\item fsw vector of conditional \emph{F}-statistics
+\describe{
+\item{fswres}{matrix with columns for the conditional \emph{F}-statistics,
+degrees of freedom, residual degrees of freedom, and p-value.
+1 row per endogenous variable.}
+\item{namesendog}{a character vector of the variable names of the endogenous
+variables.}
+\item{nendog}{the number of endogenous variables.}
+\item{n}{the sample size used for the fitted model.}
 }
 }
 \description{
