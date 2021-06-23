@@ -13,9 +13,15 @@ fsw <- function(object) UseMethod("fsw", object)
 #' @param object A fitted model from [`ivreg::ivreg()`], i.e. an object of class
 #' `ivreg`.
 #' @return An object of class fsw with the following elements:
-#'
-#' - fsw vector of conditional *F*-statistics
-#'
+#' \describe{
+#' \item{fswres}{matrix with columns for the conditional *F*-statistics,
+#' degrees of freedom, residual degrees of freedom, and p-value.
+#' 1 row per endogenous variable.}
+#' \item{namesendog}{a character vector of the variable names of the endogenous
+#' variables.}
+#' \item{nendog}{the number of endogenous variables.}
+#' \item{n}{the sample size used for the fitted model.}
+#' }
 #' @examples
 #' require(ivreg)
 #' set.seed(12345)
