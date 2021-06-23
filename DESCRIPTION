@@ -32,3 +32,6 @@ Suggests:
     lfe,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+BugReports: https://github.com/remlapmot/onesamplemr/issues/
+URL: https://github.com/remlapmot/onesamplemr
+Depends: R (>= 3.6.0)
