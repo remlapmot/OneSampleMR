@@ -41,8 +41,7 @@ fsw.ivreg <- function(mod) {
   namesexog <- names(mod$exogenous[-1])
   namesinstruments <- names(mod$instruments)
   n <- mod$n
-  fsw <- numeric(nendog)
-  fswp <- numeric(nendog)
+  fsw <- fswdf <- fswresdf <- fswp <- numeric(nendog)
   names(fsw) <- names(fswp) <- namesendog
   instrplus <- paste(namesinstruments, collapse = " + ")
 
@@ -85,11 +84,20 @@ fsw.ivreg <- function(mod) {
     wldtst <- lmtest::waldtest(resbase, resmod)
     # wldtst
     fsw[i] <- (wldtst$F[2L] * wldtst$Df[2L]) / (wldtst$Df[2L] - (nendog - 1))
+    fswdf[i] <- wldtst$Df[2L] - (nendog - 1)
+    fswresdf[i] <- wldtst$Res.Df[2L]
     fswp[i] <- pf(fsw[i], nendog, wldtst$Res.Df[2L], lower.tail= FALSE)
   }
 
+  fswres = cbind(fsw, fswdf, fswresdf, fswp)
+  rownames(fswres) = namesendog
+  colnames(fswres) = c("F value","d.f.","Residual d.f.","Pr(>F)")
+
   output <- list(fsw = fsw,
+                 fswdf = fswdf,
+                 fswresdf = fswresdf,
                  fswp = fswp,
+                 fswres = fswres,
                  namesendog = namesendog,
                  nendog = nendog,
                  n = n)
