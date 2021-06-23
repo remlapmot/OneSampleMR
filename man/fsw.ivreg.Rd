@@ -4,7 +4,7 @@
 \alias{fsw.ivreg}
 \title{Calculate the conditional F-statistic of Sanderson and Windmeijer (2016)}
 \usage{
-fsw.ivreg(mod)
+\method{fsw}{ivreg}(mod)
 }
 \arguments{
 \item{mod}{A fitted model from \code{ivreg::ivreg()}, i.e. an object of class ivreg.}
