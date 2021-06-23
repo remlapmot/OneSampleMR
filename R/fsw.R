@@ -31,17 +31,17 @@ fsw <- function(x) UseMethod("fsw", x)
 #' @importFrom ivreg ivreg
 #' @importFrom lmtest waldtest
 #' @export
-fsw.ivreg <- function(mod) {
+fsw.ivreg <- function(object) {
 
-  if (is.null(mod$model)) stop("Please re-run your ivreg() model with the option model==TRUE")
+  if (is.null(object$model)) stop("Please re-run your ivreg() model with the option model==TRUE")
 
-  nendog <- length(mod$endogenous)
-  ninstruments <- length(mod$instruments)
-  nexogenous <- length(mod$exogenous) - 1
-  namesendog <- names(mod$endogenous)
-  namesexog <- names(mod$exogenous[-1])
-  namesinstruments <- names(mod$instruments)
-  n <- mod$n
+  nendog <- length(object$endogenous)
+  ninstruments <- length(object$instruments)
+  nexogenous <- length(object$exogenous) - 1
+  namesendog <- names(object$endogenous)
+  namesexog <- names(object$exogenous[-1])
+  namesinstruments <- names(object$instruments)
+  n <- object$n
   fsw <- fswdf <- fswresdf <- fswp <- numeric(nendog)
   names(fsw) <- names(fswp) <- namesendog
   instrplus <- paste(namesinstruments, collapse = " + ")
@@ -66,21 +66,21 @@ fsw.ivreg <- function(mod) {
                         "|", instrplus)
     }
     modelfor <- as.formula(modelstr)
-    condmod <- ivreg::ivreg(modelfor, data = mod$model)
+    condmod <- ivreg::ivreg(modelfor, data = object$model)
     condres <- condmod$residuals
     if (nexogenous > 0) {
       resfor <- as.formula(paste("condres", "~", instrplus, "+", exogplus))
     } else {
       resfor <- as.formula(paste("condres", "~", instrplus))
     }
-    resmod <- lm(resfor, data = mod$model)
+    resmod <- lm(resfor, data = object$model)
     # summary(resmod)
     if (nexogenous > 0) {
       resbasefor <- as.formula(paste("condres ~ 1 +", exogplus))
     } else {
       resbasefor <- as.formula(paste("condres ~ 1"))
     }
-    resbase <- lm(resbasefor, data = mod$model)
+    resbase <- lm(resbasefor, data = object$model)
     # summary(resbase)
     wldtst <- lmtest::waldtest(resbase, resmod)
     # wldtst
