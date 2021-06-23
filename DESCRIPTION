@@ -12,7 +12,7 @@ Authors@R: c(
           role = c("aut"),
           email = "wes.spiller@bristol.ac.uk",
           comment = c(ORCID = "0000-0002-8169-5531")),
-    person(given = "Eleanor".
+    person(given = "Eleanor",
           family = "Sanderson",
           role = c("aut"),
           email = "eleanor.sanderson@bristol.ac.uk",
