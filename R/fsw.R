@@ -1,63 +1,94 @@
-#' Condtional F-statistic of Sanderson and Windmeijer 2014.
+#' Calculate the conditional F-statistic of Sanderson and Windmeijer (2016)
+#' @param mod A fitted model from `ivreg::ivreg()`, i.e. an object of class ivreg.
+#' @return An object of class fsw with the following elements:
+#'
+#' - fsw vector of conditional *F*-statistics
+#'
+#' @examples
+#' require(ivreg)
+#' set.seed(12345)
+#' n <- 4000
+#' z1 <- rnorm(n)
+#' z2 <- rnorm(n)
+#' w1 <- rnorm(n)
+#' w2 <- rnorm(n)
+#' u <- rnorm(n)
+#' x1 <- z1 + z2 + 0.2*u + 0.1*w1 + rnorm(n)
+#' x2 <- z1 + 0.94*z2 - 0.3*u + 0.1*w2 + rnorm(n)
+#' y <- x1 + x2 + w1 + w2 + u
+#' dat <- data.frame(w1, w2, x1, x2, y, z1, z2)
+#' mod <- ivreg::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
+#' fsw(mod)
+#'
+#' @references
+#' Sanderson E and Windmeijer F. A weak instrument *F*-test in linear
+#' IV models with multiple endogenous variables. Journal of Econometrics,
+#' 2016, 190, 2, 212-221, \doi{10.1016/j.jeconom.2015.06.004}.
+#' @importFrom stats as.formula lm
 #' @export
 fsw.ivreg <- function(mod) {
 
+  if (is.null(mod$model)) stop("Please re-run your ivreg() model with the option model==TRUE")
 
   nendog <- length(mod$endogenous)
   ninstruments <- length(mod$instruments)
+  nexogenous <- length(mod$exogenous) - 1
   namesendog <- names(mod$endogenous)
+  namesexog <- names(mod$exogenous[-1])
   namesinstruments <- names(mod$instruments)
-
-
-m12 = ivreg::ivreg(educ ~ exper | age + kidslt6 + kidsge6, data = dat)
-r12 = m12$residuals
-lm12 = lm(r12 ~ age + kidslt6 + kidsge6, data = dat)
-lm12base = lm(r12 ~ 1, data = dat)
-wldt = lmtest::waldtest(lm12base, lm12)
-(wldt$F[2]*wldt$Df[2]) / (wldt$Df[2] - 1)
-
-
-m21 = ivreg::ivreg(exper ~ educ | age + kidslt6 + kidsge6, data = dat)
-r21 = m21$residuals
-lm21 = lm(r21 ~ age + kidslt6 + kidsge6, data = dat)
-lm21base = lm(r21 ~ 1, data = dat)
-wldt = lmtest::waldtest(lm21base, lm21)
-(wldt$F[2]*wldt$Df[2]) / (wldt$Df[2] - 1)
-
-
-
   n <- mod$n
-  varmat <- (1/n) * t(mod$residuals1) %*% mod$residuals1
   fsw <- numeric(nendog)
-
-  Zmat <- as.matrix(cbind(rep(1, n), mod$model[namesinstruments]))
+  names(fsw) <- namesendog
+  instrplus <- paste(namesinstruments, collapse = " + ")
 
   for (i in 1:nendog) {
-    varmatdim <- i + 1
-    endogname <- namesendog[i]
-    # fittedvalues <- mod$model[endogname] - as.data.frame(mod$residuals1)[endogname]
-    #
-    # x1 = t(as.matrix(mod$model[endogname]))
-    # x2 = as.matrix(Zmat)
-    # x3 = fittedvalues
 
-    pihat = mod$coefficients1[, endogname]
-    numerator <- t(pihat) %*% t(Zmat) %*% Zmat %*% pihat
-    numerator
-    # xmat = as.matrix(mod$model[endogname])
-    # numerator = t(xmat) %*% Zmat %*% solve(t(Zmat) %*% Zmat) %*% t(Zmat) %*% xmat
-    denominator <- (ninstruments) * varmat[varmatdim, varmatdim]
-    denominator
-    numerator / denominator
-    fsw[i] <- numerator / denominator
+    endogoutcome <- namesendog[i]
+    endogothers <- namesendog[-i]
+
+    if (nexogenous > 0) {
+      exogplus <- paste(namesexog, collapse = " + ")
+      modelstr <- paste(endogoutcome,
+                        "~",
+                        paste(endogothers, collapse = " + "),
+                        "+",
+                        exogplus,
+                        "|",
+                        instrplus, "+", exogplus)
+    } else {
+      modelstr <- paste(endogoutcome, "~",
+                        paste(endogothers, collapse = " + "),
+                        "|", instrplus)
+    }
+    modelfor <- as.formula(modelstr)
+    condmod <- ivreg::ivreg(modelfor, data = mod$model)
+    condres <- condmod$residuals
+    if (nexogenous > 0) {
+      resfor <- as.formula(paste("condres", "~", instrplus, "+", exogplus))
+    } else {
+      resfor <- as.formula(paste("condres", "~", instrplus))
+    }
+    resmod <- lm(resfor, data = mod$model)
+    # summary(resmod)
+    if (nexogenous > 0) {
+      resbasefor <- as.formula(paste("condres ~ 1 +", exogplus))
+    } else {
+      resbasefor <- as.formula(paste("condres ~ 1"))
+    }
+    resbase <- lm(resbasefor, data = mod$model)
+    # summary(resbase)
+    wldtst <- lmtest::waldtest(resbase, resmod)
+    # wldtst
+    fsw[i] <- (wldtst$F[2] * wldtst$Df[2]) / (wldtst$Df[2] - (nendog - 1))
   }
 
-  fsw = c(6.7, 82)
   output <- list(fsw = fsw)
-  class(output) <- append("fsw", class(output))
-  output
+  class(output) <- append("fsw.ivreg", class(output))
+  return(output)
 }
 
-print.fsw <- function(x) {
-  print(x)
+#' @export
+print.fsw.ivreg <- function(x, digits = getOption("digits"), ...) {
+  print(x, digits = digits, ...)
+  invisible(x)
 }
