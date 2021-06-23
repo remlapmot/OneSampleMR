@@ -93,11 +93,7 @@ fsw.ivreg <- function(mod) {
   rownames(fswres) = namesendog
   colnames(fswres) = c("F value","d.f.","Residual d.f.","Pr(>F)")
 
-  output <- list(fsw = fsw,
-                 fswdf = fswdf,
-                 fswresdf = fswresdf,
-                 fswp = fswp,
-                 fswres = fswres,
+  output <- list(fswres = fswres,
                  namesendog = namesendog,
                  nendog = nendog,
                  n = n)
