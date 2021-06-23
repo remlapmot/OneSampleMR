@@ -1,3 +1,6 @@
+#' @export
+fsw <- function(x) UseMethod("fsw", x)
+
 #' Calculate the conditional F-statistic of Sanderson and Windmeijer (2016)
 #' @param mod A fitted model from `ivreg::ivreg()`, i.e. an object of class ivreg.
 #' @return An object of class fsw with the following elements:
