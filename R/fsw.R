@@ -105,6 +105,7 @@ fsw.ivreg <- function(mod) {
   return(output)
 }
 
+#' @importFrom stats printCoefmat
 #' @export
 print.fsw <- function(x, digits = getOption("digits"), ...) {
   cat("\nModel sample size: ", x$n, "\n")
