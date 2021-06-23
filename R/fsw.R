@@ -27,7 +27,7 @@ fsw <- function(x) UseMethod("fsw", x)
 #' Sanderson E and Windmeijer F. A weak instrument *F*-test in linear
 #' IV models with multiple endogenous variables. Journal of Econometrics,
 #' 2016, 190, 2, 212-221, \doi{10.1016/j.jeconom.2015.06.004}.
-#' @importFrom stats as.formula lm
+#' @importFrom stats as.formula lm pf
 #' @export
 fsw.ivreg <- function(mod) {
 
