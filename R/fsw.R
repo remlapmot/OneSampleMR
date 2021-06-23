@@ -29,6 +29,7 @@ fsw <- function(x) UseMethod("fsw", x)
 #' 2016, 190, 2, 212-221, \doi{10.1016/j.jeconom.2015.06.004}.
 #' @importFrom stats as.formula lm pf
 #' @importFrom ivreg ivreg
+#' @importFrom lmtest waldtest
 #' @export
 fsw.ivreg <- function(mod) {
 
