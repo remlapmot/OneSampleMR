@@ -111,5 +111,5 @@ print.fsw <- function(x, digits = getOption("digits"), ...) {
         "\n")
   }
   cat("\n")
-
+  invisible(x)
 }
