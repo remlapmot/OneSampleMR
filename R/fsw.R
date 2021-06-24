@@ -48,7 +48,7 @@ fsw <- function(object) UseMethod("fsw", object)
 #' @export
 fsw.ivreg <- function(object) {
 
-  if (is.null(object$model)) stop("Please re-run your ivreg() model with the option model==TRUE")
+  if (is.null(object$model)) stop("Please re-run your ivreg() model with the option model=TRUE")
 
   nendog <- length(object$endogenous)
   ninstruments <- length(object$instruments)
