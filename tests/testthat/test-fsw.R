@@ -24,6 +24,14 @@ test_that("Check run after ivreg model", {
 #   test <- fsw(m)
 # })
 
+# Check error with a single endogenous variable
+test_that("Require two or more exposures", {
+  object <- ivreg(packs ~ rprice | salestax + rincome,
+                  data = CigaretteDemand)
+  expect_error(fsw(object))
+})
+
+
 # lfe package - modified example from condfstat() helpfile
 
 library(lfe)
