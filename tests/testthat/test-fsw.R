@@ -13,9 +13,10 @@ test_that("Expect error when model=FALSE", {
 
 
 test_that("Check run after ivreg model", {
-  mod <- ivreg(packs ~ rprice + rincome | salestax + rincome,
+  object <- ivreg(packs ~ rprice + rincome | salestax + cigtax + packsdiff,
                   data = CigaretteDemand)
-  expect_equal(fsw(mod)$fswres[1,1], 44.0, tolerance = 1e-1)
+  expect_equal(fsw(object)$fswres[1,1], 4.884, tolerance = 1e-2)
+  expect_equal(fsw(object)$fswres[2,1], 3.450, tolerance = 1e-2)
 })
 
 # test_that("Check run with ivreg model object with transformations in formula", {
