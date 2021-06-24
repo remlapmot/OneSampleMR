@@ -51,6 +51,8 @@ fsw.ivreg <- function(object) {
   if (is.null(object$model)) stop("Please re-run your ivreg() model with the option model=TRUE")
 
   nendog <- length(object$endogenous)
+  if (nendog < 2) stop("The number of exposures must be 2 or more.")
+
   ninstruments <- length(object$instruments)
   nexogenous <- length(object$exogenous) - 1
   namesendog <- names(object$endogenous)
