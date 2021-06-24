@@ -19,8 +19,10 @@ test_that("Check run after ivreg model", {
 })
 
 # test_that("Check run with ivreg model object with transformations in formula", {
-#   m <- ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
-#            data = CigaretteDemand)
+  # object <- ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + cigtax + packsdiff,
+  #                 data = CigaretteDemand)
+  # summary(object)
+  # fsw(object)
 #   test <- fsw(m)
 # })
 
