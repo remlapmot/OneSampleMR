@@ -20,12 +20,31 @@ test_that("Check run after ivreg model", {
 })
 
 # test_that("Check run with ivreg model object with transformations in formula", {
-  # object <- ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + cigtax + packsdiff,
-  #                 data = CigaretteDemand)
-  # summary(object)
-  # fsw(object)
+  object <- ivreg(log(packs) ~ rprice + rincome |
+                    salestax + cigtax + packsdiff,
+                  data = CigaretteDemand)
+  summary(object)
+  fsw(object)
 #   test <- fsw(m)
 # })
+
+  object <- ivreg(packs ~ log(rprice) + rincome |
+                    salestax + cigtax + packsdiff,
+                  data = CigaretteDemand)
+  summary(object)
+  fsw(object)
+
+  object <- ivreg(packs ~ rprice + log(rincome) |
+                    salestax + cigtax + packsdiff,
+                  data = CigaretteDemand)
+  summary(object)
+  fsw(object)
+
+  object <- ivreg(packs ~ rprice + rincome |
+                    salestax + cigtax + I(packsdiff^2),
+                  data = CigaretteDemand)
+  summary(object)
+  fsw(object)
 
 # Check error with a single endogenous variable
 test_that("Require two or more exposures", {
