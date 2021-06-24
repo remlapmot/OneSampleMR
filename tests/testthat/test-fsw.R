@@ -5,13 +5,24 @@ library(ivreg)
 ## data
 data("CigaretteDemand", package = "ivreg")
 
-## model
-m <- ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
-           data = CigaretteDemand)
-
-test_that("multiplication works", {
-  expect_equal(2 * 2, 4)
+test_that("Expect error when model=FALSE", {
+  merror <- ivreg(packs ~ rprice + rincome | salestax + rincome,
+                  data = CigaretteDemand, model = FALSE)
+  expect_error(fsw(merror))
 })
+
+
+test_that("Check run after ivreg model", {
+  mod <- ivreg(packs ~ rprice + rincome | salestax + rincome,
+                  data = CigaretteDemand)
+  expect_equal(fsw(mod)$fswres[1,1], 44.0, tolerance = 1e-1)
+})
+
+# test_that("Check run with ivreg model object with transformations in formula", {
+#   m <- ivreg(log(packs) ~ log(rprice) + log(rincome) | salestax + log(rincome),
+#            data = CigaretteDemand)
+#   test <- fsw(m)
+# })
 
 # lfe package - modified example from condfstat() helpfile
 
@@ -19,30 +30,36 @@ library(lfe)
 
 set.seed(12345)
 n <- 4000
-
 z1 <- rnorm(n)
 z2 <- rnorm(n)
 u <- rnorm(n)
 # make x1, x2 correlated with errors u
-
 x1 <- z1 + z2 + 0.2*u + rnorm(n)
 x2 <- z1 + 0.94*z2 - 0.3*u + rnorm(n)
 y <- x1 + x2 + u
-est <- felm(y ~ 1 | 0 | (x1 | x2 ~ z1 + z2))
-summary(est)
+dat <- data.frame(x1,x2,y,z1,z2)
+est <- felm(y ~ 1 | 0 | (x1 | x2 ~ z1 + z2), data = dat)
+# summary(est)
 ## Not run:
-summary(est$stage1, lhs='x1')
-summary(est$stage1, lhs='x2')
-
+# summary(est$stage1, lhs='x1')
+# summary(est$stage1, lhs='x2')
 ## End(Not run)
-
 # the joint significance of the instruments in both the first stages are ok:
-t(sapply(est$stage1$lhs, function(lh) waldtest(est$stage1, ~ z1|z2, lhs = lh)))
+# t(sapply(est$stage1$lhs, function(lh) waldtest(est$stage1, ~ z1|z2, lhs = lh)))
 # everything above looks fine, t-tests for instruments,
 # as well as F-tests for excluded instruments in the 1st stages.
 # The conditional F-test reveals that the instruments are jointly weak
 # (it's close to being only one instrument, z1+z2, for both x1 and x2)
-condfstat(est, quantiles = c(0.05, 0.95))
+lfefstat <- condfstat(est, quantiles = c(0.05, 0.95))
+lfefstat
+
+mod2 <- ivreg(y ~ x1 + x2 | z1 + z2, data = dat)
+fstat = fsw(mod2)
+
+test_that("Check equivalence with lfe package", {
+  expect_equal(lfefstat[1], fstat$fswres[1,1], tolerance = 1e-2)
+  expect_equal(lfefstat[2], fstat$fswres[2,1], tolerance = 1e-2)
+})
 
 
 # Stata ivreg2 example
@@ -55,30 +72,20 @@ url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
 dat <- haven::read_dta(url)
 
 mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
-summary(mod)
+# summary(mod)
 condf <- fsw(mod)
-condf
+# condf
+test_that("Compare with Stata ivreg2 output", {
+  expect_equal(condf$fswres[1,1], 6.69, tolerance = 1e-2)
+  expect_equal(condf$fswres[2,1], 81.81, tolerance = 1e-2)
+})
 
-
-m12 = ivreg::ivreg(educ ~ exper | age + kidslt6 + kidsge6, data = dat)
-r12 = m12$residuals
-lm12 = lm(r12 ~ age + kidslt6 + kidsge6, data = dat)
-lm12base = lm(r12 ~ 1, data = dat)
-wldt = lmtest::waldtest(lm12base, lm12)
-(wldt$F[2]*wldt$Df[2]) / (wldt$Df[2] - 1)
-
-m21 = ivreg::ivreg(exper ~ educ | age + kidslt6 + kidsge6, data = dat)
-r21 = m21$residuals
-lm21 = lm(r21 ~ age + kidslt6 + kidsge6, data = dat)
-lm21base = lm(r21 ~ 1, data = dat)
-wldt = lmtest::waldtest(lm21base, lm21)
-(wldt$F[2]*wldt$Df[2]) / (wldt$Df[2] - 1)
 
 # Using lfe package
-modst2 <- felm(lwage ~ 1 | 0 | (educ | exper ~ age + kidslt6 + kidsge6), data = dat)
-summary(modst2)
-t(sapply(modst2$stage1$lhs, function(lh) waldtest(modst2$stage1, ~ age | kidslt6 | kidsge6, lhs = lh)))
-condfstat(modst2, quantiles = c(0.025, 0.975))
+# modst2 <- felm(lwage ~ 1 | 0 | (educ | exper ~ age + kidslt6 + kidsge6), data = dat)
+# summary(modst2)
+# t(sapply(modst2$stage1$lhs, function(lh) waldtest(modst2$stage1, ~ age | kidslt6 | kidsge6, lhs = lh)))
+# condfstat(modst2, quantiles = c(0.025, 0.975))
 
 # . use http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear
 #
