@@ -4,7 +4,7 @@ library(ivreg)
 ## Load data.frame for tests
 data("CigaretteDemand", package = "ivreg")
 
-test_that("Expect error when model=FALSE", {
+test_that("Expect error when object from ivreg(..., model=FALSE)", {
   merror <- ivreg(packs ~ rprice + rincome | salestax + rincome,
                   data = CigaretteDemand, model = FALSE)
   expect_error(fsw(merror))
