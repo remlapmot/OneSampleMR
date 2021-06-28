@@ -27,11 +27,13 @@ test_that("Check run with ivreg model object with transformations of outcome", {
   expect_equal(res$fswres[2,1], 3.450, tolerance = 1e-2)
 })
 
+test_that("Check error with transformation of exposure", {
+# Note check if there is a way to work out if there is a transformed variable in a formula
   object <- ivreg(packs ~ log(rprice) + rincome |
                     salestax + cigtax + packsdiff,
                   data = CigaretteDemand)
-  summary(object)
-  fsw(object)
+  expect_error(fsw(object))
+})
 
   object <- ivreg(packs ~ rprice + log(rincome) |
                     salestax + cigtax + packsdiff,
