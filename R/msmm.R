@@ -7,6 +7,8 @@
 #' @param estmethod Estimation method, these are
 #'
 #'    * `"gmm"` GMM estimation of the MSMM
+#'    * `"gmmalt"` GMM estimation of the alternative moment conditions
+#'    for the MSMM as per Clarke et al. (2015)
 #'    * `"tsls"` the TSLS method of fitting MSMM Clarke et al. (2015)
 #'    * `"tslsalt"` the alternative TSLS method of Clarke et al. (2015)
 #' @references Clarke PS, Palmer TM Windmeijer F. Estimating structural
@@ -16,10 +18,14 @@
 #' @export
 msmm <- function(formula, estmethod = "gmm") {
 
-  if (estmethod == "gmm") msmm_gmm(formula)
-  if (estmethod == "tsls") msmm_tsls(formula)
-  if (estmethod == "tslsalt") msmm_tsls_alt(formula)
+  estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
+  if (estmethod == "gmm") output = msmm_gmm(formula)
+  if (estmethod == "gmmalt") output = msmm_gmm_alt(formula)
+  if (estmethod == "tsls") output = msmm_tsls(formula)
+  if (estmethod == "tslsalt") output = msmm_tsls_alt(formula)
 
+  class(output) <- append("msmm", class(output))
+  output
 }
 
 msmm_tsls <- function(formula) {
@@ -35,5 +41,9 @@ msmm_tsls_alt <- function() {
 }
 
 msmm_gmm <- function(formula){
+
+}
+
+msmm_gmm_alt <- function(formula) {
 
 }
