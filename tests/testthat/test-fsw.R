@@ -111,6 +111,8 @@ test_that("Compare with Stata ivreg2 output", {
 })
 
 
+# Copy-pasted output from some model fits
+
 # Using lfe package
 # modst2 <- felm(lwage ~ 1 | 0 | (educ | exper ~ age + kidslt6 + kidsge6), data = dat)
 # summary(modst2)
