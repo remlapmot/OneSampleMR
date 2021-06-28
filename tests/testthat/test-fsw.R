@@ -42,11 +42,12 @@ test_that("Check error with two transformed exposures", {
   expect_error(fsw(object))
 })
 
+test_that("Check run with transformation of instrument", {
   object <- ivreg(packs ~ rprice + rincome |
                     salestax + cigtax + I(packsdiff^2),
                   data = CigaretteDemand)
-  summary(object)
-  fsw(object)
+  expect_error(fsw(object))
+})
 
 # Check error with a single endogenous variable
 test_that("Require two or more exposures", {
