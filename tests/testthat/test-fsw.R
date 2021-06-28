@@ -56,37 +56,33 @@ test_that("Require two or more exposures", {
 
 # lfe package - modified example from condfstat() helpfile
 
-library(lfe)
-
-set.seed(12345)
-n <- 4000
-z1 <- rnorm(n)
-z2 <- rnorm(n)
-u <- rnorm(n)
-# make x1, x2 correlated with errors u
-x1 <- z1 + z2 + 0.2*u + rnorm(n)
-x2 <- z1 + 0.94*z2 - 0.3*u + rnorm(n)
-y <- x1 + x2 + u
-dat <- data.frame(x1,x2,y,z1,z2)
-est <- felm(y ~ 1 | 0 | (x1 | x2 ~ z1 + z2), data = dat)
-# summary(est)
-## Not run:
-# summary(est$stage1, lhs='x1')
-# summary(est$stage1, lhs='x2')
-## End(Not run)
-# the joint significance of the instruments in both the first stages are ok:
-# t(sapply(est$stage1$lhs, function(lh) waldtest(est$stage1, ~ z1|z2, lhs = lh)))
-# everything above looks fine, t-tests for instruments,
-# as well as F-tests for excluded instruments in the 1st stages.
-# The conditional F-test reveals that the instruments are jointly weak
-# (it's close to being only one instrument, z1+z2, for both x1 and x2)
-lfefstat <- condfstat(est, quantiles = c(0.05, 0.95))
-lfefstat
-
-mod2 <- ivreg(y ~ x1 + x2 | z1 + z2, data = dat)
-fstat = fsw(mod2)
-
-test_that("Check equivalence with lfe package", {
+test_that("Check approx. equivalence with lfe package", {
+  library(lfe)
+  set.seed(12345)
+  n <- 4000
+  z1 <- rnorm(n)
+  z2 <- rnorm(n)
+  u <- rnorm(n)
+  # make x1, x2 correlated with errors u
+  x1 <- z1 + z2 + 0.2*u + rnorm(n)
+  x2 <- z1 + 0.94*z2 - 0.3*u + rnorm(n)
+  y <- x1 + x2 + u
+  dat <- data.frame(x1,x2,y,z1,z2)
+  est <- felm(y ~ 1 | 0 | (x1 | x2 ~ z1 + z2), data = dat)
+  # summary(est)
+  ## Not run:
+  # summary(est$stage1, lhs='x1')
+  # summary(est$stage1, lhs='x2')
+  ## End(Not run)
+  # the joint significance of the instruments in both the first stages are ok:
+  # t(sapply(est$stage1$lhs, function(lh) waldtest(est$stage1, ~ z1|z2, lhs = lh)))
+  # everything above looks fine, t-tests for instruments,
+  # as well as F-tests for excluded instruments in the 1st stages.
+  # The conditional F-test reveals that the instruments are jointly weak
+  # (it's close to being only one instrument, z1+z2, for both x1 and x2)
+  lfefstat <- condfstat(est, quantiles = c(0.05, 0.95))
+  mod2 <- ivreg(y ~ x1 + x2 | z1 + z2, data = dat)
+  fstat = fsw(mod2)
   expect_equal(lfefstat[1], fstat$fswres[1,1], tolerance = 1e-2)
   expect_equal(lfefstat[2], fstat$fswres[2,1], tolerance = 1e-2)
 })
