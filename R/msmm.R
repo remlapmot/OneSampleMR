@@ -16,7 +16,7 @@
 #' Generalised Method of Moments. Statistical Science, 2015, 30, 1,
 #' 96-117, \doi{10.1214/14-STS503}.
 #' @export
-msmm <- function(formula, estmethod = "gmm") {
+msmm <- function(formula, estmethod = "gmm", data, subset, ...) {
 
   estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
   if (estmethod == "gmm") output = msmm_gmm(formula)
