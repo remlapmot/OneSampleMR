@@ -94,18 +94,14 @@ test_that("Check equivalence with lfe package", {
 
 # Stata ivreg2 example
 
-library(haven)
-library(ivreg)
-library(lfe)
-
-url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
-dat <- haven::read_dta(url)
-
-mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
-# summary(mod)
-condf <- fsw(mod)
-# condf
 test_that("Compare with Stata ivreg2 output", {
+  library(haven)
+  library(ivreg)
+  library(lfe)
+  url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
+  dat <- haven::read_dta(url)
+  mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
+  condf <- fsw(mod)
   expect_equal(condf$fswres[1,1], 6.69, tolerance = 1e-2)
   expect_equal(condf$fswres[2,1], 81.81, tolerance = 1e-2)
 })
