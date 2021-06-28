@@ -1,8 +1,7 @@
-# ivreg package
-
+# Load ivreg package
 library(ivreg)
 
-## data
+## Load data.frame for tests
 data("CigaretteDemand", package = "ivreg")
 
 test_that("Expect error when model=FALSE", {
