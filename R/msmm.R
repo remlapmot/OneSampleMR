@@ -6,7 +6,7 @@
 #' @param formula The model formula
 #' @param estmethod Estimation method, these are
 #'
-#'    * "`gmm`"
+#'    * `"gmm"` GMM estimation of the MSMM
 #'    * `"tsls"` the TSLS method of fitting MSMM Clarke et al. (2015)
 #'    * `"tslsalt"` the alternative TSLS method of Clarke et al. (2015)
 #' @references Clarke PS, Palmer TM Windmeijer F. Estimating structural
