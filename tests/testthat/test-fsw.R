@@ -35,11 +35,12 @@ test_that("Check error with transformation of exposure", {
   expect_error(fsw(object))
 })
 
-  object <- ivreg(packs ~ rprice + log(rincome) |
+test_that("Check error with two transformed exposures", {
+  object <- ivreg(packs ~ log(rprice) + log(rincome) |
                     salestax + cigtax + packsdiff,
                   data = CigaretteDemand)
-  summary(object)
-  fsw(object)
+  expect_error(fsw(object))
+})
 
   object <- ivreg(packs ~ rprice + rincome |
                     salestax + cigtax + I(packsdiff^2),
