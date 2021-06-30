@@ -18,6 +18,20 @@
 #' @export
 msmm <- function(formula, estmethod = "gmm", data, subset, ...) {
 
+  # From Formula package vignette
+  mf <- match.call(expand.dots = FALSE)
+  m <- match(c("formula", "data", "subset", "na.action"), names(mf), 0)
+  mf <- mf[c(1, m)]
+
+  f <- Formula::Formula(formula)
+  mf[[1]] <- as.name("model.frame")
+  mf$formula <- f
+  mf <- eval(mf, parent.frame())
+
+  y <- model.response(mf)
+  x <- model.matrix(f, data = mf, rhs = 1)
+  z <- model.matrix(f, data = mf, rhs = 2)
+
   estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
   if (estmethod == "gmm") output = msmm_gmm(formula)
   if (estmethod == "gmmalt") output = msmm_gmm_alt(formula)
