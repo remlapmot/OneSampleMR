@@ -208,6 +208,46 @@ dat <- read_dta("https://www.stata-press.com/data/r17/trip.dta")
 #
 # . // estat overid
 # .
+# . * coding msmm using the gmm command with first derivatives
+# . local y trips
+#
+# . local xlist tcost cbd ptn worker weekend
+#
+# . local zlist pt cbd ptn worker weekend
+#
+# . local covars cbd ptn worker weekend
+#
+# . gmm (`y'*exp(-1*{xb:`xlist'}) - {ey0}), ///
+# >         instruments(`zlist') tracelevel("none") ///
+#                           >         deriv(/xb = -1*`y'*exp(-1*{xb:})) /// remembering that deriv automatically multiplies by x in xb
+# >         deriv(/ey0 = -1)
+#
+# Final GMM criterion Q(b) =  5.31e-33
+#
+# note: model is exactly identified
+#
+# GMM estimation
+#
+# Number of parameters =   6
+# Number of moments    =   6
+# Initial weight matrix: Unadjusted                 Number of obs   =      5,000
+# GMM weight matrix:     Robust
+#
+# ------------------------------------------------------------------------------
+#              |               Robust
+#              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#        tcost |   .0352185   .0098182     3.59   0.000     .0159752    .0544617
+#          cbd |   -.008398   .0020172    -4.16   0.000    -.0123517   -.0044444
+#          ptn |  -.0113146   .0021819    -5.19   0.000     -.015591   -.0070383
+#       worker |   .6623018   .0519909    12.74   0.000     .5604015     .764202
+#      weekend |   .3009323   .0362682     8.30   0.000     .2298479    .3720167
+# -------------+----------------------------------------------------------------
+#         /ey0 |   1.304008   .2021377     6.45   0.000      .907825     1.70019
+# ------------------------------------------------------------------------------
+# Instruments for equation 1: pt cbd ptn worker weekend _cons
+#
+# .
 # . * coding msmm using the alternative moment condition using the gmm command
 # . local y trips
 #
@@ -269,3 +309,42 @@ dat <- read_dta("https://www.stata-press.com/data/r17/trip.dta")
 # ------------------------------------------------------------------------------
 #
 # . // estat overid
+# .
+# . // with first derivatives
+# . local y trips
+#
+# . local x tcost
+#
+# . local z pt
+#
+# . local covars cbd ptn worker weekend
+#
+# . gmm (`y'*exp(-1*{xb:`x' `covars'} - {logey0}) - 1), ///
+# >         instruments(`z' `covars') tracelevel("none") ///
+# >         deriv(/xb = -1*`y'*exp(-1*{xb:} - {logey0})) ///
+#                  >         deriv(/logey0 = -1*`y'*exp(-1*{xb:} - {logey0}))
+#
+# Final GMM criterion Q(b) =  1.09e-28
+#
+# note: model is exactly identified
+#
+# GMM estimation
+#
+# Number of parameters =   6
+# Number of moments    =   6
+# Initial weight matrix: Unadjusted                 Number of obs   =      5,000
+# GMM weight matrix:     Robust
+#
+# ------------------------------------------------------------------------------
+#              |               Robust
+#              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#        tcost |   .0352185   .0098182     3.59   0.000     .0159752    .0544617
+#          cbd |   -.008398   .0020172    -4.16   0.000    -.0123517   -.0044444
+#          ptn |  -.0113146   .0021819    -5.19   0.000     -.015591   -.0070383
+#       worker |   .6623018   .0519909    12.74   0.000     .5604015     .764202
+#      weekend |   .3009323   .0362682     8.30   0.000     .2298479    .3720167
+# -------------+----------------------------------------------------------------
+#      /logey0 |   .2654423   .1550127     1.71   0.087    -.0383769    .5692616
+# ------------------------------------------------------------------------------
+# Instruments for equation 1: pt cbd ptn worker weekend _cons
