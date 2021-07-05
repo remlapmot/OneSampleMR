@@ -1,0 +1,19 @@
+---
+title: "f-statistic-comparison"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{f-statistic-comparison}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(OneSampleMR)
+```
