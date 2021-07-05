@@ -348,3 +348,221 @@ dat <- read_dta("https://www.stata-press.com/data/r17/trip.dta")
 #      /logey0 |   .2654423   .1550127     1.71   0.087    -.0383769    .5692616
 # ------------------------------------------------------------------------------
 # Instruments for equation 1: pt cbd ptn worker weekend _cons
+#
+# . * multiple phenotype examples
+# .
+# . webuse trip, clear
+# (Household trips)
+#
+# .
+# . ** without covariates
+# .
+# . ** ivpoisson fit
+# . ivpoisson gmm trips (tcost cbd = ptn worker), multiplicative nolog
+#
+# Final GMM criterion Q(b) =  3.12e-29
+#
+# note: model is exactly identified
+#
+# Exponential mean model with endogenous regressors
+#
+# Number of parameters =   3                         Number of obs  =      5,000
+# Number of moments    =   3
+# Initial weight matrix: Unadjusted
+# GMM weight matrix:     Robust
+#
+# ------------------------------------------------------------------------------
+#   |               Robust
+# trips |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   tcost |   .4214074   .0700091     6.02   0.000     .2841921    .5586228
+# cbd |    .075126   .1304184     0.58   0.565    -.1804893    .3307413
+# _cons |  -5.359227    1.47909    -3.62   0.000    -8.258191   -2.460263
+# ------------------------------------------------------------------------------
+#   Instrumented:  tcost cbd
+# Instruments:   ptn worker
+#
+# . lincom _cons, eform
+#
+# ( 1)  [trips]_cons = 0
+#
+# ------------------------------------------------------------------------------
+#   trips |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   (1) |   .0047045   .0069584    -3.62   0.000     .0002591    .0854124
+# ------------------------------------------------------------------------------
+#
+#   .
+# . *** moment conditions 1
+# . local y trips
+#
+# . local x tcost cbd
+#
+# . local z ptn worker
+#
+# . gmm (`y'*exp(-1*{xb:`x'}) - {ey0}), ///
+# >     instruments(`z') tracelevel("none")
+#
+# Final GMM criterion Q(b) =  5.27e-09
+#
+# note: model is exactly identified
+#
+# GMM estimation
+#
+# Number of parameters =   3
+# Number of moments    =   3
+# Initial weight matrix: Unadjusted                 Number of obs   =      5,000
+# GMM weight matrix:     Robust
+#
+# ------------------------------------------------------------------------------
+#   |               Robust
+# |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   tcost |   .4213734   .0699533     6.02   0.000     .2842675    .5584793
+# cbd |   .0751167   .1303905     0.58   0.565    -.1804441    .3306774
+# -------------+----------------------------------------------------------------
+#   /ey0 |   .0047057   .0069581     0.68   0.499    -.0089319    .0183433
+# ------------------------------------------------------------------------------
+#   Instruments for equation 1: ptn worker _cons
+#
+# .
+# . *** moment conditions 2
+# . local y trips
+#
+# . local x tcost cbd
+#
+# . local z ptn worker
+#
+# . gmm (`y'*exp(-1*{xb:`x'} - {logey0}) - 1), ///
+# >     instruments(`z') tracelevel("none")
+#
+# Final GMM criterion Q(b) =  1.21e-33
+#
+# note: model is exactly identified
+#
+# GMM estimation
+#
+# Number of parameters =   3
+# Number of moments    =   3
+# Initial weight matrix: Unadjusted                 Number of obs   =      5,000
+# GMM weight matrix:     Robust
+#
+# ------------------------------------------------------------------------------
+#   |               Robust
+# |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   tcost |   .4214074   .0700091     6.02   0.000     .2841921    .5586228
+# cbd |    .075126   .1304184     0.58   0.565    -.1804893    .3307413
+# -------------+----------------------------------------------------------------
+#   /logey0 |  -5.359227    1.47909    -3.62   0.000    -8.258191   -2.460264
+# ------------------------------------------------------------------------------
+#   Instruments for equation 1: ptn worker _cons
+#
+# .
+# . ** including covariates
+# . ivpoisson gmm trips weekend (tcost cbd = ptn worker), multiplicative nolog
+#
+# Final GMM criterion Q(b) =  2.33e-32
+#
+# note: model is exactly identified
+#
+# Exponential mean model with endogenous regressors
+#
+# Number of parameters =   4                         Number of obs  =      5,000
+# Number of moments    =   4
+# Initial weight matrix: Unadjusted
+# GMM weight matrix:     Robust
+#
+# ------------------------------------------------------------------------------
+#   |               Robust
+# trips |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   tcost |   .4252243   .0750159     5.67   0.000     .2781958    .5722528
+# cbd |   .0773626   .1414159     0.55   0.584    -.1998075    .3545328
+# weekend |   .2157507   .0804855     2.68   0.007      .058002    .3734994
+# _cons |  -5.484431    1.57664    -3.48   0.001    -8.574588   -2.394274
+# ------------------------------------------------------------------------------
+#   Instrumented:  tcost cbd
+# Instruments:   weekend ptn worker
+#
+# . lincom _cons, eform
+#
+# ( 1)  [trips]_cons = 0
+#
+# ------------------------------------------------------------------------------
+#   trips |     exp(b)   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#   (1) |   .0041509   .0065445    -3.48   0.001     .0001888    .0912389
+# ------------------------------------------------------------------------------
+#
+#   .
+# . *** moment conditions 1
+# . local y trips
+#
+# . local x tcost cbd
+#
+# . local z ptn worker
+#
+# . local covars weekend
+#
+# . gmm (`y'*exp(-1*{xb:`x' `covars'}) - {ey0}), ///
+#   >     instruments(`z' `covars') tracelevel("none")
+#
+# Final GMM criterion Q(b) =  2.73e-12
+#
+# note: model is exactly identified
+#
+# GMM estimation
+#
+# Number of parameters =   4
+# Number of moments    =   4
+# Initial weight matrix: Unadjusted                 Number of obs   =      5,000
+# GMM weight matrix:     Robust
+#
+# ------------------------------------------------------------------------------
+#              |               Robust
+#              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#        tcost |   .4252238   .0750177     5.67   0.000     .2781917    .5722559
+#          cbd |   .0773625   .1414325     0.55   0.584    -.1998401     .354565
+#      weekend |   .2157505   .0804888     2.68   0.007     .0579953    .3735057
+# -------------+----------------------------------------------------------------
+#         /ey0 |   .0041509    .006545     0.63   0.526    -.0086771    .0169789
+# ------------------------------------------------------------------------------
+# Instruments for equation 1: ptn worker weekend _cons
+#
+# .
+# . *** moment conditions 2
+# . local y trips
+#
+# . local x tcost cbd
+#
+# . local z ptn worker
+#
+# . local covars weekend
+#
+# . gmm (`y'*exp(-1*{xb:`x' `covars'} - {logey0}) - 1), ///
+# >     instruments(`z' `covars') tracelevel("none")
+#
+# Final GMM criterion Q(b) =  2.43e-32
+#
+# note: model is exactly identified
+#
+# GMM estimation
+#
+# Number of parameters =   4
+# Number of moments    =   4
+# Initial weight matrix: Unadjusted                 Number of obs   =      5,000
+# GMM weight matrix:     Robust
+#
+# ------------------------------------------------------------------------------
+#              |               Robust
+#              |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+# -------------+----------------------------------------------------------------
+#        tcost |   .4252243   .0750159     5.67   0.000     .2781958    .5722528
+#          cbd |   .0773626   .1414159     0.55   0.584    -.1998075    .3545328
+#      weekend |   .2157507   .0804855     2.68   0.007      .058002    .3734994
+# -------------+----------------------------------------------------------------
+#      /logey0 |  -5.484431    1.57664    -3.48   0.001    -8.574588   -2.394274
+# ------------------------------------------------------------------------------
+# Instruments for equation 1: ptn worker weekend _cons
