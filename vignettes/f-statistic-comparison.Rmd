@@ -1,5 +1,5 @@
 ---
-title: "f-statistic-comparison"
+title: "Comparison of conditional F-statistics"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{f-statistic-comparison}
