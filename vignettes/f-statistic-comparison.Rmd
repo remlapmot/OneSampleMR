@@ -15,5 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+library(haven)
+library(ivreg)
 library(OneSampleMR)
 ```
