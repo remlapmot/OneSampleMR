@@ -14,7 +14,19 @@
 #' @references Clarke PS, Palmer TM Windmeijer F. Estimating structural
 #' mean models with multiple instrumental variables using the
 #' Generalised Method of Moments. Statistical Science, 2015, 30, 1,
-#' 96-117, \doi{10.1214/14-STS503}.
+#' 96-117. \doi{10.1214/14-STS503}
+#'
+#' Hernan and Robins. Instruments for causal inference: An
+#' epidemiologist's dream? Epidemiology, 2006, 17, 360-372.
+#' \doi{10.1097/01.ede.0000222409.00878.37}
+#'
+#' Robins JM. ROBINS, J. M. (1989). The analysis of randomised and
+#' nonrandomised AIDS treatment trials using a new approach to
+#' causal inference in longitudinal studies.
+#' In Health Service Research Methodology: A Focus on AIDS
+#' (L. Sechrest, H. Freeman and A. Mulley, eds.) 113–159.
+#' US Public Health Service, National Center for Health Services Research,
+#' Washington, DC.
 #' @export
 msmm <- function(formula, estmethod = "gmm", data, subset, ...) {
 
