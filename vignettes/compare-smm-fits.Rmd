@@ -1,0 +1,40 @@
+---
+title: "Compare fits of structural mean models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{compare-smm-fits}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(OneSampleMR)
+library(ivtools)
+```
+
+## Comparison fit using the ivtools package
+
+* Example for `ivtools::ivglm()` helpfile. First simulate some example data.
+
+```{r}
+Z <- rbinom(n, 1, 0.5)
+X <- rbinom(n, 1, 0.7*Z+0.2*(1-Z)) 
+m0 <- plogis(1+0.8*X-0.39*Z)
+Y <- rbinom(n, 1, plogis(psi0*X+log(m0/(1-m0)))) 
+dat <- data.frame(Z, X, Y)
+```
+
+* Then fit MSMM.
+
+```{r}
+ivglm(Y ~ X, data = dat, estmethod = "g", link = "log")
+summary(ivglm)
+```
+
