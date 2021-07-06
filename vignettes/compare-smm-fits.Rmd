@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(OneSampleMR)
 library(ivtools)
+library(gmm)
 ```
 
 ## Comparison fit using the ivtools package
@@ -24,13 +25,14 @@ library(ivtools)
 * Example from the `ivtools::ivglm()` helpfile. First simulate some example data.
 
 ```{r}
+set.seed(12345)
 n <- 5000
 psi0 <- 0.5
 psi1 <- 0.2
 Z <- rbinom(n, 1, 0.5)
-X <- rbinom(n, 1, 0.7*Z+0.2*(1-Z)) 
-m0 <- plogis(1+0.8*X-0.39*Z)
-Y <- rbinom(n, 1, plogis(psi0*X+log(m0/(1-m0)))) 
+X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z)) 
+m0 <- plogis(1 + 0.8*X - 0.39*Z)
+Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0)))) 
 dat <- data.frame(Z, X, Y)
 ```
 
@@ -39,9 +41,49 @@ dat <- data.frame(Z, X, Y)
 ```{r}
 fitZ.L <- glm(Z ~ 1, family = "binomial", data = dat)
 fitY.LZX <- glm(Y ~ X, family = "binomial", data = dat)
-msmmfit1 <- ivglm(estmethod = "g", X = "X", Y = "Y",
+fit01 <- ivglm(estmethod = "g", X = "X", Y = "Y",
                   fitZ.L = fitZ.L, fitY.LZX = fitY.LZX, 
                   data = dat, link = "log")
-summary(msmmfit1)
+summary(fit01)
+confint(fit01)
 ```
 
+* Comparison fit using gmm()
+
+```{r}
+coefci <- function(fit) cbind(coef(fit), confint.default(fit))
+  
+msmmOneX <- function(theta, x){
+  # extract variables from x
+  Y <- x[,"Y"]
+  X1 <- x[,"X"]
+  Z1 <- x[,"Z"]
+  # moments
+  m1 <- (Y*exp(- X1*theta[2]) - theta[1])
+  m2 <- (Y*exp(- X1*theta[2]) - theta[1])*Z1
+  return(cbind(m1, m2))
+}
+
+fit02 <- gmm(msmmOneX, x = dat, t0 = rep(.1, 2), vcov = "iid")
+summary(fit02)
+coefci(fit02)
+```
+
+* Alternative moment conditions
+
+```{r}
+msmmAltMoments <- function(theta, x){
+  # extract variables from x
+  Y <- x[,"Y"]
+  X1 <- x[,"X"]
+  Z1 <- x[,"Z"]
+  # moments
+  m1 <- (Y*exp(-theta[1] - X1*theta[2]) - 1)
+  m2 <- (Y*exp(-theta[1] - X1*theta[2]) - 1)*Z1
+  return(cbind(m1, m2))
+}
+
+fit03 <- gmm(msmmAltMoments, x = dat, t0 = rep(.1, 2), vcov = "iid")
+summary(fit03)
+confint(fit03)
+```
