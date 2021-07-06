@@ -21,9 +21,12 @@ library(ivtools)
 
 ## Comparison fit using the ivtools package
 
-* Example for `ivtools::ivglm()` helpfile. First simulate some example data.
+* Example from the `ivtools::ivglm()` helpfile. First simulate some example data.
 
 ```{r}
+n <- 5000
+psi0 <- 0.5
+psi1 <- 0.2
 Z <- rbinom(n, 1, 0.5)
 X <- rbinom(n, 1, 0.7*Z+0.2*(1-Z)) 
 m0 <- plogis(1+0.8*X-0.39*Z)
@@ -34,7 +37,11 @@ dat <- data.frame(Z, X, Y)
 * Then fit MSMM.
 
 ```{r}
-ivglm(Y ~ X, data = dat, estmethod = "g", link = "log")
-summary(ivglm)
+fitZ.L <- glm(Z ~ 1, family = "binomial", data = dat)
+fitY.LZX <- glm(Y ~ X, family = "binomial", data = dat)
+msmmfit1 <- ivglm(estmethod = "g", X = "X", Y = "Y",
+                  fitZ.L = fitZ.L, fitY.LZX = fitY.LZX, 
+                  data = dat, link = "log")
+summary(msmmfit1)
 ```
 
