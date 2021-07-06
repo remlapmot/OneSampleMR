@@ -26,14 +26,16 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports:
     Formula,
+    gmm,
     ivreg,
     lmtest
 Suggests: 
-    knitr,
     haven,
+    ivtools,
+    knitr,
     lfe,
-    testthat (>= 3.0.0),
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3
 BugReports: https://github.com/remlapmot/OneSampleMR/issues/
 URL: https://github.com/remlapmot/OneSampleMR
