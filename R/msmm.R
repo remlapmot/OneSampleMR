@@ -1,34 +1,72 @@
 #' Multiplicative structural mean model
 #'
 #' Function providing several methods to estimate the multiplicative
-#' structural mean model (MSMM) of Robins (1994).
+#' structural mean model (MSMM) of Robins (1989).
+#'
+#' Function providing several methods to estimate the multiplicative
+#' structural mean model (MSMM) of Robins (1989).
+#'
+#' An equivalent estimator was proposed in Econometrics by Mullahy (1997) and
+#' then discussed in several articles by Windmeijer (1997, 2002) and Cameron
+#' and Trivedi (2013), implemented in the user-written Stata command `ivpois`
+#' (Nichols, 2007) and then implemented in official Stata in the `ivpoisson`
+#' command (StataCorp., 2013).
 #'
 #' @param formula The model formula
 #' @param estmethod Estimation method, these are
 #'
 #'    * `"gmm"` GMM estimation of the MSMM
 #'    * `"gmmalt"` GMM estimation of the alternative moment conditions
-#'    for the MSMM as per Clarke et al. (2015)
-#'    * `"tsls"` the TSLS method of fitting MSMM Clarke et al. (2015)
-#'    * `"tslsalt"` the alternative TSLS method of Clarke et al. (2015)
-#' @references Clarke PS, Palmer TM Windmeijer F. Estimating structural
+#'    for the MSMM as per Clarke et al. (2015). These are the same moment
+#'    conditions fit by the user-written Stata command `ivpois` (Nichols, 2007)
+#'    and by the official Stata command `ivpoisson gmm ..., multiplicative`
+#'    (StataCorp., 2013).
+#'    * `"tsls"` the TSLS method of fitting the MSMM of Clarke et al. (2015)
+#'    * `"tslsalt"` the alternative TSLS method of fitting the MSMM of
+#'    Clarke et al. (2015)
+#' @references
+#' Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
+#' New York, Cambridge University Press.
+#'
+#' Clarke PS, Palmer TM Windmeijer F. Estimating structural
 #' mean models with multiple instrumental variables using the
 #' Generalised Method of Moments. Statistical Science, 2015, 30, 1,
 #' 96-117. \doi{10.1214/14-STS503}
 #'
 #' Hernan and Robins. Instruments for causal inference: An
-#' epidemiologist's dream? Epidemiology, 2006, 17, 360-372.
+#' Epidemiologist's dream? Epidemiology, 2006, 17, 360-372.
 #' \doi{10.1097/01.ede.0000222409.00878.37}
 #'
-#' Robins JM. ROBINS, J. M. (1989). The analysis of randomised and
+#' Mullahy J. Instrumental-variable estimation of count data models:
+#' applications to models of cigarette smoking and behavior. The Review of
+#' Economics and Statistics. 1997, 79, 4, 586-593.
+#' \doi{https://doi.org/10.1162/003465397557169}
+#'
+#' Nichols A. ivpois: Stata module for IV/GMM Poisson regression. 2007.
+#' [url]( http://ideas.repec.org/c/boc/bocode/s456890.html)
+#'
+#' Robins JM. The analysis of randomised and
 #' nonrandomised AIDS treatment trials using a new approach to
 #' causal inference in longitudinal studies.
 #' In Health Service Research Methodology: A Focus on AIDS
-#' (L. Sechrest, H. Freeman and A. Mulley, eds.) 113–159.
+#' (L. Sechrest, H. Freeman and A. Mulley, eds.). 1989. 113–159.
 #' US Public Health Service, National Center for Health Services Research,
 #' Washington, DC.
+#'
+#' StataCorp. Stata Base Reference Manual. Release 13.
+#' ivpoisson - Poisson model with continuous endogenous covariates. 2013.
+#' [url](https://www.stata.com/manuals13/rivpoisson.pdf)
+#'
+#' Windmeijer FAG, Santos Silva JMC. Endogeneity in Count Data Models:
+#' An Application to Demand for Health Care. Journal of Applied Econometrics.
+#' 1997, 12, 3, 281-294.
+#' <https://doi.org/10.1002/(SICI)1099-1255(199705)12:3%3C281::AID-JAE436%3E3.0.CO;2-1>
+#'
+#' Windmeijer, F. ExpEnd, A Gauss programme for non-linear GMM estimation of
+#' EXPonential models with ENDogenous regressors for cross section and panel
+#' data. CEMMAP working paper CWP14/02. 2002. [url](https://www.cemmap.ac.uk/wp-content/uploads/2020/08/CWP1402.pdf)
 #' @examples
-#' # Data generation from the example in the [`ivtools::ivglm()`] helpfile
+#' # Data generation from the example in the ivtools::ivglm() helpfile
 #' set.seed(9)
 #' n <- 1000
 #' psi0 <- 0.5
@@ -38,7 +76,11 @@
 #' m0 <- plogis(1 + 0.8*X - 0.39*Z)
 #' Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
 #' dat <- data.frame(Z, X, Y)
+#' msmm(Y ~ X | Z, data = dat)
+#' msmm(Y ~ X | Z, data = dat, estmethod = "gmm")
+#' msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
 #' msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
+#' msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
 #' @export
 msmm <- function(formula, instruments, data, subset, na.action, weights, offset,
                  contrasts = NULL, model = TRUE, y = TRUE, x = FALSE,
@@ -100,10 +142,10 @@ msmm <- function(formula, instruments, data, subset, na.action, weights, offset,
   # end of code from ivreg::ivreg()
 
   estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
-  if (estmethod == "gmm") output = msmm_gmm(formula)
-  if (estmethod == "gmmalt") output = msmm_gmm_alt(formula)
-  if (estmethod == "tsls") output = msmm_tsls(x = X[,2], y = Y, z = Z)
-  if (estmethod == "tslsalt") output = msmm_tsls_alt(formula)
+  if (estmethod == "gmm") output = msmm_gmm(x = X[,2], y = Y, z = Z[,-1])
+  if (estmethod == "gmmalt") output = msmm_gmm_alt(x = X[,2], y = Y, z = Z[,-1])
+  if (estmethod == "tsls") output = msmm_tsls(x = X[,2], y = Y, z = Z[,-1])
+  if (estmethod == "tslsalt") output = msmm_tsls_alt(x = X[,2], y = Y, z = Z[,-1])
 
   class(output) <- append("msmm", class(output))
   output
@@ -114,13 +156,12 @@ msmm_tsls <- function(x, y, z) {
   exposure <- y * x
 
   # first stage
-  stage1 <- lm(exposure ~ z, data = dat)
-  # stage1sum <- summary(stage1)
+  stage1 <- lm(exposure ~ z)
 
+  # tsls fit
   tslsmsmmfit <- ivreg::ivreg(outcome ~ exposure | z)
-  # tslsmsmmfitsum <- summary(tslsmsmmfit)
 
-  # causal risk ratio estimate
+  # transformed causal risk ratio estimate
   beta <- coef(tslsmsmmfit)
 
   # log crr
@@ -144,16 +185,92 @@ msmm_tsls <- function(x, y, z) {
   return(reslist)
 }
 
-msmm_tsls_alt <- function() {
+msmm_tsls_alt <- function(x, y, z) {
   outcome <- y * x
-  exposure <- y * (x - 1)
-  ivreg::ivreg(outcome ~ exposure | instruments)
+  exposure <- y * (1 - x)
+
+  # first stage
+  stage1 <- lm(exposure ~ z)
+
+  # tsls fit
+  tslsmsmmfit <- ivreg::ivreg(outcome ~ exposure | z)
+
+  # transformed causal risk ratio estimate
+  beta <- coef(tslsmsmmfit)
+
+  # log crr
+  logcrr <- log(-1 * beta[2])
+
+  # delta-method SE for log crr
+  estvar <- vcov(tslsmsmmfit)
+  logcrrse <- msm::deltamethod(~ log(-1 * x2), beta, estvar)
+
+  # crr with 95% CI
+  crrci <- unname(c(-1*beta[2], exp(logcrr - 1.96*logcrrse), exp(logcrr + 1.96*logcrrse)))
+
+  # list of results to return
+  reslist <- list(stage1 = stage1,
+                  tslsmsmmfit = tslsmsmmfit,
+                  crrci = crrci)
+  return(reslist)
 }
 
-msmm_gmm <- function(formula){
-
+msmmMoments <- function(theta, x){
+  # extract variables from x
+  Y <- x[,"y"]
+  X <- x[,"x"]
+  Z1 <- x[,"z"]
+  # moments
+  m1 <- (Y*exp(-1*X*theta[2]) - theta[1])
+  m2 <- (Y*exp(-1*X*theta[2]) - theta[1])*Z1
+  return(cbind(m1, m2))
 }
 
-msmm_gmm_alt <- function(formula) {
+msmm_gmm <- function(x, y, z){
+  dat = data.frame(x, y, z)
 
+  # gmm fit
+  msmmgmm <- gmm::gmm(msmmMoments, x = dat, t0 = c(0, 0), vcov = "iid")
+
+  if (msmmgmm$algoInfo$convergence != 0) warning("The GMM fit has not converged, perhaps try different initial parameter values")
+
+  # causal risk ratio
+  crrci <- exp(cbind(coef(msmmgmm), confint(msmmgmm)$test)[2,])
+
+  # E[Y(0)]
+  ey0ci <- cbind(coef(msmmgmm), confint(msmmgmm)$test)[1,]
+
+  reslist <- list(msmmgmm = msmmgmm,
+                  crrci = crrci,
+                  ey0ci = ey0ci)
+  return(reslist)
+}
+
+msmmAltMoments <- function(theta, x){
+  # extract variables from x
+  Y <- x[,"y"]
+  X <- x[,"x"]
+  Z1 <- x[,"z"]
+  # moments
+  m1 <- (Y*exp(-theta[1] - X*theta[2]) - 1)
+  m2 <- (Y*exp(-theta[1] - X*theta[2]) - 1)*Z1
+  return(cbind(m1, m2))
+}
+
+msmm_gmm_alt <- function(x, y, z) {
+  dat = data.frame(x, y, z)
+
+  # gmm fit
+  msmmgmm <- gmm::gmm(msmmAltMoments, x = dat, t0 = c(0, 0), vcov = "iid")
+
+  if (msmmgmm$algoInfo$convergence != 0) warning("The GMM fit has not converged, perhaps try different initial parameter values")
+
+  # exponentiate estimates
+  expests <- exp(cbind(coef(msmmgmm), confint(msmmgmm)$test))
+  crrci <- expests[2,]
+  ey0ci <- expests[1,]
+
+  reslist <- list(msmmgmm = msmmgmm,
+                  crrci = crrci,
+                  ey0ci = ey0ci)
 }
