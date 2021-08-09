@@ -322,4 +322,24 @@ msmm_gmm_alt <- function(x, y, z) {
                   ey0ci = ey0ci,
                   estmethod = "gmmalt")
 }
+
+#' @export
+summary.msmm <- function(object, ...) {
+
+  if (object$estmethod %in% c("tsls", "tslsalt")) {
+    requireNamespace("ivreg", quietly = TRUE)
+    smry <- summary(object$fit)
+  }
+
+  if (object$estmethod %in% c("gmm", "gmmalt")) {
+    smry <- gmm::summary.gmm(object$fit)
+  }
+
+  res <- list(smry = smry,
+              estmethod = object$estmethod,
+              object = object)
+
+  class(res) <- append(class(res), "summary.msmm")
+  return(res)
+}
 }
