@@ -368,4 +368,9 @@ print.summary.msmm <- function(x, digits = getOption("digits"), ...) {
 
   cat("\n")
 }
+
+#' @export
+print.msmm <- function(x, digits = getOption("digits"), ...) {
+
+
 }
