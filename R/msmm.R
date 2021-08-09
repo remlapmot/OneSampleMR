@@ -207,7 +207,8 @@ msmm_tsls <- function(x, y, z) {
   reslist <- list(stage1 = stage1,
                   fit = fit,
                   crrci = crrci,
-                  ey0ci = ey0ci)
+                  ey0ci = ey0ci,
+                  estmethod = "tsls")
   return(reslist)
 }
 
@@ -237,7 +238,8 @@ msmm_tsls_alt <- function(x, y, z) {
   # list of results to return
   reslist <- list(stage1 = stage1,
                   fit = fit,
-                  crrci = crrci)
+                  crrci = crrci,
+                  estmethod = "tslsalt")
   return(reslist)
 }
 
@@ -277,7 +279,8 @@ msmm_gmm <- function(x, y, z){
 
   reslist <- list(fit = fit,
                   crrci = crrci,
-                  ey0ci = ey0ci)
+                  ey0ci = ey0ci,
+                  estmethod = "gmm")
   return(reslist)
 }
 
@@ -316,5 +319,7 @@ msmm_gmm_alt <- function(x, y, z) {
 
   reslist <- list(fit = fit,
                   crrci = crrci,
-                  ey0ci = ey0ci)
+                  ey0ci = ey0ci,
+                  estmethod = "gmmalt")
+}
 }
