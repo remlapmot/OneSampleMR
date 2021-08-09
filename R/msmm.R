@@ -102,7 +102,7 @@ msmm <- function(formula, instruments, data, subset, na.action, weights, offset,
   estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
   if (estmethod == "gmm") output = msmm_gmm(formula)
   if (estmethod == "gmmalt") output = msmm_gmm_alt(formula)
-  if (estmethod == "tsls") output = msmm_tsls(formula)
+  if (estmethod == "tsls") output = msmm_tsls(x = X[,2], y = Y, z = Z)
   if (estmethod == "tslsalt") output = msmm_tsls_alt(formula)
 
   class(output) <- append("msmm", class(output))
