@@ -215,10 +215,10 @@ msmm_tsls_alt <- function(x, y, z) {
   stage1 <- lm(exposure ~ z)
 
   # tsls fit
-  tslsmsmmfit <- ivreg::ivreg(outcome ~ exposure | z)
+  fit <- ivreg::ivreg(outcome ~ exposure | z)
 
   # transformed causal risk ratio estimate
-  beta <- coef(tslsmsmmfit)
+  beta <- coef(fit)
 
   # log crr
   logcrr <- log(-1 * beta[2])
