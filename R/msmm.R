@@ -81,6 +81,15 @@
 #' msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
 #' msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
 #' msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
+#' mod <- msmm(Y ~ X | Z, data = dat)
+#' smy <- summary(mod)
+#' class(mod)
+#' class(smy)
+#' mod
+#' smy
+#'
+#' mod2 <- msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
+#' summary(mod2)
 #'
 #' # Multiple instrument example
 #' set.seed(123456)
