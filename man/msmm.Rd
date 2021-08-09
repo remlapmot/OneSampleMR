@@ -27,17 +27,31 @@ msmm(
 \itemize{
 \item \code{"gmm"} GMM estimation of the MSMM
 \item \code{"gmmalt"} GMM estimation of the alternative moment conditions
-for the MSMM as per Clarke et al. (2015)
-\item \code{"tsls"} the TSLS method of fitting MSMM Clarke et al. (2015)
-\item \code{"tslsalt"} the alternative TSLS method of Clarke et al. (2015)
+for the MSMM as per Clarke et al. (2015). These are the same moment
+conditions fit by the user-written Stata command \code{ivpois} (Nichols, 2007)
+and by the official Stata command \verb{ivpoisson gmm ..., multiplicative}
+(StataCorp., 2013).
+\item \code{"tsls"} the TSLS method of fitting the MSMM of Clarke et al. (2015)
+\item \code{"tslsalt"} the alternative TSLS method of fitting the MSMM of
+Clarke et al. (2015)
 }}
 }
 \description{
 Function providing several methods to estimate the multiplicative
-structural mean model (MSMM) of Robins (1994).
+structural mean model (MSMM) of Robins (1989).
+}
+\details{
+Function providing several methods to estimate the multiplicative
+structural mean model (MSMM) of Robins (1989).
+
+An equivalent estimator was proposed in Econometrics by Mullahy (1997) and
+then discussed in several articles by Windmeijer (1997, 2002) and Cameron
+and Trivedi (2013), implemented in the user-written Stata command \code{ivpois}
+(Nichols, 2007) and then implemented in official Stata in the \code{ivpoisson}
+command (StataCorp., 2013).
 }
 \examples{
-# Data generation from the example in the [`ivtools::ivglm()`] helpfile
+# Data generation from the example in the ivtools::ivglm() helpfile
 set.seed(9)
 n <- 1000
 psi0 <- 0.5
@@ -47,23 +61,51 @@ X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
 m0 <- plogis(1 + 0.8*X - 0.39*Z)
 Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
 dat <- data.frame(Z, X, Y)
+msmm(Y ~ X | Z, data = dat)
+msmm(Y ~ X | Z, data = dat, estmethod = "gmm")
+msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
 msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
+msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
 }
 \references{
+Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
+New York, Cambridge University Press.
+
 Clarke PS, Palmer TM Windmeijer F. Estimating structural
 mean models with multiple instrumental variables using the
 Generalised Method of Moments. Statistical Science, 2015, 30, 1,
 96-117. \doi{10.1214/14-STS503}
 
 Hernan and Robins. Instruments for causal inference: An
-epidemiologist's dream? Epidemiology, 2006, 17, 360-372.
+Epidemiologist's dream? Epidemiology, 2006, 17, 360-372.
 \doi{10.1097/01.ede.0000222409.00878.37}
 
-Robins JM. ROBINS, J. M. (1989). The analysis of randomised and
+Mullahy J. Instrumental-variable estimation of count data models:
+applications to models of cigarette smoking and behavior. The Review of
+Economics and Statistics. 1997, 79, 4, 586-593.
+\doi{https://doi.org/10.1162/003465397557169}
+
+Nichols A. ivpois: Stata module for IV/GMM Poisson regression. 2007.
+\href{http://ideas.repec.org/c/boc/bocode/s456890.html}{url}
+
+Robins JM. The analysis of randomised and
 nonrandomised AIDS treatment trials using a new approach to
 causal inference in longitudinal studies.
 In Health Service Research Methodology: A Focus on AIDS
-(L. Sechrest, H. Freeman and A. Mulley, eds.) 113–159.
+(L. Sechrest, H. Freeman and A. Mulley, eds.). 1989. 113–159.
 US Public Health Service, National Center for Health Services Research,
 Washington, DC.
+
+StataCorp. Stata Base Reference Manual. Release 13.
+ivpoisson - Poisson model with continuous endogenous covariates. 2013.
+\href{https://www.stata.com/manuals13/rivpoisson.pdf}{url}
+
+Windmeijer FAG, Santos Silva JMC. Endogeneity in Count Data Models:
+An Application to Demand for Health Care. Journal of Applied Econometrics.
+1997, 12, 3, 281-294.
+\url{https://doi.org/10.1002/(SICI)1099-1255(199705)12:3\%3C281::AID-JAE436\%3E3.0.CO;2-1}
+
+Windmeijer, F. ExpEnd, A Gauss programme for non-linear GMM estimation of
+EXPonential models with ENDogenous regressors for cross section and panel
+data. CEMMAP working paper CWP14/02. 2002. \href{https://www.cemmap.ac.uk/wp-content/uploads/2020/08/CWP1402.pdf}{url}
 }
