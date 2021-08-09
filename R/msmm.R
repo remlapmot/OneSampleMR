@@ -224,7 +224,7 @@ msmm_tsls_alt <- function(x, y, z) {
   logcrr <- log(-1 * beta[2])
 
   # delta-method SE for log crr
-  estvar <- vcov(tslsmsmmfit)
+  estvar <- vcov(fit)
   logcrrse <- msm::deltamethod(~ log(-1 * x2), beta, estvar)
 
   # crr with 95% CI
@@ -232,7 +232,7 @@ msmm_tsls_alt <- function(x, y, z) {
 
   # list of results to return
   reslist <- list(stage1 = stage1,
-                  tslsmsmmfit = tslsmsmmfit,
+                  fit = fit,
                   crrci = crrci)
   return(reslist)
 }
