@@ -342,4 +342,30 @@ summary.msmm <- function(object, ...) {
   class(res) <- append(class(res), "summary.msmm")
   return(res)
 }
+
+#' @export
+print.summary.msmm <- function(x, digits = getOption("digits"), ...) {
+  cat("\n")
+  cat("Estimation method:", x$estmethod)
+  if (x$estmethod %in% c("tsls", "tslsalt")) {
+    requireNamespace("ivreg", quietly = TRUE)
+    print(x$smry)
+  }
+
+  if (x$estmethod %in% c("gmm", "gmmalt")) {
+    gmm::print.summary.gmm(x$smry)
+  }
+
+  if (x$estmethod != "tslsalt") {
+    cat("\nE[Y(0)] with 95% CI:\n")
+    print(x$object$ey0ci, digits = digits)
+  }
+
+  cat("\n")
+
+  cat("Causal risk ratio with 95% CI:\n")
+  print(x$object$crrci, digits = digits)
+
+  cat("\n")
+}
 }
