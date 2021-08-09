@@ -28,7 +28,8 @@ Imports:
     Formula,
     gmm,
     ivreg,
-    lmtest
+    lmtest,
+    msm
 Suggests: 
     haven,
     ivtools,
