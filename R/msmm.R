@@ -95,6 +95,11 @@
 #' pY <- -2 + psi0*X + U
 #' Y <- rbinom(n, 1, pX)
 #' dat <- data.frame(G1, G2, G3, X, Y)
+#' msmm(Y ~ X | G1 + G2 + G3, data = dat)
+#' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmm")
+#' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
+#' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tsls")
+#' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tslsalt")
 #' @export
 msmm <- function(formula, instruments, data, subset, na.action, weights, offset,
                  contrasts = NULL, model = TRUE, y = TRUE, x = FALSE,
