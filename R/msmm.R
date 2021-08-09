@@ -261,17 +261,17 @@ msmm_gmm <- function(x, y, z){
   dat = data.frame(x, y, z)
 
   # gmm fit
-  msmmgmm <- gmm::gmm(msmmMoments, x = dat, t0 = c(0, 0), vcov = "iid")
+  fit <- gmm::gmm(msmmMoments, x = dat, t0 = c(0, 0), vcov = "iid")
 
-  if (msmmgmm$algoInfo$convergence != 0) warning("The GMM fit has not converged, perhaps try different initial parameter values")
+  if (fit$algoInfo$convergence != 0) warning("The GMM fit has not converged, perhaps try different initial parameter values")
 
   # causal risk ratio
-  crrci <- exp(cbind(coef(msmmgmm), confint(msmmgmm)$test)[2,])
+  crrci <- exp(cbind(coef(fit), confint(fit)$test)[2,])
 
   # E[Y(0)]
-  ey0ci <- cbind(coef(msmmgmm), confint(msmmgmm)$test)[1,]
+  ey0ci <- cbind(coef(fit), confint(fit)$test)[1,]
 
-  reslist <- list(msmmgmm = msmmgmm,
+  reslist <- list(fit = fit,
                   crrci = crrci,
                   ey0ci = ey0ci)
   return(reslist)
