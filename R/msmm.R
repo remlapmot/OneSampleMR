@@ -281,11 +281,20 @@ msmmAltMoments <- function(theta, x){
   # extract variables from x
   Y <- x[,"y"]
   X <- x[,"x"]
-  Z1 <- x[,"z"]
+
+  znames <- names(x)[!names(x) %in% c("x", "y")]
+  Z <- x[znames]
+  nZ <- ncol(Z)
+  nZp1 <- nZ + 1
+
   # moments
-  m1 <- (Y*exp(-theta[1] - X*theta[2]) - 1)
-  m2 <- (Y*exp(-theta[1] - X*theta[2]) - 1)*Z1
-  return(cbind(m1, m2))
+  moments <- matrix(nrow = nrow(Z), ncol = nZp1, NA)
+  moments[,1] <- (Y*exp(-theta[1] - X*theta[2]) - 1)
+  for (i in 1:nZ) {
+    j <- i + 1
+    moments[,j] <- (Y*exp(-theta[1] - X*theta[2]) - 1)*Z[,i]
+  }
+  return(moments)
 }
 
 msmm_gmm_alt <- function(x, y, z) {
