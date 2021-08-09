@@ -3,6 +3,7 @@
 S3method(fsw,ivreg)
 S3method(print,fsw)
 export(fsw)
+export(msmm)
 importFrom(ivreg,ivreg)
 importFrom(lmtest,waldtest)
 importFrom(stats,as.formula)
