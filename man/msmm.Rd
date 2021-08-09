@@ -51,11 +51,11 @@ and Trivedi (2013), implemented in the user-written Stata command \code{ivpois}
 command (StataCorp., 2013).
 }
 \examples{
+# Single instrument example
 # Data generation from the example in the ivtools::ivglm() helpfile
 set.seed(9)
 n <- 1000
 psi0 <- 0.5
-psi1 <- 0.2
 Z <- rbinom(n, 1, 0.5)
 X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
 m0 <- plogis(1 + 0.8*X - 0.39*Z)
@@ -66,6 +66,25 @@ msmm(Y ~ X | Z, data = dat, estmethod = "gmm")
 msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
 msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
 msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
+
+# Multiple instrument example
+set.seed(123456)
+n <- 1000
+psi0 <- 0.5
+G1 <- rbinom(n, 2, 0.5)
+G2 <- rbinom(n, 2, 0.3)
+G3 <- rbinom(n, 2, 0.4)
+U <- runif(n)
+pX <- plogis(0.7*G1 + G2 - G3 + U)
+X <- rbinom(n, 1, pX)
+pY <- -2 + psi0*X + U
+Y <- rbinom(n, 1, pX)
+dat <- data.frame(G1, G2, G3, X, Y)
+msmm(Y ~ X | G1 + G2 + G3, data = dat)
+msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmm")
+msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
+msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tsls")
+msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tslsalt")
 }
 \references{
 Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
