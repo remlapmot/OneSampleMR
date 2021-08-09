@@ -181,29 +181,29 @@ msmm_tsls <- function(x, y, z) {
   stage1 <- lm(exposure ~ z)
 
   # tsls fit
-  tslsmsmmfit <- ivreg::ivreg(outcome ~ exposure | z)
+  fit <- ivreg::ivreg(outcome ~ exposure | z)
 
   # transformed causal risk ratio estimate
-  beta <- coef(tslsmsmmfit)
+  beta <- coef(fit)
 
   # log crr
   logcrr <- log(-1 / beta[2])
 
   # delta-method SE for log crr
-  estvar <- vcov(tslsmsmmfit)
+  estvar <- vcov(fit)
   logcrrse <- msm::deltamethod(~ log(-1 / x2), beta, estvar)
 
   # crr with 95% CI
   crrci <- unname(c(-1/beta[2], exp(logcrr - 1.96*logcrrse), exp(logcrr + 1.96*logcrrse)))
 
   # baseline risk
-  blriskci <- cbind(coef(tslsmsmmfit), confint(tslsmsmmfit))[1,]
+  ey0ci <- cbind(coef(fit), confint(fit))[1,]
 
   # list of results to return
   reslist <- list(stage1 = stage1,
-                  tslsmsmmfit = tslsmsmmfit,
+                  fit = fit,
                   crrci = crrci,
-                  blriskci = blriskci)
+                  ey0ci = ey0ci)
   return(reslist)
 }
 
