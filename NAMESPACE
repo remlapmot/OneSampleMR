@@ -2,6 +2,8 @@
 
 S3method(fsw,ivreg)
 S3method(print,fsw)
+S3method(print,summary.msmm)
+S3method(summary,msmm)
 export(fsw)
 export(msmm)
 importFrom(ivreg,ivreg)
