@@ -1,6 +1,7 @@
 # OneSampleMR
 
-Useful functions for one sample Mendelian randomization analyses.
+Useful functions for one sample Mendelian randomization / instrumental variable 
+analyses.
 
 Install the package within R using
 ``` r
