@@ -81,6 +81,22 @@
 #' msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
 #' msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
 #' msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
+#'
+#' # Multiple instrument example
+#' set.seed(123456)
+#' n <- 1000
+#' psi0 <- 0.5
+#' Z1 <- rbinom(n, 2, 0.5)
+#' Z2 <- rbinom(n, 2, 0.3)
+#' Z3 <- rbinom(n, 2, 0.4)
+#' U <- runif(n)
+#' pX <- plogis(0.7*Z1 + Z2 - Z3 + U)
+#' X <- rbinom(n, 1, pX)
+#' pY <- -2 + psi0*X + U
+#' Y <- rbinom(n, 1, pX)
+#' dat <- data.frame(Z1, Z2, Z3, X, Y)
+#' msmm(Y ~ X | Z1 + Z2 + Z3, data = dat, estmethod = "tsls")
+#' msmm(Y ~ X | Z1 + Z2 + Z3, data = dat, estmethod = "tslsalt")
 #' @export
 msmm <- function(formula, instruments, data, subset, na.action, weights, offset,
                  contrasts = NULL, model = TRUE, y = TRUE, x = FALSE,
