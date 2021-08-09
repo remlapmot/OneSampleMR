@@ -301,16 +301,16 @@ msmm_gmm_alt <- function(x, y, z) {
   dat = data.frame(x, y, z)
 
   # gmm fit
-  msmmgmm <- gmm::gmm(msmmAltMoments, x = dat, t0 = c(0, 0), vcov = "iid")
+  fit <- gmm::gmm(msmmAltMoments, x = dat, t0 = c(0, 0), vcov = "iid")
 
-  if (msmmgmm$algoInfo$convergence != 0) warning("The GMM fit has not converged, perhaps try different initial parameter values")
+  if (fit$algoInfo$convergence != 0) warning("The GMM fit has not converged, perhaps try different initial parameter values")
 
   # exponentiate estimates
-  expests <- exp(cbind(coef(msmmgmm), confint(msmmgmm)$test))
+  expests <- exp(cbind(coef(fit), confint(fit)$test))
   crrci <- expests[2,]
   ey0ci <- expests[1,]
 
-  reslist <- list(msmmgmm = msmmgmm,
+  reslist <- list(fit = fit,
                   crrci = crrci,
                   ey0ci = ey0ci)
 }
