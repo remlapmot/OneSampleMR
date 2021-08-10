@@ -188,11 +188,11 @@ msmm <- function(formula, instruments, data, subset, na.action,
     Z <- model.matrix(mtZ, mf, contrasts)
   }
   ## weights and offset
-  weights <- model.weights(mf)
-  offset <- model.offset(mf)
-  if(is.null(offset)) offset <- 0
-  if(length(offset) == 1) offset <- rep(offset, NROW(Y))
-  offset <- as.vector(offset)
+  # weights <- model.weights(mf)
+  # offset <- model.offset(mf)
+  # if(is.null(offset)) offset <- 0
+  # if(length(offset) == 1) offset <- rep(offset, NROW(Y))
+  # offset <- as.vector(offset)
   # end of code from ivreg::ivreg()
 
   # print(head(X))
