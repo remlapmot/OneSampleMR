@@ -66,14 +66,18 @@ msmm(Y ~ X | Z, data = dat, estmethod = "gmm")
 msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
 msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
 msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
+
 mod <- msmm(Y ~ X | Z, data = dat)
 smy <- summary(mod)
 class(mod)
 class(smy)
 mod
 smy
+print(mod)
+print(smy)
 
 mod2 <- msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
+mod2
 summary(mod2)
 
 # Multiple instrument example
