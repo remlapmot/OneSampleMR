@@ -28,7 +28,7 @@
 #' Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
 #' New York, Cambridge University Press.
 #'
-#' Clarke PS, Palmer TM Windmeijer F. Estimating structural
+#' Clarke PS, Palmer TM, Windmeijer F. Estimating structural
 #' mean models with multiple instrumental variables using the
 #' Generalised Method of Moments. Statistical Science, 2015, 30, 1,
 #' 96-117. \doi{10.1214/14-STS503}
