@@ -338,6 +338,7 @@ msmm_gmm_alt <- function(x, y, z) {
                   estmethod = "gmmalt")
 }
 
+#' Summarizing MSMM Fits
 #' @export
 summary.msmm <- function(object, ...) {
 
@@ -351,7 +352,6 @@ summary.msmm <- function(object, ...) {
   }
 
   res <- list(smry = smry,
-              estmethod = object$estmethod,
               object = object)
 
   class(res) <- append(class(res), "summary.msmm")
