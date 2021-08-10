@@ -210,6 +210,7 @@ msmm <- function(formula, instruments, data, subset, na.action,
 }
 
 msmm_tsls <- function(x, y, z) {
+
   outcome <- y * (1 - x)
   exposure <- y * x
 
@@ -245,6 +246,7 @@ msmm_tsls <- function(x, y, z) {
 }
 
 msmm_tsls_alt <- function(x, y, z) {
+
   outcome <- y * x
   exposure <- y * (1 - x)
 
