@@ -372,24 +372,25 @@ summary.msmm <- function(object, ...) {
 print.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\n")
   cat("Estimation method:", x$estmethod)
+  cat("\n")
+
   if (x$estmethod %in% c("tsls", "tslsalt")) {
     requireNamespace("ivreg", quietly = TRUE)
     print(x$fit)
   }
 
   if (x$estmethod %in% c("gmm", "gmmalt")) {
-    gmm::print.summary.gmm(x$smry)
+    cat("\n")
+    gmm::print.gmm(x$fit)
   }
 
   if (x$estmethod != "tslsalt") {
     cat("\nE[Y(0)] with 95% CI:\n")
-    print(x$object$ey0ci, digits = digits)
+    print(x$ey0ci, digits = digits, ...)
   }
 
-  cat("\n")
-
-  cat("Causal risk ratio with 95% CI:\n")
-  print(x$object$crrci, digits = digits)
+  cat("\nCausal risk ratio with 95% CI:\n")
+  print(x$crrci, digits = digits, ...)
 
   cat("\n")
 }
@@ -397,6 +398,30 @@ print.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 #' @rdname summary.msmm
 #' @export
 print.summary.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
+  cat("\n")
 
+  cat("Estimation method:", x$object$estmethod, "\n")
+  if (x$object$estmethod %in% c("tsls", "tslsalt")) {
+    cat("\nStage 1 summary:\n")
+    print(summary(x$object$stage1))
 
+    requireNamespace("ivreg", quietly = TRUE)
+    cat("TSLS fit summary:\n")
+    print(x$smry)
+  }
+
+  if (x$object$estmethod %in% c("gmm", "gmmalt")) {
+    cat("\nGMM fit summary:\n")
+    gmm::print.summary.gmm(x$smry)
+  }
+
+  if (x$object$estmethod != "tslsalt") {
+    cat("\nE[Y(0)] with 95% CI:\n")
+    print(x$object$ey0ci, digits = digits, ...)
+  }
+
+  cat("\nCausal risk ratio with 95% CI:\n")
+  print(x$object$crrci, digits = digits, ...)
+
+  cat("\n")
 }
