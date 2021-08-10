@@ -195,9 +195,6 @@ msmm <- function(formula, instruments, data, subset, na.action,
   # offset <- as.vector(offset)
   # end of code from ivreg::ivreg()
 
-  # print(head(X))
-  # print(head(Z))
-
   estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
   if (estmethod == "gmm")
     output = msmm_gmm(x = X[,2], y = Y, z = Z[,-1])
