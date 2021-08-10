@@ -359,7 +359,7 @@ summary.msmm <- function(object, ...) {
 }
 
 #' @export
-print.summary.msmm <- function(x, digits = getOption("digits"), ...) {
+print.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\n")
   cat("Estimation method:", x$estmethod)
   if (x$estmethod %in% c("tsls", "tslsalt")) {
@@ -385,7 +385,7 @@ print.summary.msmm <- function(x, digits = getOption("digits"), ...) {
 }
 
 #' @export
-print.msmm <- function(x, digits = getOption("digits"), ...) {
+print.summary.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 
 
 }
