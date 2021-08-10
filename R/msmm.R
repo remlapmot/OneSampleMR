@@ -15,7 +15,7 @@
 #' @param formula The model formula
 #' @param estmethod Estimation method, these are
 #'
-#'    * `"gmm"` GMM estimation of the MSMM
+#'    * `"gmm"` GMM estimation of the MSMM (the default).
 #'    * `"gmmalt"` GMM estimation of the alternative moment conditions
 #'    for the MSMM as per Clarke et al. (2015). These are the same moment
 #'    conditions fit by the user-written Stata command `ivpois` (Nichols, 2007)
