@@ -10,31 +10,49 @@ msmm(
   data,
   subset,
   na.action,
-  weights,
-  offset,
   contrasts = NULL,
-  model = TRUE,
-  y = TRUE,
-  x = FALSE,
   estmethod = c("gmm", "gmmalt", "tsls", "tslsalt"),
   ...
 )
 }
 \arguments{
-\item{formula}{The model formula}
+\item{formula, instruments}{formula specification(s) of the regression
+relationship and the instruments. Either \code{instruments} is missing and
+\code{formula} has three parts as in \code{y ~ x1 + x2 | z1 + z2 + z3}
+(recommended) or \code{formula} is \code{y ~ x1 + x2} and \code{instruments}
+is a one-sided formula \code{~ z1 + z2 + z3} (only for backward
+compatibility).}
 
-\item{estmethod}{Estimation method, these are
+\item{data}{an optional data frame containing the variables in the model.
+By default the variables are taken from the environment of the
+\code{formula}.}
+
+\item{subset}{an optional vector specifying a subset of observations to be
+used in fitting the model.}
+
+\item{na.action}{a function that indicates what should happen when the data
+contain \code{NA}s. The default is set by the \code{na.action} option.}
+
+\item{contrasts}{an optional list. See the \code{contrasts.arg} of
+\code{\link[stats:model.matrix]{model.matrix.default}}.}
+
+\item{estmethod}{Estimation method, please use one of
 \itemize{
-\item \code{"gmm"} GMM estimation of the MSMM
+\item \code{"gmm"} GMM estimation of the MSMM (the default).
 \item \code{"gmmalt"} GMM estimation of the alternative moment conditions
 for the MSMM as per Clarke et al. (2015). These are the same moment
 conditions fit by the user-written Stata command \code{ivpois} (Nichols, 2007)
 and by the official Stata command \verb{ivpoisson gmm ..., multiplicative}
 (StataCorp., 2013).
-\item \code{"tsls"} the TSLS method of fitting the MSMM of Clarke et al. (2015)
+\item \code{"tsls"} the TSLS method of fitting the MSMM of Clarke et al. (2015).
+For binary \eqn{Y} and \eqn{X} this uses \eqn{Y*(1-X)} as the outcome and
+\eqn{Y*X} as the exposure.
 \item \code{"tslsalt"} the alternative TSLS method of fitting the MSMM of
-Clarke et al. (2015)
+Clarke et al. (2015). For binary \eqn{Y} and \eqn{X} this uses \eqn{Y*X}
+as the outcome and \eqn{Y*(1-X)} as the exposure.
 }}
+
+\item{...}{further arguments passed to or from other methods.}
 }
 \description{
 Function providing several methods to estimate the multiplicative
@@ -42,11 +60,13 @@ structural mean model (MSMM) of Robins (1989).
 }
 \details{
 Function providing several methods to estimate the multiplicative
-structural mean model (MSMM) of Robins (1989).
+structural mean model (MSMM) of Robins (1989). These are the methods
+described in Clarke, Palmer, and Windmeijer (2015), most notably
+generalised method of moments (GMM) estimation of the MSMM.
 
-An equivalent estimator was proposed in Econometrics by Mullahy (1997) and
+An equivalent estimator to the MSMM was proposed in Econometrics by Mullahy (1997) and
 then discussed in several articles by Windmeijer (1997, 2002) and Cameron
-and Trivedi (2013), implemented in the user-written Stata command \code{ivpois}
+and Trivedi (2013). This was implemented in the user-written Stata command \code{ivpois}
 (Nichols, 2007) and then implemented in official Stata in the \code{ivpoisson}
 command (StataCorp., 2013).
 }
@@ -103,7 +123,7 @@ msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tslsalt")
 Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
 New York, Cambridge University Press.
 
-Clarke PS, Palmer TM Windmeijer F. Estimating structural
+Clarke PS, Palmer TM, Windmeijer F. Estimating structural
 mean models with multiple instrumental variables using the
 Generalised Method of Moments. Statistical Science, 2015, 30, 1,
 96-117. \doi{10.1214/14-STS503}
