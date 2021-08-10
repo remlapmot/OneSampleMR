@@ -374,7 +374,7 @@ print.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("Estimation method:", x$estmethod)
   if (x$estmethod %in% c("tsls", "tslsalt")) {
     requireNamespace("ivreg", quietly = TRUE)
-    print(x$smry)
+    print(x$fit)
   }
 
   if (x$estmethod %in% c("gmm", "gmmalt")) {
