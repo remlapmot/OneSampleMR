@@ -12,8 +12,22 @@
 #' (Nichols, 2007) and then implemented in official Stata in the `ivpoisson`
 #' command (StataCorp., 2013).
 #'
-#' @param formula The model formula
-#' @param estmethod Estimation method, these are
+#' @param formula,instruments formula specification(s) of the regression
+#' relationship and the instruments. Either \code{instruments} is missing and
+#' \code{formula} has three parts as in \code{y ~ x1 + x2 | z1 + z2 + z3}
+#' (recommended) or \code{formula} is \code{y ~ x1 + x2} and \code{instruments}
+#' is a one-sided formula \code{~ z1 + z2 + z3} (only for backward
+#' compatibility).
+#' @param data an optional data frame containing the variables in the model.
+#' By default the variables are taken from the environment of the
+#' \code{formula}.
+#' @param subset an optional vector specifying a subset of observations to be
+#' used in fitting the model.
+#' @param na.action a function that indicates what should happen when the data
+#' contain \code{NA}s. The default is set by the \code{na.action} option.
+#' @param contrasts an optional list. See the \code{contrasts.arg} of
+#' \code{\link[stats:model.matrix]{model.matrix.default}}.
+#' @param estmethod Estimation method, please use one of
 #'
 #'    * `"gmm"` GMM estimation of the MSMM (the default).
 #'    * `"gmmalt"` GMM estimation of the alternative moment conditions
@@ -27,6 +41,7 @@
 #'    * `"tslsalt"` the alternative TSLS method of fitting the MSMM of
 #'    Clarke et al. (2015). For binary \eqn{Y} and \eqn{X} this uses \eqn{Y*X}
 #'    as the outcome and \eqn{Y*(1-X)} as the exposure.
+#' @param ... further arguments passed to or from other methods.
 #' @references
 #' Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
 #' New York, Cambridge University Press.
