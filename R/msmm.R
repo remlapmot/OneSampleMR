@@ -4,11 +4,13 @@
 #' structural mean model (MSMM) of Robins (1989).
 #'
 #' Function providing several methods to estimate the multiplicative
-#' structural mean model (MSMM) of Robins (1989).
+#' structural mean model (MSMM) of Robins (1989). These are the methods
+#' described in Clarke, Palmer, and Windmeijer (2015), most notably
+#' generalised method of moments (GMM) estimation of the MSMM.
 #'
-#' An equivalent estimator was proposed in Econometrics by Mullahy (1997) and
+#' An equivalent estimator to the MSMM was proposed in Econometrics by Mullahy (1997) and
 #' then discussed in several articles by Windmeijer (1997, 2002) and Cameron
-#' and Trivedi (2013), implemented in the user-written Stata command `ivpois`
+#' and Trivedi (2013). This was implemented in the user-written Stata command `ivpois`
 #' (Nichols, 2007) and then implemented in official Stata in the `ivpoisson`
 #' command (StataCorp., 2013).
 #'
