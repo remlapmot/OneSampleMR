@@ -307,10 +307,10 @@ msmm_gmm <- function(x, y, z){
     warning("The GMM fit has not converged, perhaps try different initial parameter values")
 
   # causal risk ratio
-  crrci <- exp(cbind(coef(fit), confint(fit)$test)[2,])
+  crrci <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[2,])
 
   # E[Y(0)]
-  ey0ci <- cbind(coef(fit), confint(fit)$test)[1,]
+  ey0ci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[1,]
 
   reslist <- list(fit = fit,
                   crrci = crrci,
@@ -349,7 +349,7 @@ msmm_gmm_alt <- function(x, y, z) {
     warning("The GMM fit has not converged, perhaps try different initial parameter values")
 
   # exponentiate estimates
-  expests <- exp(cbind(coef(fit), confint(fit)$test))
+  expests <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test))
   crrci <- expests[2,]
   ey0ci <- expests[1,]
 
