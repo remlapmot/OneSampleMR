@@ -358,6 +358,7 @@ summary.msmm <- function(object, ...) {
   return(res)
 }
 
+#' @rdname summary.msmm
 #' @export
 print.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\n")
@@ -384,6 +385,7 @@ print.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\n")
 }
 
+#' @rdname summary.msmm
 #' @export
 print.summary.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 
