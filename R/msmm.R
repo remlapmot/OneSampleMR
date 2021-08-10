@@ -132,10 +132,14 @@
 #' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tsls")
 #' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tslsalt")
 #' @export
-msmm <- function(formula, instruments, data, subset, na.action, weights, offset,
-                 contrasts = NULL, model = TRUE, y = TRUE, x = FALSE,
+#' @importFrom stats coef confint delete.response model.matrix model.response terms update vcov
+msmm <- function(formula, instruments, data, subset, na.action,
+                 contrasts = NULL,
                  estmethod = c("gmm", "gmmalt", "tsls", "tslsalt"),
                  ...) {
+  #  ivreg::ivreg() arguments I haven't implemented:
+  # weights, offset,
+  # model = TRUE, y = TRUE, x = FALSE,
 
   # code from beginning for ivreg::ivreg()
   estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
