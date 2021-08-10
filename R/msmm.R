@@ -393,6 +393,7 @@ print.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   print(x$crrci, digits = digits, ...)
 
   cat("\n")
+  invisible(x)
 }
 
 #' @rdname summary.msmm
@@ -424,4 +425,5 @@ print.summary.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...)
   print(x$object$crrci, digits = digits, ...)
 
   cat("\n")
+  invisible(x)
 }
