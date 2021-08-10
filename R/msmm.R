@@ -339,6 +339,15 @@ msmm_gmm_alt <- function(x, y, z) {
 }
 
 #' Summarizing MSMM Fits
+#'
+#' @param object an object of class `"msmm"`.
+#' @param x an object of class `"summary.msmm"`.
+#' @param digits the number of significant digits to use when printing.
+#' @param ... further arguments passed to or from other methods.
+#'
+#' S3 summary and print methods for objects of class `msmm` and `summary.msmm`.
+#' @examples
+#' # For examples see the examples at the bottom of help('msmm')
 #' @export
 summary.msmm <- function(object, ...) {
 
