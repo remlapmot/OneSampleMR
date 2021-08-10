@@ -282,7 +282,8 @@ msmm_gmm <- function(x, y, z){
   # gmm fit
   fit <- gmm::gmm(msmmMoments, x = dat, t0 = c(0, 0), vcov = "iid")
 
-  if (fit$algoInfo$convergence != 0) warning("The GMM fit has not converged, perhaps try different initial parameter values")
+  if (fit$algoInfo$convergence != 0)
+    warning("The GMM fit has not converged, perhaps try different initial parameter values")
 
   # causal risk ratio
   crrci <- exp(cbind(coef(fit), confint(fit)$test)[2,])
@@ -323,7 +324,8 @@ msmm_gmm_alt <- function(x, y, z) {
   # gmm fit
   fit <- gmm::gmm(msmmAltMoments, x = dat, t0 = c(0, 0), vcov = "iid")
 
-  if (fit$algoInfo$convergence != 0) warning("The GMM fit has not converged, perhaps try different initial parameter values")
+  if (fit$algoInfo$convergence != 0)
+    warning("The GMM fit has not converged, perhaps try different initial parameter values")
 
   # exponentiate estimates
   expests <- exp(cbind(coef(fit), confint(fit)$test))
