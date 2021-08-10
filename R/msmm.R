@@ -21,9 +21,12 @@
 #'    conditions fit by the user-written Stata command `ivpois` (Nichols, 2007)
 #'    and by the official Stata command `ivpoisson gmm ..., multiplicative`
 #'    (StataCorp., 2013).
-#'    * `"tsls"` the TSLS method of fitting the MSMM of Clarke et al. (2015)
+#'    * `"tsls"` the TSLS method of fitting the MSMM of Clarke et al. (2015).
+#'    For binary \eqn{Y} and \eqn{X} this uses \eqn{Y*(1-X)} as the outcome and
+#'    \eqn{Y*X} as the exposure.
 #'    * `"tslsalt"` the alternative TSLS method of fitting the MSMM of
-#'    Clarke et al. (2015)
+#'    Clarke et al. (2015). For binary \eqn{Y} and \eqn{X} this uses \eqn{Y*X}
+#'    as the outcome and \eqn{Y*(1-X)} as the exposure.
 #' @references
 #' Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
 #' New York, Cambridge University Press.
