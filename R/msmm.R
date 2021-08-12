@@ -115,6 +115,12 @@
 #' mod2
 #' summary(mod2)
 #'
+#' # check variables with different names
+#' dat$E <- dat$X
+#' dat$R <- dat$Y
+#' dat$W <- dat$Z
+#' msmm(R ~ E | W, data = dat)
+#'
 #' # non-binary y fail
 #' set.seed(9)
 #' n <- 1000
