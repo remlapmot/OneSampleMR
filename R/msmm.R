@@ -367,6 +367,10 @@ msmmMoments <- function(theta, x){
 }
 
 msmm_gmm <- function(x, y, z){
+
+  if (ncol(x) >= 2)
+    xnames <- colnames(x)
+
   dat = data.frame(x, y, z)
 
   # gmm fit
