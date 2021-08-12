@@ -198,6 +198,10 @@ msmm <- function(formula, instruments, data, subset, na.action,
   # end of code from ivreg::ivreg()
 
   estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
+
+  # check y binary
+  if (!all(Y %in% 0:1))
+    stop("The outcome must be binary, i.e. take values 0 or 1.")
   if (estmethod == "gmm")
     output = msmm_gmm(x = X[,2], y = Y, z = Z[,-1])
   if (estmethod == "gmmalt")
