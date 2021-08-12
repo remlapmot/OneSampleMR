@@ -125,8 +125,8 @@
 #' U <- runif(n)
 #' pX <- plogis(0.7*G1 + G2 - G3 + U)
 #' X <- rbinom(n, 1, pX)
-#' pY <- -2 + psi0*X + U
 #' Y <- rbinom(n, 1, pX)
+#' pY <- plogis(-2 + psi0*X + U)
 #' dat <- data.frame(G1, G2, G3, X, Y)
 #' msmm(Y ~ X | G1 + G2 + G3, data = dat)
 #' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmm")
