@@ -163,6 +163,29 @@
 #' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
 #' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tsls")
 #' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tslsalt")
+#'
+#' # Multiple exposure example
+#' set.seed(123456)
+#' n <- 1000
+#' psi0 <- 0.5
+#' psi1 <- 0.4
+#' G1 <- rbinom(n, 2, 0.5)
+#' G2 <- rbinom(n, 2, 0.3)
+#' G3 <- rbinom(n, 2, 0.4)
+#' U <- runif(n)
+#' pX1 <- plogis(0.7*G1 + G2 - G3 + U)
+#' X1 <- rbinom(n, 1, pX1)
+#' pX2 <- plogis(-1 + 0.2*G1 - 0.2*G2 + 0.4*G3 + U)
+#' X2 <- rbinom(n, 1, pX2)
+#' pY <- plogis(-2 + psi0*X1 + psi1*X2 + U)
+#' Y <- rbinom(n, 1, pY)
+#' table(Y)
+#' dat <- data.frame(G1, G2, G3, X1, X2, Y)
+#' msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat)
+#' msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "gmm")
+#' msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
+#' try(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tsls"))
+#' try(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tslsalt"))
 #' @export
 #' @importFrom stats coef confint delete.response model.matrix model.response terms update vcov
 msmm <- function(formula, instruments, data, subset, na.action,
