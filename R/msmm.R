@@ -231,6 +231,11 @@ msmm <- function(formula, instruments, data, subset, na.action,
   if (estmethod %in% c("tsls", "tslsalt") & !all(X %in% 0:1))
     stop("The exposure must be binary, i.e. take values 0 or 1.")
 
+  # check for only 1 exposure for tsls methods
+  nX <- ncol(X) - 1
+  if (nX != 1 & estmethod %in% c("tsls", "tslsalt"))
+    stop("With tsls and tslsalt only 1 exposure variable is allowed.")
+
   if (estmethod == "gmm")
     output = msmm_gmm(x = X[,2], y = Y, z = Z[,-1])
   if (estmethod == "gmmalt")
