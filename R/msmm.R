@@ -227,9 +227,9 @@ msmm <- function(formula, instruments, data, subset, na.action,
   if (!all(Y %in% 0:1))
     stop("The outcome must be binary, i.e. take values 0 or 1.")
 
-  # for TSLS methods check Xs binary
+  # for TSLS methods check X binary
   if (estmethod %in% c("tsls", "tslsalt") & !all(X %in% 0:1))
-    stop("The exposures must all be binary, i.e. take values 0 or 1.")
+    stop("The exposure must be binary, i.e. take values 0 or 1.")
 
   if (estmethod == "gmm")
     output = msmm_gmm(x = X[,2], y = Y, z = Z[,-1])
