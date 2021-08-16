@@ -386,7 +386,7 @@ msmm_gmm <- function(x, y, z){
   if (ncol(x) >= 2)
     xnames <- colnames(x)
 
-  dat = data.frame(x, y, z)
+  dat = data.frame(y, x, z)
 
   t0 <- rep(0, ncol(x) + 1)
 
