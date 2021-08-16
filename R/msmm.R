@@ -357,7 +357,7 @@ msmm_tsls_alt <- function(x, y, z) {
 
 msmmMoments <- function(theta, x){
   # extract variables from x
-  Y <- as.matrix(x[,1])
+  Y <- as.matrix(x[,"y"])
   xcolstop <- length(theta)
   X <- as.matrix(x[,2:xcolstop])
   zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
