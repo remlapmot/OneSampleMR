@@ -1,11 +1,26 @@
 # tests for MSMM
 
-library(haven)
-
-dat <- read_dta("https://www.stata-press.com/data/r17/trip.dta")
-
-
-
+# Test equivalence to Stata output
+test_that("Stata output check", {
+  skip_on_cran()
+  library(haven)
+  dat <- read_dta("https://www.stata-press.com/data/r17/trip.dta")
+  fit1 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
+                 cbd + ptn + worker + weekend + pt,
+               data = dat, estmethod = "gmmalt")
+  expect_equal(log(fit1$crrci["tcost",1]), log(1.036),  tolerance = 0.05)
+  # fit2 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
+  #                cbd + ptn + worker + weekend + pt,
+  #              data = dat)
+  # fit3 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
+  #                cbd + ptn + worker + weekend + pt,
+  #              data = dat, estmethod = "gmmalt",
+  #              t0 = c(.265, -.008, -.011, .662, .301, .035))
+  # fit4 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
+  #                cbd + ptn + worker + weekend + pt,
+  #              data = dat,
+  #              t0 = c(exp(.265), -.008, -.011, .662, .301, .035))
+})
 # . * Setup
 # . webuse trip, clear
 # (Household trips)
@@ -568,30 +583,35 @@ dat <- read_dta("https://www.stata-press.com/data/r17/trip.dta")
 # Instruments for equation 1: ptn worker weekend _cons
 
 
-#' # Single instrument example
-#' # Data generation from the example in the ivtools::ivglm() helpfile
-#' set.seed(9)
-#' n <- 1000
-#' psi0 <- 0.5
-#' Z <- rbinom(n, 1, 0.5)
-#' X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-#' m0 <- plogis(1 + 0.8*X - 0.39*Z)
-#' Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
-#' dat <- data.frame(Z, X, Y)
-#' fit01 <- msmm(Y ~ X | Z, data = dat)
-#' summary(fit01)
-#' msmm(Y ~ X | Z, data = dat, estmethod = "gmm")
-#' msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
-#' msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
-#' msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
-#' mod <- msmm(Y ~ X | Z, data = dat)
-#' smy <- summary(mod)
-#' class(mod)
-#' class(smy)
-#' mod
-#' smy
-#' print(mod)
-#' print(smy)
+# Single instrument example
+test_that("Single instrument example", {
+  library(ivtools)
+  # Data generation from the example in the ivtools::ivglm() helpfile
+  set.seed(9)
+  n <- 1000
+  psi0 <- 0.5
+  Z <- rbinom(n, 1, 0.5)
+  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+  m0 <- plogis(1 + 0.8*X - 0.39*Z)
+  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  dat <- data.frame(Z, X, Y)
+  fit01 <- msmm(Y ~ X | Z, data = dat)
+  summary(fit01)
+  msmm(Y ~ X | Z, data = dat, estmethod = "gmm")
+  msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
+  msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
+  msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
+  mod <- msmm(Y ~ X | Z, data = dat)
+  smy <- summary(mod)
+  class(mod)
+  class(smy)
+  mod
+  smy
+  print(mod)
+  print(smy)
+
+
+})
 
 #' # check variables with different names
 #' dat$E <- dat$X
