@@ -373,8 +373,10 @@ msmm_gmm <- function(x, y, z){
 
   dat = data.frame(x, y, z)
 
+  t0 <- rep(0, ncol(x) + 1)
+
   # gmm fit
-  fit <- gmm::gmm(msmmMoments, x = dat, t0 = c(0, 0), vcov = "iid")
+  fit <- gmm::gmm(msmmMoments, x = dat, t0 = t0, vcov = "iid")
 
   if (fit$algoInfo$convergence != 0)
     warning("The GMM fit has not converged, perhaps try different initial parameter values")
