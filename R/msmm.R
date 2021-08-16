@@ -401,6 +401,7 @@ msmm_gmm <- function(x, y, z, xnames){
     crrci <- t(as.matrix(crrci))
   }
   rownames(crrci) <- xnames
+  colnames(crrci)[1] <- "CRR"
 
   # E[Y(0)]
   ey0ci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[1,]
