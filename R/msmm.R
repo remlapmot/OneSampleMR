@@ -43,6 +43,8 @@
 #'    * `"tslsalt"` the alternative TSLS method of fitting the MSMM of
 #'    Clarke et al. (2015). For binary \eqn{Y} and \eqn{X} this uses \eqn{Y*X}
 #'    as the outcome and \eqn{Y*(1-X)} as the exposure.
+#' @param t0 A vector of starting values for the gmm optimizer. This should
+#' have length equal to the number of exposures plus 1.
 #' @param ... further arguments passed to or from other methods.
 #' @references
 #' Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
@@ -119,6 +121,7 @@
 msmm <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
                  estmethod = c("gmm", "gmmalt", "tsls", "tslsalt"),
+                 t0 = NULL,
                  ...) {
   #  ivreg::ivreg() arguments I haven't implemented:
   # weights, offset,
@@ -197,9 +200,9 @@ msmm <- function(formula, instruments, data, subset, na.action,
     stop("With tsls and tslsalt only 1 exposure variable is allowed.")
 
   if (estmethod == "gmm")
-    output = msmm_gmm(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames)
+    output = msmm_gmm(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0)
   if (estmethod == "gmmalt")
-    output = msmm_gmm_alt(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames)
+    output = msmm_gmm_alt(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0)
   if (estmethod == "tsls")
     output = msmm_tsls(x = X[,-1], y = Y, z = Z[,-1])
   if (estmethod == "tslsalt")
@@ -300,11 +303,13 @@ msmmMoments <- function(theta, x){
   return(moments)
 }
 
-msmm_gmm <- function(x, y, z, xnames){
+msmm_gmm <- function(x, y, z, xnames, t0){
 
   x <- as.matrix(x)
   dat = data.frame(y, x, z)
-  t0 <- rep(0, ncol(x) + 1)
+
+  if (is.null(t0))
+    t0 <- rep(0, ncol(x) + 1)
 
   # gmm fit
   fit <- gmm::gmm(msmmMoments, x = dat, t0 = t0, vcov = "iid")
@@ -355,11 +360,13 @@ msmmAltMoments <- function(theta, x){
   return(moments)
 }
 
-msmm_gmm_alt <- function(x, y, z, xnames) {
+msmm_gmm_alt <- function(x, y, z, xnames, t0) {
 
   x <- as.matrix(x)
   dat = data.frame(y, x, z)
-  t0 <- rep(0, ncol(x) + 1)
+
+  if (is.null(t0))
+    t0 <- rep(0, ncol(x) + 1)
 
   # gmm fit
   fit <- gmm::gmm(msmmAltMoments, x = dat, t0 = t0, vcov = "iid")
