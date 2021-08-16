@@ -144,6 +144,7 @@
 #' dat <- data.frame(Z, X, Y)
 #' dat$X[1] <- 2
 #' try(msmm(Y ~ X | Z, data = dat, estmethod = "tsls"))
+#' try(msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt"))
 #'
 #' # Multiple instrument example
 #' set.seed(123456)
