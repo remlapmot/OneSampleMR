@@ -80,25 +80,9 @@ Z <- rbinom(n, 1, 0.5)
 X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
 m0 <- plogis(1 + 0.8*X - 0.39*Z)
 Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
-dat <- data.frame(Z, X, Y)
-msmm(Y ~ X | Z, data = dat)
-msmm(Y ~ X | Z, data = dat, estmethod = "gmm")
-msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
-msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
-msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
-
-mod <- msmm(Y ~ X | Z, data = dat)
-smy <- summary(mod)
-class(mod)
-class(smy)
-mod
-smy
-print(mod)
-print(smy)
-
-mod2 <- msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
-mod2
-summary(mod2)
+dat1 <- data.frame(Z, X, Y)
+fit1 <- msmm(Y ~ X | Z, data = dat1)
+summary(fit1)
 
 # Multiple instrument example
 set.seed(123456)
@@ -110,14 +94,11 @@ G3 <- rbinom(n, 2, 0.4)
 U <- runif(n)
 pX <- plogis(0.7*G1 + G2 - G3 + U)
 X <- rbinom(n, 1, pX)
-pY <- -2 + psi0*X + U
-Y <- rbinom(n, 1, pX)
-dat <- data.frame(G1, G2, G3, X, Y)
-msmm(Y ~ X | G1 + G2 + G3, data = dat)
-msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmm")
-msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
-msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tsls")
-msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tslsalt")
+pY <- plogis(-2 + psi0*X + U)
+Y <- rbinom(n, 1, pY)
+dat2 <- data.frame(G1, G2, G3, X, Y)
+fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
+summary(fit2)
 }
 \references{
 Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
