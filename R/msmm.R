@@ -356,12 +356,13 @@ msmm_tsls_alt <- function(x, y, z) {
 
 msmmMoments <- function(theta, x){
   # extract variables from x
-  Y <- x[,"y"]
-  X <- x[,"x"]
-
-  znames <- names(x)[!names(x) %in% c("x", "y")]
-  Z <- x[znames]
-  nZ <- ncol(Z)
+  Y <- as.matrix(x[,1])
+  xcolstop <- length(theta)
+  X <- as.matrix(x[,2:xcolstop])
+  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
+  zcolstop <- ncol(x)
+  Z <- as.matrix(x[,zcolstart:zcolstop])
+  nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
 
   linearpredictor <- -1 * X %*% t(theta[-1])
