@@ -95,7 +95,9 @@
 #' X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
 #' m0 <- plogis(1 + 0.8*X - 0.39*Z)
 #' Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
-#' dat <- data.frame(Z, X, Y)
+#' dat1 <- data.frame(Z, X, Y)
+#' fit1 <- msmm(Y ~ X | Z, data = dat1)
+#' summary(fit1)
 #'
 #' # Multiple instrument example
 #' set.seed(123456)
@@ -109,7 +111,9 @@
 #' X <- rbinom(n, 1, pX)
 #' pY <- plogis(-2 + psi0*X + U)
 #' Y <- rbinom(n, 1, pY)
-#' dat <- data.frame(G1, G2, G3, X, Y)
+#' dat2 <- data.frame(G1, G2, G3, X, Y)
+#' fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
+#' summary(fit2)
 #' @export
 #' @importFrom stats coef confint delete.response model.matrix model.response terms update vcov
 msmm <- function(formula, instruments, data, subset, na.action,
