@@ -63,7 +63,7 @@
 #' \doi{https://doi.org/10.1162/003465397557169}
 #'
 #' Nichols A. ivpois: Stata module for IV/GMM Poisson regression. 2007.
-#' [url]( http://ideas.repec.org/c/boc/bocode/s456890.html)
+#' [url](http://ideas.repec.org/c/boc/bocode/s456890.html)
 #'
 #' Robins JM. The analysis of randomised and
 #' nonrandomised AIDS treatment trials using a new approach to
