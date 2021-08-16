@@ -186,18 +186,28 @@ msmm <- function(formula, instruments, data, subset, na.action,
 
   estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
 
-  # check y binary
-  if (!all(Y %in% 0:1))
-    stop("The outcome must be binary, i.e. take values 0 or 1.")
+  # check y greater than or equal to 0
+  ygr0chck <- sum(Y < 0)
+  if (as.logical(ygr0chck))
+    stop("All of the values of the outcome must be greater than 0.")
+
+  # check y all integers
+  yintchck <- all.equal(Y, as.integer(Y), check.attributes = FALSE)
+  if (!yintchck)
+    stop("All of the values of the outcome must be integers.")
+
+  # for tsls methods check y binary
+  if (estmethod %in% c("tsls", "tslsalt") & !all(Y %in% 0:1))
+    stop("For tsls and tslsalt, the outcome must be binary, i.e. take values 0 or 1.")
 
   # for TSLS methods check X binary
   if (estmethod %in% c("tsls", "tslsalt") & !all(X %in% 0:1))
-    stop("The exposure must be binary, i.e. take values 0 or 1.")
+    stop("For tsls and tslsalt, the exposure must be binary, i.e. take values 0 or 1.")
 
   # check for only 1 exposure for tsls methods
   nX <- ncol(X) - 1
   if (nX != 1 & estmethod %in% c("tsls", "tslsalt"))
-    stop("With tsls and tslsalt only 1 exposure variable is allowed.")
+    stop("With tsls and tslsalt, only 1 exposure variable is allowed.")
 
   if (estmethod == "gmm")
     output = msmm_gmm(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0)
