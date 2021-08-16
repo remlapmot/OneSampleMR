@@ -12,6 +12,7 @@ msmm(
   na.action,
   contrasts = NULL,
   estmethod = c("gmm", "gmmalt", "tsls", "tslsalt"),
+  t0 = NULL,
   ...
 )
 }
@@ -51,6 +52,9 @@ For binary \eqn{Y} and \eqn{X} this uses \eqn{Y*(1-X)} as the outcome and
 Clarke et al. (2015). For binary \eqn{Y} and \eqn{X} this uses \eqn{Y*X}
 as the outcome and \eqn{Y*(1-X)} as the exposure.
 }}
+
+\item{t0}{A vector of starting values for the gmm optimizer. This should
+have length equal to the number of exposures plus 1.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
