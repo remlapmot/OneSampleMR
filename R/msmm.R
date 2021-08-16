@@ -366,7 +366,7 @@ msmmMoments <- function(theta, x){
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
 
-  linearpredictor <- -1 * X %*% t(theta[-1])
+  linearpredictor <- -1 * X %*% as.matrix(theta[-1])
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
