@@ -368,6 +368,7 @@ msmmMoments <- function(theta, x){
 
 msmm_gmm <- function(x, y, z){
 
+  x <- as.matrix(x)
   if (ncol(x) >= 2)
     xnames <- colnames(x)
 
