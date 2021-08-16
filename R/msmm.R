@@ -280,7 +280,7 @@ msmm <- function(formula, instruments, data, subset, na.action,
   if (estmethod == "gmm")
     output = msmm_gmm(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames)
   if (estmethod == "gmmalt")
-    output = msmm_gmm_alt(x = X[,-1], y = Y, z = Z[,-1])
+    output = msmm_gmm_alt(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames)
   if (estmethod == "tsls")
     output = msmm_tsls(x = X[,-1], y = Y, z = Z[,-1])
   if (estmethod == "tslsalt")
@@ -414,36 +414,49 @@ msmm_gmm <- function(x, y, z, xnames){
 
 msmmAltMoments <- function(theta, x){
   # extract variables from x
-  Y <- x[,"y"]
-  X <- x[,"x"]
-
-  znames <- names(x)[!names(x) %in% c("x", "y")]
-  Z <- x[znames]
-  nZ <- ncol(Z)
+  Y <- as.matrix(x[,"y"])
+  xcolstop <- length(theta)
+  X <- cbind(rep(1, nrow(x)), as.matrix(x[,2:xcolstop]))
+  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
+  zcolstop <- ncol(x)
+  Z <- as.matrix(x[,zcolstart:zcolstop])
+  nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
 
+  linearpredictor <- -1 * X %*% as.matrix(theta)
+
   # moments
-  moments <- matrix(nrow = nrow(Z), ncol = nZp1, NA)
-  moments[,1] <- (Y*exp(-theta[1] - X*theta[2]) - 1)
+  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
+  moments[,1] <- (Y*exp(linearpredictor) - 1)
   for (i in 1:nZ) {
     j <- i + 1
-    moments[,j] <- (Y*exp(-theta[1] - X*theta[2]) - 1)*Z[,i]
+    moments[,j] <- (Y*exp(linearpredictor) - 1)*Z[,i]
   }
   return(moments)
 }
 
-msmm_gmm_alt <- function(x, y, z) {
-  dat = data.frame(x, y, z)
+msmm_gmm_alt <- function(x, y, z, xnames) {
+
+  x <- as.matrix(x)
+  dat = data.frame(y, x, z)
+  t0 <- rep(0, ncol(x) + 1)
 
   # gmm fit
-  fit <- gmm::gmm(msmmAltMoments, x = dat, t0 = c(0, 0), vcov = "iid")
+  fit <- gmm::gmm(msmmAltMoments, x = dat, t0 = t0, vcov = "iid")
 
   if (fit$algoInfo$convergence != 0)
     warning("The GMM fit has not converged, perhaps try different initial parameter values")
 
   # exponentiate estimates
   expests <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test))
-  crrci <- expests[2,]
+  crrci <- as.matrix(expests[-1,])
+  if (ncol(x) >= 2) {
+    crrci <- as.matrix(crrci)
+  } else {
+    crrci <- t(as.matrix(crrci))
+  }
+  rownames(crrci) <- xnames
+  colnames(crrci)[1] <- "CRR"
   ey0ci <- expests[1,]
 
   reslist <- list(fit = fit,
