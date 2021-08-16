@@ -259,6 +259,9 @@ msmm <- function(formula, instruments, data, subset, na.action,
   # offset <- as.vector(offset)
   # end of code from ivreg::ivreg()
 
+  xnames <- colnames(X)
+  xnames <- xnames[-1]
+
   estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
 
   # check y binary
@@ -275,7 +278,7 @@ msmm <- function(formula, instruments, data, subset, na.action,
     stop("With tsls and tslsalt only 1 exposure variable is allowed.")
 
   if (estmethod == "gmm")
-    output = msmm_gmm(x = X[,-1], y = Y, z = Z[,-1])
+    output = msmm_gmm(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames)
   if (estmethod == "gmmalt")
     output = msmm_gmm_alt(x = X[,-1], y = Y, z = Z[,-1])
   if (estmethod == "tsls")
@@ -378,14 +381,10 @@ msmmMoments <- function(theta, x){
   return(moments)
 }
 
-msmm_gmm <- function(x, y, z){
+msmm_gmm <- function(x, y, z, xnames){
 
   x <- as.matrix(x)
-  if (ncol(x) >= 2)
-    xnames <- colnames(x)
-
   dat = data.frame(y, x, z)
-
   t0 <- rep(0, ncol(x) + 1)
 
   # gmm fit
@@ -395,7 +394,13 @@ msmm_gmm <- function(x, y, z){
     warning("The GMM fit has not converged, perhaps try different initial parameter values")
 
   # causal risk ratio
-  crrci <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[2,])
+  crrci <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[-1,])
+  if (ncol(x) >= 2) {
+    crrci <- as.matrix(crrci)
+  } else {
+    crrci <- t(as.matrix(crrci))
+  }
+  rownames(crrci) <- xnames
 
   # E[Y(0)]
   ey0ci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[1,]
