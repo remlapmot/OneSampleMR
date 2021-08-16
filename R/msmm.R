@@ -186,6 +186,14 @@
 #' msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
 #' try(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tsls"))
 #' try(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tslsalt"))
+#'
+#' # With different variable names
+#' E1 <- X1
+#' E2 <- X2
+#' R <- Y
+#' dat <- data.frame(G1, G2, G3, E1, E2, R)
+#' msmm(Y ~ E1 + E2 | G1 + G2 + G3, data = dat)
+#'
 #' @export
 #' @importFrom stats coef confint delete.response model.matrix model.response terms update vcov
 msmm <- function(formula, instruments, data, subset, na.action,
