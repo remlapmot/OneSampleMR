@@ -133,7 +133,7 @@
 #' dat$Y[1] <- 2
 #' try(msmm(Y ~ X | Z, data = dat))
 #'
-#' # non-binary x with tsls fail
+#' # non-binary x with tsls, tslsalt methods fail
 #' set.seed(9)
 #' n <- 1000
 #' psi0 <- 0.5
