@@ -35,7 +35,7 @@ Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
 dat <- data.frame(Z, X, Y)
 ```
 
-* Then fit MSMM.
+* Then fit MSMM using G-estimation.
 
 ```{r}
 fitZ.L <- glm(Z ~ 1, family = "binomial", data = dat)
@@ -47,42 +47,36 @@ summary(fit01)
 confint(fit01)
 ```
 
-* Comparison fit using gmm()
+* Back transforming that estimate from the $\log(\text{CRR})$ scale to the $\text{CRR}$ scale.
 
 ```{r}
-coefci <- function(fit) cbind(coef(fit), confint.default(fit))
-  
-msmmOneX <- function(theta, x){
-  # extract variables from x
-  Y <- x[,"Y"]
-  X1 <- x[,"X"]
-  Z1 <- x[,"Z"]
-  # moments
-  m1 <- (Y*exp(- X1*theta[2]) - theta[1])
-  m2 <- (Y*exp(- X1*theta[2]) - theta[1])*Z1
-  return(cbind(m1, m2))
-}
-
-fit02 <- gmm(msmmOneX, x = dat, t0 = rep(.1, 2), vcov = "iid")
-summary(fit02)
-coefci(fit02)
+exp(cbind(fit01$est, confint(fit01)))
 ```
 
-* Alternative moment conditions
+* Comparison fit using `msmm()`.
 
 ```{r}
-msmmAltMoments <- function(theta, x){
-  # extract variables from x
-  Y <- x[,"Y"]
-  X1 <- x[,"X"]
-  Z1 <- x[,"Z"]
-  # moments
-  m1 <- (Y*exp(-theta[1] - X1*theta[2]) - 1)
-  m2 <- (Y*exp(-theta[1] - X1*theta[2]) - 1)*Z1
-  return(cbind(m1, m2))
-}
+fit02 <- msmm(Y ~ X | Z, data = dat, t0 = rep(.1, 2))
+summary(fit02)
+```
 
-fit03 <- gmm(msmmAltMoments, x = dat, t0 = rep(.1, 2), vcov = "iid")
+* Comparison fit using the alternative GMM moment conditions.
+
+```{r}
+fit03 <- msmm(Y ~ X | Z, data = dat, t0 = rep(.1, 2), estmethod = "gmmalt")
 summary(fit03)
-confint(fit03)
+```
+
+* Comparison fit using transformed variables using two-stage least squares.
+
+```{r}
+fit04 <- msmm(Y ~ X | Z, data = dat, t0 = rep(.1, 2), estmethod = "tsls")
+summary(fit04)
+```
+
+* Comparison fit using the alternative transformed variables approach using two-stage least squares.
+
+```{r}
+fit05 <- msmm(Y ~ X | Z, data = dat, t0 = rep(.1, 2), estmethod = "tslsalt")
+summary(fit05)
 ```
