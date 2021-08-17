@@ -635,11 +635,19 @@ test_that("Single instrument example", {
 
 # check variables with different names
 test_that("Check using different variable names", {
+  set.seed(9)
+  n <- 1000
+  psi0 <- 0.5
+  Z <- rbinom(n, 1, 0.5)
+  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+  m0 <- plogis(1 + 0.8*X - 0.39*Z)
+  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  dat <- data.frame(Z, X, Y)
   dat$E <- dat$X
   dat$R <- dat$Y
   dat$W <- dat$Z
   fit06 <- msmm(R ~ E | W, data = dat)
-  expect_equal(log(fit06$crrci[1]), logcrr, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(log(fit06$crrci[1]), 0.1314654, tolerance = 0.05, ignore_attr = "names")
 })
 
 # Multiple instrument example
@@ -705,6 +713,14 @@ test_that("Y needs to be binary for the TSLS methods", {
 
 # All methods fail for a non-integer in Y
 test_that("Methods fail for non-integer Y", {
+  set.seed(9)
+  n <- 1000
+  psi0 <- 0.5
+  Z <- rbinom(n, 1, 0.5)
+  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+  m0 <- plogis(1 + 0.8*X - 0.39*Z)
+  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  dat <- data.frame(Z, X, Y)
   dat$Y[1] <- 1.5
   expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "gmm"))
   expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt"))
@@ -745,6 +761,20 @@ test_that("Multiple exposure example", {
 
 # Multiple exposure example with different variable names
 test_that("Multiple exposure example with different variable names", {
+  set.seed(123456)
+  n <- 1000
+  psi0 <- 0.5
+  psi1 <- 0.4
+  G1 <- rbinom(n, 2, 0.5)
+  G2 <- rbinom(n, 2, 0.3)
+  G3 <- rbinom(n, 2, 0.4)
+  U <- runif(n)
+  pX1 <- plogis(0.7*G1 + G2 - G3 + U)
+  X1 <- rbinom(n, 1, pX1)
+  pX2 <- plogis(-1 + 0.2*G1 - 0.2*G2 + 0.4*G3 + U)
+  X2 <- rbinom(n, 1, pX2)
+  pY <- plogis(-2 + psi0*X1 + psi1*X2 + U)
+  Y <- rbinom(n, 1, pY)
   E1 <- X1
   E2 <- X2
   R <- Y
