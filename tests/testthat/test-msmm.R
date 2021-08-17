@@ -633,11 +633,14 @@ test_that("Single instrument example", {
   expect_output(print(smy))
 })
 
-#' # check variables with different names
-#' dat$E <- dat$X
-#' dat$R <- dat$Y
-#' dat$W <- dat$Z
-#' msmm(R ~ E | W, data = dat)
+# check variables with different names
+test_that("Check using different variable names", {
+  dat$E <- dat$X
+  dat$R <- dat$Y
+  dat$W <- dat$Z
+  fit06 <- msmm(R ~ E | W, data = dat)
+  expect_equal(log(fit06$crrci[1]), logcrr, tolerance = 0.05, ignore_attr = "names")
+})
 
 
 
