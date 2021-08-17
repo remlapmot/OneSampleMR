@@ -1,8 +1,8 @@
 ---
-title: "Compare fits of structural mean models"
+title: "Comparison fits of the multiplicative structural mean model"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{compare-smm-fits}
+  %\VignetteIndexEntry{Comparison fits of the multiplicative structural mean model}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
