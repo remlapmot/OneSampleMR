@@ -56,27 +56,27 @@ exp(cbind(fit01$est, confint(fit01)))
 * Comparison fit using `msmm()`.
 
 ```{r}
-fit02 <- msmm(Y ~ X | Z, data = dat, t0 = rep(.1, 2))
+fit02 <- msmm(Y ~ X | Z, data = dat)
 summary(fit02)
 ```
 
 * Comparison fit using the alternative GMM moment conditions.
 
 ```{r}
-fit03 <- msmm(Y ~ X | Z, data = dat, t0 = rep(.1, 2), estmethod = "gmmalt")
+fit03 <- msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
 summary(fit03)
 ```
 
 * Comparison fit using transformed variables using two-stage least squares.
 
 ```{r}
-fit04 <- msmm(Y ~ X | Z, data = dat, t0 = rep(.1, 2), estmethod = "tsls")
+fit04 <- msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
 summary(fit04)
 ```
 
 * Comparison fit using the alternative transformed variables approach using two-stage least squares.
 
 ```{r}
-fit05 <- msmm(Y ~ X | Z, data = dat, t0 = rep(.1, 2), estmethod = "tslsalt")
+fit05 <- msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
 summary(fit05)
 ```
