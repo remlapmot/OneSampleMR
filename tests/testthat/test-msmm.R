@@ -673,60 +673,82 @@ test_that("Multiple instrument example", {
   expect_equal(log(fit15$crrci[1]), 0.45, tolerance = 0.15)
 })
 
+# non-binary x with tsls, tslsalt methods fail
+test_that("Non-binary x with tsls and tslsalt methods should produce an error", {
+  set.seed(9)
+  n <- 1000
+  psi0 <- 0.5
+  Z <- rbinom(n, 1, 0.5)
+  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+  m0 <- plogis(1 + 0.8*X - 0.39*Z)
+  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  dat <- data.frame(Z, X, Y)
+  dat$X[1] <- 2
+  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "tsls"))
+  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt"))
+})
 
-#' # non-binary x with tsls, tslsalt methods fail
-#' set.seed(9)
-#' n <- 1000
-#' psi0 <- 0.5
-#' Z <- rbinom(n, 1, 0.5)
-#' X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-#' m0 <- plogis(1 + 0.8*X - 0.39*Z)
-#' Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
-#' dat <- data.frame(Z, X, Y)
-#' dat$X[1] <- 2
-#' try(msmm(Y ~ X | Z, data = dat, estmethod = "tsls"))
-#' try(msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt"))
+# non-binary y fail for tsls methods
+test_that("Y needs to be binary for the TSLS methods", {
+  set.seed(9)
+  n <- 1000
+  psi0 <- 0.5
+  Z <- rbinom(n, 1, 0.5)
+  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+  m0 <- plogis(1 + 0.8*X - 0.39*Z)
+  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  dat <- data.frame(Z, X, Y)
+  dat$Y[1] <- 2
+  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "tsls"))
+  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt"))
+})
 
-#' # non-binary y fail
-#' set.seed(9)
-#' n <- 1000
-#' psi0 <- 0.5
-#' Z <- rbinom(n, 1, 0.5)
-#' X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-#' m0 <- plogis(1 + 0.8*X - 0.39*Z)
-#' Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
-#' dat <- data.frame(Z, X, Y)
-#' dat$Y[1] <- 2
-#' try(msmm(Y ~ X | Z, data = dat))
+# All methods fail for a non-integer in Y
+test_that("Methods fail for non-integer Y", {
+  dat$Y[1] <- 1.5
+  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "gmm"))
+  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt"))
+  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "tsls"))
+  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt"))
+})
 
-#' # Multiple exposure example
-#' set.seed(123456)
-#' n <- 1000
-#' psi0 <- 0.5
-#' psi1 <- 0.4
-#' G1 <- rbinom(n, 2, 0.5)
-#' G2 <- rbinom(n, 2, 0.3)
-#' G3 <- rbinom(n, 2, 0.4)
-#' U <- runif(n)
-#' pX1 <- plogis(0.7*G1 + G2 - G3 + U)
-#' X1 <- rbinom(n, 1, pX1)
-#' pX2 <- plogis(-1 + 0.2*G1 - 0.2*G2 + 0.4*G3 + U)
-#' X2 <- rbinom(n, 1, pX2)
-#' pY <- plogis(-2 + psi0*X1 + psi1*X2 + U)
-#' Y <- rbinom(n, 1, pY)
-#' table(Y)
-#' dat <- data.frame(G1, G2, G3, X1, X2, Y)
-#' msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat)
-#' msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "gmm")
-#' msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
-#' try(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tsls"))
-#' try(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tslsalt"))
-#'
-#' # With different variable names
-#' E1 <- X1
-#' E2 <- X2
-#' R <- Y
-#' dat <- data.frame(G1, G2, G3, E1, E2, R)
-#' msmm(Y ~ E1 + E2 | G1 + G2 + G3, data = dat)
+# Multiple exposure example
+test_that("Multiple exposure example", {
+  set.seed(123456)
+  n <- 1000
+  psi0 <- 0.5
+  psi1 <- 0.4
+  G1 <- rbinom(n, 2, 0.5)
+  G2 <- rbinom(n, 2, 0.3)
+  G3 <- rbinom(n, 2, 0.4)
+  U <- runif(n)
+  pX1 <- plogis(0.7*G1 + G2 - G3 + U)
+  X1 <- rbinom(n, 1, pX1)
+  pX2 <- plogis(-1 + 0.2*G1 - 0.2*G2 + 0.4*G3 + U)
+  X2 <- rbinom(n, 1, pX2)
+  pY <- plogis(-2 + psi0*X1 + psi1*X2 + U)
+  Y <- rbinom(n, 1, pY)
+  dat <- data.frame(G1, G2, G3, X1, X2, Y)
 
+  fit21 <- msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat)
+  expect_equal(log(fit21$crrci[1,1]), 0.08, tolerance = 0.02)
 
+  fit22 <- msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "gmm")
+  expect_equal(log(fit22$crrci[1,1]), 0.08, tolerance = 0.02)
+
+  fit23 <- msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
+  expect_equal(log(fit23$crrci[1,1]), 0.08, tolerance = 0.1)
+
+  expect_error(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tsls"))
+  expect_error(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tslsalt"))
+})
+
+# Multiple exposure example with different variable names
+test_that("Multiple exposure example with different variable names", {
+  E1 <- X1
+  E2 <- X2
+  R <- Y
+  dat <- data.frame(G1, G2, G3, E1, E2, R)
+  fit24 <- msmm(Y ~ E1 + E2 | G1 + G2 + G3, data = dat)
+  expect_equal(log(fit24$crrci[1,1]), 0.08, tolerance = 0.02)
+})
