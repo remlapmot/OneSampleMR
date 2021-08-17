@@ -642,7 +642,62 @@ test_that("Check using different variable names", {
   expect_equal(log(fit06$crrci[1]), logcrr, tolerance = 0.05, ignore_attr = "names")
 })
 
+# Multiple instrument example
+test_that("Multiple instrument example", {
+  set.seed(123456)
+  n <- 1000
+  psi0 <- 0.5
+  G1 <- rbinom(n, 2, 0.5)
+  G2 <- rbinom(n, 2, 0.3)
+  G3 <- rbinom(n, 2, 0.4)
+  U <- runif(n)
+  pX <- plogis(0.7*G1 + G2 - G3 + U)
+  X <- rbinom(n, 1, pX)
+  pY <- plogis(-2 + psi0*X + U)
+  Y <- rbinom(n, 1, pY)
+  dat <- data.frame(G1, G2, G3, X, Y)
 
+  fit11 <- msmm(Y ~ X | G1 + G2 + G3, data = dat)
+  expect_equal(log(fit11$crrci[1]), 0.45, tolerance = 0.05)
+
+  fit12 <- msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmm")
+  expect_equal(log(fit12$crrci[1]), 0.45, tolerance = 0.05)
+
+  fit13 <- msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
+  expect_equal(log(fit13$crrci[1]), 0.45, tolerance = 0.1)
+
+  fit14 <- msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tsls")
+  expect_equal(log(fit14$crrci[1]), 0.45, tolerance = 0.02)
+
+  fit15 <- msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tslsalt")
+  expect_equal(log(fit15$crrci[1]), 0.45, tolerance = 0.15)
+})
+
+
+#' # non-binary x with tsls, tslsalt methods fail
+#' set.seed(9)
+#' n <- 1000
+#' psi0 <- 0.5
+#' Z <- rbinom(n, 1, 0.5)
+#' X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+#' m0 <- plogis(1 + 0.8*X - 0.39*Z)
+#' Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+#' dat <- data.frame(Z, X, Y)
+#' dat$X[1] <- 2
+#' try(msmm(Y ~ X | Z, data = dat, estmethod = "tsls"))
+#' try(msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt"))
+
+#' # non-binary y fail
+#' set.seed(9)
+#' n <- 1000
+#' psi0 <- 0.5
+#' Z <- rbinom(n, 1, 0.5)
+#' X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+#' m0 <- plogis(1 + 0.8*X - 0.39*Z)
+#' Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+#' dat <- data.frame(Z, X, Y)
+#' dat$Y[1] <- 2
+#' try(msmm(Y ~ X | Z, data = dat))
 
 #' # Multiple exposure example
 #' set.seed(123456)
@@ -675,47 +730,3 @@ test_that("Check using different variable names", {
 #' msmm(Y ~ E1 + E2 | G1 + G2 + G3, data = dat)
 
 
-#' # Multiple instrument example
-#' set.seed(123456)
-#' n <- 1000
-#' psi0 <- 0.5
-#' G1 <- rbinom(n, 2, 0.5)
-#' G2 <- rbinom(n, 2, 0.3)
-#' G3 <- rbinom(n, 2, 0.4)
-#' U <- runif(n)
-#' pX <- plogis(0.7*G1 + G2 - G3 + U)
-#' X <- rbinom(n, 1, pX)
-#' pY <- plogis(-2 + psi0*X + U)
-#' Y <- rbinom(n, 1, pY)
-#' dat <- data.frame(G1, G2, G3, X, Y)
-#' msmm(Y ~ X | G1 + G2 + G3, data = dat)
-#' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmm")
-#' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
-#' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tsls")
-#' msmm(Y ~ X | G1 + G2 + G3, data = dat, estmethod = "tslsalt")
-
-
-#' # non-binary x with tsls, tslsalt methods fail
-#' set.seed(9)
-#' n <- 1000
-#' psi0 <- 0.5
-#' Z <- rbinom(n, 1, 0.5)
-#' X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-#' m0 <- plogis(1 + 0.8*X - 0.39*Z)
-#' Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
-#' dat <- data.frame(Z, X, Y)
-#' dat$X[1] <- 2
-#' try(msmm(Y ~ X | Z, data = dat, estmethod = "tsls"))
-#' try(msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt"))
-
-#' # non-binary y fail
-#' set.seed(9)
-#' n <- 1000
-#' psi0 <- 0.5
-#' Z <- rbinom(n, 1, 0.5)
-#' X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-#' m0 <- plogis(1 + 0.8*X - 0.39*Z)
-#' Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
-#' dat <- data.frame(Z, X, Y)
-#' dat$Y[1] <- 2
-#' try(msmm(Y ~ X | Z, data = dat))
