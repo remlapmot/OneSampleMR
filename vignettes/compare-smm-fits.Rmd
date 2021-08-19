@@ -1,0 +1,82 @@
+---
+title: "Comparison fits of the multiplicative structural mean model"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Comparison fits of the multiplicative structural mean model}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(OneSampleMR)
+library(ivtools)
+```
+
+## Comparison fit using the ivtools package
+
+* Example from the `ivtools::ivglm()` helpfile. First simulate some example data.
+
+```{r}
+set.seed(12345)
+n <- 5000
+psi0 <- 0.5
+psi1 <- 0.2
+Z <- rbinom(n, 1, 0.5)
+X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z)) 
+m0 <- plogis(1 + 0.8*X - 0.39*Z)
+Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0)))) 
+dat <- data.frame(Z, X, Y)
+```
+
+* Then fit MSMM using G-estimation.
+
+```{r}
+fitZ.L <- glm(Z ~ 1, family = "binomial", data = dat)
+fitY.LZX <- glm(Y ~ X, family = "binomial", data = dat)
+fit01 <- ivglm(estmethod = "g", X = "X", Y = "Y",
+                  fitZ.L = fitZ.L, fitY.LZX = fitY.LZX, 
+                  data = dat, link = "log")
+summary(fit01)
+confint(fit01)
+```
+
+* Back transforming that estimate from the $\log(\text{CRR})$ scale to the $\text{CRR}$ scale.
+
+```{r}
+exp(cbind(fit01$est, confint(fit01)))
+```
+
+* Comparison fit using `msmm()`.
+
+```{r}
+fit02 <- msmm(Y ~ X | Z, data = dat)
+summary(fit02)
+```
+
+* Comparison fit using the alternative GMM moment conditions.
+
+```{r}
+fit03 <- msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
+summary(fit03)
+```
+
+* Comparison fit using transformed variables using two-stage least squares.
+
+```{r}
+fit04 <- msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
+summary(fit04)
+```
+
+* Comparison fit using the alternative transformed variables approach using two-stage least squares.
+
+```{r}
+fit05 <- msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
+summary(fit05)
+```

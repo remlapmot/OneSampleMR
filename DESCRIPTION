@@ -1,6 +1,6 @@
 Package: OneSampleMR
 Title: Useful Functions for One Sample Mendelian Randomization Analyses
-Version: 0.0.0.9000
+Version: 0.0.0.900
 Authors@R: c(
     person(given = "Tom",
            family = "Palmer",
@@ -25,13 +25,20 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports:
+    Formula,
+    gmm,
     ivreg,
-    lmtest
+    lmtest,
+    msm
 Suggests: 
     haven,
+    ivtools,
+    knitr,
     lfe,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 BugReports: https://github.com/remlapmot/OneSampleMR/issues/
 URL: https://github.com/remlapmot/OneSampleMR
 Depends: R (>= 3.6.0)
+VignetteBuilder: knitr
