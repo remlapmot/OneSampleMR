@@ -46,6 +46,22 @@
 #' @param t0 A vector of starting values for the gmm optimizer. This should
 #' have length equal to the number of exposures plus 1.
 #' @param ... further arguments passed to or from other methods.
+#' @return An object of class `"msmm"`. A list with the following items:
+#'
+#' \item{fit}{The object from either a [`gmm::gmm()`] or [`ivreg::ivreg()`] fit.}
+#' \item{crrci}{The causal risk ratio/s and it corresponding 95% confidence
+#' interval limits.}
+#' \item{estmethod}{The specified `estmethod`.}
+#'
+#' If `estmethod` is `"tsls"`, `"gmm"`, or `"gmmalt"`:
+#'
+#' \item{ey0ci}{The estimate of the treatment/exposure free potential outcome and
+#' its 95% confidence interval limits.}
+#'
+#' If `estmethod` is `"tsls"` or `"tslsalt"`:
+#'
+#' \item{stage1}{An object containing the first stage regression from an
+#' [`stats::lm()`] fit.}
 #' @references
 #' Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
 #' New York, Cambridge University Press.
