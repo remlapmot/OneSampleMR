@@ -58,6 +58,24 @@ have length equal to the number of exposures plus 1.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+An object of class \code{"msmm"}. A list with the following items:
+
+\item{fit}{The object from either a \code{\link[gmm:gmm]{gmm::gmm()}} or \code{\link[ivreg:ivreg]{ivreg::ivreg()}} fit.}
+\item{crrci}{The causal risk ratio/s and it corresponding 95\% confidence
+interval limits.}
+\item{estmethod}{The specified \code{estmethod}.}
+
+If \code{estmethod} is \code{"tsls"}, \code{"gmm"}, or \code{"gmmalt"}:
+
+\item{ey0ci}{The estimate of the treatment/exposure free potential outcome and
+its 95\% confidence interval limits.}
+
+If \code{estmethod} is \code{"tsls"} or \code{"tslsalt"}:
+
+\item{stage1}{An object containing the first stage regression from an
+\code{\link[stats:lm]{stats::lm()}} fit.}
+}
 \description{
 Function providing several methods to estimate the multiplicative
 structural mean model (MSMM) of Robins (1989).
