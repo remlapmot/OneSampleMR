@@ -426,6 +426,13 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
 #' @param ... further arguments passed to or from other methods.
 #'
 #' S3 summary and print methods for objects of class `msmm` and `summary.msmm`.
+#'
+#' @return `summary.msmm()` returns an object of class `"summary.msmm"`. A list with the following elements:
+#'
+#' \item{smry}{An object from a call to either [`gmm::summary.gmm()`] or
+#' [`ivreg::summary.ivreg()`].}
+#' \item{object}{The object of class `msmm` passed to the function.}
+#'
 #' @examples
 #' # For examples see the examples at the bottom of help('msmm')
 #' @export
