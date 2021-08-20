@@ -71,7 +71,7 @@
 #' Generalised Method of Moments. Statistical Science, 2015, 30, 1,
 #' 96-117. \doi{10.1214/14-STS503}
 #'
-#' Hernan and Robins. Instruments for causal inference: An
+#' Hernán and Robins. Instruments for causal inference: An
 #' Epidemiologist's dream? Epidemiology, 2006, 17, 360-372.
 #' \doi{10.1097/01.ede.0000222409.00878.37}
 #'
