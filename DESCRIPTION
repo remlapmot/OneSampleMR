@@ -1,29 +1,29 @@
 Package: OneSampleMR
 Title: Useful Functions for One Sample Mendelian Randomization Analyses
 Version: 0.0.0.900
-Authors@R: c(
-    person(given = "Tom",
-           family = "Palmer",
-           role = c("aut", "cre"),
-           email = "remlapmot@hotmail.com",
-           comment = c(ORCID = "0000-0003-4655-4511")),
-    person(given = "Wes",
-          family = "Spiller",
-          role = c("aut"),
-          email = "wes.spiller@bristol.ac.uk",
-          comment = c(ORCID = "0000-0002-8169-5531")),
-    person(given = "Eleanor",
-          family = "Sanderson",
-          role = c("aut"),
-          email = "eleanor.sanderson@bristol.ac.uk",
-          comment = c(ORCID = "0000-0001-5188-5775")))
-Description: This package provides useful functions for one sample 
+Authors@R: 
+    c(person(given = "Tom",
+             family = "Palmer",
+             role = c("aut", "cre"),
+             email = "remlapmot@hotmail.com",
+             comment = c(ORCID = "0000-0003-4655-4511")),
+      person(given = "Wes",
+             family = "Spiller",
+             role = "aut",
+             email = "wes.spiller@bristol.ac.uk",
+             comment = c(ORCID = "0000-0002-8169-5531")),
+      person(given = "Eleanor",
+             family = "Sanderson",
+             role = "aut",
+             email = "eleanor.sanderson@bristol.ac.uk",
+             comment = c(ORCID = "0000-0001-5188-5775")))
+Description: This package provides useful functions for one sample
     Mendelian randomization and instrumental variable analyses.
 License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+URL: https://github.com/remlapmot/OneSampleMR
+BugReports: https://github.com/remlapmot/OneSampleMR/issues/
+Depends: 
+    R (>= 3.6.0)
 Imports:
     Formula,
     gmm,
@@ -37,8 +37,10 @@ Suggests:
     lfe,
     rmarkdown,
     testthat (>= 3.0.0)
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
-BugReports: https://github.com/remlapmot/OneSampleMR/issues/
-URL: https://github.com/remlapmot/OneSampleMR
-Depends: R (>= 3.6.0)
-VignetteBuilder: knitr
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
