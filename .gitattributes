@@ -3,3 +3,4 @@
 *.rmd linguist-detectable
 *.Rmd linguist-language=RMarkdown
 *.Rmd linguist-detectable
+vignettes/* linguist-vendored=false
