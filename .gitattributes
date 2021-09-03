@@ -1,5 +1,4 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-*.rmd linguist-detectable
-*.Rmd linguist-language=RMarkdown linguist-detectable
+*.[Rr]md linguist-detectable
 vignettes/* linguist-vendored=false
