@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Please cite this software using the metadata below."
+authors:
+- family-names: "Palmer"
+  given-names: "Tom"
+  orcid: "https://orcid.org/0000-0003-4655-4511"
+- family-names: "Spiller"
+  given-names: "Wes"
+  orcid: "https://orcid.org/0000-0002-8169-5531"
+- family-names: "Sanderson"
+  given-names: "Eleanor"
+  orcid: "https://orcid.org/0000-0001-5188-5775"
+title: "OneSampleMR - R package for one-sample instrumental variable (IV) / Mendelian randomization (MR) analyses"
+type: software
+version: 0.1.0
+date-released: 2021-09-11
+repository-code: "https://github.com/remlapmot/OneSampleMR"
+license: MIT
