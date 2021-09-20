@@ -139,12 +139,11 @@ msmm <- function(formula, instruments, data, subset, na.action,
                  estmethod = c("gmm", "gmmalt", "tsls", "tslsalt"),
                  t0 = NULL,
                  ...) {
-  #  ivreg::ivreg() arguments I haven't implemented:
+  # ivreg::ivreg() arguments I haven't implemented:
   # weights, offset,
   # model = TRUE, y = TRUE, x = FALSE,
 
   # code from beginning for ivreg::ivreg()
-  estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
   ## set up model.frame() call
   cl <- match.call()
   if(missing(data)) data <- environment(formula)
