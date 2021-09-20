@@ -10,8 +10,12 @@ analyses, including implementations of:
 * Various one-sample instrumental variable estimators including the
   * Multiplicative structural mean model (Robins, 1989; [Hernán and Robins, 2006](https://doi.org/10.1097/01.ede.0000222409.00878.37)).
 
+## Installation
+
 Install the package within R using
 ``` r
 # install.packages("remotes") # uncomment on first run
 remotes::install_github("remlapmot/OneSampleMR")
 ```
+
+To check for and install updates to the package run this command again.
