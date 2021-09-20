@@ -5,3 +5,4 @@
 ^docs$
 ^pkgdown$
 ^CITATION\.cff$
+^\.github$
