@@ -48,4 +48,5 @@
 #' dat2 <- data.frame(G1, G2, G3, X, Y)
 #' fit2 <- ivreg::ivreg(Y ~ X | G1 + G2 + G3, data = dat2)
 #' summary(fit2)
+#' @name asmm
 NULL
