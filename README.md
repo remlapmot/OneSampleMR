@@ -1,4 +1,7 @@
 # OneSampleMR
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/remlapmot/OneSampleMR/workflows/R-CMD-check/badge.svg)](https://github.com/remlapmot/OneSampleMR/actions)
+<!-- badges: end -->
 
 Useful functions for one sample Mendelian randomization / instrumental variable 
 analyses, including implementations of:
