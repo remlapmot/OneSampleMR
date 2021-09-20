@@ -19,7 +19,7 @@ Authors@R:
              comment = c(ORCID = "0000-0001-5188-5775")))
 Description: This package provides useful functions for one sample
     Mendelian randomization and instrumental variable analyses.
-License: MIT + file LICENSE
+License: GPL (>= 3)
 URL: https://github.com/remlapmot/OneSampleMR
 BugReports: https://github.com/remlapmot/OneSampleMR/issues/
 Depends: 
