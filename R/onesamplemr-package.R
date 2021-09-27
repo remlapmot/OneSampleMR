@@ -14,5 +14,4 @@
 #' @name OneSampleMR-package
 #' @docType package
 #' @aliases onesamplemr OneSampleMR
-#'
 NULL
