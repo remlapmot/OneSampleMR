@@ -9,6 +9,7 @@
 tsri <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
                  t0 = NULL,
+                 link = "identity",
                  ...) {
   # ivreg::ivreg() arguments I haven't implemented:
   # weights, offset,
@@ -70,10 +71,10 @@ tsri <- function(formula, instruments, data, subset, na.action,
   xnames <- colnames(X)
   xnames <- xnames[-1]
 
-  estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
+  link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
   # check y binary
-  if (!all(Y %in% 0:1))
+  if (link == "logit" & !all(Y %in% 0:1))
     stop("For tsls and tslsalt, the outcome must be binary, i.e. take values 0 or 1.")
 
 
