@@ -96,7 +96,7 @@ lsmm <- function(formula, instruments, data, subset, na.action,
 #' \item{object}{The object of class `tsps` passed to the function.}
 #'
 #' @examples
-#' # For examples see the examples at the bottom of help('msmm')
+#' # For examples see the examples at the bottom of help('lsmm')
 #' @export
 summary.lsmm <- function(object, ...) {
 
