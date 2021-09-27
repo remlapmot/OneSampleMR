@@ -15,7 +15,39 @@ lsmm(
   ...
 )
 }
+\arguments{
+\item{formula}{formula specification(s) of the regression
+relationship and the instruments. Either \code{instruments} is missing and
+\code{formula} has three parts as in \code{y ~ x1 + x2 | z1 + z2 + z3}
+(recommended) or \code{formula} is \code{y ~ x1 + x2} and \code{instruments}
+is a one-sided formula \code{~ z1 + z2 + z3} (only for backward
+compatibility).}
+
+\item{instruments}{formula specification(s) of the regression
+relationship and the instruments. Either \code{instruments} is missing and
+\code{formula} has three parts as in \code{y ~ x1 + x2 | z1 + z2 + z3}
+(recommended) or \code{formula} is \code{y ~ x1 + x2} and \code{instruments}
+is a one-sided formula \code{~ z1 + z2 + z3} (only for backward
+compatibility).}
+
+\item{data}{an optional data frame containing the variables in the model.
+By default the variables are taken from the environment of the
+\code{formula}.}
+
+\item{subset}{an optional vector specifying a subset of observations to be
+used in fitting the model.}
+
+\item{na.action}{a function that indicates what should happen when the data
+contain \code{NA}s. The default is set by the \code{na.action} option.}
+
+\item{contrasts}{an optional list. See the \code{contrasts.arg} of
+\code{\link[stats:model.matrix]{model.matrix.default}}.}
+
+\item{t0}{A vector of starting values for the gmm optimizer. This should
+have length equal to the number of exposures plus 1.}
+
+\item{...}{further arguments passed to or from other methods.}
+}
 \description{
 The logistic structural mean model is due to Robins ().
-\code{lsmm} implements
 }
