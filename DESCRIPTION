@@ -32,6 +32,7 @@ Imports:
     lmtest,
     msm
 Suggests: 
+    AER,
     haven,
     ivtools,
     knitr,
