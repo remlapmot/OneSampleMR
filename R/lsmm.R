@@ -111,7 +111,7 @@ summary.lsmm <- function(object, ...) {
 
 #' @rdname summary.lsmm
 #' @export
-print.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...) {
+print.lsmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\n")
   cat("Estimation method:", x$estmethod)
   cat("\n")
