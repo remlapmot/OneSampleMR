@@ -47,7 +47,11 @@ contain \code{NA}s. The default is set by the \code{na.action} option.}
 \item{t0}{A vector of starting values for the gmm optimizer. This should
 have length equal to the number of exposures plus 1.}
 
-\item{link}{character; one of \code{"identity"} (the default), \code{"logadd"}, \code{"logmult"}, \code{"logit"}.}
+\item{link}{character; one of \code{"identity"} (the default), \code{"logadd"}, \code{"logmult"}, \code{"logit"}.
+This is the link function for the second stage model. \code{"identity"} corresponds to linear
+regression; \code{"logadd"} is log-additive and corresponds to Poisson / log-binomial regression;
+\code{"logmult"} is log-multiplicative and corresponds to gamma regression;
+\code{"logit"} corresponds to logistic regression.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
