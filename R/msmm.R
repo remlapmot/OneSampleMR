@@ -83,6 +83,13 @@
 #' Nichols A. ivpois: Stata module for IV/GMM Poisson regression. 2007.
 #' [url](http://ideas.repec.org/c/boc/bocode/s456890.html)
 #'
+#' Palmer TM, Sterne JAC, Harbord RM, Lawlor DA, Sheehan NA, Meng S,
+#' Granell R, Davey Smith G, Didelez V.
+#' Instrumental variable estimation of causal risk ratios and causal odds ratios
+#' in Mendelian randomization analyses.
+#' American Journal of Epidemiology, 2011, 173, 12, 1392-1403.
+#' \doi{10.1093/aje/kwr026}
+#'
 #' Robins JM. The analysis of randomised and
 #' nonrandomised AIDS treatment trials using a new approach to
 #' causal inference in longitudinal studies.
