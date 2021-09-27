@@ -3,7 +3,12 @@
 #' The logistic structural mean model is due to Robins ().
 #'
 #' @inheritParams msmm
-#'
+#' @references
+#' Vansteelandt S, Geotghebeur E.
+#' Causal inference with generalized structural mean models.
+#' Journal of the Royal Statistical Society (Series B).
+#' 2003, 65, 4, 818-835.
+#' \doi{10.1046/j.1369-7412.2003.00417.x}
 #' @export
 lsmm <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
