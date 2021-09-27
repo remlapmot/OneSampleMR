@@ -26,7 +26,7 @@ S3 summary and print methods for objects of class \code{tsps} and \code{summary.
 \value{
 \code{summary.tsps()} returns an object of class \code{"summary.tsps"}. A list with the following elements:
 
-\item{smry}{An object from a call to either \code{\link[gmm:summary]{gmm::summary.gmm()}}
+\item{smry}{An object from a call to \code{\link[gmm:summary]{gmm::summary.gmm()}}}
 \item{object}{The object of class \code{tsps} passed to the function.}
 }
 \description{
