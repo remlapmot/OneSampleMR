@@ -12,6 +12,7 @@ tsri(
   na.action,
   contrasts = NULL,
   t0 = NULL,
+  link = "identity",
   ...
 )
 }
@@ -45,6 +46,8 @@ contain \code{NA}s. The default is set by the \code{na.action} option.}
 
 \item{t0}{A vector of starting values for the gmm optimizer. This should
 have length equal to the number of exposures plus 1.}
+
+\item{link}{character; one of \code{"identity"} (the default), \code{"logadd"}, \code{"logmult"}, \code{"logit"}.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
