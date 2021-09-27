@@ -8,7 +8,11 @@
 #'  regression; `"logadd"` is log-additive and corresponds to Poisson / log-binomial regression;
 #'  `"logmult"` is log-multiplicative and corresponds to gamma regression;
 #'  `"logit"` corresponds to logistic regression.
-#'
+#' @references
+#' Terza JV, Basu A, Rathouz PJ. Two-stage residual inclusion estimation:
+#' Addressing endogeneity in health econometric modeling.
+#' Journal of Health Economics, 2008, 27, 3, 531-543.
+#' \doi{10.1016/j.jhealeco.2007.09.009}
 #' @export
 tsps <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
