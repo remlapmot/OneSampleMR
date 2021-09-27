@@ -2,6 +2,7 @@
 
 S3method(fsw,ivreg)
 S3method(print,fsw)
+S3method(print,lsmm)
 S3method(print,msmm)
 S3method(print,summary.lsmm)
 S3method(print,summary.msmm)

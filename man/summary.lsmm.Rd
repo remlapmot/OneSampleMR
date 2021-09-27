@@ -2,13 +2,13 @@
 % Please edit documentation in R/lsmm.R
 \name{summary.lsmm}
 \alias{summary.lsmm}
-\alias{print.tsps}
+\alias{print.lsmm}
 \alias{print.summary.lsmm}
 \title{Summarizing LSMM Fits}
 \usage{
 \method{summary}{lsmm}(object, ...)
 
-\method{print}{tsps}(x, digits = max(3, getOption("digits") - 3), ...)
+\method{print}{lsmm}(x, digits = max(3, getOption("digits") - 3), ...)
 
 \method{print}{summary.lsmm}(x, digits = max(3, getOption("digits") - 3), ...)
 }
@@ -33,5 +33,5 @@ S3 summary and print methods for objects of class \code{lsmm} and \code{summary.
 Summarizing LSMM Fits
 }
 \examples{
-# For examples see the examples at the bottom of help('msmm')
+# For examples see the examples at the bottom of help('lsmm')
 }
