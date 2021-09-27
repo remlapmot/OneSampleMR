@@ -92,7 +92,7 @@ lsmm <- function(formula, instruments, data, subset, na.action,
 #'
 #' @return `summary.lsmm()` returns an object of class `"summary.lsmm"`. A list with the following elements:
 #'
-#' \item{smry}{An object from a call to either [`gmm::summary.gmm()`]
+#' \item{smry}{An object from a call to [`gmm::summary.gmm()`]}
 #' \item{object}{The object of class `tsps` passed to the function.}
 #'
 #' @examples
