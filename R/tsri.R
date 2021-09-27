@@ -5,7 +5,6 @@
 #'
 #' @inheritParams msmm
 #' @inheritParams tsps
-#'
 #' @export
 tsri <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
