@@ -3,6 +3,7 @@
 #' TSPS estimators
 #'
 #' @inheritParams msmm
+#' @param link character; one of `"identity"` (the default), `"logadd"`, `"logmult"`, `"logit"`.
 #'
 #' @export
 tsps <- function(formula, instruments, data, subset, na.action,
