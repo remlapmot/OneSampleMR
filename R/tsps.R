@@ -4,6 +4,10 @@
 #'
 #' @inheritParams msmm
 #' @param link character; one of `"identity"` (the default), `"logadd"`, `"logmult"`, `"logit"`.
+#'  This is the link function for the second stage model. `"identity"` corresponds to linear
+#'  regression; `"logadd"` is log-additive and corresponds to Poisson / log-binomial regression;
+#'  `"logmult"` is log-multiplicative and corresponds to gamma regression;
+#'  `"logit"` corresponds to logistic regression.
 #'
 #' @export
 tsps <- function(formula, instruments, data, subset, na.action,
