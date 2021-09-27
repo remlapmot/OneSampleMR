@@ -59,3 +59,9 @@ regression; \code{"logadd"} is log-additive and corresponds to Poisson / log-bin
 TSRI estimators
 \code{tsri} implements
 }
+\references{
+Terza JV, Basu A, Rathouz PJ. Two-stage residual inclusion estimation:
+Addressing endogeneity in health econometric modeling.
+Journal of Health Economics, 2008, 27, 3, 531-543.
+\doi{10.1016/j.jhealeco.2007.09.009}
+}
