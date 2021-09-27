@@ -80,3 +80,73 @@ tsps <- function(formula, instruments, data, subset, na.action,
   class(output) <- append("tsps", class(output))
   output
 }
+
+#' Summarizing TSPS Fits
+#'
+#' @param object an object of class `"tsps"`.
+#' @param x an object of class `"summary.tsps"`.
+#' @param digits the number of significant digits to use when printing.
+#' @param ... further arguments passed to or from other methods.
+#'
+#' S3 summary and print methods for objects of class `tsps` and `summary.tsps`.
+#'
+#' @return `summary.tsps()` returns an object of class `"summary.tsps"`. A list with the following elements:
+#'
+#' \item{smry}{An object from a call to either [`gmm::summary.gmm()`]
+#' \item{object}{The object of class `tsps` passed to the function.}
+#'
+#' @examples
+#' # For examples see the examples at the bottom of help('tsps')
+#' @export
+summary.tsps <- function(object, ...) {
+
+  smry <- gmm::summary.gmm(object$fit)
+
+  res <- list(smry = smry,
+              object = object)
+
+  class(res) <- append(class(res), "summary.tsps")
+  return(res)
+}
+
+#' @rdname summary.tsps
+#' @export
+print.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...) {
+  cat("\n")
+  cat("Estimation method:", x$estmethod)
+  cat("\n")
+
+  cat("\n")
+  gmm::print.gmm(x$fit)
+
+  if (x$estmethod != "tslsalt") {
+    cat("\nE[Y(0)] with 95% CI:\n")
+    print(x$ey0ci, digits = digits, ...)
+  }
+
+  cat("\nCausal risk ratio with 95% CI:\n")
+  print(x$crrci, digits = digits, ...)
+
+  cat("\n")
+  invisible(x)
+}
+
+#' @rdname summary.tsps
+#' @export
+print.summary.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...) {
+  cat("\n")
+
+  cat("\nGMM fit summary:\n")
+  gmm::print.summary.gmm(x$smry)
+
+  if (x$object$estmethod != "tslsalt") {
+    cat("\nE[Y(0)] with 95% CI:\n")
+    print(x$object$ey0ci, digits = digits, ...)
+  }
+
+  cat("\nCausal risk ratio with 95% CI:\n")
+  print(x$object$crrci, digits = digits, ...)
+
+  cat("\n")
+  invisible(x)
+}
