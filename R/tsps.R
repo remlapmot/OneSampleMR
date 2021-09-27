@@ -79,8 +79,67 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
 
 
+
+
   class(output) <- append("tsps", class(output))
   output
+}
+
+tspsMoments <- function(theta, x){
+  # extract variables from x
+  Y <- as.matrix(x[,"y"])
+  xcolstop <- length(theta)
+  X <- as.matrix(x[,2:xcolstop])
+  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
+  zcolstop <- ncol(x)
+  Z <- as.matrix(x[,zcolstart:zcolstop])
+  nZ <- zcolstop - zcolstart + 1
+  nZp1 <- nZ + 1
+
+  linearpredictor <- -1 * X %*% as.matrix(theta[-1])
+
+  # moments
+  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
+  moments[,1] <- (Y*exp(linearpredictor) - theta[1])
+  for (i in 1:nZ) {
+    j <- i + 1
+    moments[,j] <- (Y*exp(linearpredictor) - theta[1])*Z[,i]
+  }
+  return(moments)
+}
+
+tsps_gmm <- function(x, y, z, xnames, t0){
+
+  x <- as.matrix(x)
+  dat = data.frame(y, x, z)
+
+  if (is.null(t0))
+    t0 <- rep(0, ncol(x) + 1)
+
+  # gmm fit
+  fit <- gmm::gmm(msmmMoments, x = dat, t0 = t0, vcov = "iid")
+
+  if (fit$algoInfo$convergence != 0)
+    warning("The GMM fit has not converged, perhaps try different initial parameter values")
+
+  # causal risk ratio
+  crrci <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[-1,])
+  if (ncol(x) >= 2) {
+    crrci <- as.matrix(crrci)
+  } else {
+    crrci <- t(as.matrix(crrci))
+  }
+  rownames(crrci) <- xnames
+  colnames(crrci)[1] <- "CRR"
+
+  # E[Y(0)]
+  ey0ci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[1,]
+
+  reslist <- list(fit = fit,
+                  crrci = crrci,
+                  ey0ci = ey0ci,
+                  estmethod = "gmm")
+  return(reslist)
 }
 
 #' Summarizing TSPS Fits
