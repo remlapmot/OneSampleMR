@@ -1,5 +1,6 @@
 Package: OneSampleMR
-Title: Useful Functions for One Sample Mendelian Randomization Analyses
+Title: Useful Functions for One Sample Mendelian Randomization And 
+  Instrumental Variable Analyses
 Version: 0.0.0.900
 Authors@R: 
     c(person(given = "Tom",
