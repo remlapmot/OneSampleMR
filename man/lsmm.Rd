@@ -49,5 +49,27 @@ have length equal to the number of exposures plus 1.}
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{
-The logistic structural mean model is due to Robins ().
+The logistic structural mean model (LSMM) is due to Robins (1989).
+This command implements the double-LSMM due to Vansteelandt and
+Goetghebeur (2003) using the GMM estimation approach of Clarke et al. (2015).
+}
+\references{
+Clarke PS, Palmer TM, Windmeijer F. Estimating structural
+mean models with multiple instrumental variables using the
+Generalised Method of Moments. Statistical Science, 2015, 30, 1,
+96-117. \doi{10.1214/14-STS503}
+
+Robins JM. The analysis of randomised and
+nonrandomised AIDS treatment trials using a new approach to
+causal inference in longitudinal studies.
+In Health Service Research Methodology: A Focus on AIDS
+(L. Sechrest, H. Freeman and A. Mulley, eds.). 1989. 113–159.
+US Public Health Service, National Center for Health Services Research,
+Washington, DC.
+
+Vansteelandt S, Geotghebeur E.
+Causal inference with generalized structural mean models.
+Journal of the Royal Statistical Society (Series B).
+2003, 65, 4, 818-835.
+\doi{10.1046/j.1369-7412.2003.00417.x}
 }
