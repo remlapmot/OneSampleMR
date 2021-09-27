@@ -1,4 +1,4 @@
-#' OneSampleMR: Use functions for one-sample Mendelian randomization
+#' OneSampleMR: Useful functions for one-sample Mendelian randomization
 #' and instrumental variables analyses
 #'
 #' Some useful functions for one-sample Mendelian randomization
