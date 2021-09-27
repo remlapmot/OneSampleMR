@@ -19,6 +19,13 @@
 #' US Public Health Service, National Center for Health Services Research,
 #' Washington, DC.
 #'
+#' Palmer TM, Sterne JAC, Harbord RM, Lawlor DA, Sheehan NA, Meng S,
+#' Granell R, Davey Smith G, Didelez V.
+#' Instrumental variable estimation of causal risk ratios and causal odds ratios
+#' in Mendelian randomization analyses.
+#' American Journal of Epidemiology, 2011, 173, 12, 1392-1403.
+#' \doi{10.1093/aje/kwr026}
+#'
 #' Vansteelandt S, Geotghebeur E.
 #' Causal inference with generalized structural mean models.
 #' Journal of the Royal Statistical Society (Series B).
