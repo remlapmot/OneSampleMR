@@ -1,7 +1,9 @@
 #' Logistic structural mean model
 #'
 #' The logistic structural mean model is due to Robins ().
-#' `lsmm` implements
+#'
+#' @inheritParams msmm
+#'
 #' @export
 lsmm <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,

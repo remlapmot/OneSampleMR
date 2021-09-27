@@ -2,6 +2,9 @@
 #'
 #' TSRI estimators
 #' `tsri` implements
+#'
+#' @inheritParams msmm
+#'
 #' @export
 tsri <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,

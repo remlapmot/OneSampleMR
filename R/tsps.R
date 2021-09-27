@@ -1,7 +1,9 @@
 #' Two-stage predictor substitution (TSPS) estimators
 #'
 #' TSPS estimators
-#' `tsps` implements
+#'
+#' @inheritParams msmm
+#'
 #' @export
 tsps <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
