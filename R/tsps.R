@@ -142,10 +142,10 @@ tspsMoments <- function(theta, x, link){
     }
   }
   else if (link == "logit") {
-    moments[,1] <- (Y - qlogis(linearpredictor))
+    moments[,1] <- (Y - plogis(linearpredictor))
     for (i in 1:nZ) {
       j <- i + 1
-      moments[,j] <- (Y - qlogis(linearpredictor))*Z[,i]
+      moments[,j] <- (Y - plogis(linearpredictor))*Z[,i]
     }
   }
 
