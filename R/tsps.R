@@ -97,15 +97,14 @@ tsps <- function(formula, instruments, data, subset, na.action,
   if (link == "logit" & !all(Y %in% 0:1))
     stop("With the logit link, the outcome must be binary, i.e. take values 0 or 1.")
 
-
-
-
+  # gmm fit
+  output <- tsps_gmm(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0, link = link)
 
   class(output) <- append("tsps", class(output))
   output
 }
 
-tspsMoments <- function(theta, x){
+tspsMoments <- function(theta, x, link){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   xcolstop <- length(theta)
@@ -116,19 +115,44 @@ tspsMoments <- function(theta, x){
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
 
-  linearpredictor <- -1 * X %*% as.matrix(theta[-1])
+  linearpredictor <- X %*% as.matrix(theta)
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
-  moments[,1] <- (Y*exp(linearpredictor) - theta[1])
-  for (i in 1:nZ) {
-    j <- i + 1
-    moments[,j] <- (Y*exp(linearpredictor) - theta[1])*Z[,i]
+
+  if (link == "identity") {
+    moments[,1] <- (Y - linearpredictor)
+    for (i in 1:nZ) {
+      j <- i + 1
+      moments[,j] <- (Y - linearpredictor)*Z[,i]
+    }
   }
+  else if (link == "logadd") {
+    moments[,1] <- (Y - exp(linearpredictor))
+    for (i in 1:nZ) {
+      j <- i + 1
+      moments[,j] <- (Y - exp(linearpredictor))*Z[,i]
+    }
+  }
+  else if (link == "logmult") {
+    moments[,1] <- (Y*exp(-1 * linearpredictor))
+    for (i in 1:nZ) {
+      j <- i + 1
+      moments[,j] <- (Y*exp(-1 * linearpredictor))*Z[,i]
+    }
+  }
+  else if (link == "logit") {
+    moments[,1] <- (Y - qlogis(linearpredictor))
+    for (i in 1:nZ) {
+      j <- i + 1
+      moments[,j] <- (Y - qlogis(linearpredictor))*Z[,i]
+    }
+  }
+
   return(moments)
 }
 
-tsps_gmm <- function(x, y, z, xnames, t0){
+tsps_gmm <- function(x, y, z, xnames, t0, link){
 
   x <- as.matrix(x)
   dat = data.frame(y, x, z)
@@ -137,28 +161,33 @@ tsps_gmm <- function(x, y, z, xnames, t0){
     t0 <- rep(0, ncol(x) + 1)
 
   # gmm fit
-  fit <- gmm::gmm(msmmMoments, x = dat, t0 = t0, vcov = "iid")
+  fit <- gmm::gmm(tspsMoments, x = dat, t0 = t0, vcov = "iid", link = link)
 
   if (fit$algoInfo$convergence != 0)
     warning("The GMM fit has not converged, perhaps try different initial parameter values")
 
-  # causal risk ratio
-  crrci <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[-1,])
-  if (ncol(x) >= 2) {
-    crrci <- as.matrix(crrci)
-  } else {
-    crrci <- t(as.matrix(crrci))
-  }
-  rownames(crrci) <- xnames
-  colnames(crrci)[1] <- "CRR"
+  if (link == "identity")
+    estci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)
+  else
+    estci <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[-1,])
 
-  # E[Y(0)]
-  ey0ci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[1,]
+  if (ncol(x) >= 2) {
+    estci <- as.matrix(estci)
+  } else {
+    estci <- t(as.matrix(estci))
+  }
+  rownames(estci) <- xnames
+
+  if (link == "identity")
+    colnames(estci)[1] <- "EST"
+  else if (link %in% c("logadd", "logmult"))
+    colnames(estci)[1] <- "CRR"
+  else if (link == "logit")
+    colnames(estci)[1] <- "C0R"
 
   reslist <- list(fit = fit,
-                  crrci = crrci,
-                  ey0ci = ey0ci,
-                  estmethod = "gmm")
+                  estci = estci,
+                  link = link)
   return(reslist)
 }
 
@@ -194,19 +223,14 @@ summary.tsps <- function(object, ...) {
 #' @export
 print.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\n")
-  cat("Estimation method:", x$estmethod)
+  cat("Link function:", x$link)
   cat("\n")
 
   cat("\n")
   gmm::print.gmm(x$fit)
 
-  if (x$estmethod != "tslsalt") {
-    cat("\nE[Y(0)] with 95% CI:\n")
-    print(x$ey0ci, digits = digits, ...)
-  }
-
-  cat("\nCausal risk ratio with 95% CI:\n")
-  print(x$crrci, digits = digits, ...)
+  cat("\nEstimates with 95% CI:\n")
+  print(x$estci, digits = digits, ...)
 
   cat("\n")
   invisible(x)
@@ -220,13 +244,8 @@ print.summary.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...)
   cat("\nGMM fit summary:\n")
   gmm::print.summary.gmm(x$smry)
 
-  if (x$object$estmethod != "tslsalt") {
-    cat("\nE[Y(0)] with 95% CI:\n")
-    print(x$object$ey0ci, digits = digits, ...)
-  }
-
-  cat("\nCausal risk ratio with 95% CI:\n")
-  print(x$object$crrci, digits = digits, ...)
+  cat("\nEstimates with 95% CI:\n")
+  print(x$object$estci, digits = digits, ...)
 
   cat("\n")
   invisible(x)
