@@ -130,6 +130,12 @@ tspsMoments <- function(theta, x, link){
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
 
+  # generate first stage residuals
+  if (ncol(X) == 1) {
+    stage1 <- lm(X ~ Z) # TODO covariates
+    xhat <- fitted.values(stage1)
+  }
+
   linearpredictor <- X %*% as.matrix(theta)
 
   # moments
