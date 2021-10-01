@@ -585,6 +585,7 @@ test_that("Stata output check", {
 
 # Single instrument example
 test_that("Single instrument example", {
+  skip_on_cran()
   # Data generation from the example in the ivtools::ivglm() helpfile
   set.seed(9)
   n <- 1000
@@ -635,6 +636,7 @@ test_that("Single instrument example", {
 
 # check variables with different names
 test_that("Check using different variable names", {
+  skip_on_cran()
   set.seed(9)
   n <- 1000
   psi0 <- 0.5
@@ -652,6 +654,7 @@ test_that("Check using different variable names", {
 
 # Multiple instrument example
 test_that("Multiple instrument example", {
+  skip_on_cran()
   set.seed(123456)
   n <- 1000
   psi0 <- 0.5
@@ -683,6 +686,7 @@ test_that("Multiple instrument example", {
 
 # non-binary x with tsls, tslsalt methods fail
 test_that("Non-binary x with tsls and tslsalt methods should produce an error", {
+  skip_on_cran()
   set.seed(9)
   n <- 1000
   psi0 <- 0.5
@@ -698,6 +702,7 @@ test_that("Non-binary x with tsls and tslsalt methods should produce an error", 
 
 # non-binary y fail for tsls methods
 test_that("Y needs to be binary for the TSLS methods", {
+  skip_on_cran()
   set.seed(9)
   n <- 1000
   psi0 <- 0.5
@@ -713,6 +718,7 @@ test_that("Y needs to be binary for the TSLS methods", {
 
 # All methods fail for a non-integer in Y
 test_that("Methods fail for non-integer Y", {
+  skip_on_cran()
   set.seed(9)
   n <- 1000
   psi0 <- 0.5
@@ -730,6 +736,7 @@ test_that("Methods fail for non-integer Y", {
 
 # Multiple exposure example
 test_that("Multiple exposure example", {
+  skip_on_cran()
   set.seed(123456)
   n <- 1000
   psi0 <- 0.5
@@ -761,6 +768,7 @@ test_that("Multiple exposure example", {
 
 # Multiple exposure example with different variable names
 test_that("Multiple exposure example with different variable names", {
+  skip_on_cran()
   set.seed(123456)
   n <- 1000
   psi0 <- 0.5
