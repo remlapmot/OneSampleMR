@@ -1,16 +1,17 @@
 # tests for TSPS
 
-# Data generation from the example in the ivtools::ivglm() helpfile
-set.seed(9)
-n <- 1000
-psi0 <- 0.5
-Z <- rbinom(n, 1, 0.5)
-X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-m0 <- plogis(1 + 0.8*X - 0.39*Z)
-Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
-dat <- data.frame(Z, X, Y)
-
 test_that("Single instrument example - identity link", {
+  skip_on_cran()
+  # Data generation from the example in the ivtools::ivglm() helpfile
+  set.seed(9)
+  n <- 1000
+  psi0 <- 0.5
+  Z <- rbinom(n, 1, 0.5)
+  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+  m0 <- plogis(1 + 0.8*X - 0.39*Z)
+  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  dat <- data.frame(Z, X, Y)
+
   # ivtools for comparison fit
   library(ivtools)
   fitZ.L <- glm(Z ~ 1, data = dat)
