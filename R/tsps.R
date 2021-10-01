@@ -163,11 +163,18 @@ tspsMoments <- function(theta, x, link){
     }
   }
   else if (link == "logit") {
-    moments[,1] <- (Y - plogis(linearpredictor))
-    for (i in 1:nZ) {
-      j <- i + 1
-      moments[,j] <- (Y - plogis(linearpredictor))*Z[,i]
-    }
+    # moments
+    a1 <- (X - theta[1] - Z1*theta[2])
+    a2 <- (X - theta[1] - Z1*theta[2])*Z1
+    m1 <- (Y - plogis(theta[3] + (theta[1] + theta[2]*Z1)*theta[4]))
+    m2 <- (Y - plogis(theta[3] + (theta[1] + theta[2]*Z1)*theta[4]))*xhat
+    moments <- cbind(a1, a2, m1, m2)
+
+    # moments[,1] <- (Y - plogis(linearpredictor))
+    # for (i in 1:nZ) {
+    #   j <- i + 1
+    #   moments[,j] <- (Y - plogis(linearpredictor))*Z[,i]
+    # }
   }
 
   return(moments)
