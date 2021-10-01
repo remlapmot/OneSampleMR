@@ -1,6 +1,14 @@
 #' Two-stage predictor substitution (TSPS) estimators
 #'
-#' TSPS estimators
+#' Terza et al. (2008) give an excellent description of TSPS estimators.
+#' They proceed by fitting a first stage model of the
+#' exposure regressed upon the instruments (and possibly any measured
+#' confounders). From this the predicted values of the exposure are obtained.
+#' A second stage model if then fitted of the outcome regressed upon
+#' the predicted values of the exposure (and possibly measured confounders).
+#'
+#' `tsps()` performs GMM estimation to ensure appropriate standard errors
+#' on its estimates.
 #'
 #' @inheritParams msmm
 #' @param link character; one of `"identity"` (the default), `"logadd"`, `"logmult"`, `"logit"`.
@@ -9,6 +17,13 @@
 #'  `"logmult"` is log-multiplicative and corresponds to gamma regression;
 #'  `"logit"` corresponds to logistic regression.
 #' @references
+#' Burgess S, CRP CHD Genetics Collaboration.
+#' Identifying the odds ratio estimated by a
+#' two-stage instrumental variable analysis
+#' with a logistic regression model.
+#' Statistics in Medicine, 2013, 32, 27, 4726-4747.
+#' \doi{10.1002/sim.5871}
+#'
 #' Dukes O, Vansteelandt S.
 #' A note on G-estimation of causal risk ratios.
 #' American Journal of Epidemiology, 2018, 187, 5, 1079-1084.
