@@ -1,7 +1,18 @@
 #' Two-stage residual inclusion (TSRI) estimators
 #'
-#' TSRI estimators
-#' `tsri` implements
+#' An excellent description of TSRI estimators is given by Terza et al.
+#' (2008). TSRI estimators proceed by fitting a first stage model of the
+#' exposure regressed upon the instruments (and possibly any measured
+#' confounders). From this the first stage residuals are estimated.
+#' A second stage model if then fitted of the outcome regressed upon
+#' the exposure and first stage residuals (and possibly measured
+#' confounders).
+#'
+#' TSRI estimators are sometimes described as a special case of
+#' control function estimators.
+#'
+#' `tsri()` performs GMM estimation to ensure appropriate standard errors
+#' on its estimates. Terza (2017) described an alternative approach.
 #'
 #' @inheritParams msmm
 #' @inheritParams tsps
@@ -34,6 +45,13 @@
 #' Addressing endogeneity in health econometric modeling.
 #' Journal of Health Economics, 2008, 27, 3, 531-543.
 #' \doi{10.1016/j.jhealeco.2007.09.009}
+#'
+#' Terza JV.
+#' Two-stage residual inclusion estimation: A
+#' practitioners guide to Stata implementation.
+#' The Stata Journal, 2017, 17, 4, 916-938.
+#' \doi{10.1177/1536867X1801700409}
+#'
 #' @export
 tsri <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
