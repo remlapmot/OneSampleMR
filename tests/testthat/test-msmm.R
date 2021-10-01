@@ -790,3 +790,29 @@ test_that("Multiple exposure example with different variable names", {
   fit24 <- msmm(Y ~ E1 + E2 | G1 + G2 + G3, data = dat)
   expect_equal(log(fit24$crrci[1,1]), 0.08, tolerance = 0.02)
 })
+
+# Example adjusting for a covariate
+test_that("Adjusting for covariate", {
+  skip_on_cran()
+  set.seed(123456)
+  n <- 1000
+  psi0 <- 0.5
+  psi1 <- 0.4
+  G1 <- rbinom(n, 2, 0.5)
+  G2 <- rbinom(n, 2, 0.3)
+  G3 <- rbinom(n, 2, 0.4)
+  U <- runif(n)
+  C <- runif(n)
+  pX1 <- plogis(0.7*G1 + G2 - G3 + U + C)
+  X1 <- rbinom(n, 1, pX1)
+  pX2 <- plogis(-1 + 0.2*G1 - 0.2*G2 + 0.4*G3 + U + C)
+  X2 <- rbinom(n, 1, pX2)
+  pY <- plogis(-2 + psi0*X1 + psi1*X2 + U + C)
+  Y <- rbinom(n, 1, pY)
+  E1 <- X1
+  E2 <- X2
+  R <- Y
+  dat <- data.frame(G1, G2, G3, E1, E2, R, C)
+  fit25 <- msmm(Y ~ E1 + C | G1 + G2 + G3 + C, data = dat)
+  fit26 <- msmm(Y ~ E1 + E2 + C | G1 + G2 + G3 + C, data = dat)
+})
