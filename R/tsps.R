@@ -273,19 +273,22 @@ tspsLogmultMoments <- function(theta, x){
 }
 
 tspsLogitMoments <- function(theta, x){
+  print(theta)
+  print(head(x))
+
   # extract variables from x
   Y <- as.matrix(x[,"y"])
-  xcolstop <- length(theta)
+  xcolstop <- 2
   X <- as.matrix(x[,2:xcolstop])
-  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
-  zcolstop <- ncol(x)
+  zcolstart <- 3 # 1 is y, length(theta) is nX
+  zcolstop <- ncol(x) - 2
   Z <- as.matrix(x[,zcolstart:zcolstop])
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
 
   # generate first stage residuals
   if (ncol(X) == 1) {
-    stage1 <- lm(X ~ Z) # TODO covariates
+    stage1 <- lm(X ~ Z) # TODO TSPS covariates
     xhat <- fitted.values(stage1)
   }
 
