@@ -119,67 +119,6 @@ tsps <- function(formula, instruments, data, subset, na.action,
   output
 }
 
-tspsMoments <- function(theta, x, link){
-  # extract variables from x
-  Y <- as.matrix(x[,"y"])
-  xcolstop <- length(theta)
-  X <- as.matrix(x[,2:xcolstop])
-  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
-  zcolstop <- ncol(x)
-  Z <- as.matrix(x[,zcolstart:zcolstop])
-  nZ <- zcolstop - zcolstart + 1
-  nZp1 <- nZ + 1
-
-  # generate first stage residuals
-  if (ncol(X) == 1) {
-    stage1 <- lm(X ~ Z) # TODO covariates
-    xhat <- fitted.values(stage1)
-  }
-
-  linearpredictor <- X %*% as.matrix(theta)
-
-  # moments
-  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
-
-  if (link == "identity") {
-    moments[,1] <- (Y - linearpredictor)
-    for (i in 1:nZ) {
-      j <- i + 1
-      moments[,j] <- (Y - linearpredictor)*Z[,i]
-    }
-  }
-  else if (link == "logadd") {
-    moments[,1] <- (Y - exp(linearpredictor))
-    for (i in 1:nZ) {
-      j <- i + 1
-      moments[,j] <- (Y - exp(linearpredictor))*Z[,i]
-    }
-  }
-  else if (link == "logmult") {
-    moments[,1] <- (Y*exp(-1 * linearpredictor))
-    for (i in 1:nZ) {
-      j <- i + 1
-      moments[,j] <- (Y*exp(-1 * linearpredictor))*Z[,i]
-    }
-  }
-  else if (link == "logit") {
-    # moments
-    a1 <- (X - theta[1] - Z1*theta[2])
-    a2 <- (X - theta[1] - Z1*theta[2])*Z1
-    m1 <- (Y - plogis(theta[3] + (theta[1] + theta[2]*Z1)*theta[4]))
-    m2 <- (Y - plogis(theta[3] + (theta[1] + theta[2]*Z1)*theta[4]))*xhat
-    moments <- cbind(a1, a2, m1, m2)
-
-    # moments[,1] <- (Y - plogis(linearpredictor))
-    # for (i in 1:nZ) {
-    #   j <- i + 1
-    #   moments[,j] <- (Y - plogis(linearpredictor))*Z[,i]
-    # }
-  }
-
-  return(moments)
-}
-
 tsps_gmm <- function(x, y, z, xnames, t0, link){
 
   x <- as.matrix(x)
@@ -188,8 +127,21 @@ tsps_gmm <- function(x, y, z, xnames, t0, link){
   if (is.null(t0))
     t0 <- rep(0, ncol(x) + 1)
 
+  print(link)
+
   # gmm fit
-  fit <- gmm::gmm(tspsMoments, x = dat, t0 = t0, vcov = "iid", link = link)
+  if (link == "identity") {
+    fit <- gmm::gmm(tspsIdentityMoments, x = dat, t0 = t0, vcov = "iid")
+  }
+  else if (link == "logadd") {
+    fit <- gmm::gmm(tspsLogaddMoments, x = dat, t0 = t0, vcov = "iid")
+  }
+  else if (link == "logmult") {
+    fit <- gmm::gmm(tspsLogmultMoments, x = dat, t0 = t0, vcov = "iid")
+  }
+  else if (link == "logit") {
+    fit <- gmm::gmm(tspsLogitMoments, x = dat, t0 = t0, vcov = "iid")
+  }
 
   if (fit$algoInfo$convergence != 0)
     warning("The GMM fit has not converged, perhaps try different initial parameter values")
@@ -217,6 +169,144 @@ tsps_gmm <- function(x, y, z, xnames, t0, link){
                   estci = estci,
                   link = link)
   return(reslist)
+}
+
+tspsIdentityMoments <- function(theta, x){
+  # extract variables from x
+  Y <- as.matrix(x[,"y"])
+  xcolstop <- length(theta)
+  X <- as.matrix(x[,2:xcolstop])
+  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
+  zcolstop <- ncol(x)
+  Z <- as.matrix(x[,zcolstart:zcolstop])
+  nZ <- zcolstop - zcolstart + 1
+  nZp1 <- nZ + 1
+
+  # generate first stage residuals
+  if (ncol(X) == 1) {
+    stage1 <- lm(X ~ Z) # TODO covariates
+    xhat <- fitted.values(stage1)
+  }
+
+  print(link)
+  print(dim(X))
+  print(dim(t(as.matrix(theta))))
+  linearpredictor <- X %*% t(as.matrix(theta))
+
+  # moments
+  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
+
+  moments[,1] <- (Y - linearpredictor)
+  for (i in 1:nZ) {
+    j <- i + 1
+    moments[,j] <- (Y - linearpredictor)*Z[,i]
+  }
+  return(moments)
+}
+
+tspsLogaddMoments <- function(theta, x){
+  # extract variables from x
+  Y <- as.matrix(x[,"y"])
+  xcolstop <- length(theta)
+  X <- as.matrix(x[,2:xcolstop])
+  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
+  zcolstop <- ncol(x)
+  Z <- as.matrix(x[,zcolstart:zcolstop])
+  nZ <- zcolstop - zcolstart + 1
+  nZp1 <- nZ + 1
+
+  # generate first stage residuals
+  if (ncol(X) == 1) {
+    stage1 <- lm(X ~ Z) # TODO covariates
+    xhat <- fitted.values(stage1)
+  }
+
+  print(link)
+  print(dim(X))
+  print(dim(t(as.matrix(theta))))
+  linearpredictor <- X %*% t(as.matrix(theta))
+
+  # moments
+  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
+
+  moments[,1] <- (Y - exp(linearpredictor))
+  for (i in 1:nZ) {
+    j <- i + 1
+    moments[,j] <- (Y - exp(linearpredictor))*Z[,i]
+  }
+  return(moments)
+}
+
+tspsLogmultMoments <- function(theta, x){
+  # extract variables from x
+  Y <- as.matrix(x[,"y"])
+  xcolstop <- length(theta)
+  X <- as.matrix(x[,2:xcolstop])
+  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
+  zcolstop <- ncol(x)
+  Z <- as.matrix(x[,zcolstart:zcolstop])
+  nZ <- zcolstop - zcolstart + 1
+  nZp1 <- nZ + 1
+
+  # generate first stage residuals
+  if (ncol(X) == 1) {
+    stage1 <- lm(X ~ Z) # TODO covariates
+    xhat <- fitted.values(stage1)
+  }
+
+  print(link)
+  print(dim(X))
+  print(dim(t(as.matrix(theta))))
+  linearpredictor <- X %*% t(as.matrix(theta))
+
+  # moments
+  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
+
+  moments[,1] <- (Y*exp(-1 * linearpredictor))
+  for (i in 1:nZ) {
+    j <- i + 1
+    moments[,j] <- (Y*exp(-1 * linearpredictor))*Z[,i]
+  }
+  return(moments)
+}
+
+tspsLogitMoments <- function(theta, x){
+  # extract variables from x
+  Y <- as.matrix(x[,"y"])
+  xcolstop <- length(theta)
+  X <- as.matrix(x[,2:xcolstop])
+  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
+  zcolstop <- ncol(x)
+  Z <- as.matrix(x[,zcolstart:zcolstop])
+  nZ <- zcolstop - zcolstart + 1
+  nZp1 <- nZ + 1
+
+  # generate first stage residuals
+  if (ncol(X) == 1) {
+    stage1 <- lm(X ~ Z) # TODO covariates
+    xhat <- fitted.values(stage1)
+  }
+
+  print(link)
+  print(dim(X))
+  print(dim(t(as.matrix(theta))))
+  linearpredictor <- X %*% t(as.matrix(theta))
+
+  # moments
+  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
+
+  a1 <- (X - linearpredictor)
+  a2 <- (X - linearpredictor)*Z1
+  m1 <- (Y - plogis(theta[3] + (linearpredictor)*theta[4]))
+  m2 <- (Y - plogis(theta[3] + (linearpredictor)*theta[4]))*xhat
+  moments <- cbind(a1, a2, m1, m2)
+
+  # moments[,1] <- (Y - plogis(linearpredictor))
+  # for (i in 1:nZ) {
+  #   j <- i + 1
+  #   moments[,j] <- (Y - plogis(linearpredictor))*Z[,i]
+  # }
+  return(moments)
 }
 
 #' Summarizing TSPS Fits
