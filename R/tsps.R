@@ -186,19 +186,19 @@ tspsIdentityMoments <- function(theta, x){
     xhat <- fitted.values(stage1)
   }
 
-  print(dim(X))
-  print(dim(t(as.matrix(theta))))
-  linearpredictor <- X %*% t(as.matrix(theta))
-
-  # moments
-  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
-
-  moments[,1] <- (Y - linearpredictor)
-  for (i in 1:nZ) {
-    j <- i + 1
-    moments[,j] <- (Y - linearpredictor)*Z[,i]
-  }
-  return(moments)
+  # print(dim(X))
+  # print(dim(t(as.matrix(theta))))
+  # linearpredictor <- X %*% t(as.matrix(theta))
+  #
+  # # moments
+  # moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
+  #
+  # moments[,1] <- (Y - linearpredictor)
+  # for (i in 1:nZ) {
+  #   j <- i + 1
+  #   moments[,j] <- (Y - linearpredictor)*Z[,i]
+  # }
+  # return(moments)
 }
 
 tspsLogaddMoments <- function(theta, x){
@@ -218,19 +218,19 @@ tspsLogaddMoments <- function(theta, x){
     xhat <- fitted.values(stage1)
   }
 
-  print(dim(X))
-  print(dim(t(as.matrix(theta))))
-  linearpredictor <- X %*% t(as.matrix(theta))
-
-  # moments
-  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
-
-  moments[,1] <- (Y - exp(linearpredictor))
-  for (i in 1:nZ) {
-    j <- i + 1
-    moments[,j] <- (Y - exp(linearpredictor))*Z[,i]
-  }
-  return(moments)
+  # print(dim(X))
+  # print(dim(t(as.matrix(theta))))
+  # linearpredictor <- X %*% t(as.matrix(theta))
+  #
+  # # moments
+  # moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
+  #
+  # moments[,1] <- (Y - exp(linearpredictor))
+  # for (i in 1:nZ) {
+  #   j <- i + 1
+  #   moments[,j] <- (Y - exp(linearpredictor))*Z[,i]
+  # }
+  # return(moments)
 }
 
 tspsLogmultMoments <- function(theta, x){
@@ -250,19 +250,19 @@ tspsLogmultMoments <- function(theta, x){
     xhat <- fitted.values(stage1)
   }
 
-  print(dim(X))
-  print(dim(t(as.matrix(theta))))
-  linearpredictor <- X %*% t(as.matrix(theta))
-
-  # moments
-  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
-
-  moments[,1] <- (Y*exp(-1 * linearpredictor))
-  for (i in 1:nZ) {
-    j <- i + 1
-    moments[,j] <- (Y*exp(-1 * linearpredictor))*Z[,i]
-  }
-  return(moments)
+  # print(dim(X))
+  # print(dim(t(as.matrix(theta))))
+  # linearpredictor <- X %*% t(as.matrix(theta))
+  #
+  # # moments
+  # moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
+  #
+  # moments[,1] <- (Y*exp(-1 * linearpredictor))
+  # for (i in 1:nZ) {
+  #   j <- i + 1
+  #   moments[,j] <- (Y*exp(-1 * linearpredictor))*Z[,i]
+  # }
+  # return(moments)
 }
 
 tspsLogitMoments <- function(theta, x){
@@ -282,18 +282,40 @@ tspsLogitMoments <- function(theta, x){
     xhat <- fitted.values(stage1)
   }
 
+  print(dim(Z))
   print(dim(X))
   print(dim(t(as.matrix(theta))))
-  linearpredictor <- X %*% t(as.matrix(theta))
+  linearpredictor <- Z %*% theta # only need subset of theta
+  dim(linearpredictor)
+  head(linearpredictor)
+  class(linearpredictor)
+
+  print("here")
+
+  class(X)
+
+  test <- X - linearpredictor
 
   # moments
-  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
+  moments <- matrix(nrow = nrow(x), ncol = nZp1 + ncol(X) + 1, NA)
 
-  a1 <- (X - linearpredictor)
-  a2 <- (X - linearpredictor)*Z1
-  m1 <- (Y - plogis(theta[3] + (linearpredictor)*theta[4]))
-  m2 <- (Y - plogis(theta[3] + (linearpredictor)*theta[4]))*xhat
-  moments <- cbind(a1, a2, m1, m2)
+  moments[1,] <- (X - linearpredictor)
+  end1 <- 2 + nZ
+
+  for (i in 2:end1) {
+    moments[i,] <- (X - linearpredictor)*Z[,i]
+  }
+
+  start2 <- 2 + nZ + 1
+
+  moments[start2,] <- (Y - plogis(theta[3] + (linearpredictor)*theta[4]))
+
+  start3 <- 2 + nZ + 1 + 1
+  end3 <- 2 + nZ + 1 + 1 + 1 # when 1 x
+
+  for (i in start3:end3) {
+    moments[i,] <- (Y - plogis(theta[3] + (linearpredictor)*theta[4]))*xhat
+  }
 
   # moments[,1] <- (Y - plogis(linearpredictor))
   # for (i in 1:nZ) {
