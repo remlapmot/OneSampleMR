@@ -127,8 +127,6 @@ tsps_gmm <- function(x, y, z, xnames, t0, link){
   if (is.null(t0))
     t0 <- rep(0, ncol(x) + 1)
 
-  print(link)
-
   # gmm fit
   if (link == "identity") {
     fit <- gmm::gmm(tspsIdentityMoments, x = dat, t0 = t0, vcov = "iid")
@@ -188,7 +186,6 @@ tspsIdentityMoments <- function(theta, x){
     xhat <- fitted.values(stage1)
   }
 
-  print(link)
   print(dim(X))
   print(dim(t(as.matrix(theta))))
   linearpredictor <- X %*% t(as.matrix(theta))
@@ -221,7 +218,6 @@ tspsLogaddMoments <- function(theta, x){
     xhat <- fitted.values(stage1)
   }
 
-  print(link)
   print(dim(X))
   print(dim(t(as.matrix(theta))))
   linearpredictor <- X %*% t(as.matrix(theta))
@@ -254,7 +250,6 @@ tspsLogmultMoments <- function(theta, x){
     xhat <- fitted.values(stage1)
   }
 
-  print(link)
   print(dim(X))
   print(dim(t(as.matrix(theta))))
   linearpredictor <- X %*% t(as.matrix(theta))
@@ -287,7 +282,6 @@ tspsLogitMoments <- function(theta, x){
     xhat <- fitted.values(stage1)
   }
 
-  print(link)
   print(dim(X))
   print(dim(t(as.matrix(theta))))
   linearpredictor <- X %*% t(as.matrix(theta))
