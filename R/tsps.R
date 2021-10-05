@@ -112,6 +112,13 @@ tsps <- function(formula, instruments, data, subset, na.action,
   if (link == "logit" & !all(Y %in% 0:1))
     stop("With the logit link, the outcome must be binary, i.e. take values 0 or 1.")
 
+  # initial values
+  if (is.null(t0)) {
+    nX <- ncol(as.matrix(X))
+    nZ <- ncol(as.matrix(Z))
+    t0 <- rep(0, nX + nZ)
+  }
+
   # gmm fit
   output <- tsps_gmm(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0, link = link)
 
