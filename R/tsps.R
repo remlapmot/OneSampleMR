@@ -273,65 +273,45 @@ tspsLogmultMoments <- function(theta, x){
 }
 
 tspsLogitMoments <- function(theta, x){
-  print(theta)
-  print(head(x))
-
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   xcolstop <- 2
   X <- as.matrix(x[,2:xcolstop])
   zcolstart <- 3 # 1 is y, length(theta) is nX
-  zcolstop <- ncol(x) - 2
+  zcolstop <- ncol(x)
   Z <- as.matrix(x[,zcolstart:zcolstop])
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
+  Zwithcons <- cbind(rep(1, nrow(x)), Z)
 
   # generate first stage residuals
   if (ncol(X) == 1) {
-    stage1 <- lm(X ~ Z) # TODO TSPS covariates
+    stage1 <- lm(X ~ Z) # TODO add TSPS covariates
     xhat <- fitted.values(stage1)
   }
 
-  print(dim(Z))
-  print(dim(X))
-  print(dim(t(as.matrix(theta))))
-  linearpredictor <- Z %*% theta # only need subset of theta
-  dim(linearpredictor)
-  head(linearpredictor)
-  class(linearpredictor)
-
-  print("here")
-
-  class(X)
-
-  test <- X - linearpredictor
+  linearpredictor <- Zwithcons %*% theta[1:nZp1] # only need subset of theta
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = nZp1 + ncol(X) + 1, NA)
 
-  moments[1,] <- (X - linearpredictor)
-  end1 <- 2 + nZ
+  moments[,1] <- (X - linearpredictor)
 
+  end1 <- 1 + nZ
   for (i in 2:end1) {
-    moments[i,] <- (X - linearpredictor)*Z[,i]
+    moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
   }
 
-  start2 <- 2 + nZ + 1
+  start2 <- nZ + 2
+  thetaeffect <- start2 + 1
+  moments[,start2] <- (Y - plogis(theta[start2] + (linearpredictor)*theta[thetaeffect]))
 
-  moments[start2,] <- (Y - plogis(theta[3] + (linearpredictor)*theta[4]))
-
-  start3 <- 2 + nZ + 1 + 1
-  end3 <- 2 + nZ + 1 + 1 + 1 # when 1 x
-
+  start3 <- nZ + 3
+  end3 <- nZ + 3 # when 1 x
   for (i in start3:end3) {
-    moments[i,] <- (Y - plogis(theta[3] + (linearpredictor)*theta[4]))*xhat
+    moments[,i] <- (Y - plogis(theta[start2] + (linearpredictor)*theta[thetaeffect]))*xhat
   }
 
-  # moments[,1] <- (Y - plogis(linearpredictor))
-  # for (i in 1:nZ) {
-  #   j <- i + 1
-  #   moments[,j] <- (Y - plogis(linearpredictor))*Z[,i]
-  # }
   return(moments)
 }
 
