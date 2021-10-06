@@ -114,24 +114,23 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
   # initial values
   if (is.null(t0)) {
-    stage1 <- lm(formula(paste(c("X", mtZ, "- 1"), collapse = " ")))
+    stage1 <- lm(X[,2] ~ -1 + Z) # TODO covariates??
     t0 <- coef(stage1)
     xhat <- fitted.values(stage1)
-    print(head(xhat))
-    print(t0)
+
     if (link == "identity") {
-      stage2 <- lm(Y ~ -1 + xhat)
+      stage2 <- lm(Y ~ xhat)
     }
     else if (link == "logadd") {
-      stage2 <- glm(Y ~ -1 + xhat, family = poisson(link = "log"))
+      stage2 <- glm(Y ~ xhat, family = poisson(link = "log"))
     }
     else if (link == "logmult") {
       Ystar <- Y
       Ystar[Y == 0] <- 0.001
-      stage2 <- glm(Ystar ~ -1 + xhat, family = Gamma(link = "log"))
+      stage2 <- glm(Ystar ~ xhat, family = Gamma(link = "log"))
     }
     else if (link == "logit") {
-      stage2 <- glm(Y ~ -1 + xhat, family = binomial(link = "logit"))
+      stage2 <- glm(Y ~ xhat, family = binomial(link = "logit"))
     }
     print(summary(stage2))
     t0 <- c(t0, coef(stage2))
