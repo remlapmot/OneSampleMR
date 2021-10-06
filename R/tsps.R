@@ -132,9 +132,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     else if (link == "logit") {
       stage2 <- glm(Y ~ xhat, family = binomial(link = "logit"))
     }
-    print(summary(stage2))
     t0 <- c(t0, coef(stage2))
-    print(t0)
   }
 
   # gmm fit
@@ -169,24 +167,8 @@ tsps_gmm <- function(x, y, z, xnames, t0, link){
   if (fit$algoInfo$convergence != 0)
     warning("The GMM fit has not converged, perhaps try different initial parameter values")
 
-  if (link == "identity")
-    estci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)
-  else
-    estci <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[-1,])
-
-  if (ncol(x) >= 2) {
-    estci <- as.matrix(estci)
-  } else {
-    estci <- t(as.matrix(estci))
-  }
-  rownames(estci) <- xnames
-
-  if (link == "identity")
-    colnames(estci)[1] <- "EST"
-  else if (link %in% c("logadd", "logmult"))
-    colnames(estci)[1] <- "CRR"
-  else if (link == "logit")
-    colnames(estci)[1] <- "C0R"
+  estci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)
+  colnames(estci)[1] <- "Estimate"
 
   reslist <- list(fit = fit,
                   estci = estci,
