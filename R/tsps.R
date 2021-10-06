@@ -105,6 +105,10 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
   xnames <- colnames(X)
   xnames <- xnames[-1]
+  znames <- colnames(Z)[-1]
+
+  covariatenames <- intersect(xnames, znames)
+  covariates <- X[,covariatenames]
 
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
@@ -114,10 +118,12 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
   # initial values
   if (is.null(t0)) {
-    stage1 <- lm(X[,2] ~ -1 + Z) # TODO covariates??
+    stage1 <- lm(X[,2] ~ -1 + Z)
     t0 <- coef(stage1)
     xhat <- fitted.values(stage1)
-
+    if (!identical(covariatenames, character(0))) {
+      xhat <- cbind(xhat, covariates)
+    }
     if (link == "identity") {
       stage2 <- lm(Y ~ xhat)
     }
