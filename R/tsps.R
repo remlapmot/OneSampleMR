@@ -106,20 +106,18 @@ tsps <- function(formula, instruments, data, subset, na.action,
   xnames <- colnames(X)
   xnames <- xnames[-1]
   znames <- colnames(Z)[-1]
-
-  print(znames)
-
   covariatenames <- intersect(xnames, znames)
-  covariates <- X[,covariatenames]
 
   tsps_env <- new.env(parent = emptyenv())
-  tsps_env$xnames <- xnames
-  tsps_env$znames <- znames
-  tsps_env$covariatenames <- covariatenames
+  tsps_env$anycovs <- FALSE
+  if (!identical(covariatenames, character(0))) {
+    tsps_env$anycovs <- TRUE
+    covariates <- X[,covariatenames]
+  }
 
-  print(tsps_end$xnames)
-  print(tsps_end$znames)
-  print(tsps_end$covariatenames)
+  tsps_env$xnames <- xnames[!(xnames %in% covariatenames)]
+  tsps_env$znames <- znames[!(znames %in% covariatenames)]
+  tsps_env$covariatenames <- covariatenames
 
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
@@ -132,7 +130,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     stage1 <- lm(X[,2] ~ -1 + Z)
     t0 <- coef(stage1)
     xhat <- fitted.values(stage1)
-    if (!identical(covariatenames, character(0))) {
+    if (tsps_env$anycovs) {
       xhat <- cbind(xhat, covariates)
     }
     if (link == "identity") {
@@ -156,18 +154,17 @@ tsps <- function(formula, instruments, data, subset, na.action,
   output <- tsps_gmm(x = X[,-1], y = Y, z = Z[,-1],
                      xnames = xnames,
                      t0 = t0,
-                     link = link,
-                     covariatenames = covariatenames)
-
+                     link = link)
+  rm(tsps_env)
   class(output) <- append("tsps", class(output))
   output
 }
 
-tsps_gmm <- function(x, y, z, xnames, t0, link, covariatenames){
+tsps_gmm <- function(x, y, z, xnames, t0, link){
   x <- as.matrix(x)
 
-  if (!identical(covariatenames, character(0))) {
-    x <- x[,!(colnames(x) %in% covariatenames), drop = FALSE]
+  if (!identical(tsps_env$covariatenames, character(0))) {
+    x <- x[,!(colnames(x) %in% tsps_env$covariatenames), drop = FALSE]
   }
 
   dat = data.frame(y, x, z)
@@ -261,39 +258,48 @@ tspsLogmultMoments <- function(theta, x){
 tspsLogitMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
-  xcolstop <- 2
-  X <- as.matrix(x[,2:xcolstop])
-  zcolstart <- 3 # 1 is y, length(theta) is nX
-  zcolstop <- ncol(x)
-  print(zcolstop)
-  Z <- as.matrix(x[,zcolstart:zcolstop])
-  nZ <- zcolstop - zcolstart + 1
-  nZp1 <- nZ + 1
+  X <- x[, tsps_env$xnames]
+  Z <- x[, tsps_env$znames]
   Zwithcons <- cbind(rep(1, nrow(x)), Z)
-  cend <- ncol(Z)
-  cend2 <- cend + 1
+  nZ <- ncol(Z)
+  covariates <- x[, tsps_env$covariatenames]
+  ncovatiates <- ncol(covariates)
+  Zwithcovariates <- cbind(Z, covariates)
+  stage1end <- ncol(Zwithcovariates) + 1
+  thetastage1 <- theta[1:stage1end]
+  stage2start <- stage1end + 1
+  thetastage2 <- theta[stage2start:length(theta)]
+
+  # xcolstop <- 2
+  # X <- as.matrix(x[,2:xcolstop])
+  # zcolstart <- 3 # 1 is y, length(theta) is nX
+  # zcolstop <- ncol(x)
+  # print(zcolstop)
+  # Z <- as.matrix(x[,zcolstart:zcolstop])
+  # nZ <- zcolstop - zcolstart + 1
+  # nZp1 <- nZ + 1
+  #
+  # cend <- ncol(Z)
+  # cend2 <- cend + 1
 
   # generate first stage predicted values
   if (ncol(X) == 1) {
-    stage1 <- lm(X ~ Z)
+    stage1 <- lm(X ~ Zwithocvariates)
     xhat <- fitted.values(stage1)
   }
 
-  if (cend2 >= nZp1) {
-    print(head(Z))
-    print(nZp1)
-    print(head(covariates))
-    covariates <- Z[,nZp1:cend]
-
+  if (tsps_env$anycovs) {
     xhat <- cbind(xhat, covariates)
   }
 
-  linearpredictor <- Zwithcons %*% theta[1:cend2] # only need first stage subset of theta
+  linearpredictor <- Zwithcons %*% thetastage1
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
 
   moments[,1] <- (X - linearpredictor)
+
+  # TODO Here
 
   end1 <- 1 + nZ
   for (i in 2:end1) {
