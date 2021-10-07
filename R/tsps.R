@@ -253,12 +253,15 @@ tspsLogitMoments <- function(theta, x){
   xcolstop <- 2
   X <- as.matrix(x[,2:xcolstop])
   zcolstart <- 3 # 1 is y, length(theta) is nX
+
+
   zcolstop <- ncol(x)
   Z <- as.matrix(x[,zcolstart:zcolstop])
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
   Zwithcons <- cbind(rep(1, nrow(x)), Z)
   cend <- ncol(Z)
+  cend2 <- cend + 1
 
   # generate first stage predicted values
   if (ncol(X) == 1) {
@@ -266,16 +269,18 @@ tspsLogitMoments <- function(theta, x){
     xhat <- fitted.values(stage1)
   }
 
-  if (cend >= nZp1) {
-    covariates <- Z[nZp1:cend]
+  if (cend2 >= nZp1) {
+    print(head(Z))
+    print(nZp1)
+    covariates <- Z[,nZp1:cend]
     print(head(covariates))
     xhat <- cbind(xhat, covariates)
   }
 
-  linearpredictor <- Zwithcons %*% theta[1:cend] # only need first stage subset of theta
+  linearpredictor <- Zwithcons %*% theta[1:cend2] # only need first stage subset of theta
 
   # moments
-  moments <- matrix(nrow = nrow(x), ncol = nZp1 + ncol(X) + 1, NA)
+  moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
 
   moments[,1] <- (X - linearpredictor)
 
@@ -284,17 +289,26 @@ tspsLogitMoments <- function(theta, x){
     moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
   }
 
-  start2 <- nZ + 2
-  thetastart <- start2 + 1
-  thetaend <- length(theta)
-  moments[,start2] <- (Y - plogis(theta[start2] + (linearpredictor) %*% theta[thetastart:thetaend]))
+  if (cend >= nZp1) {
+    stage2linpred <- cbind(linearpredictor, covariates)
+  }
+  else {
+    stage2linpred <- linearpredictor
+  }
 
-  start3 <- nZ + 3
-  end3 <- nZ + 3 # when 1 x
-  print(head(xhat))
-  for (i in start3:end3) {
-    j <- 1
-    moments[,i] <- (Y - plogis(theta[start2] + (linearpredictor) %*% theta[thetastart:thetaend]))*xhat[,j]
+  print(head(stage2linpred))
+  print(theta)
+  start2 <- cend2 + 1
+  thetastart <- start2 + 1
+  print(thetastart)
+  thetaend <- length(theta)
+  print(thetaend)
+  moments[,start2] <- (Y - plogis(theta[start2] + stage2linpred %*% theta[thetastart:thetaend]))
+
+  start3 <- cend2 + 2
+  j <- 1
+  for (i in start3:thetaend) {
+    moments[,i] <- (Y - plogis(theta[start2] + stage2linpred %*% theta[thetastart:thetaend]))*xhat[,j]
     j <- j + 1
   }
 
