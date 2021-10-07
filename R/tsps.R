@@ -142,15 +142,23 @@ tsps <- function(formula, instruments, data, subset, na.action,
   }
 
   # gmm fit
-  output <- tsps_gmm(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0, link = link)
+  output <- tsps_gmm(x = X[,-1], y = Y, z = Z[,-1],
+                     xnames = xnames,
+                     t0 = t0,
+                     link = link,
+                     covariatenames = covariatenames)
 
   class(output) <- append("tsps", class(output))
   output
 }
 
-tsps_gmm <- function(x, y, z, xnames, t0, link){
-
+tsps_gmm <- function(x, y, z, xnames, t0, link, covariatenames){
   x <- as.matrix(x)
+
+  if (!identical(covariatenames, character(0))) {
+    x <- x[,!(colnames(x) %in% covariatenames), drop = FALSE]
+  }
+
   dat = data.frame(y, x, z)
 
   if (is.null(t0))
@@ -193,7 +201,7 @@ tspsIdentityMoments <- function(theta, x){
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
 
-  # generate first stage residuals
+  # generate first stage predicted values
   if (ncol(X) == 1) {
     stage1 <- lm(X ~ Z) # TODO covariates
     xhat <- fitted.values(stage1)
@@ -212,7 +220,7 @@ tspsLogaddMoments <- function(theta, x){
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
 
-  # generate first stage residuals
+  # generate first stage predicted values
   if (ncol(X) == 1) {
     stage1 <- lm(X ~ Z) # TODO covariates
     xhat <- fitted.values(stage1)
@@ -231,7 +239,7 @@ tspsLogmultMoments <- function(theta, x){
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
 
-  # generate first stage residuals
+  # generate first stage predicted values
   if (ncol(X) == 1) {
     stage1 <- lm(X ~ Z) # TODO covariates
     xhat <- fitted.values(stage1)
@@ -250,14 +258,21 @@ tspsLogitMoments <- function(theta, x){
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
   Zwithcons <- cbind(rep(1, nrow(x)), Z)
+  cend <- ncol(Z)
 
-  # generate first stage residuals
+  # generate first stage predicted values
   if (ncol(X) == 1) {
-    stage1 <- lm(X ~ Z) # TODO add TSPS covariates
+    stage1 <- lm(X ~ Z) # TODO check that TSPS covariates are included
     xhat <- fitted.values(stage1)
   }
 
-  linearpredictor <- Zwithcons %*% theta[1:nZp1] # only need subset of theta
+  if (cend >= nZp1) {
+    covariates <- Z[nZp1:cend]
+    print(head(covariates))
+    xhat <- cbind(xhat, covariates)
+  }
+
+  linearpredictor <- Zwithcons %*% theta[1:cend] # only need first stage subset of theta
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = nZp1 + ncol(X) + 1, NA)
@@ -270,13 +285,17 @@ tspsLogitMoments <- function(theta, x){
   }
 
   start2 <- nZ + 2
-  thetaeffect <- start2 + 1
-  moments[,start2] <- (Y - plogis(theta[start2] + (linearpredictor)*theta[thetaeffect]))
+  thetastart <- start2 + 1
+  thetaend <- length(theta)
+  moments[,start2] <- (Y - plogis(theta[start2] + (linearpredictor) %*% theta[thetastart:thetaend]))
 
   start3 <- nZ + 3
   end3 <- nZ + 3 # when 1 x
+  print(head(xhat))
   for (i in start3:end3) {
-    moments[,i] <- (Y - plogis(theta[start2] + (linearpredictor)*theta[thetaeffect]))*xhat
+    j <- 1
+    moments[,i] <- (Y - plogis(theta[start2] + (linearpredictor) %*% theta[thetastart:thetaend]))*xhat[,j]
+    j <- j + 1
   }
 
   return(moments)
