@@ -107,8 +107,15 @@ tsps <- function(formula, instruments, data, subset, na.action,
   xnames <- xnames[-1]
   znames <- colnames(Z)[-1]
 
+  print(znames)
+
   covariatenames <- intersect(xnames, znames)
   covariates <- X[,covariatenames]
+
+  tsps_env <- new.env(parent = emptyenv())
+  tsps_env$xnames <- xnames
+  tsps_env$znames <- znames
+  tsps_env$covariatenames <- covariatenames
 
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
@@ -253,9 +260,8 @@ tspsLogitMoments <- function(theta, x){
   xcolstop <- 2
   X <- as.matrix(x[,2:xcolstop])
   zcolstart <- 3 # 1 is y, length(theta) is nX
-
-
   zcolstop <- ncol(x)
+  print(zcolstop)
   Z <- as.matrix(x[,zcolstart:zcolstop])
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
@@ -265,15 +271,16 @@ tspsLogitMoments <- function(theta, x){
 
   # generate first stage predicted values
   if (ncol(X) == 1) {
-    stage1 <- lm(X ~ Z) # TODO check that TSPS covariates are included
+    stage1 <- lm(X ~ Z)
     xhat <- fitted.values(stage1)
   }
 
   if (cend2 >= nZp1) {
     print(head(Z))
     print(nZp1)
-    covariates <- Z[,nZp1:cend]
     print(head(covariates))
+    covariates <- Z[,nZp1:cend]
+
     xhat <- cbind(xhat, covariates)
   }
 
