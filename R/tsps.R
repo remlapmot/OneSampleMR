@@ -117,6 +117,10 @@ tsps <- function(formula, instruments, data, subset, na.action,
   tsps_env$znames <- znames
   tsps_env$covariatenames <- covariatenames
 
+  print(tsps_end$xnames)
+  print(tsps_end$znames)
+  print(tsps_end$covariatenames)
+
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
   # check y binary
