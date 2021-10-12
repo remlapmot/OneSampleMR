@@ -199,60 +199,60 @@ tsps_gmm <- function(x, y, z, xnames, t0, link){
 }
 
 tspsIdentityMoments <- function(theta, x){
-  # extract variables from x
-  Y <- as.matrix(x[,"y"])
-  xcolstop <- length(theta)
-  X <- as.matrix(x[,2:xcolstop])
-  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
-  zcolstop <- ncol(x)
-  Z <- as.matrix(x[,zcolstart:zcolstop])
-  nZ <- zcolstop - zcolstart + 1
-  nZp1 <- nZ + 1
-
-  # generate first stage predicted values
-  if (ncol(X) == 1) {
-    stage1 <- lm(X ~ Z) # TODO covariates
-    xhat <- fitted.values(stage1)
-  }
+  # # extract variables from x
+  # Y <- as.matrix(x[,"y"])
+  # xcolstop <- length(theta)
+  # X <- as.matrix(x[,2:xcolstop])
+  # zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
+  # zcolstop <- ncol(x)
+  # Z <- as.matrix(x[,zcolstart:zcolstop])
+  # nZ <- zcolstop - zcolstart + 1
+  # nZp1 <- nZ + 1
+  #
+  # # generate first stage predicted values
+  # if (ncol(X) == 1) {
+  #   stage1 <- lm(X ~ Z) # TODO covariates
+  #   xhat <- fitted.values(stage1)
+  # }
 
 }
 
 tspsLogaddMoments <- function(theta, x){
-  # extract variables from x
-  Y <- as.matrix(x[,"y"])
-  xcolstop <- length(theta)
-  X <- as.matrix(x[,2:xcolstop])
-  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
-  zcolstop <- ncol(x)
-  Z <- as.matrix(x[,zcolstart:zcolstop])
-  nZ <- zcolstop - zcolstart + 1
-  nZp1 <- nZ + 1
-
-  # generate first stage predicted values
-  if (ncol(X) == 1) {
-    stage1 <- lm(X ~ Z) # TODO covariates
-    xhat <- fitted.values(stage1)
-  }
+  # # extract variables from x
+  # Y <- as.matrix(x[,"y"])
+  # xcolstop <- length(theta)
+  # X <- as.matrix(x[,2:xcolstop])
+  # zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
+  # zcolstop <- ncol(x)
+  # Z <- as.matrix(x[,zcolstart:zcolstop])
+  # nZ <- zcolstop - zcolstart + 1
+  # nZp1 <- nZ + 1
+  #
+  # # generate first stage predicted values
+  # if (ncol(X) == 1) {
+  #   stage1 <- lm(X ~ Z) # TODO covariates
+  #   xhat <- fitted.values(stage1)
+  # }
 
 }
 
 tspsLogmultMoments <- function(theta, x){
-  # extract variables from x
-  Y <- as.matrix(x[,"y"])
-  xcolstop <- length(theta)
-  X <- as.matrix(x[,2:xcolstop])
-  zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
-  zcolstop <- ncol(x)
-  Z <- as.matrix(x[,zcolstart:zcolstop])
-  nZ <- zcolstop - zcolstart + 1
-  nZp1 <- nZ + 1
-
-  # generate first stage predicted values
-  if (ncol(X) == 1) {
-    stage1 <- lm(X ~ Z) # TODO covariates
-    xhat <- fitted.values(stage1)
-  }
-
+  # # extract variables from x
+  # Y <- as.matrix(x[,"y"])
+  # xcolstop <- length(theta)
+  # X <- as.matrix(x[,2:xcolstop])
+  # zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
+  # zcolstop <- ncol(x)
+  # Z <- as.matrix(x[,zcolstart:zcolstop])
+  # nZ <- zcolstop - zcolstart + 1
+  # nZp1 <- nZ + 1
+  #
+  # # generate first stage predicted values
+  # if (ncol(X) == 1) {
+  #   stage1 <- lm(X ~ Z) # TODO covariates
+  #   xhat <- fitted.values(stage1)
+  # }
+  #
 }
 
 tspsLogitMoments <- function(theta, x){
