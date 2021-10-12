@@ -108,7 +108,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
   znames <- colnames(Z)[-1]
   covariatenames <- intersect(xnames, znames)
 
-  tsps_env <- new.env(parent = emptyenv())
+  tsps_env <<- new.env(parent = emptyenv())
   tsps_env$anycovs <- FALSE
   if (!identical(covariatenames, character(0))) {
     tsps_env$anycovs <- TRUE
