@@ -263,7 +263,7 @@ tspsLogitMoments <- function(theta, x){
   Zwithcons <- cbind(rep(1, nrow(x)), Z)
   nZ <- ncol(Z)
   covariates <- x[, tsps_env$covariatenames]
-  ncovatiates <- ncol(covariates)
+  ncovariates <- length(tsps_env$covariatenames)
   Zwithcovariates <- cbind(Z, covariates)
   stage1end <- ncol(Zwithcovariates) + 1
   thetastage1 <- theta[1:stage1end]
