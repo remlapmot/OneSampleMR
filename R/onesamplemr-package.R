@@ -4,6 +4,9 @@
 #' Some useful functions for one-sample Mendelian randomization
 #' and instrumental variables analyses.
 #'
+#' More details of these estimators can be found in the papers cited in the
+#' helpfiles and more generally in Palmer et al. (2011).
+#'
 #' @references
 #' Palmer TM, Sterne JAC, Harbord RM, Lawlor DA, Sheehan NA, Meng S,
 #' Granell R, Davey Smith G, Didelez V.
