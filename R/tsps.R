@@ -8,7 +8,7 @@
 #' the predicted values of the exposure (and possibly measured confounders).
 #'
 #' `tsps()` performs GMM estimation to ensure appropriate standard errors
-#' on its estimates.
+#' on its estimates similar to the approach described in Clarke et al. (2015).
 #'
 #' @inheritParams msmm
 #' @param link character; one of `"identity"` (the default), `"logadd"`, `"logmult"`, `"logit"`.
@@ -23,6 +23,11 @@
 #' with a logistic regression model.
 #' Statistics in Medicine, 2013, 32, 27, 4726-4747.
 #' \doi{10.1002/sim.5871}
+#'
+#' Clarke PS, Palmer TM, Windmeijer F. Estimating structural
+#' mean models with multiple instrumental variables using the
+#' Generalised Method of Moments. Statistical Science, 2015, 30, 1,
+#' 96-117. \doi{10.1214/14-STS503}
 #'
 #' Dukes O, Vansteelandt S.
 #' A note on G-estimation of causal risk ratios.
