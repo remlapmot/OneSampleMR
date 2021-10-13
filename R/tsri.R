@@ -12,7 +12,8 @@
 #' control function estimators.
 #'
 #' `tsri()` performs GMM estimation to ensure appropriate standard errors
-#' on its estimates. Terza (2017) described an alternative approach.
+#' on its estimates similar to that described that described by
+#' Clarke et al. (2015). Terza (2017) described an alternative approach.
 #'
 #' @inheritParams msmm
 #' @inheritParams tsps
@@ -22,6 +23,11 @@
 #' structural mean models.
 #' Statistics in Medicine, 2011, 30, 6, 678-694.
 #' \doi{10.1002/sim.4138}
+#'
+#' Clarke PS, Palmer TM, Windmeijer F. Estimating structural
+#' mean models with multiple instrumental variables using the
+#' Generalised Method of Moments. Statistical Science, 2015, 30, 1,
+#' 96-117. \doi{10.1214/14-STS503}
 #'
 #' Dukes O, Vansteelandt S.
 #' A note on G-estimation of causal risk ratios.
