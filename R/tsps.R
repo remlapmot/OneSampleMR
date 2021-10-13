@@ -284,7 +284,7 @@ tspsLogitMoments <- function(theta, x){
 
   # generate first stage predicted values
   if (length(tsps_env$xnames) == 1) {
-    stage1 <- lm(X ~ as.matrix(Zwithcovariates))
+    stage1 <- lm(X ~ Zwithcovariates)
     xhat <- fitted.values(stage1)
   }
 
