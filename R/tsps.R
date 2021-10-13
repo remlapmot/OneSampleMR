@@ -292,7 +292,9 @@ tspsLogitMoments <- function(theta, x){
     xhat <- cbind(xhat, covariates)
   }
 
-  linearpredictor <- Zwithcons %*% thetastage1
+  Zwithcovariateswithcons <- as.matrix(cbind(rep(1, nrow(x)), Zwithcovariates))
+
+  linearpredictor <- Zwithcovariateswithcons %*% as.matrix(thetastage1)
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
