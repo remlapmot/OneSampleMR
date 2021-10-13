@@ -5,7 +5,7 @@
 #'
 #' Function providing several methods to estimate the multiplicative
 #' structural mean model (MSMM) of Robins (1989). These are the methods
-#' described in Clarke, Palmer, and Windmeijer (2015), most notably
+#' described in Clarke et al. (2015), most notably
 #' generalised method of moments (GMM) estimation of the MSMM.
 #'
 #' An equivalent estimator to the MSMM was proposed in Econometrics by Mullahy (1997) and
