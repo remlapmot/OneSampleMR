@@ -11,7 +11,20 @@ and instrumental variables analyses}
 Some useful functions for one-sample Mendelian randomization
 and instrumental variables analyses.
 }
+\details{
+More details of these estimators can be found in the papers cited in the
+helpfiles and more generally in Palmer et al. (2011).
+
+The two-stage predictor substitution, two-stage residual inclusion,
+and structural mean model estimators are estimated using the generalised
+method of moments estimation as per Clarke et al. (2015).
+}
 \references{
+Clarke PS, Palmer TM, Windmeijer F. Estimating structural
+mean models with multiple instrumental variables using the
+Generalised Method of Moments. Statistical Science, 2015, 30, 1,
+96-117. \doi{10.1214/14-STS503}
+
 Palmer TM, Sterne JAC, Harbord RM, Lawlor DA, Sheehan NA, Meng S,
 Granell R, Davey Smith G, Didelez V.
 Instrumental variable estimation of causal risk ratios and causal odds ratios
