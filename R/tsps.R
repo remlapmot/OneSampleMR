@@ -293,6 +293,8 @@ tspsLogitMoments <- function(theta, x){
   }
 
   Zwithcovariateswithcons <- as.matrix(cbind(rep(1, nrow(x)), Zwithcovariates))
+  cend <- ncol(Zwithcovariateswithcons)
+  cend2 <- cend + 1
 
   linearpredictor <- Zwithcovariateswithcons %*% as.matrix(thetastage1)
 
@@ -301,14 +303,14 @@ tspsLogitMoments <- function(theta, x){
 
   moments[,1] <- (X - linearpredictor)
 
+  # TODO here
+
   end1 <- 1 + nZ
   for (i in 2:end1) {
-    moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
+    moments[,i] <- (X - linearpredictor)*Zwithcovariateswithcons[,i]
   }
 
-  # TODO Here
-
-  if (cend >= nZp1) {
+  if (tsps_env$anycovs) {
     stage2linpred <- cbind(linearpredictor, covariates)
   }
   else {
