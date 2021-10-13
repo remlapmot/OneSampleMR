@@ -301,12 +301,12 @@ tspsLogitMoments <- function(theta, x){
 
   moments[,1] <- (X - linearpredictor)
 
-  # TODO Here
-
   end1 <- 1 + nZ
   for (i in 2:end1) {
     moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
   }
+
+  # TODO Here
 
   if (cend >= nZp1) {
     stage2linpred <- cbind(linearpredictor, covariates)
