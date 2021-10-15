@@ -183,10 +183,10 @@ test_that("Multiple instrument example with covariates - identity link", {
   expect_equal(fit30$estci[,1], betamanual, ignore_attr = TRUE)
 })
 
-test_that("Multiple instrument example with covariates - logit link", {
+test_that("Multiple instrument example with covariates - logadd link", {
   skip_on_cran()
 
-  fit31 <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logit")
+  fit31 <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logadd")
   expect_output(print(fit31))
   smry31 <- summary(fit31)
   expect_output(print(smry31))
