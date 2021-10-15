@@ -185,8 +185,6 @@ print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 #' @rdname summary.tsri
 #' @export
 print.summary.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
-  cat("\n")
-
   cat("\nGMM fit summary:\n")
   gmm::print.summary.gmm(x$smry)
 
