@@ -161,7 +161,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     else if (link == "logmult") {
       Ystar <- Y
       Ystar[Y == 0] <- 0.001
-      stage2 <- glm(Ystar ~ xhat, family = Gamma(link = "log"))
+      stage2 <- glm(Ystar ~ xhat, family = Gamma(link = "log"), control = list(maxit = 1E5))
     }
     else if (link == "logit") {
       stage2 <- glm(Y ~ xhat, family = binomial(link = "logit"))
