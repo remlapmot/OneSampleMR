@@ -159,7 +159,12 @@ tsps <- function(formula, instruments, data, subset, na.action,
   colnames(Xtopass) <- tsps_env$xnames
 
   Ztopass <- as.data.frame(Z[, -1])
-  colnames(Ztopass) <- tsps_env$znames
+  if (tsps_env$anycovs) {
+    colnames(Ztopass) <- c(tsps_env$znames, tsps_env$covariatenames)
+  }
+  else {
+    colnames(Ztopass) <- tsps_env$znames
+  }
 
   # gmm fit
   output <- tsps_gmm(x = Xtopass, y = Y, z = Ztopass,
