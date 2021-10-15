@@ -167,11 +167,7 @@ summary.tsri <- function(object, ...) {
 #' @rdname summary.tsri
 #' @export
 print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
-  cat("\n")
-  cat("Estimation method:", x$estmethod)
-  cat("\n")
-
-  cat("\n")
+  cat("\nEstimation method:", x$estmethod, "\n\n")
   gmm::print.gmm(x$fit)
 
   if (x$estmethod != "tslsalt") {
