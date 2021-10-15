@@ -299,9 +299,6 @@ tspsLogitMoments <- function(theta, x){
   # moments
   moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
 
-  print(length(theta))
-  print(head(moments))
-
   moments[,1] <- (X - linearpredictor)
 
   for (i in 2:stage1end) {
@@ -318,14 +315,7 @@ tspsLogitMoments <- function(theta, x){
   thetastart <- stage2start + 1
   moments[,stage2start] <- (Y - plogis(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))
 
-  print(theta)
-  print(thetastart)
-  print(thetaend)
-  print(head(stage2linpred))
-  print()
-
   start3 <- stage2start + 1
-  print(start3)
   j <- 1
   for (i in start3:thetaend) {
     moments[,i] <- (Y - plogis(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))*xhat[,j]
