@@ -120,6 +120,10 @@ test_that("Single instrument example - logit link", {
 
   expect_output(print(fit21))
   expect_output(print(smy))
+
+  # manual fit for comparison
+
+
 })
 
 test_that("Multiple instrument example with covariates", {
