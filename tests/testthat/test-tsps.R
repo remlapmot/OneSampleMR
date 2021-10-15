@@ -152,7 +152,7 @@ test_that("Multiple instrument example with covariates - identity link", {
 
   fit30 <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat)
   expect_output(print(fit30))
-  smry31 <- summary(fit30)
+  smry30 <- summary(fit30)
   expect_output(print(smry30))
 
   # manual fit for comparison
