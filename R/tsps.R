@@ -228,6 +228,7 @@ tsps_gmm <- function(x, y, z, xnames, t0, link){
   return(reslist)
 }
 
+#' @importFrom stats lm fitted.values
 tspsIdentityMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
