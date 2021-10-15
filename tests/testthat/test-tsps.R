@@ -75,33 +75,43 @@ test_that("Single instrument example - logadd link", {
   expect_equal(fit11$estci[,1], betamanual, ignore_attr = "names")
 })
 
-# test_that("Single instrument example - logmult link", {
-#   skip_on_cran()
-#   # ivtools for comparison fit
-#   library(ivtools)
-#   fitZ.L <- glm(Z ~ 1, data = dat)
-#   fitY.LZX <- glm(Y ~ X + Z, family = binomial(link = "log"), data = dat)
-#   fitLogGest <- ivglm(estmethod = "g",
-#                       X = "X",
-#                       fitZ.L = fitZ.L,
-#                       fitY.LZX = fitY.LZX,
-#                       data = dat,
-#                       link = "log",
-#                       Y = "Y")
-#   logcrr <- fitLogGest$est["X"]
-#   logcrrse <- sqrt(fitLogGest$vcov)
-#
-#   fit11 <- tsps(Y ~ X | Z, data = dat, link = "logmult")
-#   expect_equal(log(fit11$estci[1]), logcrr, tolerance = 0.05, ignore_attr = "names")
-#
-#   expect_s3_class(fit11, "tsps")
-#
-#   smy11 <- summary(fit11)
-#   expect_s3_class(smy, "summary.tsps")
-#
-#   expect_output(print(fit11))
-#   expect_output(print(smy11))
-# })
+test_that("Single instrument example - logmult link", {
+  skip_on_cran()
+  # ivtools for comparison fit
+  library(ivtools)
+  fitZ.L <- glm(Z ~ 1, data = dat)
+  dat$Y[dat$Y == 0] <- 0.001
+  fitY.LZX <- glm(Y ~ X + Z, family = Gamma(link = "log"), data = dat)
+  fitLogGest <- ivglm(estmethod = "g",
+                      X = "X",
+                      fitZ.L = fitZ.L,
+                      fitY.LZX = fitY.LZX,
+                      data = dat,
+                      link = "log",
+                      Y = "Y")
+  logcrr <- fitLogGest$est["X"]
+  logcrrse <- sqrt(fitLogGest$vcov)
+
+  fit12 <- tsps(Y ~ X | Z, data = dat, link = "logmult")
+  expect_equal(fit12$estci[4,1], logcrr, tolerance = 0.05, ignore_attr = "names")
+
+  expect_s3_class(fit12, "tsps")
+
+  smy12 <- summary(fit12)
+  expect_s3_class(smy12, "summary.tsps")
+
+  expect_output(print(fit12))
+  expect_output(print(smy12))
+
+  # manual fit for comparison
+  stage1 <- lm(X ~ Z, data = dat)
+  betamanual <- coef(stage1)
+  xhat <- fitted.values(stage1)
+  Y[Y == 0] <- 0.001
+  stage2 <- glm(Y ~ xhat, family = Gamma(link = "log"))
+  betamanual <- c(betamanual, coef(stage2))
+  expect_equal(fit12$estci[,1], betamanual, ignore_attr = "names")
+})
 
 test_that("Single instrument example - logit link", {
   skip_on_cran()
