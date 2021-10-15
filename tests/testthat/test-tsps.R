@@ -150,9 +150,10 @@ test_that("Single instrument example - logit link", {
 })
 
 # Data generation for multiple instrument tests
+rm(list = ls())
 set.seed(123456)
 n <- 1000
-psi0 <- 0.5
+psi0 <- 0.8
 G1 <- rbinom(n, 2, 0.5)
 G2 <- rbinom(n, 2, 0.3)
 G3 <- rbinom(n, 2, 0.4)
@@ -177,7 +178,7 @@ test_that("Multiple instrument example with covariates - identity link", {
   stage1 <- lm(X ~ G1 + G2 + G3 + C1 + C2, data = dat)
   betamanual <- coef(stage1)
   xhat <- fitted.values(stage1)
-  stage2 <- lm(Y ~ xhat  + C1 + C2)
+  stage2 <- lm(Y ~ xhat + C1 + C2)
   betamanual <- c(betamanual, coef(stage2))
   expect_equal(fit30$estci[,1], betamanual, ignore_attr = TRUE)
 })
