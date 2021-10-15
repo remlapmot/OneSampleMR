@@ -210,7 +210,7 @@ tsps_gmm <- function(x, y, z, xnames, t0, link){
     fit <- gmm::gmm(tspsLogaddMoments, x = dat, t0 = t0, vcov = "iid")
   }
   else if (link == "logmult") {
-    fit <- gmm::gmm(tspsLogmultMoments, x = dat, t0 = t0, vcov = "iid")
+    fit <- gmm::gmm(tspsLogmultMoments, x = dat, t0 = t0, vcov = "iid", itermax = 1E7)
   }
   else if (link == "logit") {
     fit <- gmm::gmm(tspsLogitMoments, x = dat, t0 = t0, vcov = "iid")
