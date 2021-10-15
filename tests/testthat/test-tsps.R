@@ -144,4 +144,11 @@ test_that("Multiple instrument example with covariates", {
   smry31 <- summary(fit31)
   expect_output(print(smry31))
 
+  # manual fit for comparison
+  stage1 <- lm(X ~ G1 + G2 + G3 + C1 + C2, data = dat)
+  xhat <- fitted.values(stage1)
+  stage2 <- glm(Y ~ xhat  + C1 + C2, family = binomial)
+  betamanual <- coef(stage2)
+  expect_equal(fit31$estci[7:10,1], betamanual, ignore_attr = TRUE)
+
 })
