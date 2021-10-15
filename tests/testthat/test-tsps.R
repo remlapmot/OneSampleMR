@@ -139,6 +139,9 @@ test_that("Multiple instrument example with covariates", {
   Y <- rbinom(n, 1, pY)
   dat <- data.frame(G1, G2, G3, X, Y, C1, C2)
 
-  tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logit")
+  fit31 <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logit")
+  expect_output(print(fit31))
+  smry31 <- summary(fit31)
+  expect_output(print(smry31))
 
 })
