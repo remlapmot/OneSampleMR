@@ -58,6 +58,7 @@
 #' dat <- data.frame(Z, X, Y)
 #' tspslogitfit <- tsps(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tspslogitfit)
+#' @importFrom stats fitted.values glm poisson Gamma binomial
 #' @export
 tsps <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
