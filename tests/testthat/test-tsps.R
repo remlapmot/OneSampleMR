@@ -218,3 +218,19 @@ test_that("Multiple instrument example with covariates - logmult link", {
   expect_equal(fit32$estci[,1], betamanual, tolerance = 0.01, ignore_attr = TRUE)
 })
 
+test_that("Multiple instrument example with covariates - logit link", {
+  skip_on_cran()
+
+  fit33 <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logit")
+  expect_output(print(fit33))
+  smry33 <- summary(fit33)
+  expect_output(print(smry33))
+
+  # manual fit for comparison
+  stage1 <- lm(X ~ G1 + G2 + G3 + C1 + C2, data = dat)
+  betamanual <- coef(stage1)
+  xhat <- fitted.values(stage1)
+  stage2 <- glm(Y ~ xhat + C1 + C2, family = binomial)
+  betamanual <- c(betamanual, coef(stage2))
+  expect_equal(fit33$estci[,1], betamanual, ignore_attr = TRUE)
+})
