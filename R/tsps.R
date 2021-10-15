@@ -58,7 +58,7 @@
 #' dat <- data.frame(Z, X, Y)
 #' tspslogitfit <- tsps(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tspslogitfit)
-#' @importFrom stats fitted.values glm poisson Gamma binomial
+#' @importFrom stats lm fitted.values glm poisson Gamma binomial
 #' @export
 tsps <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
@@ -287,23 +287,64 @@ tspsIdentityMoments <- function(theta, x){
   return(moments)
 }
 
+#' @importFrom stats lm fitted.values
 tspsLogaddMoments <- function(theta, x){
-  # # extract variables from x
-  # Y <- as.matrix(x[,"y"])
-  # xcolstop <- length(theta)
-  # X <- as.matrix(x[,2:xcolstop])
-  # zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
-  # zcolstop <- ncol(x)
-  # Z <- as.matrix(x[,zcolstart:zcolstop])
-  # nZ <- zcolstop - zcolstart + 1
-  # nZp1 <- nZ + 1
-  #
-  # # generate first stage predicted values
-  # if (ncol(X) == 1) {
-  #   stage1 <- lm(X ~ Z) # TODO covariates
-  #   xhat <- fitted.values(stage1)
-  # }
+  # extract variables from x
+  Y <- as.matrix(x[,"y"])
+  X <- x[, tsps_env$xnames]
+  Z <- x[, tsps_env$znames]
+  nZ <- ncol(Z)
+  if (tsps_env$anycovs) {
+    covariates <- x[, tsps_env$covariatenames]
+    ncovariates <- length(tsps_env$covariatenames)
+    Z <- as.matrix(cbind(Z, covariates))
+  }
+  Zwithcons <- as.matrix(cbind(rep(1, nrow(x)), Z))
+  stage1end <- ncol(Zwithcons)
+  thetastage1 <- theta[1:stage1end]
+  stage2start <- stage1end + 1
+  thetaend <- length(theta)
+  thetastage2 <- theta[stage2start:thetaend]
 
+  # generate first stage predicted values
+  if (length(tsps_env$xnames) == 1) {
+    stage1 <- lm(X ~ Z)
+    xhat <- as.matrix(fitted.values(stage1))
+  }
+
+  if (tsps_env$anycovs) {
+    xhat <- cbind(xhat, covariates)
+  }
+
+  linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
+
+  # moments
+  moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
+
+  moments[,1] <- (X - linearpredictor)
+
+  for (i in 2:stage1end) {
+    moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
+  }
+
+  if (tsps_env$anycovs) {
+    stage2linpred <- as.matrix(cbind(linearpredictor, covariates))
+  }
+  else {
+    stage2linpred <- linearpredictor
+  }
+
+  thetastart <- stage2start + 1
+  moments[,stage2start] <- (Y - exp(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))
+
+  start3 <- stage2start + 1
+  j <- 1
+  for (i in start3:thetaend) {
+    moments[,i] <- (Y - exp(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))*xhat[,j]
+    j <- j + 1
+  }
+
+  return(moments)
 }
 
 tspsLogmultMoments <- function(theta, x){
