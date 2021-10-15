@@ -39,34 +39,42 @@ test_that("Single instrument example - identity link", {
   expect_output(print(smy01))
 })
 
-# test_that("Single instrument example - logadd link", {
-#   skip_on_cran()
-#   # ivtools for comparison fit
-#   library(ivtools)
-#   fitZ.L <- glm(Z ~ 1, data = dat)
-#   fitY.LZX <- glm(Y ~ X + Z, family = binomial(link = "log"), data = dat)
-#   fitLogGest <- ivglm(estmethod = "g",
-#                       X = "X",
-#                       fitZ.L = fitZ.L,
-#                       fitY.LZX = fitY.LZX,
-#                       data = dat,
-#                       link = "log",
-#                       Y = "Y")
-#   logcrr <- fitLogGest$est["X"]
-#   logcrrse <- sqrt(fitLogGest$vcov)
-#
-#   fit11 <- tsps(Y ~ X | Z, data = dat, link = "logadd")
-#   expect_equal(log(fit11$estci[1]), logcrr, tolerance = 0.05, ignore_attr = "names")
-#
-#   expect_s3_class(fit11, "tsps")
-#
-#   smy11 <- summary(fit11)
-#   expect_s3_class(smy, "summary.tsps")
-#
-#   expect_output(print(fit11))
-#   expect_output(print(smy11))
-# })
-#
+test_that("Single instrument example - logadd link", {
+  skip_on_cran()
+  # ivtools for comparison fit
+  library(ivtools)
+  fitZ.L <- glm(Z ~ 1, data = dat)
+  fitY.LZX <- glm(Y ~ X + Z, family = poisson, data = dat) # binomial(link = "log")
+  fitLogGest <- ivglm(estmethod = "g",
+                      X = "X",
+                      fitZ.L = fitZ.L,
+                      fitY.LZX = fitY.LZX,
+                      data = dat,
+                      link = "log",
+                      Y = "Y")
+  logcrr <- fitLogGest$est["X"]
+  logcrrse <- sqrt(fitLogGest$vcov)
+
+  fit11 <- tsps(Y ~ X | Z, data = dat, link = "logadd")
+  expect_equal(fit11$estci[4,1], logcrr, tolerance = 0.05, ignore_attr = "names")
+
+  expect_s3_class(fit11, "tsps")
+
+  smy11 <- summary(fit11)
+  expect_s3_class(smy11, "summary.tsps")
+
+  expect_output(print(fit11))
+  expect_output(print(smy11))
+
+  # manual estimation check
+  stage1 <- lm(X ~ Z, data = dat)
+  betamanual <- coef(stage1)
+  xhat <- fitted.values(stage1)
+  stage2 <- glm(Y ~ xhat, family = poisson) # binomial(link = "log")
+  betamanual <- c(betamanual, coef(stage2))
+  expect_equal(fit11$estci[,1], betamanual, ignore_attr = "names")
+})
+
 # test_that("Single instrument example - logmult link", {
 #   skip_on_cran()
 #   # ivtools for comparison fit
