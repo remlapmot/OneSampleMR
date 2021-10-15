@@ -272,9 +272,9 @@ tspsLogitMoments <- function(theta, x){
   X <- x[, tsps_env$xnames]
   Z <- x[, tsps_env$znames]
   nZ <- ncol(Z)
-  covariates <- x[, tsps_env$covariatenames]
-  ncovariates <- length(tsps_env$covariatenames)
   if (tsps_env$anycovs) {
+    covariates <- x[, tsps_env$covariatenames]
+    ncovariates <- length(tsps_env$covariatenames)
     Z <- as.matrix(cbind(Z, covariates))
   }
   Zwithcons <- as.matrix(cbind(rep(1, nrow(x)), Z))
