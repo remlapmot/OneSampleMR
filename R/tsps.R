@@ -285,6 +285,7 @@ tspsLogmultMoments <- function(theta, x){
   #
 }
 
+#' @importFrom stats fitted.values plogis
 tspsLogitMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
