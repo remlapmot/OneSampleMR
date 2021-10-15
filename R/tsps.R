@@ -45,6 +45,19 @@
 #' Addressing endogeneity in health econometric modeling.
 #' Journal of Health Economics, 2008, 27, 3, 531-543.
 #' \doi{10.1016/j.jhealeco.2007.09.009}
+#' @examples
+#' # Two-stage predictor substitution estimator
+#' # with second stage logistic regression
+#' set.seed(9)
+#' n <- 1000
+#' psi0 <- 0.5
+#' Z <- rbinom(n, 1, 0.5)
+#' X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+#' m0 <- plogis(1 + 0.8*X - 0.39*Z)
+#' Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+#' dat <- data.frame(Z, X, Y)
+#' tspslogitfit <- tsps(Y ~ X | Z , data = dat, link = "logit")
+#' summary(tspslogitfit)
 #' @export
 tsps <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
