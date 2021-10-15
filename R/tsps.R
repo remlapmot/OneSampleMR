@@ -265,31 +265,22 @@ tspsLogitMoments <- function(theta, x){
   Y <- as.matrix(x[,"y"])
   X <- x[, tsps_env$xnames]
   Z <- x[, tsps_env$znames]
-  Zwithcons <- as.matrix(cbind(rep(1, nrow(x)), Z))
   nZ <- ncol(Z)
   covariates <- x[, tsps_env$covariatenames]
   ncovariates <- length(tsps_env$covariatenames)
-  Zwithcovariates <- as.matrix(cbind(Z, covariates))
-  stage1end <- ncol(Zwithcovariates) + 1
+  if (tsps_env$anycovs) {
+    Z <- as.matrix(cbind(Z, covariates))
+  }
+  Zwithcons <- as.matrix(cbind(rep(1, nrow(x)), Z))
+  stage1end <- ncol(Zwithcons)
   thetastage1 <- theta[1:stage1end]
   stage2start <- stage1end + 1
-  thetastage2 <- theta[stage2start:length(theta)]
-
-  # xcolstop <- 2
-  # X <- as.matrix(x[,2:xcolstop])
-  # zcolstart <- 3 # 1 is y, length(theta) is nX
-  # zcolstop <- ncol(x)
-  # print(zcolstop)
-  # Z <- as.matrix(x[,zcolstart:zcolstop])
-  # nZ <- zcolstop - zcolstart + 1
-  # nZp1 <- nZ + 1
-  #
-  # cend <- ncol(Z)
-  # cend2 <- cend + 1
+  thetaend <- length(theta)
+  thetastage2 <- theta[stage2start:thetaend]
 
   # generate first stage predicted values
   if (length(tsps_env$xnames) == 1) {
-    stage1 <- lm(X ~ Zwithcovariates)
+    stage1 <- lm(X ~ Z)
     xhat <- fitted.values(stage1)
   }
 
@@ -297,44 +288,31 @@ tspsLogitMoments <- function(theta, x){
     xhat <- cbind(xhat, covariates)
   }
 
-  Zwithcovariateswithcons <- as.matrix(cbind(rep(1, nrow(x)), Zwithcovariates))
-  cend <- ncol(Zwithcovariateswithcons)
-  cend2 <- cend + 1
-
-  linearpredictor <- Zwithcovariateswithcons %*% as.matrix(thetastage1)
+  linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
 
   moments[,1] <- (X - linearpredictor)
 
-  # TODO here
-
-  end1 <- 1 + nZ
-  for (i in 2:end1) {
-    moments[,i] <- (X - linearpredictor)*Zwithcovariateswithcons[,i]
+  for (i in 2:stage1end) {
+    moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
   }
 
   if (tsps_env$anycovs) {
-    stage2linpred <- cbind(linearpredictor, covariates)
+    stage2linpred <- as.matrix(cbind(linearpredictor, covariates))
   }
   else {
     stage2linpred <- linearpredictor
   }
 
-  print(head(stage2linpred))
-  print(theta)
-  start2 <- cend2 + 1
-  thetastart <- start2 + 1
-  print(thetastart)
-  thetaend <- length(theta)
-  print(thetaend)
-  moments[,start2] <- (Y - plogis(theta[start2] + stage2linpred %*% theta[thetastart:thetaend]))
+  thetastart <- stage2start + 1
+  moments[,stage2start] <- (Y - plogis(theta[stage2start] + stage2linpred %*% as.matrix(theta[thetastart:thetaend])))
 
-  start3 <- cend2 + 2
+  start3 <- stage2start + 1
   j <- 1
   for (i in start3:thetaend) {
-    moments[,i] <- (Y - plogis(theta[start2] + stage2linpred %*% theta[thetastart:thetaend]))*xhat[,j]
+    moments[,i] <- (Y - plogis(theta[stage2start] + stage2linpred %*% as.matrix(theta[thetastart:thetaend])))*xhat[,j]
     j <- j + 1
   }
 
