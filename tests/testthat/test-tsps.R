@@ -131,22 +131,41 @@ test_that("Single instrument example - logit link", {
   expect_equal(fit21$estci[,1], betamanual, ignore_attr = TRUE)
 })
 
-test_that("Multiple instrument example with covariates", {
+# Data generation for multiple instrument tests
+set.seed(123456)
+n <- 1000
+psi0 <- 0.5
+G1 <- rbinom(n, 2, 0.5)
+G2 <- rbinom(n, 2, 0.3)
+G3 <- rbinom(n, 2, 0.4)
+C1 <- runif(n)
+C2 <- runif(n)
+U <- runif(n)
+pX <- plogis(0.7*G1 + G2 - G3 + U + C1 + C2)
+X <- rbinom(n, 1, pX)
+pY <- plogis(-2 + psi0*X + U + C1 + C2)
+Y <- rbinom(n, 1, pY)
+dat <- data.frame(G1, G2, G3, X, Y, C1, C2)
+
+test_that("Multiple instrument example with covariates - identity link", {
   skip_on_cran()
-  set.seed(123456)
-  n <- 1000
-  psi0 <- 0.5
-  G1 <- rbinom(n, 2, 0.5)
-  G2 <- rbinom(n, 2, 0.3)
-  G3 <- rbinom(n, 2, 0.4)
-  C1 <- runif(n)
-  C2 <- runif(n)
-  U <- runif(n)
-  pX <- plogis(0.7*G1 + G2 - G3 + U + C1 + C2)
-  X <- rbinom(n, 1, pX)
-  pY <- plogis(-2 + psi0*X + U + C1 + C2)
-  Y <- rbinom(n, 1, pY)
-  dat <- data.frame(G1, G2, G3, X, Y, C1, C2)
+
+  fit30 <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat)
+  expect_output(print(fit30))
+  smry31 <- summary(fit30)
+  expect_output(print(smry30))
+
+  # manual fit for comparison
+  stage1 <- lm(X ~ G1 + G2 + G3 + C1 + C2, data = dat)
+  betamanual <- coef(stage1)
+  xhat <- fitted.values(stage1)
+  stage2 <- lm(Y ~ xhat  + C1 + C2)
+  betamanual <- c(betamanual, coef(stage2))
+  expect_equal(fit30$estci[,1], betamanual, ignore_attr = TRUE)
+})
+
+test_that("Multiple instrument example with covariates - logit link", {
+  skip_on_cran()
 
   fit31 <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logit")
   expect_output(print(fit31))
