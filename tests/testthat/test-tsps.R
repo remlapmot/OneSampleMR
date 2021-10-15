@@ -111,7 +111,7 @@ test_that("Single instrument example - logit link", {
   logcorse <- sqrt(fitLogitGest$vcov)
 
   fit21 <- tsps(Y ~ X | Z, data = dat, link = "logit")
-  expect_equal(log(fit21$estci[1]), logcor, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(fit21$estci[4,1], logcor, tolerance = 0.1, ignore_attr = "names")
 
   expect_s3_class(fit21, "tsps")
 
@@ -119,11 +119,15 @@ test_that("Single instrument example - logit link", {
   expect_s3_class(smy21, "summary.tsps")
 
   expect_output(print(fit21))
-  expect_output(print(smy))
+  expect_output(print(smy21))
 
   # manual fit for comparison
-
-
+  stage1 <- lm(X ~ Z, data = dat)
+  betamanual <- coef(stage1)
+  xhat <- fitted.values(stage1)
+  stage2 <- glm(Y ~ xhat, family = binomial)
+  betamanual <- c(betamanual, coef(stage2))
+  expect_equal(fit21$estci[,1], betamanual, ignore_attr = TRUE)
 })
 
 test_that("Multiple instrument example with covariates", {
