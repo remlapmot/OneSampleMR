@@ -155,8 +155,14 @@ tsps <- function(formula, instruments, data, subset, na.action,
     t0 <- c(t0, coef(stage2))
   }
 
+  Xtopass <- as.data.frame(X[, tsps_env$xnames])
+  colnames(Xtopass) <- tsps_env$xnames
+
+  Ztopass <- as.data.frame(Z[, -1])
+  colnames(Ztopass) <- tsps_env$znames
+
   # gmm fit
-  output <- tsps_gmm(x = X[,-1], y = Y, z = Z[,-1],
+  output <- tsps_gmm(x = Xtopass, y = Y, z = Ztopass,
                      xnames = xnames,
                      t0 = t0,
                      link = link)
@@ -281,7 +287,7 @@ tspsLogitMoments <- function(theta, x){
   # generate first stage predicted values
   if (length(tsps_env$xnames) == 1) {
     stage1 <- lm(X ~ Z)
-    xhat <- fitted.values(stage1)
+    xhat <- as.matrix(fitted.values(stage1))
   }
 
   if (tsps_env$anycovs) {
@@ -292,6 +298,9 @@ tspsLogitMoments <- function(theta, x){
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
+
+  print(length(theta))
+  print(head(moments))
 
   moments[,1] <- (X - linearpredictor)
 
@@ -307,12 +316,19 @@ tspsLogitMoments <- function(theta, x){
   }
 
   thetastart <- stage2start + 1
-  moments[,stage2start] <- (Y - plogis(theta[stage2start] + stage2linpred %*% as.matrix(theta[thetastart:thetaend])))
+  moments[,stage2start] <- (Y - plogis(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))
+
+  print(theta)
+  print(thetastart)
+  print(thetaend)
+  print(head(stage2linpred))
+  print()
 
   start3 <- stage2start + 1
+  print(start3)
   j <- 1
   for (i in start3:thetaend) {
-    moments[,i] <- (Y - plogis(theta[stage2start] + stage2linpred %*% as.matrix(theta[thetastart:thetaend])))*xhat[,j]
+    moments[,i] <- (Y - plogis(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))*xhat[,j]
     j <- j + 1
   }
 
