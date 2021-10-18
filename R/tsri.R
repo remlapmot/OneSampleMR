@@ -248,6 +248,9 @@ tsriIdentityMoments <- function(theta, x){
   stage2start <- stage1end + 1
   thetaend <- length(theta)
   thetastage2 <- theta[stage2start:thetaend]
+  thetacausal <- thetastage2[2]
+  thetares <- thetastage2[3]
+  thetastage2rescov <- thetastage2[3:length(thetastage2)]
 
   # generate first stage residuals
   if (length(tsri_env$xnames) == 1) {
@@ -273,18 +276,26 @@ tsriIdentityMoments <- function(theta, x){
 
   if (tsri_env$anycovs) {
     stage2linpred <- as.matrix(cbind(linearpredictor, covariates))
+    stage2express <- (Y - (theta[stage2start] +
+                             thetacausal*X +
+                             thetares * (X - as.matrix(stage2linpred) +
+                             covariates %*% as.matrix(thetacov))))
   }
   else {
     stage2linpred <- linearpredictor
+    stage2express <- (Y - (theta[stage2start] +
+                             thetacausal*X +
+                             thetares * (X - as.matrix(stage2linpred))))
   }
 
   thetastart <- stage2start + 1
-  moments[,stage2start] <- (Y - (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))
+
+  moments[,stage2start] <- stage2express
 
   start3 <- stage2start + 1
   j <- 1
   for (i in start3:thetaend) {
-    moments[,i] <- (Y - (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))*res[,j]
+    moments[,i] <- (stage2express)*res[,j]
     j <- j + 1
   }
 
@@ -325,12 +336,7 @@ print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\nEstimation method:", x$estmethod, "\n\n")
   gmm::print.gmm(x$fit)
 
-  if (x$estmethod != "tslsalt") {
-    cat("\nE[Y(0)] with 95% CI:\n")
-    print(x$ey0ci, digits = digits, ...)
-  }
-
-  cat("\nCausal risk ratio with 95% CI:\n")
+  cat("\nEstimates with 95% CI:\n")
   print(x$crrci, digits = digits, ...)
 
   cat("\n")
@@ -343,12 +349,7 @@ print.summary.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...)
   cat("\nGMM fit summary:\n")
   gmm::print.summary.gmm(x$smry)
 
-  if (x$object$estmethod != "tslsalt") {
-    cat("\nE[Y(0)] with 95% CI:\n")
-    print(x$object$ey0ci, digits = digits, ...)
-  }
-
-  cat("\nCausal risk ratio with 95% CI:\n")
+  cat("\nEstimates with 95% CI:\n")
   print(x$object$crrci, digits = digits, ...)
 
   cat("\n")
