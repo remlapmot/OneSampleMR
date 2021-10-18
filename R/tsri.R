@@ -123,15 +123,70 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
   xnames <- colnames(X)
   xnames <- xnames[-1]
+  znames <- colnames(Z)[-1]
+  covariatenames <- intersect(xnames, znames)
+
+  tsri_env <<- new.env(parent = emptyenv())
+  tsri_env$anycovs <- FALSE
+  if (!identical(covariatenames, character(0))) {
+    tsri_env$anycovs <- TRUE
+    covariates <- X[,covariatenames]
+  }
+
+  tsri_env$xnames <- xnames[!(xnames %in% covariatenames)]
+  tsri_env$znames <- znames[!(znames %in% covariatenames)]
+  tsri_env$covariatenames <- covariatenames
 
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
   # check y binary
   if (link == "logit" & !all(Y %in% 0:1))
-    stop("For tsls and tslsalt, the outcome must be binary, i.e. take values 0 or 1.")
+    stop("With the logit link, the outcome must be binary, i.e. take values 0 or 1.")
 
+  # initial values
+  if (is.null(t0)) {
+    stage1 <- lm(X[,2] ~ -1 + Z)
+    t0 <- coef(stage1)
+    xhat <- fitted.values(stage1)
+    res <- residuals(stage1)
+    if (tsri_env$anycovs) {
+      res <- cbind(res, covariates)
+    }
+    if (link == "identity") {
+      stage2 <- lm(Y ~ X[,2] + res)
+    }
+    else if (link == "logadd") {
+      stage2 <- glm(Y ~ X[,2] + res, family = poisson(link = "log"))
+    }
+    else if (link == "logmult") {
+      Ystar <- Y
+      Ystar[Y == 0] <- 0.001
+      stage2 <- glm(Ystar ~ X[,2] + res, family = Gamma(link = "log"),
+                    control = list(maxit = 1E5))
+    }
+    else if (link == "logit") {
+      stage2 <- glm(Y ~ X[,2] + res, family = binomial(link = "logit"))
+    }
+    t0 <- c(t0, coef(stage2))
+  }
 
+  Xtopass <- as.data.frame(X[, tsri_env$xnames])
+  colnames(Xtopass) <- tsri_env$xnames
 
+  Ztopass <- as.data.frame(Z[, -1])
+  if (tsri_env$anycovs) {
+    colnames(Ztopass) <- c(tsri_env$znames, tsri_env$covariatenames)
+  }
+  else {
+    colnames(Ztopass) <- tsri_env$znames
+  }
+
+  # gmm fit
+  output <- tsps_gmm(x = Xtopass, y = Y, z = Ztopass,
+                     xnames = xnames,
+                     t0 = t0,
+                     link = link)
+  rm(tsri_env)
   class(output) <- append("tsri", class(output))
   output
 }
