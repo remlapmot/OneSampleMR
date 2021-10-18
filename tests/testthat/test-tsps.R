@@ -37,6 +37,14 @@ test_that("Single instrument example - identity link", {
 
   expect_output(print(fit01))
   expect_output(print(smy01))
+
+  # manual fit
+  stage1 <- lm(X ~ Z)
+  betamanual <- coef(stage1)
+  xhat <- fitted.values(stage1)
+  stage2 <- lm(Y ~ xhat)
+  betamanual <- c(betamanual, coef(stage2))
+  expect_equal(fit01$estci[,1], betamanual, ignore_attr = TRUE)
 })
 
 test_that("Single instrument example - logadd link", {
