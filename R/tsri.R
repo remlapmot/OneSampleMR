@@ -230,6 +230,66 @@ tsri_gmm <- function(x, y, z, xnames, t0, link){
   return(reslist)
 }
 
+#' @importFrom stats lm residuals
+tsriIdentityMoments <- function(theta, x){
+  # extract variables from x
+  Y <- as.matrix(x[,"y"])
+  X <- x[, tsri_env$xnames]
+  Z <- x[, tsri_env$znames]
+  nZ <- ncol(Z)
+  if (tsri_env$anycovs) {
+    covariates <- x[, tsri_env$covariatenames]
+    ncovariates <- length(tsri_env$covariatenames)
+    Z <- as.matrix(cbind(Z, covariates))
+  }
+  Zwithcons <- as.matrix(cbind(rep(1, nrow(x)), Z))
+  stage1end <- ncol(Zwithcons)
+  thetastage1 <- theta[1:stage1end]
+  stage2start <- stage1end + 1
+  thetaend <- length(theta)
+  thetastage2 <- theta[stage2start:thetaend]
+
+  # generate first stage residuals
+  if (length(tsri_env$xnames) == 1) {
+    stage1 <- lm(X ~ Z)
+    res <- as.matrix(residuals(stage1))
+    res <- cbind(X, res)
+  }
+
+  if (tsri_env$anycovs) {
+    res <- cbind(res, covariates)
+  }
+
+  linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
+
+  # moments
+  moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
+
+  moments[,1] <- (X - linearpredictor)
+
+  for (i in 2:stage1end) {
+    moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
+  }
+
+  if (tsri_env$anycovs) {
+    stage2linpred <- as.matrix(cbind(linearpredictor, covariates))
+  }
+  else {
+    stage2linpred <- linearpredictor
+  }
+
+  thetastart <- stage2start + 1
+  moments[,stage2start] <- (Y - (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))
+
+  start3 <- stage2start + 1
+  j <- 1
+  for (i in start3:thetaend) {
+    moments[,i] <- (Y - (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))*res[,j]
+    j <- j + 1
+  }
+
+  return(moments)
+}
 
 #' Summarizing TSRI Fits
 #'
