@@ -182,7 +182,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   }
 
   # gmm fit
-  output <- tsps_gmm(x = Xtopass, y = Y, z = Ztopass,
+  output <- tsri_gmm(x = Xtopass, y = Y, z = Ztopass,
                      xnames = xnames,
                      t0 = t0,
                      link = link)
@@ -190,6 +190,45 @@ tsri <- function(formula, instruments, data, subset, na.action,
   class(output) <- append("tsri", class(output))
   output
 }
+
+tsri_gmm <- function(x, y, z, xnames, t0, link){
+  x <- as.matrix(x)
+
+  if (!identical(tsps_env$covariatenames, character(0))) {
+    x <- x[,!(colnames(x) %in% tsps_env$covariatenames), drop = FALSE]
+  }
+
+  dat = data.frame(y, x, z)
+
+  if (is.null(t0))
+    t0 <- rep(0, ncol(x) + 1)
+
+  # gmm fit
+  if (link == "identity") {
+    fit <- gmm::gmm(tspsIdentityMoments, x = dat, t0 = t0, vcov = "iid")
+  }
+  else if (link == "logadd") {
+    fit <- gmm::gmm(tspsLogaddMoments, x = dat, t0 = t0, vcov = "iid")
+  }
+  else if (link == "logmult") {
+    fit <- gmm::gmm(tspsLogmultMoments, x = dat, t0 = t0, vcov = "iid", itermax = 1E7)
+  }
+  else if (link == "logit") {
+    fit <- gmm::gmm(tspsLogitMoments, x = dat, t0 = t0, vcov = "iid")
+  }
+
+  if (fit$algoInfo$convergence != 0)
+    warning("The GMM fit has not converged, perhaps try different initial parameter values")
+
+  estci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)
+  colnames(estci)[1] <- "Estimate"
+
+  reslist <- list(fit = fit,
+                  estci = estci,
+                  link = link)
+  return(reslist)
+}
+
 
 #' Summarizing TSRI Fits
 #'
