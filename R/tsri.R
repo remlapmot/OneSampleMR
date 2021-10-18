@@ -148,7 +148,6 @@ tsri <- function(formula, instruments, data, subset, na.action,
   if (is.null(t0)) {
     stage1 <- lm(X[,2] ~ -1 + Z)
     t0 <- coef(stage1)
-    xhat <- fitted.values(stage1)
     res <- residuals(stage1)
     if (tsri_env$anycovs) {
       res <- cbind(res, covariates)
