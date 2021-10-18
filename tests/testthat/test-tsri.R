@@ -1,6 +1,6 @@
 # tests for TSRI
 
-# Data generation from the example in the ivtools::ivglm() helpfile
+# Data generation from the example in the ivtools::ivglm() helpfile ----
 set.seed(9)
 n <- 1000
 psi0 <- 0.5
@@ -125,7 +125,7 @@ test_that("Single instrument example - logmult link", {
 })
 
 
-# Data generation for multiple instrument tests
+# Data generation for multiple instrument tests ----
 rm(list = ls())
 set.seed(123456)
 n <- 1000
