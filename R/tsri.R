@@ -338,7 +338,7 @@ print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   gmm::print.gmm(x$fit)
 
   cat("\nEstimates with 95% CI:\n")
-  print(x$crrci, digits = digits, ...)
+  print(x$estci, digits = digits, ...)
 
   cat("\n")
   invisible(x)
@@ -351,7 +351,7 @@ print.summary.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...)
   gmm::print.summary.gmm(x$smry)
 
   cat("\nEstimates with 95% CI:\n")
-  print(x$object$crrci, digits = digits, ...)
+  print(x$object$estci, digits = digits, ...)
 
   cat("\n")
   invisible(x)
