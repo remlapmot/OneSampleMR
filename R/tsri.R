@@ -58,6 +58,7 @@
 #' The Stata Journal, 2017, 17, 4, 916-938.
 #' \doi{10.1177/1536867X1801700409}
 #'
+#' @importFrom stats lm residuals glm poisson Gamma binomial
 #' @export
 tsri <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
