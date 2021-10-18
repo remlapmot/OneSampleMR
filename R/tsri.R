@@ -146,8 +146,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
   # initial values
   if (is.null(t0)) {
-    print(head(Z))
-    stage1 <- lm(X[,2] ~ -1 + Z) # TODO missing covariates??
+    stage1 <- lm(X[,2] ~ -1 + Z)
     t0 <- coef(stage1)
     res <- residuals(stage1)
     if (tsri_env$anycovs) {
