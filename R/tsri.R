@@ -445,6 +445,76 @@ tsriLogmultMoments <- function(theta, x){
   return(moments)
 }
 
+#' @importFrom stats lm residuals
+tsriLogitMoments <- function(theta, x){
+  # extract variables from x
+  Y <- as.matrix(x[,"y"])
+  X <- x[, tsri_env$xnames]
+  Z <- x[, tsri_env$znames]
+  nZ <- ncol(Z)
+  if (tsri_env$anycovs) {
+    covariates <- x[, tsri_env$covariatenames]
+    ncovariates <- length(tsri_env$covariatenames)
+    Z <- as.matrix(cbind(Z, covariates))
+  }
+  Zwithcons <- as.matrix(cbind(rep(1, nrow(x)), Z))
+  stage1end <- ncol(Zwithcons)
+  thetastage1 <- theta[1:stage1end]
+  stage2start <- stage1end + 1
+  thetaend <- length(theta)
+  thetastage2 <- theta[stage2start:thetaend]
+  thetacausal <- thetastage2[2]
+  thetares <- thetastage2[3]
+  thetastage2rescov <- thetastage2[3:length(thetastage2)]
+  thetacov <- thetastage2[4:length(thetastage2)]
+
+  # generate first stage residuals
+  if (length(tsri_env$xnames) == 1) {
+    stage1 <- lm(X ~ Z)
+    res <- as.matrix(residuals(stage1))
+    res <- cbind(X, res)
+  }
+
+  if (tsri_env$anycovs) {
+    res <- cbind(res, covariates)
+  }
+
+  linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
+
+  # moments
+  moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
+
+  moments[,1] <- (X - linearpredictor)
+
+  for (i in 2:stage1end) {
+    moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
+  }
+
+  if (tsri_env$anycovs) {
+    stage2express <- (Y * plogis(theta[stage2start] +
+                                   thetacausal*X +
+                                   thetares * (X - as.matrix(linearpredictor)) +
+                                   as.matrix(covariates) %*% as.matrix(thetacov)))
+  }
+  else {
+    stage2express <- (Y * plogis(theta[stage2start] +
+                                   thetacausal*X +
+                                   thetares * (X - as.matrix(linearpredictor))))
+  }
+
+  thetastart <- stage2start + 1
+
+  moments[,stage2start] <- stage2express
+
+  start3 <- stage2start + 1
+  j <- 1
+  for (i in start3:thetaend) {
+    moments[,i] <- (stage2express)*res[,j]
+    j <- j + 1
+  }
+
+  return(moments)
+}
 
 #' Summarizing TSRI Fits
 #'
