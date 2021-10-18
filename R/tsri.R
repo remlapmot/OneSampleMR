@@ -168,7 +168,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
       stage2 <- glm(Y ~ X[,2] + res, family = binomial(link = "logit"))
     }
     t0 <- c(t0, coef(stage2))
-    index <- 1 + length(covariatenames) + 3
+    index <- 1 + 2*length(covariatenames) + 3
     names(t0)[index] <- tsri_env$xnames
   }
 
