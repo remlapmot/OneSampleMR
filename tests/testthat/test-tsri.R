@@ -120,3 +120,19 @@ test_that("Multiple instrument example with covariates - identity link", {
   expect_equal(fit30$estci[,1], betamanual, ignore_attr = TRUE)
 })
 
+test_that("Multiple instrument example with covariates - logadd link", {
+  skip_on_cran()
+
+  fit31 <- tsri(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logadd")
+  expect_output(print(fit31))
+  smry31 <- summary(fit31)
+  expect_output(print(smry31))
+
+  # manual fit for comparison
+  stage1 <- lm(X ~ G1 + G2 + G3 + C1 + C2, data = dat)
+  betamanual <- coef(stage1)
+  res <- residuals(stage1)
+  stage2 <- glm(Y ~ X + res + C1 + C2, family = poisson)
+  betamanual <- c(betamanual, coef(stage2))
+  expect_equal(fit31$estci[,1], betamanual, ignore_attr = TRUE)
+})
