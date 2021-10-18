@@ -146,7 +146,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
   # initial values
   if (is.null(t0)) {
-    stage1 <- lm(X[,2] ~ -1 + Z)
+    stage1 <- lm(X[,2] ~ -1 + Z) # TODO missing covariates??
     t0 <- coef(stage1)
     xhat <- fitted.values(stage1)
     if (tsps_env$anycovs) {
