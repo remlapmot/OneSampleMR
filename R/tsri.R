@@ -253,6 +253,7 @@ tsriIdentityMoments <- function(theta, x){
   thetacausal <- thetastage2[2]
   thetares <- thetastage2[3]
   thetastage2rescov <- thetastage2[3:length(thetastage2)]
+  thetacov <- thetastage2[4:length(thetastage2)]
 
   # generate first stage residuals
   if (length(tsri_env$xnames) == 1) {
@@ -277,17 +278,15 @@ tsriIdentityMoments <- function(theta, x){
   }
 
   if (tsri_env$anycovs) {
-    stage2linpred <- as.matrix(cbind(linearpredictor, covariates))
     stage2express <- (Y - (theta[stage2start] +
                              thetacausal*X +
-                             thetares * (X - as.matrix(stage2linpred) +
-                             covariates %*% as.matrix(thetacov))))
+                             thetares * (X - as.matrix(linearpredictor)) +
+                             as.matrix(covariates) %*% as.matrix(thetacov)))
   }
   else {
-    stage2linpred <- linearpredictor
     stage2express <- (Y - (theta[stage2start] +
                              thetacausal*X +
-                             thetares * (X - as.matrix(stage2linpred))))
+                             thetares * (X - as.matrix(linearpredictor))))
   }
 
   thetastart <- stage2start + 1
