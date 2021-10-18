@@ -194,8 +194,8 @@ tsri <- function(formula, instruments, data, subset, na.action,
 tsri_gmm <- function(x, y, z, xnames, t0, link){
   x <- as.matrix(x)
 
-  if (!identical(tsps_env$covariatenames, character(0))) {
-    x <- x[,!(colnames(x) %in% tsps_env$covariatenames), drop = FALSE]
+  if (!identical(tsri_env$covariatenames, character(0))) {
+    x <- x[,!(colnames(x) %in% tsri_env$covariatenames), drop = FALSE]
   }
 
   dat = data.frame(y, x, z)
@@ -205,16 +205,17 @@ tsri_gmm <- function(x, y, z, xnames, t0, link){
 
   # gmm fit
   if (link == "identity") {
-    fit <- gmm::gmm(tspsIdentityMoments, x = dat, t0 = t0, vcov = "iid")
+    fit <- gmm::gmm(tsriIdentityMoments, x = dat, t0 = t0, vcov = "iid")
   }
   else if (link == "logadd") {
-    fit <- gmm::gmm(tspsLogaddMoments, x = dat, t0 = t0, vcov = "iid")
+    fit <- gmm::gmm(tsriLogaddMoments, x = dat, t0 = t0, vcov = "iid")
   }
   else if (link == "logmult") {
-    fit <- gmm::gmm(tspsLogmultMoments, x = dat, t0 = t0, vcov = "iid", itermax = 1E7)
+    fit <- gmm::gmm(tsriLogmultMoments, x = dat, t0 = t0, vcov = "iid",
+                    itermax = 1E7)
   }
   else if (link == "logit") {
-    fit <- gmm::gmm(tspsLogitMoments, x = dat, t0 = t0, vcov = "iid")
+    fit <- gmm::gmm(tsriLogitMoments, x = dat, t0 = t0, vcov = "iid")
   }
 
   if (fit$algoInfo$convergence != 0)
