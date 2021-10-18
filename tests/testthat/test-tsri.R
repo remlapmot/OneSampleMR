@@ -85,6 +85,45 @@ test_that("Single instrument example - logadd link", {
   expect_equal(fit11$estci[,1], betamanual, ignore_attr = "names")
 })
 
+test_that("Single instrument example - logmult link", {
+  skip_on_cran()
+  # ivtools for comparison fit
+  library(ivtools)
+  fitZ.L <- glm(Z ~ 1, data = dat)
+  dat$Y[dat$Y == 0] <- 0.001
+  fitY.LZX <- glm(Y ~ X + Z, family = Gamma(link = "log"), data = dat)
+  fitLogGest <- ivglm(estmethod = "g",
+                      X = "X",
+                      fitZ.L = fitZ.L,
+                      fitY.LZX = fitY.LZX,
+                      data = dat,
+                      link = "log",
+                      Y = "Y",
+                      ctrl = TRUE)
+  logcrr <- fitLogGest$est["X"]
+  logcrrse <- sqrt(fitLogGest$vcov)
+
+  fit12 <- tsri(Y ~ X | Z, data = dat, link = "logmult")
+  expect_equal(fit12$estci[4,1], logcrr, tolerance = 0.05, ignore_attr = "names")
+
+  expect_s3_class(fit12, "tsri")
+
+  smy12 <- summary(fit12)
+  expect_s3_class(smy12, "summary.tsri")
+
+  expect_output(print(fit12))
+  expect_output(print(smy12))
+
+  # manual fit for comparison
+  stage1 <- lm(X ~ Z, data = dat)
+  betamanual <- coef(stage1)
+  res <- residuals(stage1)
+  Y[Y == 0] <- 0.001
+  stage2 <- glm(Y ~ X + res, family = Gamma(link = "log"))
+  betamanual <- c(betamanual, coef(stage2))
+  expect_equal(fit12$estci[,1], betamanual, tolerance = 0.01, ignore_attr = "names")
+})
+
 
 # Data generation for multiple instrument tests
 rm(list = ls())
