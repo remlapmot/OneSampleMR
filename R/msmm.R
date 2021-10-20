@@ -105,7 +105,7 @@
 #' Windmeijer FAG, Santos Silva JMC. Endogeneity in Count Data Models:
 #' An Application to Demand for Health Care. Journal of Applied Econometrics.
 #' 1997, 12, 3, 281-294.
-#' <https://doi.org/10.1002/(SICI)1099-1255(199705)12:3%3C281::AID-JAE436%3E3.0.CO;2-1>
+#' \doi{10/fdkh4n}
 #'
 #' Windmeijer, F. ExpEnd, A Gauss programme for non-linear GMM estimation of
 #' EXPonential models with ENDogenous regressors for cross section and panel
