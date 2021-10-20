@@ -200,7 +200,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
                      xnames = xnames,
                      t0 = t0,
                      link = link)
-  rm(tsri_env)
+  rm(tsri_env, envir = .GlobalEnv)
   class(output) <- append("tsri", class(output))
   output
 }
