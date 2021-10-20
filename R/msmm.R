@@ -78,7 +78,7 @@
 #' Mullahy J. Instrumental-variable estimation of count data models:
 #' applications to models of cigarette smoking and behavior. The Review of
 #' Economics and Statistics. 1997, 79, 4, 586-593.
-#' \doi{https://doi.org/10.1162/003465397557169}
+#' \doi{10.1162/003465397557169}
 #'
 #' Nichols A. ivpois: Stata module for IV/GMM Poisson regression. 2007.
 #' [url](http://ideas.repec.org/c/boc/bocode/s456890.html)
