@@ -69,6 +69,7 @@ test_that("gmm identity link check", {
 
   library(gmm)
   tsrigmmident <- gmm(tsriIdentAddMoments, x = dat, t0 = rep(0, 5), vcov = "iid")
+  fit01 <- tsri(Y ~ X | Z, data = dat)
 
   # compare estimates
   expect_equal(fit01$estci[,1], tsrigmmident$coefficients, tolerance = 0.005, ignore_attr = TRUE)
