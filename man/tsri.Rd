@@ -60,7 +60,7 @@ An excellent description of TSRI estimators is given by Terza et al.
 (2008). TSRI estimators proceed by fitting a first stage model of the
 exposure regressed upon the instruments (and possibly any measured
 confounders). From this the first stage residuals are estimated.
-A second stage model if then fitted of the outcome regressed upon
+A second stage model is then fitted of the outcome regressed upon
 the exposure and first stage residuals (and possibly measured
 confounders).
 }

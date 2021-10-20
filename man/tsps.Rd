@@ -60,7 +60,7 @@ Terza et al. (2008) give an excellent description of TSPS estimators.
 They proceed by fitting a first stage model of the
 exposure regressed upon the instruments (and possibly any measured
 confounders). From this the predicted values of the exposure are obtained.
-A second stage model if then fitted of the outcome regressed upon
+A second stage model is then fitted of the outcome regressed upon
 the predicted values of the exposure (and possibly measured confounders).
 }
 \details{
