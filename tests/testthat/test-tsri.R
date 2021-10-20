@@ -48,6 +48,37 @@ test_that("Single instrument example - identity link", {
   expect_equal(fit01$estci[,1], betamanual, ignore_attr = TRUE)
 })
 
+test_that("gmm identity link check", {
+  skip_on_cran()
+  tsriIdentAddMoments <- function(theta, x){
+    # extract variables from x
+    Y <- x[,"Y"]
+    X <- x[,"X"]
+    Z1 <- x[,"Z"]
+    # generate first stage residuals
+    stage1 <- lm(X ~ Z1)
+    res <- residuals(stage1)
+    # moments
+    a1 <- (X - theta[1] - Z1*theta[2])
+    a2 <- (X - theta[1] - Z1*theta[2])*Z1
+    m1 <- (Y - (theta[3] + X*theta[4] + theta[5]*(X - theta[1] - Z1*theta[2])))
+    m2 <- (Y - (theta[3] + X*theta[4] + theta[5]*(X - theta[1] - Z1*theta[2])))*X
+    m3 <- (Y - (theta[3] + X*theta[4] + theta[5]*(X - theta[1] - Z1*theta[2])))*res
+    return(cbind(a1, a2, m1, m2, m3))
+  }
+
+  library(gmm)
+  tsrigmmident <- gmm(tsriIdentAddMoments, x = dat, t0 = rep(0, 5), vcov = "iid")
+
+  # compare estimates
+  expect_equal(fit01$estci[,1], tsrigmmident$coefficients, tolerance = 0.005, ignore_attr = TRUE)
+
+  # compare SEs
+  SEs <- sqrt(diag(vcov(tsrigmmident)))
+  SEs2 <- sqrt(diag(vcov(fit01$fit)))
+  expect_equal(SEs2, SEs, tolerance = 0.001, ignore_attr = TRUE)
+})
+
 test_that("Single instrument example - logadd link", {
   skip_on_cran()
   # ivtools for comparison fit
