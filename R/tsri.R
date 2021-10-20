@@ -559,7 +559,7 @@ summary.tsri <- function(object, ...) {
 #' @rdname summary.tsri
 #' @export
 print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
-  cat("\nEstimation method:", x$estmethod, "\n\n")
+  cat("\nLink function:", x$link, "\n\n")
   gmm::print.gmm(x$fit)
 
   cat("\nEstimates with 95% CI:\n")
