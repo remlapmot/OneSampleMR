@@ -562,7 +562,7 @@ print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\nSecond stage model link function:", x$link, "\n\n")
   gmm::print.gmm(x$fit)
 
-  cat("\nEstimates with 95% CI:\n")
+  cat("\nEstimates with 95% CI limits:\n")
   print(x$estci, digits = digits, ...)
 
   cat("\n")
@@ -575,7 +575,7 @@ print.summary.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...)
   cat("\nGMM fit summary:\n")
   gmm::print.summary.gmm(x$smry)
 
-  cat("\nEstimates with 95% CI:\n")
+  cat("\nEstimates with 95% CI limits:\n")
   print(x$object$estci, digits = digits, ...)
 
   cat("\n")
