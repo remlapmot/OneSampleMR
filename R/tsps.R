@@ -501,7 +501,7 @@ summary.tsps <- function(object, ...) {
 #' @rdname summary.tsps
 #' @export
 print.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...) {
-  cat("\nLink function:", x$link, "\n\n")
+  cat("\nSecond stage model link function:", x$link, "\n\n")
   gmm::print.gmm(x$fit)
 
   cat("\nEstimates with 95% CI limits:\n")
