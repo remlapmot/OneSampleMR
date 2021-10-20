@@ -186,7 +186,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
                      xnames = xnames,
                      t0 = t0,
                      link = link)
-  rm(tsps_env)
+  rm(tsps_env, envir = .GlobalEnv)
   class(output) <- append("tsps", class(output))
   output
 }
