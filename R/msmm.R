@@ -109,7 +109,8 @@
 #'
 #' Windmeijer, F. ExpEnd, A Gauss programme for non-linear GMM estimation of
 #' EXPonential models with ENDogenous regressors for cross section and panel
-#' data. CEMMAP working paper CWP14/02. 2002. [url](https://www.cemmap.ac.uk/wp-content/uploads/2020/08/CWP1402.pdf)
+#' data. CEMMAP working paper CWP14/02. 2002.
+#' [url](https://www.cemmap.ac.uk/wp-content/uploads/2020/08/CWP1402.pdf)
 #' @examples
 #' # Single instrument example
 #' # Data generation from the example in the ivtools::ivglm() helpfile
