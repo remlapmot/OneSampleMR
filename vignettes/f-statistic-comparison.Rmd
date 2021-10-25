@@ -2,7 +2,7 @@
 title: "Comparison of conditional F-statistics"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{f-statistic-comparison}
+  %\VignetteIndexEntry{Comparison of conditional F-statistics}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
