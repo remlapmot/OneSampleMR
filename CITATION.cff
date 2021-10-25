@@ -15,4 +15,4 @@ type: software
 version: 0.1.0
 date-released: 2021-10-25
 repository-code: "https://github.com/remlapmot/OneSampleMR"
-license: MIT
+license: GPL-3.0
