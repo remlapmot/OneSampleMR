@@ -4,7 +4,7 @@
 #' (2008). TSRI estimators proceed by fitting a first stage model of the
 #' exposure regressed upon the instruments (and possibly any measured
 #' confounders). From this the first stage residuals are estimated.
-#' A second stage model if then fitted of the outcome regressed upon
+#' A second stage model is then fitted of the outcome regressed upon
 #' the exposure and first stage residuals (and possibly measured
 #' confounders).
 #'
@@ -559,10 +559,10 @@ summary.tsri <- function(object, ...) {
 #' @rdname summary.tsri
 #' @export
 print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
-  cat("\nEstimation method:", x$estmethod, "\n\n")
+  cat("\nSecond stage model link function:", x$link, "\n\n")
   gmm::print.gmm(x$fit)
 
-  cat("\nEstimates with 95% CI:\n")
+  cat("\nEstimates with 95% CI limits:\n")
   print(x$estci, digits = digits, ...)
 
   cat("\n")
@@ -575,7 +575,7 @@ print.summary.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...)
   cat("\nGMM fit summary:\n")
   gmm::print.summary.gmm(x$smry)
 
-  cat("\nEstimates with 95% CI:\n")
+  cat("\nEstimates with 95% CI limits:\n")
   print(x$object$estci, digits = digits, ...)
 
   cat("\n")

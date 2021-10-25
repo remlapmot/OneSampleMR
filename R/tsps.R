@@ -4,7 +4,7 @@
 #' They proceed by fitting a first stage model of the
 #' exposure regressed upon the instruments (and possibly any measured
 #' confounders). From this the predicted values of the exposure are obtained.
-#' A second stage model if then fitted of the outcome regressed upon
+#' A second stage model is then fitted of the outcome regressed upon
 #' the predicted values of the exposure (and possibly measured confounders).
 #'
 #' `tsps()` performs GMM estimation to ensure appropriate standard errors
@@ -501,7 +501,7 @@ summary.tsps <- function(object, ...) {
 #' @rdname summary.tsps
 #' @export
 print.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...) {
-  cat("\nLink function:", x$link, "\n\n")
+  cat("\nSecond stage model link function:", x$link, "\n\n")
   gmm::print.gmm(x$fit)
 
   cat("\nEstimates with 95% CI limits:\n")
