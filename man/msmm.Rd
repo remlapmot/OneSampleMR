@@ -124,7 +124,7 @@ summary(fit2)
 }
 \references{
 Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
-New York, Cambridge University Press.
+New York, Cambridge University Press. ISBN:1107667275
 
 Clarke PS, Palmer TM, Windmeijer F. Estimating structural
 mean models with multiple instrumental variables using the
@@ -169,5 +169,6 @@ An Application to Demand for Health Care. Journal of Applied Econometrics.
 
 Windmeijer, F. ExpEnd, A Gauss programme for non-linear GMM estimation of
 EXPonential models with ENDogenous regressors for cross section and panel
-data. CEMMAP working paper CWP14/02. 2002. \href{https://www.cemmap.ac.uk/wp-content/uploads/2020/08/CWP1402.pdf}{url}
+data. CEMMAP working paper CWP14/02. 2002.
+\href{https://www.cemmap.ac.uk/wp-content/uploads/2020/08/CWP1402.pdf}{url}
 }
