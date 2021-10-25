@@ -10,7 +10,7 @@ authors:
 - family-names: "Sanderson"
   given-names: "Eleanor"
   orcid: "https://orcid.org/0000-0001-5188-5775"
-title: "OneSampleMR - R package for one-sample instrumental variable (IV) / Mendelian randomization (MR) analyses"
+title: "OneSampleMR - R package for one-sample Mendelian randomization and instrumental variable analyses"
 type: software
 version: 0.1.0
 date-released: 2021-09-11
