@@ -18,7 +18,11 @@ Authors@R:
              email = "eleanor.sanderson@bristol.ac.uk",
              comment = c(ORCID = "0000-0001-5188-5775")))
 Description: Useful functions for one sample 
-    Mendelian randomization and instrumental variable analyses.
+    Mendelian randomization and instrumental variable analyses. The package 
+    includes implementations of; the Sanderson-Windmeijer conditional F-statistic, 
+    multiplicative structural mean model (MSMM), 
+    two-stage predictor substitution (TSPS) estimators, and two-stage residual 
+    inclusion (TSRI) estimators.
 License: GPL (>= 3)
 URL: https://github.com/remlapmot/OneSampleMR
 BugReports: https://github.com/remlapmot/OneSampleMR/issues/
