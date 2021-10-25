@@ -64,7 +64,7 @@
 #' [`stats::lm()`] fit.}
 #' @references
 #' Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
-#' New York, Cambridge University Press.
+#' New York, Cambridge University Press. ISBN:1107667275
 #'
 #' Clarke PS, Palmer TM, Windmeijer F. Estimating structural
 #' mean models with multiple instrumental variables using the
