@@ -102,9 +102,9 @@ Z <- rbinom(n, 1, 0.5)
 X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
 m0 <- plogis(1 + 0.8*X - 0.39*Z)
 Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
-dat1 <- data.frame(Z, X, Y)
-fit1 <- msmm(Y ~ X | Z, data = dat1)
-summary(fit1)
+dat <- data.frame(Z, X, Y)
+fit <- msmm(Y ~ X | Z, data = dat1)
+summary(fit)
 
 # Multiple instrument example
 set.seed(123456)
