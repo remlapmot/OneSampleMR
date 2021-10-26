@@ -530,6 +530,16 @@ print.summary.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...)
   cat("\nEstimates with 95% CI limits:\n")
   print(x$object$estci, digits = digits, ...)
 
+  rowstart <- which(rownames(x$object$estci) == "(Intercept)")
+  rowstop <- nrow(x$object$estci)
+  if (x$object$link %in% c("logadd", "logmult", "logit")) {
+    parname <- "Causal odds ratio"
+    if (x$object$link %in% c("logadd", "logmult"))
+      parname <- "Causal risk ratio"
+    cat("\n", parname, " with 95% CI limits:\n", sep = "")
+    print(exp(x$object$estci[rowstart:rowstop,]), digits = digits, ...)
+  }
+
   cat("\n")
   invisible(x)
 }
