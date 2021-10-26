@@ -249,7 +249,7 @@ tsriIdentityMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsri_env$xnames]
-  Z <- x[, tsri_env$znames]
+  Z <- as.matrix(x[, tsri_env$znames])
   nZ <- ncol(Z)
   if (tsri_env$anycovs) {
     covariates <- x[, tsri_env$covariatenames]
@@ -320,7 +320,7 @@ tsriLogaddMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsri_env$xnames]
-  Z <- x[, tsri_env$znames]
+  Z <- as.matrix(x[, tsri_env$znames])
   nZ <- ncol(Z)
   if (tsri_env$anycovs) {
     covariates <- x[, tsri_env$covariatenames]
@@ -391,7 +391,7 @@ tsriLogmultMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsri_env$xnames]
-  Z <- x[, tsri_env$znames]
+  Z <- as.matrix(x[, tsri_env$znames])
   nZ <- ncol(Z)
   if (tsri_env$anycovs) {
     covariates <- x[, tsri_env$covariatenames]
@@ -462,7 +462,7 @@ tsriLogitMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsri_env$xnames]
-  Z <- x[, tsri_env$znames]
+  Z <- as.matrix(x[, tsri_env$znames])
   nZ <- ncol(Z)
   if (tsri_env$anycovs) {
     covariates <- x[, tsri_env$covariatenames]

@@ -235,7 +235,7 @@ tspsIdentityMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsps_env$xnames]
-  Z <- x[, tsps_env$znames]
+  Z <- as.matrix(x[, tsps_env$znames])
   nZ <- ncol(Z)
   if (tsps_env$anycovs) {
     covariates <- x[, tsps_env$covariatenames]
@@ -295,7 +295,7 @@ tspsLogaddMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsps_env$xnames]
-  Z <- x[, tsps_env$znames]
+  Z <- as.matrix(x[, tsps_env$znames])
   nZ <- ncol(Z)
   if (tsps_env$anycovs) {
     covariates <- x[, tsps_env$covariatenames]
@@ -355,7 +355,7 @@ tspsLogmultMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsps_env$xnames]
-  Z <- x[, tsps_env$znames]
+  Z <- as.matrix(x[, tsps_env$znames])
   nZ <- ncol(Z)
   if (tsps_env$anycovs) {
     covariates <- x[, tsps_env$covariatenames]
@@ -415,7 +415,7 @@ tspsLogitMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsps_env$xnames]
-  Z <- x[, tsps_env$znames]
+  Z <- as.matrix(x[, tsps_env$znames])
   nZ <- ncol(Z)
   if (tsps_env$anycovs) {
     covariates <- x[, tsps_env$covariatenames]
