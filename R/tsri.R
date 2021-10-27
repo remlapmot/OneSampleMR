@@ -149,6 +149,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   tsri_env$xnames <- xnames[!(xnames %in% covariatenames)]
   tsri_env$znames <- znames[!(znames %in% covariatenames)]
   tsri_env$covariatenames <- covariatenames
+  tsri_env$ncovs <- length(covariatenames)
 
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
