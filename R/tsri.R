@@ -149,6 +149,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   tsri_env$xnames <- xnames[!(xnames %in% covariatenames)]
   tsri_env$znames <- znames[!(znames %in% covariatenames)]
   tsri_env$covariatenames <- covariatenames
+  tsri_env$ncovs <- length(covariatenames)
 
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
@@ -180,8 +181,12 @@ tsri <- function(formula, instruments, data, subset, na.action,
       stage2 <- glm(Y ~ X[,2] + res, family = binomial(link = "logit"))
     }
     t0 <- c(t0, coef(stage2))
-    index <- 1 + 2*length(covariatenames) + 3
-    names(t0)[index] <- tsri_env$xnames
+
+    if (!tsri_env$anycovs)
+      xindex <- length(t0) - 1
+    else
+      xindex <- length(t0) - 1 - tsri_env$ncovs
+    names(t0)[xindex] <- tsri_env$xnames
   }
 
   Xtopass <- as.data.frame(X[, tsri_env$xnames])
@@ -249,7 +254,7 @@ tsriIdentityMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsri_env$xnames]
-  Z <- x[, tsri_env$znames]
+  Z <- as.matrix(x[, tsri_env$znames])
   nZ <- ncol(Z)
   if (tsri_env$anycovs) {
     covariates <- x[, tsri_env$covariatenames]
@@ -320,7 +325,7 @@ tsriLogaddMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsri_env$xnames]
-  Z <- x[, tsri_env$znames]
+  Z <- as.matrix(x[, tsri_env$znames])
   nZ <- ncol(Z)
   if (tsri_env$anycovs) {
     covariates <- x[, tsri_env$covariatenames]
@@ -391,7 +396,7 @@ tsriLogmultMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsri_env$xnames]
-  Z <- x[, tsri_env$znames]
+  Z <- as.matrix(x[, tsri_env$znames])
   nZ <- ncol(Z)
   if (tsri_env$anycovs) {
     covariates <- x[, tsri_env$covariatenames]
@@ -462,7 +467,7 @@ tsriLogitMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsri_env$xnames]
-  Z <- x[, tsri_env$znames]
+  Z <- as.matrix(x[, tsri_env$znames])
   nZ <- ncol(Z)
   if (tsri_env$anycovs) {
     covariates <- x[, tsri_env$covariatenames]
@@ -565,6 +570,16 @@ print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\nEstimates with 95% CI limits:\n")
   print(x$estci, digits = digits, ...)
 
+  rowstart <- which(rownames(x$estci) == "(Intercept)")
+  rowstop <- nrow(x$estci)
+  if (x$link %in% c("logadd", "logmult", "logit")) {
+    parname <- "Causal odds ratio"
+    if (x$link %in% c("logadd", "logmult"))
+      parname <- "Causal risk ratio"
+    cat("\n", parname, " with 95% CI limits:\n", sep = "")
+    print(exp(x$estci[rowstart:rowstop,]), digits = digits, ...)
+  }
+
   cat("\n")
   invisible(x)
 }
@@ -577,6 +592,16 @@ print.summary.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...)
 
   cat("\nEstimates with 95% CI limits:\n")
   print(x$object$estci, digits = digits, ...)
+
+  rowstart <- which(rownames(x$object$estci) == "(Intercept)")
+  rowstop <- nrow(x$object$estci)
+  if (x$object$link %in% c("logadd", "logmult", "logit")) {
+    parname <- "Causal odds ratio"
+    if (x$object$link %in% c("logadd", "logmult"))
+      parname <- "Causal risk ratio"
+    cat("\n", parname, " with 95% CI limits:\n", sep = "")
+    print(exp(x$object$estci[rowstart:rowstop,]), digits = digits, ...)
+  }
 
   cat("\n")
   invisible(x)

@@ -235,7 +235,7 @@ tspsIdentityMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsps_env$xnames]
-  Z <- x[, tsps_env$znames]
+  Z <- as.matrix(x[, tsps_env$znames])
   nZ <- ncol(Z)
   if (tsps_env$anycovs) {
     covariates <- x[, tsps_env$covariatenames]
@@ -295,7 +295,7 @@ tspsLogaddMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsps_env$xnames]
-  Z <- x[, tsps_env$znames]
+  Z <- as.matrix(x[, tsps_env$znames])
   nZ <- ncol(Z)
   if (tsps_env$anycovs) {
     covariates <- x[, tsps_env$covariatenames]
@@ -355,7 +355,7 @@ tspsLogmultMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsps_env$xnames]
-  Z <- x[, tsps_env$znames]
+  Z <- as.matrix(x[, tsps_env$znames])
   nZ <- ncol(Z)
   if (tsps_env$anycovs) {
     covariates <- x[, tsps_env$covariatenames]
@@ -415,7 +415,7 @@ tspsLogitMoments <- function(theta, x){
   # extract variables from x
   Y <- as.matrix(x[,"y"])
   X <- x[, tsps_env$xnames]
-  Z <- x[, tsps_env$znames]
+  Z <- as.matrix(x[, tsps_env$znames])
   nZ <- ncol(Z)
   if (tsps_env$anycovs) {
     covariates <- x[, tsps_env$covariatenames]
@@ -507,6 +507,16 @@ print.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\nEstimates with 95% CI limits:\n")
   print(x$estci, digits = digits, ...)
 
+  rowstart <- which(rownames(x$estci) == "(Intercept)")
+  rowstop <- nrow(x$estci)
+  if (x$link %in% c("logadd", "logmult", "logit")) {
+    parname <- "Causal odds ratio"
+    if (x$link %in% c("logadd", "logmult"))
+      parname <- "Causal risk ratio"
+    cat("\n", parname, " with 95% CI limits:\n", sep = "")
+    print(exp(x$estci[rowstart:rowstop,]), digits = digits, ...)
+  }
+
   cat("\n")
   invisible(x)
 }
@@ -519,6 +529,16 @@ print.summary.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...)
 
   cat("\nEstimates with 95% CI limits:\n")
   print(x$object$estci, digits = digits, ...)
+
+  rowstart <- which(rownames(x$object$estci) == "(Intercept)")
+  rowstop <- nrow(x$object$estci)
+  if (x$object$link %in% c("logadd", "logmult", "logit")) {
+    parname <- "Causal odds ratio"
+    if (x$object$link %in% c("logadd", "logmult"))
+      parname <- "Causal risk ratio"
+    cat("\n", parname, " with 95% CI limits:\n", sep = "")
+    print(exp(x$object$estci[rowstart:rowstop,]), digits = digits, ...)
+  }
 
   cat("\n")
   invisible(x)

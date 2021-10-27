@@ -103,6 +103,9 @@ structural mean model (MSMM) of Robins (1989)." />
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -239,7 +242,7 @@ command (StataCorp., 2013).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
-New York, Cambridge University Press.</p>
+New York, Cambridge University Press. ISBN:1107667275</p>
 <p>Clarke PS, Palmer TM, Windmeijer F. Estimating structural
 mean models with multiple instrumental variables using the
 Generalised Method of Moments. Statistical Science, 2015, 30, 1,
@@ -252,7 +255,7 @@ applications to models of cigarette smoking and behavior. The Review of
 Economics and Statistics. 1997, 79, 4, 586-593.
 doi: <a href='https://doi.org/10.1162/003465397557169'>10.1162/003465397557169</a></p>
 <p>Nichols A. ivpois: Stata module for IV/GMM Poisson regression. 2007.
-<a href='http://ideas.repec.org/c/boc/bocode/s456890.html'>url</a></p>
+<a href='https://ideas.repec.org/c/boc/bocode/s456890.html'>url</a></p>
 <p>Palmer TM, Sterne JAC, Harbord RM, Lawlor DA, Sheehan NA, Meng S,
 Granell R, Davey Smith G, Didelez V.
 Instrumental variable estimation of causal risk ratios and causal odds ratios
@@ -275,7 +278,8 @@ An Application to Demand for Health Care. Journal of Applied Econometrics.
 doi: <a href='https://doi.org/10/fdkh4n'>10/fdkh4n</a></p>
 <p>Windmeijer, F. ExpEnd, A Gauss programme for non-linear GMM estimation of
 EXPonential models with ENDogenous regressors for cross section and panel
-data. CEMMAP working paper CWP14/02. 2002. <a href='https://www.cemmap.ac.uk/wp-content/uploads/2020/08/CWP1402.pdf'>url</a></p>
+data. CEMMAP working paper CWP14/02. 2002.
+<a href='https://www.cemmap.ac.uk/wp-content/uploads/2020/08/CWP1402.pdf'>url</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Single instrument example</span>
@@ -287,9 +291,9 @@ data. CEMMAP working paper CWP14/02. 2002. <a href='https://www.cemmap.ac.uk/wp-
 <span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fl'>1</span>, <span class='fl'>0.7</span><span class='op'>*</span><span class='va'>Z</span> <span class='op'>+</span> <span class='fl'>0.2</span><span class='op'>*</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>Z</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>m0</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Logistic.html'>plogis</a></span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='fl'>0.8</span><span class='op'>*</span><span class='va'>X</span> <span class='op'>-</span> <span class='fl'>0.39</span><span class='op'>*</span><span class='va'>Z</span><span class='op'>)</span>
 <span class='va'>Y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Logistic.html'>plogis</a></span><span class='op'>(</span><span class='va'>psi0</span><span class='op'>*</span><span class='va'>X</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>m0</span><span class='op'>/</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>m0</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>dat1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>Z</span>, <span class='va'>X</span>, <span class='va'>Y</span><span class='op'>)</span>
-<span class='va'>fit1</span> <span class='op'>&lt;-</span> <span class='fu'>msmm</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>X</span> <span class='op'>|</span> <span class='va'>Z</span>, data <span class='op'>=</span> <span class='va'>dat1</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>fit1</span><span class='op'>)</span>
+<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>Z</span>, <span class='va'>X</span>, <span class='va'>Y</span><span class='op'>)</span>
+<span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'>msmm</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>X</span> <span class='op'>|</span> <span class='va'>Z</span>, data <span class='op'>=</span> <span class='va'>dat</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>fit</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; 
 #&gt; Estimation method: gmm 
 #&gt; 
