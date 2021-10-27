@@ -157,6 +157,10 @@ test_that("Single instrument example - logit link", {
   expect_equal(fit21$estci[,1], betamanual, ignore_attr = TRUE)
 })
 
+# Subset of observations ----
+
+
+
 # Data generation for multiple instrument tests ----
 rm(list = ls())
 set.seed(123456)
