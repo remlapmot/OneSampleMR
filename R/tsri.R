@@ -181,8 +181,12 @@ tsri <- function(formula, instruments, data, subset, na.action,
       stage2 <- glm(Y ~ X[,2] + res, family = binomial(link = "logit"))
     }
     t0 <- c(t0, coef(stage2))
-    index <- 1 + 2*length(covariatenames) + 3
-    names(t0)[index] <- tsri_env$xnames
+
+    if (!tsri_env$anycovs)
+      xindex <- length(t0) - 1
+    else
+      xindex <- length(t0) - 1 - tsri_env$ncovs
+    names(t0)[xindex] <- tsri_env$xnames
   }
 
   Xtopass <- as.data.frame(X[, tsri_env$xnames])
