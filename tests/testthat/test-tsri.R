@@ -193,6 +193,15 @@ test_that("Single instrument example - logit link", {
   expect_equal(fit21$estci[,1], betamanual, ignore_attr = TRUE)
 })
 
+# Subset of observations ----
+
+test_that("Test subset argument", {
+  datfifty <- dat[1:50,]
+  fitcompare <- tsri(Y ~ X | Z, data = datfifty)
+  fitsubset <- tsri(Y ~ X | Z, data = dat, subset = 1:50)
+  expect_equal(fitsubset$estci, fitcompare$estci)
+})
+
 # Data generation for multiple instrument tests ----
 rm(list = ls())
 set.seed(123456)
