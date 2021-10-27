@@ -637,6 +637,15 @@ test_that("Single instrument example", {
 # check subset argument ----
 test_that("Check subset argument", {
   skip_on_cran()
+  # Data generation from the example in the ivtools::ivglm() helpfile
+  set.seed(9)
+  n <- 1000
+  psi0 <- 0.5
+  Z <- rbinom(n, 1, 0.5)
+  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+  m0 <- plogis(1 + 0.8*X - 0.39*Z)
+  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  dat <- data.frame(Z, X, Y)
   datfifty <- dat[1:50,]
   fitcompare <- msmm(Y ~ X | Z, dat = datfifty)
   fitcheck <- msmm(Y ~ X | Z, dat = dat, subset = 1:50)
