@@ -634,6 +634,15 @@ test_that("Single instrument example", {
   expect_output(print(smy))
 })
 
+# check subset argument ----
+test_that("Check subset argument", {
+  skip_on_cran()
+  datfifty <- dat[1:50,]
+  fitcompare <- msmm(Y ~ X | Z, dat = datfifty)
+  fitcheck <- msmm(Y ~ X | Z, dat = dat, subset = 1:50)
+  expect_equal(fitcheck$crrci, fitcompare$crrci)
+})
+
 # check variables with different names ----
 test_that("Check using different variable names", {
   skip_on_cran()
