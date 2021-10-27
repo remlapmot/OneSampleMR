@@ -196,6 +196,7 @@ test_that("Single instrument example - logit link", {
 # Subset of observations ----
 
 test_that("Test subset argument", {
+  skip_on_cran()
   datfifty <- dat[1:50,]
   fitcompare <- tsri(Y ~ X | Z, data = datfifty)
   fitsubset <- tsri(Y ~ X | Z, data = dat, subset = 1:50)
