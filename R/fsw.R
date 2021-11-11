@@ -1,17 +1,11 @@
-#' Conditional F-statistic of Sanderson and Windmeijer
+#' Conditional F-statistic of Sanderson and Windmeijer (2016)
 #'
-#' `fsw` is a generic function for calculating the conditional F-statistic of
-#' Sanderson and Windmeijer (2016). The function invokes particular methods which
-#' depend upon the [`class`] of the first argument.
-#' @param object An object containing the results of an IV model for which to
-#' calculate the conditional F-statistics for each endogenous variable.
-#' @seealso [`fsw.ivreg()`]
-#' @export
-fsw <- function(object) UseMethod("fsw", object)
-
-#' Calculate the conditional F-statistic of Sanderson and Windmeijer (2016)
-#' @param object A fitted model from [`ivreg::ivreg()`], i.e. an object of class
-#' `ivreg`.
+#' `fsw` calculates the conditional F-statistic of
+#' Sanderson and Windmeijer (2016) for each endogenous variable
+#' in the model.
+#' @param object An object of class `"ivreg"` containing the results of
+#' an IV model fitted by [`ivreg::ivreg`] for which to calculate
+#' the conditional F-statistics for each endogenous variable.
 #' @return An object of class `"fsw"` with the following elements:
 #' \describe{
 #' \item{fswres}{matrix with columns for the conditional *F*-statistics,
@@ -42,6 +36,10 @@ fsw <- function(object) UseMethod("fsw", object)
 #' Sanderson E and Windmeijer F. A weak instrument *F*-test in linear
 #' IV models with multiple endogenous variables. Journal of Econometrics,
 #' 2016, 190, 2, 212-221, \doi{10.1016/j.jeconom.2015.06.004}.
+#' @export
+fsw <- function(object) UseMethod("fsw", object)
+
+#' @rdname fsw
 #' @importFrom stats as.formula lm pf
 #' @importFrom ivreg ivreg
 #' @importFrom lmtest waldtest
