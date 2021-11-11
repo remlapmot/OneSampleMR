@@ -1,7 +1,7 @@
 #' Conditional F-statistic of Sanderson and Windmeijer
 #'
 #' `fsw` is a generic function for calculating the conditional F-statistic of
-#' Sanderson and Windmeijer. The function invokes particular methods which
+#' Sanderson and Windmeijer (2016). The function invokes particular methods which
 #' depend upon the [`class`] of the first argument.
 #' @param object An object containing the results of an IV model for which to
 #' calculate the conditional F-statistics for each endogenous variable.
