@@ -139,7 +139,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   znames <- colnames(Z)[-1]
   covariatenames <- intersect(xnames, znames)
 
-  tsri_env <<- new.env(parent = emptyenv())
+  tsri_env <- new.env(parent = emptyenv())
   tsri_env$anycovs <- FALSE
   if (!identical(covariatenames, character(0))) {
     tsri_env$anycovs <- TRUE
