@@ -11,7 +11,7 @@
 \code{ivreg}.}
 }
 \value{
-An object of class fsw with the following elements:
+An object of class \code{"fsw"} with the following elements:
 \describe{
 \item{fswres}{matrix with columns for the conditional \emph{F}-statistics,
 degrees of freedom, residual degrees of freedom, and p-value.

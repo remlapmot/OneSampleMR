@@ -55,6 +55,14 @@ regression; \code{"logadd"} is log-additive and corresponds to Poisson / log-bin
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+An object of class \code{"tsps"} with the following elements
+\describe{
+\item{fit}{the fitted object of class \code{"gmm"} from the call to \link[gmm:gmm]{gmm::gmm}.}
+\item{estci}{a matrix of the estimates with their corresponding confidence interval limits.}
+\item{link}{a character vector containing the specificed link function.}
+}
+}
 \description{
 Terza et al. (2008) give an excellent description of TSPS estimators.
 They proceed by fitting a first stage model of the
