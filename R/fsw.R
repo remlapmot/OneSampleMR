@@ -12,7 +12,7 @@ fsw <- function(object) UseMethod("fsw", object)
 #' Calculate the conditional F-statistic of Sanderson and Windmeijer (2016)
 #' @param object A fitted model from [`ivreg::ivreg()`], i.e. an object of class
 #' `ivreg`.
-#' @return An object of class fsw with the following elements:
+#' @return An object of class `"fsw"` with the following elements:
 #' \describe{
 #' \item{fswres}{matrix with columns for the conditional *F*-statistics,
 #' degrees of freedom, residual degrees of freedom, and p-value.
