@@ -24,7 +24,7 @@ Description: Useful functions for one sample
     the multiplicative structural mean model explained by 
     Hernán and Robins (2006) <doi:10.1097/01.ede.0000222409.00878.37>, 
     two-stage predictor substitution estimators and two-stage residual 
-    inclusion (TSRI) estimators explained by Terza et al. (2008) 
+    inclusion estimators explained by Terza et al. (2008) 
     <doi:10.1016/j.jhealeco.2007.09.009>.
 License: GPL (>= 3)
 URL: https://github.com/remlapmot/OneSampleMR
