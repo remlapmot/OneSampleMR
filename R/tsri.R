@@ -200,14 +200,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     colnames(Ztopass) <- tsri_env$znames
   }
 
-  # gmm fit
-  output <- tsri_gmm(x = Xtopass, y = Y, z = Ztopass,
-                     xnames = xnames,
-                     t0 = t0,
-                     link = link)
-  class(output) <- append("tsri", class(output))
-  output
-
+  # functions for tsri fit
   tsri_gmm <- function(x, y, z, xnames, t0, link){
     x <- as.matrix(x)
 
@@ -530,6 +523,14 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
     return(moments)
   }
+
+  # gmm fit
+  output <- tsri_gmm(x = Xtopass, y = Y, z = Ztopass,
+                     xnames = xnames,
+                     t0 = t0,
+                     link = link)
+  class(output) <- append("tsri", class(output))
+  output
 }
 
 #' Summarizing TSRI Fits
