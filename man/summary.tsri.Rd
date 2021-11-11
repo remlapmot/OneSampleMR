@@ -15,9 +15,7 @@
 \arguments{
 \item{object}{an object of class \code{"tsri"}.}
 
-\item{...}{further arguments passed to or from other methods.
-
-S3 summary and print methods for objects of class \code{tsri} and \code{summary.tsri}.}
+\item{...}{further arguments passed to or from other methods.}
 
 \item{x}{an object of class \code{"summary.tsri"}.}
 
@@ -30,8 +28,10 @@ S3 summary and print methods for objects of class \code{tsri} and \code{summary.
 \item{object}{The object of class \code{tsps} passed to the function.}
 }
 \description{
-Summarizing TSRI Fits
+S3 print and summary methods for objects of
+class \code{"tsri"} and print method for objects of
+class \code{"summary.tsri"}.
 }
 \examples{
-# For examples see the examples at the bottom of help('tsri')
+# See the examples at the bottom of help('tsri')
 }

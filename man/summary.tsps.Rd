@@ -15,9 +15,7 @@
 \arguments{
 \item{object}{an object of class \code{"tsps"}.}
 
-\item{...}{further arguments passed to or from other methods.
-
-S3 summary and print methods for objects of class \code{tsps} and \code{summary.tsps}.}
+\item{...}{further arguments passed to or from other methods.}
 
 \item{x}{an object of class \code{"summary.tsps"}.}
 
@@ -30,8 +28,10 @@ S3 summary and print methods for objects of class \code{tsps} and \code{summary.
 \item{object}{The object of class \code{tsps} passed to the function.}
 }
 \description{
-Summarizing TSPS Fits
+S3 print and summary methods for objects of
+class \code{"tsps"} and print method for objects of
+class \code{"summary.tsps"}.
 }
 \examples{
-# For examples see the examples at the bottom of help('tsps')
+# See the examples at the bottom of help('tsps')
 }
