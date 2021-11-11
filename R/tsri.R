@@ -542,12 +542,14 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
 #' Summarizing TSRI Fits
 #'
+#' S3 print and summary methods for objects of
+#' class `"tsri"` and print method for objects of
+#' class `"summary.tsri"`.
+#'
 #' @param object an object of class `"tsri"`.
 #' @param x an object of class `"summary.tsri"`.
 #' @param digits the number of significant digits to use when printing.
 #' @param ... further arguments passed to or from other methods.
-#'
-#' S3 summary and print methods for objects of class `tsri` and `summary.tsri`.
 #'
 #' @return `summary.tsri()` returns an object of class `"summary.tsri"`. A list with the following elements:
 #'
@@ -555,7 +557,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 #' \item{object}{The object of class `tsps` passed to the function.}
 #'
 #' @examples
-#' # For examples see the examples at the bottom of help('tsri')
+#' # See the examples at the bottom of help('tsri')
 #' @export
 summary.tsri <- function(object, ...) {
 
