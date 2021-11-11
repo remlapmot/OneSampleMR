@@ -17,7 +17,7 @@ Authors@R:
              role = "aut",
              email = "eleanor.sanderson@bristol.ac.uk",
              comment = c(ORCID = "0000-0001-5188-5775")))
-Description: Useful functions for one sample 
+Description: Useful functions for one-sample individual level 
     Mendelian randomization and instrumental variable analyses. 
     The package includes implementations of; the Sanderson and Windmeijer (2016)
     <doi:10.1016/j.jeconom.2015.06.004> conditional F-statistic, 
