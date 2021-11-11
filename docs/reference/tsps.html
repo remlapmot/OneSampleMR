@@ -218,6 +218,15 @@ regression; <code>"logadd"</code> is log-additive and corresponds to Poisson / l
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>An object of class <code>"tsps"</code> with the following elements</p><dl>
+<dt>fit</dt><dd><p>the fitted object of class <code>"gmm"</code> from the call to <a href='https://rdrr.io/pkg/gmm/man/gmm.html'>gmm::gmm</a>.</p></dd>
+<dt>estci</dt><dd><p>a matrix of the estimates with their corresponding confidence interval limits.</p></dd>
+<dt>link</dt><dd><p>a character vector containing the specificed link function.</p></dd>
+
+</dl>
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p><code>tsps()</code> performs GMM estimation to ensure appropriate standard errors
@@ -250,56 +259,57 @@ Journal of Health Economics, 2008, 27, 3, 531-543.
 doi: <a href='https://doi.org/10.1016/j.jhealeco.2007.09.009'>10.1016/j.jhealeco.2007.09.009</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Two-stage predictor substitution estimator</span>
-<span class='co'># with second stage logistic regression</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>9</span><span class='op'>)</span>
-<span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>1000</span>
-<span class='va'>psi0</span> <span class='op'>&lt;-</span> <span class='fl'>0.5</span>
-<span class='va'>Z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span>
-<span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fl'>1</span>, <span class='fl'>0.7</span><span class='op'>*</span><span class='va'>Z</span> <span class='op'>+</span> <span class='fl'>0.2</span><span class='op'>*</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>Z</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>m0</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Logistic.html'>plogis</a></span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='fl'>0.8</span><span class='op'>*</span><span class='va'>X</span> <span class='op'>-</span> <span class='fl'>0.39</span><span class='op'>*</span><span class='va'>Z</span><span class='op'>)</span>
-<span class='va'>Y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Logistic.html'>plogis</a></span><span class='op'>(</span><span class='va'>psi0</span><span class='op'>*</span><span class='va'>X</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>m0</span><span class='op'>/</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>m0</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>Z</span>, <span class='va'>X</span>, <span class='va'>Y</span><span class='op'>)</span>
-<span class='va'>tspslogitfit</span> <span class='op'>&lt;-</span> <span class='fu'>tsps</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>X</span> <span class='op'>|</span> <span class='va'>Z</span> , data <span class='op'>=</span> <span class='va'>dat</span>, link <span class='op'>=</span> <span class='st'>"logit"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>tspslogitfit</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 
-#&gt; GMM fit summary:
-#&gt; 
-#&gt; Call:
-#&gt; gmm::gmm(g = tspsLogitMoments, x = dat, t0 = t0, vcov = "iid")
-#&gt; 
-#&gt; 
-#&gt; Method:  twoStep 
-#&gt; 
-#&gt; Coefficients:
-#&gt;               Estimate    Std. Error  t value     Pr(&gt;|t|)  
-#&gt; Z(Intercept)  1.7647e-01  1.7169e-02  1.0278e+01  8.8297e-25
-#&gt; ZZ            5.4740e-01  2.6249e-02  2.0854e+01  1.4138e-96
-#&gt; (Intercept)   9.7133e-01  1.4042e-01  6.9173e+00  4.6027e-12
-#&gt; xhat          6.1451e-01  2.7464e-01  2.2375e+00  2.5256e-02
-#&gt; 
-#&gt; J-Test: degrees of freedom is 0 
-#&gt;                 J-test                P-value             
-#&gt; Test E(g)=0:    8.88497490724335e-23  *******             
-#&gt; 
-#&gt; #############
-#&gt; Information related to the numerical optimization
-#&gt; Convergence code =  0 
-#&gt; Function eval. =  169 
-#&gt; Gradian eval. =  NA 
-#&gt; 
-#&gt; Estimates with 95% CI limits:
-#&gt;              Estimate   0.025  0.975
-#&gt; Z(Intercept)   0.1765 0.14282 0.2101
-#&gt; ZZ             0.5474 0.49595 0.5988
-#&gt; (Intercept)    0.9713 0.69611 1.2465
-#&gt; xhat           0.6145 0.07622 1.1528
-#&gt; 
-#&gt; Causal odds ratio with 95% CI limits:
-#&gt;             Estimate 0.025 0.975
-#&gt; (Intercept)    2.641 2.006 3.478
-#&gt; xhat           1.849 1.079 3.167
-#&gt; </div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Two-stage predictor substitution estimator</span></span>
+<span class='r-in'><span class='co'># with second stage logistic regression</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>9</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>1000</span></span>
+<span class='r-in'><span class='va'>psi0</span> <span class='op'>&lt;-</span> <span class='fl'>0.5</span></span>
+<span class='r-in'><span class='va'>Z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fl'>1</span>, <span class='fl'>0.7</span><span class='op'>*</span><span class='va'>Z</span> <span class='op'>+</span> <span class='fl'>0.2</span><span class='op'>*</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>Z</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>m0</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Logistic.html'>plogis</a></span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='fl'>0.8</span><span class='op'>*</span><span class='va'>X</span> <span class='op'>-</span> <span class='fl'>0.39</span><span class='op'>*</span><span class='va'>Z</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>Y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fl'>1</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Logistic.html'>plogis</a></span><span class='op'>(</span><span class='va'>psi0</span><span class='op'>*</span><span class='va'>X</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>m0</span><span class='op'>/</span><span class='op'>(</span><span class='fl'>1</span> <span class='op'>-</span> <span class='va'>m0</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>Z</span>, <span class='va'>X</span>, <span class='va'>Y</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>tspslogitfit</span> <span class='op'>&lt;-</span> <span class='fu'>tsps</span><span class='op'>(</span><span class='va'>Y</span> <span class='op'>~</span> <span class='va'>X</span> <span class='op'>|</span> <span class='va'>Z</span> , data <span class='op'>=</span> <span class='va'>dat</span>, link <span class='op'>=</span> <span class='st'>"logit"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>tspslogitfit</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GMM fit summary:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Call:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> gmm::gmm(g = tspsLogitMoments, x = dat, t0 = t0, vcov = "iid")</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Method:  twoStep </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Coefficients:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>               Estimate    Std. Error  t value     Pr(&gt;|t|)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Z(Intercept)  1.7647e-01  1.7169e-02  1.0278e+01  8.8297e-25</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ZZ            5.4740e-01  2.6249e-02  2.0854e+01  1.4138e-96</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> (Intercept)   9.7133e-01  1.4042e-01  6.9173e+00  4.6027e-12</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xhat          6.1451e-01  2.7464e-01  2.2375e+00  2.5256e-02</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> J-Test: degrees of freedom is 0 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                 J-test                P-value             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Test E(g)=0:    8.88497490724335e-23  *******             </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> #############</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Information related to the numerical optimization</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Convergence code =  0 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Function eval. =  169 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Gradian eval. =  NA </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Estimates with 95% CI limits:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              Estimate   0.025  0.975</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Z(Intercept)   0.1765 0.14282 0.2101</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ZZ             0.5474 0.49595 0.5988</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> (Intercept)    0.9713 0.69611 1.2465</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xhat           0.6145 0.07622 1.1528</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Causal odds ratio with 95% CI limits:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>             Estimate 0.025 0.975</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> (Intercept)    2.641 2.006 3.478</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> xhat           1.849 1.079 3.167</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Conditional F-statistic of Sanderson and Windmeijer — fsw • OneSampleMR</title>
+<title>Conditional F-statistic of Sanderson and Windmeijer (2016) — fsw • OneSampleMR</title>
 
 
 <!-- jquery -->
@@ -39,10 +39,10 @@
 
 
 
-<meta property="og:title" content="Conditional F-statistic of Sanderson and Windmeijer — fsw" />
-<meta property="og:description" content="fsw is a generic function for calculating the conditional F-statistic of
-Sanderson and Windmeijer. The function invokes particular methods which
-depend upon the class of the first argument." />
+<meta property="og:title" content="Conditional F-statistic of Sanderson and Windmeijer (2016) — fsw" />
+<meta property="og:description" content="fsw calculates the conditional F-statistic of
+Sanderson and Windmeijer (2016) for each endogenous variable
+in the model." />
 
 
 
@@ -128,33 +128,81 @@ depend upon the class of the first argument." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Conditional F-statistic of Sanderson and Windmeijer</h1>
+    <h1>Conditional F-statistic of Sanderson and Windmeijer (2016)</h1>
     <small class="dont-index">Source: <a href='https://github.com/remlapmot/OneSampleMR/blob/master/R/fsw.R'><code>R/fsw.R</code></a></small>
     <div class="hidden name"><code>fsw.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>fsw</code> is a generic function for calculating the conditional F-statistic of
-Sanderson and Windmeijer. The function invokes particular methods which
-depend upon the <code><a href='https://rdrr.io/r/base/class.html'>class</a></code> of the first argument.</p>
+    <p><code>fsw</code> calculates the conditional F-statistic of
+Sanderson and Windmeijer (2016) for each endogenous variable
+in the model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>fsw</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>fsw</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+
+<span class='co'># S3 method for ivreg</span>
+<span class='fu'>fsw</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>An object containing the results of an IV model for which to
-calculate the conditional F-statistics for each endogenous variable.</p></td>
+      <td><p>An object of class <code>"ivreg"</code> containing the results of
+an IV model fitted by <code><a href='https://john-d-fox.github.io/ivreg//reference/ivreg.html'>ivreg::ivreg</a></code> for which to calculate
+the conditional F-statistics for each endogenous variable.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <div class='dont-index'><p><code><a href='fsw.ivreg.html'>fsw.ivreg()</a></code></p></div>
+    <p>An object of class <code>"fsw"</code> with the following elements:</p><dl>
+<dt>fswres</dt><dd><p>matrix with columns for the conditional <em>F</em>-statistics,
+degrees of freedom, residual degrees of freedom, and p-value.
+1 row per endogenous variable.</p></dd>
+<dt>namesendog</dt><dd><p>a character vector of the variable names of the endogenous
+variables.</p></dd>
+<dt>nendog</dt><dd><p>the number of endogenous variables.</p></dd>
+<dt>n</dt><dd><p>the sample size used for the fitted model.</p></dd>
 
+</dl>
+
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Sanderson E and Windmeijer F. A weak instrument <em>F</em>-test in linear
+IV models with multiple endogenous variables. Journal of Econometrics,
+2016, 190, 2, 212-221, doi: <a href='https://doi.org/10.1016/j.jeconom.2015.06.004'>10.1016/j.jeconom.2015.06.004</a>
+.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://john-d-fox.github.io/ivreg/'>ivreg</a></span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: ivreg</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>12345</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>4000</span></span>
+<span class='r-in'><span class='va'>z1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>z2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>w1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>w2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x1</span> <span class='op'>&lt;-</span> <span class='va'>z1</span> <span class='op'>+</span> <span class='va'>z2</span> <span class='op'>+</span> <span class='fl'>0.2</span><span class='op'>*</span><span class='va'>u</span> <span class='op'>+</span> <span class='fl'>0.1</span><span class='op'>*</span><span class='va'>w1</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x2</span> <span class='op'>&lt;-</span> <span class='va'>z1</span> <span class='op'>+</span> <span class='fl'>0.94</span><span class='op'>*</span><span class='va'>z2</span> <span class='op'>-</span> <span class='fl'>0.3</span><span class='op'>*</span><span class='va'>u</span> <span class='op'>+</span> <span class='fl'>0.1</span><span class='op'>*</span><span class='va'>w2</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>x1</span> <span class='op'>+</span> <span class='va'>x2</span> <span class='op'>+</span> <span class='va'>w1</span> <span class='op'>+</span> <span class='va'>w2</span> <span class='op'>+</span> <span class='va'>u</span></span>
+<span class='r-in'><span class='va'>dat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>w1</span>, <span class='va'>w2</span>, <span class='va'>x1</span>, <span class='va'>x2</span>, <span class='va'>y</span>, <span class='va'>z1</span>, <span class='va'>z2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'>ivreg</span><span class='fu'>::</span><span class='fu'><a href='https://john-d-fox.github.io/ivreg//reference/ivreg.html'>ivreg</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x1</span> <span class='op'>+</span> <span class='va'>x2</span> <span class='op'>+</span> <span class='va'>w1</span> <span class='op'>+</span> <span class='va'>w2</span> <span class='op'>|</span> <span class='va'>z1</span> <span class='op'>+</span> <span class='va'>z2</span> <span class='op'>+</span> <span class='va'>w1</span> <span class='op'>+</span> <span class='va'>w2</span>, data <span class='op'>=</span> <span class='va'>dat</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>fsw</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Model sample size:  4000 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Sanderson-Windmeijer conditional F-statistics for first stage model:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    F value d.f. Residual d.f.   Pr(&gt;F)  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> x1 3.42466    1          3995 0.032656 *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> x2 3.42443    1          3995 0.032663 *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
