@@ -19,11 +19,11 @@ Authors@R:
              comment = c(ORCID = "0000-0001-5188-5775")))
 Description: Useful functions for one sample 
     Mendelian randomization and instrumental variable analyses. 
-    The package includes implementations of; the Sanderson and Windmeijer (2020)
-    conditional F-statistic <doi:10.1016/j.jeconom.2015.06.004>, 
+    The package includes implementations of; the Sanderson and Windmeijer (2016)
+    <doi:10.1016/j.jeconom.2015.06.004> conditional F-statistic, 
     the multiplicative structural mean model explained by 
-    Hernán and Robins (2006) <doi:10.1097/01.ede.0000222409.00878.37>, 
-    two-stage predictor substitution estimators and two-stage residual 
+    Hernán and Robins (2006) <doi:10.1097/01.ede.0000222409.00878.37>, and 
+    two-stage predictor substitution and two-stage residual 
     inclusion estimators explained by Terza et al. (2008) 
     <doi:10.1016/j.jhealeco.2007.09.009>.
 License: GPL (>= 3)
