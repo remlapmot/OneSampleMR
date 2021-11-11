@@ -2,19 +2,54 @@
 % Please edit documentation in R/fsw.R
 \name{fsw}
 \alias{fsw}
-\title{Conditional F-statistic of Sanderson and Windmeijer}
+\alias{fsw.ivreg}
+\title{Conditional F-statistic of Sanderson and Windmeijer (2016)}
 \usage{
 fsw(object)
+
+\method{fsw}{ivreg}(object)
 }
 \arguments{
-\item{object}{An object containing the results of an IV model for which to
-calculate the conditional F-statistics for each endogenous variable.}
+\item{object}{An object of class \code{"ivreg"} containing the results of
+an IV model fitted by \code{\link[ivreg:ivreg]{ivreg::ivreg}} for which to calculate
+the conditional F-statistics for each endogenous variable.}
+}
+\value{
+An object of class \code{"fsw"} with the following elements:
+\describe{
+\item{fswres}{matrix with columns for the conditional \emph{F}-statistics,
+degrees of freedom, residual degrees of freedom, and p-value.
+1 row per endogenous variable.}
+\item{namesendog}{a character vector of the variable names of the endogenous
+variables.}
+\item{nendog}{the number of endogenous variables.}
+\item{n}{the sample size used for the fitted model.}
+}
 }
 \description{
-\code{fsw} is a generic function for calculating the conditional F-statistic of
-Sanderson and Windmeijer (2016). The function invokes particular methods which
-depend upon the \code{\link{class}} of the first argument.
+\code{fsw} calculates the conditional F-statistic of
+Sanderson and Windmeijer (2016) for each endogenous variable
+in the model.
 }
-\seealso{
-\code{\link[=fsw.ivreg]{fsw.ivreg()}}
+\examples{
+require(ivreg)
+set.seed(12345)
+n <- 4000
+z1 <- rnorm(n)
+z2 <- rnorm(n)
+w1 <- rnorm(n)
+w2 <- rnorm(n)
+u <- rnorm(n)
+x1 <- z1 + z2 + 0.2*u + 0.1*w1 + rnorm(n)
+x2 <- z1 + 0.94*z2 - 0.3*u + 0.1*w2 + rnorm(n)
+y <- x1 + x2 + w1 + w2 + u
+dat <- data.frame(w1, w2, x1, x2, y, z1, z2)
+mod <- ivreg::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
+fsw(mod)
+
+}
+\references{
+Sanderson E and Windmeijer F. A weak instrument \emph{F}-test in linear
+IV models with multiple endogenous variables. Journal of Econometrics,
+2016, 190, 2, 212-221, \doi{10.1016/j.jeconom.2015.06.004}.
 }
