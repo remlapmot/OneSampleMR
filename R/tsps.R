@@ -478,12 +478,14 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
 #' Summarizing TSPS Fits
 #'
+#' S3 print and summary methods for objects of
+#' class `"tsps"` and print method for objects of
+#' class `"summary.tsps"`.
+#'
 #' @param object an object of class `"tsps"`.
 #' @param x an object of class `"summary.tsps"`.
 #' @param digits the number of significant digits to use when printing.
 #' @param ... further arguments passed to or from other methods.
-#'
-#' S3 summary and print methods for objects of class `tsps` and `summary.tsps`.
 #'
 #' @return `summary.tsps()` returns an object of class `"summary.tsps"`. A list with the following elements:
 #'
@@ -491,7 +493,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
 #' \item{object}{The object of class `tsps` passed to the function.}
 #'
 #' @examples
-#' # For examples see the examples at the bottom of help('tsps')
+#' # See the examples at the bottom of help('tsps')
 #' @export
 summary.tsps <- function(object, ...) {
 
