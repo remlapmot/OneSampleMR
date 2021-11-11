@@ -12,7 +12,7 @@ calculate the conditional F-statistics for each endogenous variable.}
 }
 \description{
 \code{fsw} is a generic function for calculating the conditional F-statistic of
-Sanderson and Windmeijer. The function invokes particular methods which
+Sanderson and Windmeijer (2016). The function invokes particular methods which
 depend upon the \code{\link{class}} of the first argument.
 }
 \seealso{
