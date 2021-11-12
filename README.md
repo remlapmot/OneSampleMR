@@ -1,6 +1,7 @@
 # OneSampleMR
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/remlapmot/OneSampleMR/workflows/R-CMD-check/badge.svg)](https://github.com/remlapmot/OneSampleMR/actions?workflow=R-CMD-check)
+[![CRAN status](https://www.r-pkg.org/badges/version/OneSampleMR)](https://cran.r-project.org/package=OneSampleMR)
 <!-- badges: end -->
 
 Useful functions for one sample, individual level data, Mendelian randomization / instrumental variable 
