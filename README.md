@@ -16,13 +16,27 @@ analyses, including implementations of:
 
 ## Installation
 
-Install the package within R using
+### Released version
+
+Install the package from CRAN using
+``` r
+install.packages("OneSampleMR")
+```
+
+To check for updates run
+``` r
+update.packages()
+```  
+
+### Development version
+
+Install the development version of the package from GitHub using
 ``` r
 # install.packages("remotes") # uncomment on first run
 remotes::install_github("remlapmot/OneSampleMR")
 ```
 
-To check for and install updates to the package run this command again or alternatively run
+To check for and install updates to the development version run the previous command again or run
 ``` r
 remotes::update_packages()
 ```
