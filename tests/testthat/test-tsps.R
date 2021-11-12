@@ -168,7 +168,6 @@ test_that("Test subset argument", {
 })
 
 # Data generation for multiple instrument tests ----
-rm(list = ls())
 set.seed(123456)
 n <- 1000
 psi0 <- 0.8
