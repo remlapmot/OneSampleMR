@@ -3,7 +3,7 @@
 [![R-CMD-check](https://github.com/remlapmot/OneSampleMR/workflows/R-CMD-check/badge.svg)](https://github.com/remlapmot/OneSampleMR/actions?workflow=R-CMD-check)
 <!-- badges: end -->
 
-Useful functions for one sample Mendelian randomization / instrumental variable 
+Useful functions for one sample, individual level data, Mendelian randomization / instrumental variable 
 analyses, including implementations of:
 
 * The [Sanderson and Windmeijer (2016)](https://doi.org/10.1016/j.jeconom.2015.06.004) conditional F-statistic for multiple exposure models.
