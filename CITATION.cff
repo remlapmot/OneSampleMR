@@ -14,6 +14,6 @@ title: "OneSampleMR - R package for one-sample Mendelian randomization and instr
 type: software
 version: 0.1.0
 date-released: 2021-10-25
-url: "https://remlapmot.github.io/OneSampleMR/"
+url: "https://CRAN.R-project.org/package=OneSampleMR"
 repository-code: "https://github.com/remlapmot/OneSampleMR"
 license: GPL-3.0
