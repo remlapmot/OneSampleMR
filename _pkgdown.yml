@@ -1,1 +1,3 @@
 url: https://remlapmot.github.io/OneSampleMR/
+template:
+  bootstrap: 5
