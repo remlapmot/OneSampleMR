@@ -1,39 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//index.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/404.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//reference/asmm.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/articles/compare-smm-fits.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//reference/fsw.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/articles/f-statistic-comparison.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//reference/msmm.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//reference/OneSampleMR-package.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/authors.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//reference/summary.msmm.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/index.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//reference/summary.tsps.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//reference/summary.tsri.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/news/index.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//reference/tsps.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/asmm.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//reference/tsri.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/fsw.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//articles/compare-smm-fits.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/fsw.ivreg.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR//articles/f-statistic-comparison.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/msmm.html</loc>
+  </url>
+  <url>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/OneSampleMR-package.html</loc>
+  </url>
+  <url>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/summary.msmm.html</loc>
+  </url>
+  <url>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/summary.tsps.html</loc>
+  </url>
+  <url>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/summary.tsri.html</loc>
+  </url>
+  <url>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/tsps.html</loc>
+  </url>
+  <url>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/tsri.html</loc>
   </url>
 </urlset>
