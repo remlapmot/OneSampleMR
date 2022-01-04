@@ -1,10 +1,10 @@
 pandoc: 2.14.0.3
-pkgdown: 2.0.0
+pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
   compare-smm-fits: compare-smm-fits.html
   f-statistic-comparison: f-statistic-comparison.html
-last_built: 2021-12-01T12:51Z
+last_built: 2022-01-04T13:37Z
 urls:
   reference: https://remlapmot.github.io/OneSampleMR/reference
   article: https://remlapmot.github.io/OneSampleMR/articles
