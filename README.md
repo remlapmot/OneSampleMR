@@ -14,6 +14,8 @@ analyses, including implementations of:
   * Two-stage predictor substitution estimators ([Terza, 2008](https://doi.org/10.1016/j.jhealeco.2007.09.009))
   * Two-stage residual inclusion estimators ([Terza, 2008](https://doi.org/10.1016/j.jhealeco.2007.09.009))
 
+**OneSampleMR** was included in the R Views November 2021 "Top 40" New CRAN Packages [here](https://rviews.rstudio.com/2021/12/21/november-2021-top-40-new-cran-packages/)!
+
 ## Installation
 
 ### Released version
