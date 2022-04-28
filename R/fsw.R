@@ -92,7 +92,7 @@ fsw.ivreg <- function(object) {
                           "ivreg(y ~ log(x1) + x2 | z1 + z2 + z3)",
                           "please create dat$logx1 = log(x1) in your data.frame",
                           "and fit ivreg(y ~ logx1 + x2 | z1 + z2 + z3).")
-    if (class(condmod) == "try-error") stop(condmoderrmsg)
+    if (inherits(condmod, "try-error")) stop(condmoderrmsg)
     condres <- condmod$residuals
     if (nexogenous > 0) {
       resfor <- as.formula(paste("condres", "~", instrplus, "+", exogplus))
