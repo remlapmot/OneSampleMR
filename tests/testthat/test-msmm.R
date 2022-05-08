@@ -3,6 +3,7 @@
 # Test equivalence to Stata output ----
 test_that("Stata output check", {
   skip_on_cran()
+  skip_if_not_available("haven")
   library(haven)
   dat <- read_dta("https://www.stata-press.com/data/r17/trip.dta")
   fit1 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
