@@ -24,10 +24,18 @@ library(OneSampleMR)
 
 ```{r}
 url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
-dat <- haven::read_dta(url)
-mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
-summary(mod)
-fsw(mod)
+if (requireNamespace("haven", quietly = TRUE)) {
+  dat <- haven::read_dta(url)
+  if (requireNamespace("ivreg", quietly = TRUE)) {
+    mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
+    summary(mod)
+    fsw(mod)
+  } else {
+    print("The ivreg package is not available, so this example was not run")
+  }
+} else {
+  print("The haven package is not available, so this example was not run")
+}
 ```
 
 ## Comparison with F-statistic from lfe package
