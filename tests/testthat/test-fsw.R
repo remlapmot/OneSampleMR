@@ -95,6 +95,8 @@ test_that("Check approx. equivalence with lfe package", {
 # Stata ivreg2 example
 
 test_that("Compare with Stata ivreg2 output", {
+  skip_if_not_installed("haven")
+  skip_if_not_installed("lfe")
   library(haven)
   library(ivreg)
   library(lfe)
