@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 if (requireNamespace("haven", quietly = TRUE)) library(haven)
-if (requireNamespace("ivreg", quietly = TRUE)) library(ivreg)
+library(ivreg)
 if (requireNamespace("lfe", quietly = TRUE)) library(lfe)
 library(OneSampleMR)
 ```
@@ -27,13 +27,9 @@ library(OneSampleMR)
 url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
 if (requireNamespace("haven", quietly = TRUE)) {
   dat <- haven::read_dta(url)
-  if (requireNamespace("ivreg", quietly = TRUE)) {
-    mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
-    summary(mod)
-    fsw(mod)
-  } else {
-    print("The ivreg package is not available, so this example was not run")
-  }
+  mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
+  summary(mod)
+  fsw(mod)
 } else {
   print("The haven package is not available, so this example was not run")
 }
