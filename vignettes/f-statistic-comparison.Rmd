@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 ```{r setup}
 if (requireNamespace("haven", quietly = TRUE)) library(haven)
 if (requireNamespace("ivreg", quietly = TRUE)) library(ivreg)
+if (requireNamespace("lfe", quietly = TRUE)) library(lfe)
 library(OneSampleMR)
 ```
 
@@ -41,8 +42,6 @@ if (requireNamespace("haven", quietly = TRUE)) {
 ## Comparison with F-statistic from lfe package
 
 ```{r}
-library(lfe)
-
 modst2 <- felm(lwage ~ 1 | 0 | (educ | exper ~ age + kidslt6 + kidsge6),
                data = dat)
 summary(modst2)
