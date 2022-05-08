@@ -15,8 +15,8 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(haven)
-library(ivreg)
+if (requireNamespace("haven", quietly = TRUE)) library(haven)
+if (requireNamespace("ivreg", quietly = TRUE)) library(ivreg)
 library(OneSampleMR)
 ```
 
