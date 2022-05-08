@@ -54,7 +54,9 @@ if (requireNamespace("ivtools", quietly = TRUE)) {
 * Back transforming that estimate from the $\log(\text{CRR})$ scale to the $\text{CRR}$ scale.
 
 ```{r}
-exp(cbind(fit01$est, confint(fit01)))
+if (requireNamespace("ivtools", quietly = TRUE)) {
+  exp(cbind(fit01$est, confint(fit01)))
+}
 ```
 
 * Comparison fit using `msmm()`.
