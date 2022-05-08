@@ -60,6 +60,7 @@ test_that("Require two or more exposures", {
 # lfe package - modified example from condfstat() helpfile
 
 test_that("Check approx. equivalence with lfe package", {
+  skip_if_not_installed("lfe")
   library(lfe)
   set.seed(12345)
   n <- 4000
