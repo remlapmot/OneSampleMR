@@ -639,6 +639,7 @@ test_that("Single instrument example", {
 # check subset argument ----
 test_that("Check subset argument", {
   skip_on_cran()
+  skip_if_not_available("ivtools")
   # Data generation from the example in the ivtools::ivglm() helpfile
   set.seed(9)
   n <- 1000
