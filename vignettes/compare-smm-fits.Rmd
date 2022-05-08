@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(OneSampleMR)
-library(ivtools)
+if (requireNamespace("ivtools", quietly = TRUE)) library(ivtools)
 ```
 
 ## Comparison fit using the ivtools package
