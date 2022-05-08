@@ -587,6 +587,7 @@ test_that("Stata output check", {
 # Single instrument example ----
 test_that("Single instrument example", {
   skip_on_cran()
+  skip_if_not_available("ivtools")
   # Data generation from the example in the ivtools::ivglm() helpfile
   set.seed(9)
   n <- 1000
