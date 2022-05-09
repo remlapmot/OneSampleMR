@@ -28,8 +28,8 @@ url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
 if (requireNamespace("haven", quietly = TRUE)) {
   dat <- haven::read_dta(url)
   mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
-  summary(mod)
-  fsw(mod)
+  print(summary(mod))
+  print(fsw(mod))
 } else {
   print("The haven package is not available, so this example was not run")
 }
@@ -42,11 +42,11 @@ if (requireNamespace("haven", quietly = TRUE)) {
   if (requireNamespace("lfe", quietly = TRUE)) {
     modst2 <- felm(lwage ~ 1 | 0 | (educ | exper ~ age + kidslt6 + kidsge6),
                    data = dat)
-    summary(modst2)
+    print(summary(modst2))
     t(sapply(modst2$stage1$lhs, 
              function(lh) waldtest(modst2$stage1, 
                                    ~ age | kidslt6 | kidsge6, lhs = lh)))
-    condfstat(modst2, quantiles = c(0.025, 0.975))
+    print(condfstat(modst2, quantiles = c(0.025, 0.975)))
   } else {
     print("The lfe package is not available, so this example was not run")
   }
