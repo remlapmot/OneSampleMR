@@ -21,7 +21,7 @@ library(OneSampleMR)
 
 ## Comparison fit using the ivtools package
 
-* Example from the `ivtools::ivglm()` helpfile. First simulate some example data.
+* Example from the **ivtools** `ivglm()` helpfile. First simulate some example data.
 
 ```{r}
 set.seed(12345)
