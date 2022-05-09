@@ -588,7 +588,7 @@ test_that("Stata output check", {
 test_that("Single instrument example", {
   skip_on_cran()
   skip_if_not_installed("ivtools")
-  # Data generation from the example in the ivtools::ivglm() helpfile
+  # Data generation from the example in the ivtools ivglm() helpfile
   set.seed(9)
   n <- 1000
   psi0 <- 0.5
@@ -640,7 +640,7 @@ test_that("Single instrument example", {
 test_that("Check subset argument", {
   skip_on_cran()
   skip_if_not_installed("ivtools")
-  # Data generation from the example in the ivtools::ivglm() helpfile
+  # Data generation from the example in the ivtools ivglm() helpfile
   set.seed(9)
   n <- 1000
   psi0 <- 0.5

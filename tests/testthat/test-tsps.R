@@ -1,6 +1,6 @@
 # tests for TSPS
 
-# Data generation from the example in the ivtools::ivglm() helpfile ----
+# Data generation from the example in the ivtools ivglm() helpfile ----
 set.seed(9)
 n <- 1000
 psi0 <- 0.5
