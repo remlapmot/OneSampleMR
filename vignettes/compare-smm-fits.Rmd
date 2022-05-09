@@ -8,6 +8,7 @@ vignette: >
 ---
 
 ```{r, include=FALSE}
+evalcond <- requireNamespace("ivtools", quietly = TRUE)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -16,7 +17,6 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(OneSampleMR)
-library(ivtools)
 ```
 
 ## Comparison fit using the ivtools package
@@ -37,19 +37,20 @@ dat <- data.frame(Z, X, Y)
 
 * Then fit MSMM using G-estimation.
 
-```{r}
+```{r, eval=evalcond}
+library(ivtools)
 fitZ.L <- glm(Z ~ 1, family = "binomial", data = dat)
 fitY.LZX <- glm(Y ~ X, family = "binomial", data = dat)
 fit01 <- ivglm(estmethod = "g", X = "X", Y = "Y",
-                  fitZ.L = fitZ.L, fitY.LZX = fitY.LZX, 
-                  data = dat, link = "log")
+               fitZ.L = fitZ.L, fitY.LZX = fitY.LZX, 
+               data = dat, link = "log")
 summary(fit01)
 confint(fit01)
 ```
 
 * Back transforming that estimate from the $\log(\text{CRR})$ scale to the $\text{CRR}$ scale.
 
-```{r}
+```{r, eval=evalcond}
 exp(cbind(fit01$est, confint(fit01)))
 ```
 

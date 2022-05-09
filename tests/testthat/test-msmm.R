@@ -3,6 +3,7 @@
 # Test equivalence to Stata output ----
 test_that("Stata output check", {
   skip_on_cran()
+  skip_if_not_installed("haven")
   library(haven)
   dat <- read_dta("https://www.stata-press.com/data/r17/trip.dta")
   fit1 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
@@ -586,6 +587,7 @@ test_that("Stata output check", {
 # Single instrument example ----
 test_that("Single instrument example", {
   skip_on_cran()
+  skip_if_not_installed("ivtools")
   # Data generation from the example in the ivtools::ivglm() helpfile
   set.seed(9)
   n <- 1000
@@ -637,6 +639,7 @@ test_that("Single instrument example", {
 # check subset argument ----
 test_that("Check subset argument", {
   skip_on_cran()
+  skip_if_not_installed("ivtools")
   # Data generation from the example in the ivtools::ivglm() helpfile
   set.seed(9)
   n <- 1000

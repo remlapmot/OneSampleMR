@@ -12,7 +12,7 @@ dat <- data.frame(Z, X, Y)
 
 test_that("Single instrument example - identity link", {
   skip_on_cran()
-
+  skip_if_not_installed("ivtools")
   # ivtools for comparison fit
   library(ivtools)
   fitZ.L <- glm(Z ~ 1, data = dat)
@@ -82,6 +82,7 @@ test_that("gmm identity link check", {
 
 test_that("Single instrument example - logadd link", {
   skip_on_cran()
+  skip_if_not_installed("ivtools")
   # ivtools for comparison fit
   library(ivtools)
   fitZ.L <- glm(Z ~ 1, data = dat)
@@ -119,6 +120,7 @@ test_that("Single instrument example - logadd link", {
 
 test_that("Single instrument example - logmult link", {
   skip_on_cran()
+  skip_if_not_installed("ivtools")
   # ivtools for comparison fit
   library(ivtools)
   fitZ.L <- glm(Z ~ 1, data = dat)
@@ -158,6 +160,7 @@ test_that("Single instrument example - logmult link", {
 
 test_that("Single instrument example - logit link", {
   skip_on_cran()
+  skip_if_not_installed("ivtools")
   # ivtools for comparison fit
   library(ivtools)
   fitZ.L <- glm(Z ~ 1, data = dat)

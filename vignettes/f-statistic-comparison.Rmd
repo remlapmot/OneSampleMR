@@ -8,15 +8,21 @@ vignette: >
 ---
 
 ```{r, include=FALSE}
+# Only run code chunks if Suggests packages available
+suggestsavailable <-
+  sapply(c("lfe", "haven"), requireNamespace, quietly = TRUE)
+evalcond <- all(suggestsavailable)
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = evalcond
 )
 ```
 
 ```{r setup}
 library(haven)
 library(ivreg)
+library(lfe)
 library(OneSampleMR)
 ```
 
@@ -33,10 +39,8 @@ fsw(mod)
 ## Comparison with F-statistic from lfe package
 
 ```{r}
-library(lfe)
-
 modst2 <- felm(lwage ~ 1 | 0 | (educ | exper ~ age + kidslt6 + kidsge6),
-               data = dat)
+                 data = dat)
 summary(modst2)
 t(sapply(modst2$stage1$lhs, 
          function(lh) waldtest(modst2$stage1, 
