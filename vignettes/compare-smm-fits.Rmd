@@ -44,8 +44,8 @@ if (requireNamespace("ivtools", quietly = TRUE)) {
   fit01 <- ivglm(estmethod = "g", X = "X", Y = "Y",
                     fitZ.L = fitZ.L, fitY.LZX = fitY.LZX, 
                     data = dat, link = "log")
-  summary(fit01)
-  confint(fit01)
+  print(summary(fit01))
+  print(confint(fit01))
 } else {
   print("The ivtools package is not available, so this example was not run")  
 }
@@ -55,7 +55,7 @@ if (requireNamespace("ivtools", quietly = TRUE)) {
 
 ```{r}
 if (requireNamespace("ivtools", quietly = TRUE)) {
-  exp(cbind(fit01$est, confint(fit01)))
+  print(exp(cbind(fit01$est, confint(fit01))))
 } else {
   print("The ivtools package is not available, so this example was not run")  
 }
