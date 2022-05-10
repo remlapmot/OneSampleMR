@@ -90,7 +90,7 @@ test_that("Single instrument example - logmult link", {
   # ivtools for comparison fit
   # library(ivtools)
   # fitZ.L <- glm(Z ~ 1, data = dat)
-  # dat$Y[dat$Y == 0] <- 0.001
+  dat$Y[dat$Y == 0] <- 0.001
   # fitY.LZX <- glm(Y ~ X + Z, family = Gamma(link = "log"), data = dat)
   # fitLogGest <- ivglm(estmethod = "g",
   #                     X = "X",
@@ -121,6 +121,7 @@ test_that("Single instrument example - logmult link", {
   stage2 <- glm(Y ~ xhat, family = Gamma(link = "log"))
   betamanual <- c(betamanual, coef(stage2))
   expect_equal(fit12$estci[,1], betamanual, ignore_attr = "names", tolerance = 1e-3)
+  dat$Y[dat$Y == 0.001] <- 0
 })
 
 test_that("Single instrument example - logit link", {
@@ -223,6 +224,7 @@ test_that("Multiple instrument example with covariates - logadd link", {
 test_that("Multiple instrument example with covariates - logmult link", {
   skip_on_cran()
 
+  dat$Y[dat$Y == 0] <- 0.001
   fit32 <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logmult")
   expect_output(print(fit32))
   smry32 <- summary(fit32)
@@ -236,6 +238,7 @@ test_that("Multiple instrument example with covariates - logmult link", {
   stage2 <- glm(Y ~ xhat + C1 + C2, family = Gamma(link = "log"), control = list(maxit = 1E2))
   betamanual <- c(betamanual, coef(stage2))
   expect_equal(fit32$estci[,1], betamanual, tolerance = 0.01, ignore_attr = TRUE)
+  dat$Y[dat$Y == 0.001] <- 0
 })
 
 test_that("Multiple instrument example with covariates - logit link", {
