@@ -156,6 +156,7 @@ test_that("Single instrument example - logmult link", {
   stage2 <- glm(Y ~ X + res, family = Gamma(link = "log"))
   betamanual <- c(betamanual, coef(stage2))
   expect_equal(fit12$estci[,1], betamanual, tolerance = 0.01, ignore_attr = "names")
+  dat$Y[dat$Y == 0.001] <- 0
 })
 
 test_that("Single instrument example - logit link", {
