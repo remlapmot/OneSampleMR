@@ -12,24 +12,24 @@ dat <- data.frame(Z, X, Y)
 
 test_that("Single instrument example - identity link", {
   skip_on_cran()
-  skip_if_not_installed("ivtools")
+  # skip_if_not_installed("ivtools")
   # ivtools for comparison fit
-  library(ivtools)
-  fitZ.L <- glm(Z ~ 1, data = dat)
-  fitY.LZX <- glm(Y ~ X + Z, family = binomial(link = "identity"), data = dat)
-  fitIdentGest <- ivglm(estmethod = "g",
-                        X = "X",
-                        fitZ.L = fitZ.L,
-                        fitY.LZX = fitY.LZX,
-                        data = dat,
-                        link = "identity",
-                        Y = "Y",
-                        ctrl = TRUE)
-  crd <- fitIdentGest$est["X"]
-  crdse <- sqrt(fitIdentGest$vcov)
+  # library(ivtools)
+  # fitZ.L <- glm(Z ~ 1, data = dat)
+  # fitY.LZX <- glm(Y ~ X + Z, family = binomial(link = "identity"), data = dat)
+  # fitIdentGest <- ivglm(estmethod = "g",
+  #                       X = "X",
+  #                       fitZ.L = fitZ.L,
+  #                       fitY.LZX = fitY.LZX,
+  #                       data = dat,
+  #                       link = "identity",
+  #                       Y = "Y",
+  #                       ctrl = TRUE)
+  crd <- 0.1064741 # fitIdentGest$est["X"]
+  crdse <- 0.04748229 # sqrt(fitIdentGest$vcov)
 
   fit01 <- tsri(Y ~ X | Z, data = dat, link = "identity")
-  expect_equal(fit01$estci[4,1], crd, ignore_attr = "names")
+  expect_equal(fit01$estci[4,1], crd, ignore_attr = "names", tolerance = 1e-5)
 
   expect_s3_class(fit01, "tsri")
 
@@ -82,21 +82,21 @@ test_that("gmm identity link check", {
 
 test_that("Single instrument example - logadd link", {
   skip_on_cran()
-  skip_if_not_installed("ivtools")
+  # skip_if_not_installed("ivtools")
   # ivtools for comparison fit
-  library(ivtools)
-  fitZ.L <- glm(Z ~ 1, data = dat)
-  fitY.LZX <- glm(Y ~ X + Z, family = poisson, data = dat) # binomial(link = "log")
-  fitLogGest <- ivglm(estmethod = "g",
-                      X = "X",
-                      fitZ.L = fitZ.L,
-                      fitY.LZX = fitY.LZX,
-                      data = dat,
-                      link = "log",
-                      Y = "Y",
-                      ctrl = TRUE)
-  logcrr <- fitLogGest$est["X"]
-  logcrrse <- sqrt(fitLogGest$vcov)
+  # library(ivtools)
+  # fitZ.L <- glm(Z ~ 1, data = dat)
+  # fitY.LZX <- glm(Y ~ X + Z, family = poisson, data = dat) # binomial(link = "log")
+  # fitLogGest <- ivglm(estmethod = "g",
+  #                     X = "X",
+  #                     fitZ.L = fitZ.L,
+  #                     fitY.LZX = fitY.LZX,
+  #                     data = dat,
+  #                     link = "log",
+  #                     Y = "Y",
+  #                     ctrl = TRUE)
+  logcrr <- 0.1314654 # fitLogGest$est["X"]
+  logcrrse <- 0.06035374 # sqrt(fitLogGest$vcov)
 
   fit11 <- tsri(Y ~ X | Z, data = dat, link = "logadd")
   expect_equal(fit11$estci[4,1], logcrr, tolerance = 0.05, ignore_attr = "names")
@@ -120,22 +120,22 @@ test_that("Single instrument example - logadd link", {
 
 test_that("Single instrument example - logmult link", {
   skip_on_cran()
-  skip_if_not_installed("ivtools")
+  # skip_if_not_installed("ivtools")
   # ivtools for comparison fit
-  library(ivtools)
-  fitZ.L <- glm(Z ~ 1, data = dat)
+  # library(ivtools)
+  # fitZ.L <- glm(Z ~ 1, data = dat)
   dat$Y[dat$Y == 0] <- 0.001
-  fitY.LZX <- glm(Y ~ X + Z, family = Gamma(link = "log"), data = dat)
-  fitLogGest <- ivglm(estmethod = "g",
-                      X = "X",
-                      fitZ.L = fitZ.L,
-                      fitY.LZX = fitY.LZX,
-                      data = dat,
-                      link = "log",
-                      Y = "Y",
-                      ctrl = TRUE)
-  logcrr <- fitLogGest$est["X"]
-  logcrrse <- sqrt(fitLogGest$vcov)
+  # fitY.LZX <- glm(Y ~ X + Z, family = Gamma(link = "log"), data = dat)
+  # fitLogGest <- ivglm(estmethod = "g",
+  #                     X = "X",
+  #                     fitZ.L = fitZ.L,
+  #                     fitY.LZX = fitY.LZX,
+  #                     data = dat,
+  #                     link = "log",
+  #                     Y = "Y",
+  #                     ctrl = TRUE)
+  logcrr <- 0.1313029 # fitLogGest$est["X"]
+  logcrrse <- 0.06027666 # sqrt(fitLogGest$vcov)
 
   fit12 <- tsri(Y ~ X | Z, data = dat, link = "logmult")
   expect_equal(fit12$estci[4,1], logcrr, tolerance = 0.05, ignore_attr = "names")
@@ -160,21 +160,21 @@ test_that("Single instrument example - logmult link", {
 
 test_that("Single instrument example - logit link", {
   skip_on_cran()
-  skip_if_not_installed("ivtools")
+  # skip_if_not_installed("ivtools")
   # ivtools for comparison fit
-  library(ivtools)
-  fitZ.L <- glm(Z ~ 1, data = dat)
-  fitY.LZX <- glm(Y ~ X + Z, family = binomial(link = "logit"), data = dat)
-  fitLogitGest <- ivglm(estmethod = "g",
-                        X = "X",
-                        fitZ.L = fitZ.L,
-                        fitY.LZX = fitY.LZX,
-                        data = dat,
-                        link = "logit",
-                        Y = "Y",
-                        ctrl = TRUE)
-  logcor <- fitLogitGest$est["X"]
-  logcorse <- sqrt(fitLogitGest$vcov)
+  # library(ivtools)
+  # fitZ.L <- glm(Z ~ 1, data = dat)
+  # fitY.LZX <- glm(Y ~ X + Z, family = binomial(link = "logit"), data = dat)
+  # fitLogitGest <- ivglm(estmethod = "g",
+  #                       X = "X",
+  #                       fitZ.L = fitZ.L,
+  #                       fitY.LZX = fitY.LZX,
+  #                       data = dat,
+  #                       link = "logit",
+  #                       Y = "Y",
+  #                       ctrl = TRUE)
+  logcor <- 0.6666527 # fitLogitGest$est["X"]
+  logcorse <- 0.2896101 # sqrt(fitLogitGest$vcov)
 
   fit21 <- tsri(Y ~ X | Z, data = dat, link = "logit")
   expect_equal(fit21$estci[4,1], logcor, tolerance = 0.1, ignore_attr = "names")
