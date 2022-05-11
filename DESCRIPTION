@@ -32,7 +32,6 @@ Imports:
     msm
 Suggests: 
     haven,
-    ivtools,
     knitr,
     lfe,
     rmarkdown,

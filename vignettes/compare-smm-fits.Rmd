@@ -8,7 +8,6 @@ vignette: >
 ---
 
 ```{r, include=FALSE}
-evalcond <- requireNamespace("ivtools", quietly = TRUE)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -33,33 +32,6 @@ X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
 m0 <- plogis(1 + 0.8*X - 0.39*Z)
 Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0)))) 
 dat <- data.frame(Z, X, Y)
-```
-
-* Then fit MSMM using G-estimation.
-
-```{r, eval=evalcond}
-if (requireNamespace("ivtools", quietly = TRUE)) {
-  library(ivtools)
-  fitZ.L <- glm(Z ~ 1, family = "binomial", data = dat)
-  fitY.LZX <- glm(Y ~ X, family = "binomial", data = dat)
-  fit01 <- ivglm(estmethod = "g", X = "X", Y = "Y",
-                 fitZ.L = fitZ.L, fitY.LZX = fitY.LZX, 
-                 data = dat, link = "log")
-  print(summary(fit01))
-  print(confint(fit01))
-} else {
-  print("Package ivtools not available, so example not run")
-}
-```
-
-* Back transforming that estimate from the $\log(\text{CRR})$ scale to the $\text{CRR}$ scale.
-
-```{r, eval=evalcond}
-if (requireNamespace("ivtools", quietly = TRUE)) {
-  exp(cbind(fit01$est, confint(fit01)))
-} else {
-  print("Package ivtools not available, so example not run")
-}
 ```
 
 * Comparison fit using `msmm()`.

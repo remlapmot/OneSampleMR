@@ -5,7 +5,7 @@
 \title{Additive structural mean model}
 \description{
 \code{asmm} is not a function. This helpfile is to note that the additive structural mean model (ASMM)
-is simply fit with a linear IV estimator, such as available in \code{\link[ivreg:ivreg]{ivreg::ivreg()}} or \code{\link[AER:ivreg]{AER::ivreg()}}.
+is simply fit with a linear IV estimator, such as available in \code{\link[ivreg:ivreg]{ivreg::ivreg()}}.
 }
 \details{
 For a binary outcome the ASMM estimates a causal risk difference.
