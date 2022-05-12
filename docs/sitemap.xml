@@ -4,9 +4,6 @@
     <loc>https://remlapmot.github.io/OneSampleMR/404.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR/LICENSE.html</loc>
-  </url>
-  <url>
     <loc>https://remlapmot.github.io/OneSampleMR/articles/compare-smm-fits.html</loc>
   </url>
   <url>
@@ -22,10 +19,10 @@
     <loc>https://remlapmot.github.io/OneSampleMR/index.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR/news/index.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://remlapmot.github.io/OneSampleMR/reference/OneSampleMR-package.html</loc>
+    <loc>https://remlapmot.github.io/OneSampleMR/news/index.html</loc>
   </url>
   <url>
     <loc>https://remlapmot.github.io/OneSampleMR/reference/asmm.html</loc>
@@ -41,6 +38,9 @@
   </url>
   <url>
     <loc>https://remlapmot.github.io/OneSampleMR/reference/msmm.html</loc>
+  </url>
+  <url>
+    <loc>https://remlapmot.github.io/OneSampleMR/reference/OneSampleMR-package.html</loc>
   </url>
   <url>
     <loc>https://remlapmot.github.io/OneSampleMR/reference/summary.msmm.html</loc>
