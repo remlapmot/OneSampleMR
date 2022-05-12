@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">OneSampleMR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,14 +82,13 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/remlapmot/OneSampleMR" class="external-link">OneSampleMR</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">ivtools</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/remlapmot/OneSampleMR" class="external-link">OneSampleMR</a></span><span class="op">)</span></code></pre></div>
 <div class="section level2">
 <h2 id="comparison-fit-using-the-ivtools-package">Comparison fit using the ivtools package<a class="anchor" aria-label="anchor" href="#comparison-fit-using-the-ivtools-package"></a>
 </h2>
 <ul>
-<li>Example from the <code><a href="https://rdrr.io/pkg/ivtools/man/ivglm.html" class="external-link">ivtools::ivglm()</a></code> helpfile. First
-simulate some example data.</li>
+<li>Example from the <strong>ivtools</strong> <code>ivglm()</code>
+helpfile. First simulate some example data.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span>
@@ -102,39 +101,9 @@ simulate some example data.</li>
 <span class="va">Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html" class="external-link">plogis</a></span><span class="op">(</span><span class="va">psi0</span><span class="op">*</span><span class="va">X</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">m0</span><span class="op">/</span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">m0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> 
 <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">Z</span>, <span class="va">X</span>, <span class="va">Y</span><span class="op">)</span></code></pre></div>
 <ul>
-<li>Then fit MSMM using G-estimation.</li>
-</ul>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fitZ.L</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Z</span> <span class="op">~</span> <span class="fl">1</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="va">fitY.LZX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span>, family <span class="op">=</span> <span class="st">"binomial"</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
-<span class="va">fit01</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ivtools/man/ivglm.html" class="external-link">ivglm</a></span><span class="op">(</span>estmethod <span class="op">=</span> <span class="st">"g"</span>, X <span class="op">=</span> <span class="st">"X"</span>, Y <span class="op">=</span> <span class="st">"Y"</span>,
-                  fitZ.L <span class="op">=</span> <span class="va">fitZ.L</span>, fitY.LZX <span class="op">=</span> <span class="va">fitY.LZX</span>, 
-                  data <span class="op">=</span> <span class="va">dat</span>, link <span class="op">=</span> <span class="st">"log"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit01</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Call:  </span>
-<span class="co">#&gt; ivglm(estmethod = "g", X = "X", Y = "Y", fitZ.L = fitZ.L, fitY.LZX = fitY.LZX, </span>
-<span class="co">#&gt;     data = dat, link = "log")</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Coefficients: </span>
-<span class="co">#&gt;   Estimate Std. Error z value Pr(&gt;|z|)    </span>
-<span class="co">#&gt; X  0.10186    0.02822    3.61 0.000307 ***</span>
-<span class="co">#&gt; ---</span>
-<span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit01</span><span class="op">)</span>
-<span class="co">#&gt;        2.5 %    97.5 %</span>
-<span class="co">#&gt; X 0.04655277 0.1571731</span></code></pre></div>
-<ul>
-<li>Back transforming that estimate from the <span class="math inline">\(\log(\text{CRR})\)</span> scale to the <span class="math inline">\(\text{CRR}\)</span> scale.</li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">fit01</span><span class="op">$</span><span class="va">est</span>, <span class="fu"><a href="https://rdrr.io/r/stats/confint.html" class="external-link">confint</a></span><span class="op">(</span><span class="va">fit01</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt;               2.5 %   97.5 %</span>
-<span class="co">#&gt; X 1.107232 1.047653 1.170198</span></code></pre></div>
-<ul>
 <li>Comparison fit using <code><a href="../reference/msmm.html">msmm()</a></code>.</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit02</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/msmm.html">msmm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span> <span class="op">|</span> <span class="va">Z</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit02</span><span class="op">)</span>
 <span class="co">#&gt; </span>
@@ -173,7 +142,7 @@ simulate some example data.</li>
 <ul>
 <li>Comparison fit using the alternative GMM moment conditions.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit03</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/msmm.html">msmm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span> <span class="op">|</span> <span class="va">Z</span>, data <span class="op">=</span> <span class="va">dat</span>, estmethod <span class="op">=</span> <span class="st">"gmmalt"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit03</span><span class="op">)</span>
 <span class="co">#&gt; </span>
@@ -213,7 +182,7 @@ simulate some example data.</li>
 <li>Comparison fit using transformed variables using two-stage least
 squares.</li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit04</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/msmm.html">msmm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span> <span class="op">|</span> <span class="va">Z</span>, data <span class="op">=</span> <span class="va">dat</span>, estmethod <span class="op">=</span> <span class="st">"tsls"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit04</span><span class="op">)</span>
 <span class="co">#&gt; </span>
@@ -276,7 +245,7 @@ squares.</li>
 <li>Comparison fit using the alternative transformed variables approach
 using two-stage least squares.</li>
 </ul>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit05</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/msmm.html">msmm</a></span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span> <span class="op">|</span> <span class="va">Z</span>, data <span class="op">=</span> <span class="va">dat</span>, estmethod <span class="op">=</span> <span class="st">"tslsalt"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit05</span><span class="op">)</span>
 <span class="co">#&gt; </span>
