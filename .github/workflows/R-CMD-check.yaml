@@ -6,6 +6,8 @@ on:
   pull_request:
     branches: [main, master]
   workflow_dispatch:
+  schedule:
+    - cron: '37 7 * * TUE' # run at 7:37am UTC on Tuesdays
 
 name: R-CMD-check
 
