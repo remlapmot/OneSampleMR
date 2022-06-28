@@ -6,3 +6,5 @@
 ^pkgdown$
 ^CITATION\.cff$
 ^\.github$
+^\.covrignore$
+^codecov\.yml$
