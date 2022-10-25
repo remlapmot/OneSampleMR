@@ -91,16 +91,7 @@ confounders).</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>formula</dt>
-<dd><p>formula specification(s) of the regression
-relationship and the instruments. Either <code>instruments</code> is missing and
-<code>formula</code> has three parts as in <code>y ~ x1 + x2 | z1 + z2 + z3</code>
-(recommended) or <code>formula</code> is <code>y ~ x1 + x2</code> and <code>instruments</code>
-is a one-sided formula <code>~ z1 + z2 + z3</code> (only for backward
-compatibility).</p></dd>
-
-
-<dt>instruments</dt>
+    <dl><dt>formula, instruments</dt>
 <dd><p>formula specification(s) of the regression
 relationship and the instruments. Either <code>instruments</code> is missing and
 <code>formula</code> has three parts as in <code>y ~ x1 + x2 | z1 + z2 + z3</code>
