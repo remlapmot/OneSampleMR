@@ -17,14 +17,7 @@ tsps(
 )
 }
 \arguments{
-\item{formula}{formula specification(s) of the regression
-relationship and the instruments. Either \code{instruments} is missing and
-\code{formula} has three parts as in \code{y ~ x1 + x2 | z1 + z2 + z3}
-(recommended) or \code{formula} is \code{y ~ x1 + x2} and \code{instruments}
-is a one-sided formula \code{~ z1 + z2 + z3} (only for backward
-compatibility).}
-
-\item{instruments}{formula specification(s) of the regression
+\item{formula, instruments}{formula specification(s) of the regression
 relationship and the instruments. Either \code{instruments} is missing and
 \code{formula} has three parts as in \code{y ~ x1 + x2 | z1 + z2 + z3}
 (recommended) or \code{formula} is \code{y ~ x1 + x2} and \code{instruments}
