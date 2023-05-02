@@ -40,7 +40,6 @@
 fsw <- function(object) UseMethod("fsw", object)
 
 #' @rdname fsw
-#' @importFrom stats as.formula lm pf
 #' @importFrom ivreg ivreg
 #' @importFrom lmtest waldtest
 #' @export
@@ -80,7 +79,7 @@ fsw.ivreg <- function(object) {
                         paste(endogothers, collapse = " + "),
                         "|", instrplus)
     }
-    modelfor <- as.formula(modelstr)
+    modelfor <- stats::as.formula(modelstr)
     condmod <- try(ivreg::ivreg(modelfor, data = object$model), silent = TRUE)
     condmoderrmsg = paste("The IV regression of one of the exposures",
                           "on the other/s has failed.",
@@ -95,25 +94,25 @@ fsw.ivreg <- function(object) {
     if (inherits(condmod, "try-error")) stop(condmoderrmsg)
     condres <- condmod$residuals
     if (nexogenous > 0) {
-      resfor <- as.formula(paste("condres", "~", instrplus, "+", exogplus))
+      resfor <- stats::as.formula(paste("condres", "~", instrplus, "+", exogplus))
     } else {
-      resfor <- as.formula(paste("condres", "~", instrplus))
+      resfor <- stats::as.formula(paste("condres", "~", instrplus))
     }
-    resmod <- lm(resfor, data = object$model)
+    resmod <- stats::lm(resfor, data = object$model)
     # summary(resmod)
     if (nexogenous > 0) {
-      resbasefor <- as.formula(paste("condres ~ 1 +", exogplus))
+      resbasefor <- stats::as.formula(paste("condres ~ 1 +", exogplus))
     } else {
-      resbasefor <- as.formula(paste("condres ~ 1"))
+      resbasefor <- stats::as.formula(paste("condres ~ 1"))
     }
-    resbase <- lm(resbasefor, data = object$model)
+    resbase <- stats::lm(resbasefor, data = object$model)
     # summary(resbase)
     wldtst <- lmtest::waldtest(resbase, resmod)
     # wldtst
     fsw[i] <- (wldtst$F[2L] * wldtst$Df[2L]) / (wldtst$Df[2L] - (nendog - 1))
     fswdf[i] <- wldtst$Df[2L] - (nendog - 1)
     fswresdf[i] <- wldtst$Res.Df[2L]
-    fswp[i] <- pf(fsw[i], nendog, wldtst$Res.Df[2L], lower.tail= FALSE)
+    fswp[i] <- stats::pf(fsw[i], nendog, wldtst$Res.Df[2L], lower.tail = FALSE)
   }
 
   fswres = cbind(fsw, fswdf, fswresdf, fswp)
