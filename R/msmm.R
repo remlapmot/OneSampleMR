@@ -141,7 +141,7 @@
 #' fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
 #' summary(fit2)
 #' @export
-#' @importFrom stats model.response terms update vcov
+#' @importFrom stats terms update vcov
 msmm <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
                  estmethod = c("gmm", "gmmalt", "tsls", "tslsalt"),
@@ -185,7 +185,7 @@ msmm <- function(formula, instruments, data, subset, na.action,
   mf[[1]] <- as.name("model.frame")
   mf <- eval(mf, parent.frame())
   ## extract response, terms, model matrices
-  Y <- model.response(mf, "numeric")
+  Y <- stats::model.response(mf, "numeric")
   mt <- terms(formula, data = data)
   mtX <- terms(formula, data = data, rhs = 1)
   X <- stats::model.matrix(mtX, mf, contrasts)
