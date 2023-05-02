@@ -152,7 +152,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
   # initial values
   if (is.null(t0)) {
     stage1 <- stats::lm(X[,2] ~ -1 + Z)
-    t0 <- coef(stage1)
+    t0 <- stats::coef(stage1)
     xhat <- stats::fitted.values(stage1)
     if (tsps_env$anycovs) {
       xhat <- cbind(xhat, covariates)
@@ -172,7 +172,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     else if (link == "logit") {
       stage2 <- stats::glm(Y ~ xhat, family = stats::binomial(link = "logit"))
     }
-    t0 <- c(t0, coef(stage2))
+    t0 <- c(t0, stats::coef(stage2))
   }
 
   Xtopass <- as.data.frame(X[, tsps_env$xnames])
