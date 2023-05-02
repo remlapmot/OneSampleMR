@@ -166,7 +166,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   # initial values
   if (is.null(t0)) {
     stage1 <- stats::lm(X[,2] ~ -1 + Z)
-    t0 <- coef(stage1)
+    t0 <- stats::coef(stage1)
     res <- stats::residuals(stage1)
     if (tsri_env$anycovs) {
       res <- cbind(res, covariates)
@@ -186,7 +186,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     else if (link == "logit") {
       stage2 <- stats::glm(Y ~ X[,2] + res, family = stats::binomial(link = "logit"))
     }
-    t0 <- c(t0, coef(stage2))
+    t0 <- c(t0, stats::coef(stage2))
 
     if (!tsri_env$anycovs)
       xindex <- length(t0) - 1
