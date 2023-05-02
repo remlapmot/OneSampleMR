@@ -64,7 +64,6 @@
 #' dat <- data.frame(Z, X, Y)
 #' tspslogitfit <- tsps(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tspslogitfit)
-#' @importFrom stats binomial
 #' @export
 tsps <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
@@ -171,7 +170,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
                     control = list(maxit = 1E5))
     }
     else if (link == "logit") {
-      stage2 <- stats::glm(Y ~ xhat, family = binomial(link = "logit"))
+      stage2 <- stats::glm(Y ~ xhat, family = stats::binomial(link = "logit"))
     }
     t0 <- c(t0, coef(stage2))
   }
