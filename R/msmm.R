@@ -141,7 +141,7 @@
 #' fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
 #' summary(fit2)
 #' @export
-#' @importFrom stats coef confint delete.response model.matrix model.response terms update vcov
+#' @importFrom stats confint delete.response model.matrix model.response terms update vcov
 msmm <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
                  estmethod = c("gmm", "gmmalt", "tsls", "tslsalt"),
@@ -257,7 +257,7 @@ msmm_tsls <- function(x, y, z) {
   fit <- ivreg::ivreg(outcome ~ exposure | z)
 
   # transformed causal risk ratio estimate
-  beta <- coef(fit)
+  beta <- stats::coef(fit)
 
   # log crr
   logcrr <- log(-1 / beta[2])
@@ -270,7 +270,7 @@ msmm_tsls <- function(x, y, z) {
   crrci <- unname(c(-1/beta[2], exp(logcrr - 1.96*logcrrse), exp(logcrr + 1.96*logcrrse)))
 
   # baseline risk
-  ey0ci <- cbind(coef(fit), confint(fit))[1,]
+  ey0ci <- cbind(stats::coef(fit), confint(fit))[1,]
 
   # list of results to return
   reslist <- list(stage1 = stage1,
@@ -293,7 +293,7 @@ msmm_tsls_alt <- function(x, y, z) {
   fit <- ivreg::ivreg(outcome ~ exposure | z)
 
   # transformed causal risk ratio estimate
-  beta <- coef(fit)
+  beta <- stats::coef(fit)
 
   # log crr
   logcrr <- log(-1 * beta[2])
