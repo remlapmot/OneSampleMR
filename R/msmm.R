@@ -141,7 +141,7 @@
 #' fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
 #' summary(fit2)
 #' @export
-#' @importFrom stats model.matrix model.response terms update vcov
+#' @importFrom stats model.response terms update vcov
 msmm <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
                  estmethod = c("gmm", "gmmalt", "tsls", "tslsalt"),
@@ -188,13 +188,13 @@ msmm <- function(formula, instruments, data, subset, na.action,
   Y <- model.response(mf, "numeric")
   mt <- terms(formula, data = data)
   mtX <- terms(formula, data = data, rhs = 1)
-  X <- model.matrix(mtX, mf, contrasts)
+  X <- stats::model.matrix(mtX, mf, contrasts)
   if(length(formula)[2] < 2L) {
     mtZ <- NULL
     Z <- NULL
   } else {
     mtZ <- stats::delete.response(terms(formula, data = data, rhs = 2))
-    Z <- model.matrix(mtZ, mf, contrasts)
+    Z <- stats::model.matrix(mtZ, mf, contrasts)
   }
   ## weights and offset
   # weights <- model.weights(mf)
