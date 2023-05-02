@@ -77,7 +77,6 @@
 #' dat <- data.frame(Z, X, Y)
 #' tsrilogitfit <- tsri(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tsrilogitfit)
-#' @importFrom stats binomial
 #' @export
 tsri <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
@@ -185,7 +184,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
                     control = list(maxit = 1E5))
     }
     else if (link == "logit") {
-      stage2 <- stats::glm(Y ~ X[,2] + res, family = binomial(link = "logit"))
+      stage2 <- stats::glm(Y ~ X[,2] + res, family = stats::binomial(link = "logit"))
     }
     t0 <- c(t0, coef(stage2))
 
