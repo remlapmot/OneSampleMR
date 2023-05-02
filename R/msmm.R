@@ -141,7 +141,7 @@
 #' fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
 #' summary(fit2)
 #' @export
-#' @importFrom stats update vcov
+#' @importFrom stats vcov
 msmm <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
                  estmethod = c("gmm", "gmmalt", "tsls", "tslsalt"),
@@ -178,7 +178,7 @@ msmm <- function(formula, instruments, data, subset, na.action,
     f1 <- formula(formula, rhs = 1L)
     f2 <- formula(formula, lhs = 0L, rhs = 2L)
     if(!has_dot(f1) & has_dot(f2)) formula <- Formula::as.Formula(f1,
-                                                                  update(formula(formula, lhs = 0L, rhs = 1L), f2))
+                                                                  stats::update(formula(formula, lhs = 0L, rhs = 1L), f2))
   }
   ## call model.frame()
   mf$formula <- formula
