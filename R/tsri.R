@@ -121,7 +121,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   mf[[1]] <- as.name("model.frame")
   mf <- eval(mf, parent.frame())
   ## extract response, terms, model matrices
-  Y <- model.response(mf, "numeric")
+  Y <- stats::model.response(mf, "numeric")
   mt <- stats::terms(formula, data = data)
   mtX <- stats::terms(formula, data = data, rhs = 1)
   X <- model.matrix(mtX, mf, contrasts)
