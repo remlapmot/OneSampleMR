@@ -77,7 +77,7 @@
 #' dat <- data.frame(Z, X, Y)
 #' tsrilogitfit <- tsri(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tsrilogitfit)
-#' @importFrom stats lm residuals glm poisson Gamma binomial
+#' @importFrom stats residuals glm poisson Gamma binomial
 #' @export
 tsri <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
@@ -166,14 +166,14 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
   # initial values
   if (is.null(t0)) {
-    stage1 <- lm(X[,2] ~ -1 + Z)
+    stage1 <- stats::lm(X[,2] ~ -1 + Z)
     t0 <- coef(stage1)
     res <- residuals(stage1)
     if (tsri_env$anycovs) {
       res <- cbind(res, covariates)
     }
     if (link == "identity") {
-      stage2 <- lm(Y ~ X[,2] + res)
+      stage2 <- stats::lm(Y ~ X[,2] + res)
     }
     else if (link == "logadd") {
       stage2 <- glm(Y ~ X[,2] + res, family = poisson(link = "log"))
@@ -272,7 +272,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
-      stage1 <- lm(X ~ Z)
+      stage1 <- stats::lm(X ~ Z)
       res <- as.matrix(residuals(stage1))
       res <- cbind(X, res)
     }
@@ -343,7 +343,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
-      stage1 <- lm(X ~ Z)
+      stage1 <- stats::lm(X ~ Z)
       res <- as.matrix(residuals(stage1))
       res <- cbind(X, res)
     }
@@ -414,7 +414,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
-      stage1 <- lm(X ~ Z)
+      stage1 <- stats::lm(X ~ Z)
       res <- as.matrix(residuals(stage1))
       res <- cbind(X, res)
     }
@@ -485,7 +485,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
-      stage1 <- lm(X ~ Z)
+      stage1 <- stats::lm(X ~ Z)
       res <- as.matrix(residuals(stage1))
       res <- cbind(X, res)
     }
