@@ -64,7 +64,7 @@
 #' dat <- data.frame(Z, X, Y)
 #' tspslogitfit <- tsps(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tspslogitfit)
-#' @importFrom stats lm fitted.values glm poisson Gamma binomial
+#' @importFrom stats fitted.values glm poisson Gamma binomial
 #' @export
 tsps <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
@@ -152,14 +152,14 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
   # initial values
   if (is.null(t0)) {
-    stage1 <- lm(X[,2] ~ -1 + Z)
+    stage1 <- stats::lm(X[,2] ~ -1 + Z)
     t0 <- coef(stage1)
     xhat <- fitted.values(stage1)
     if (tsps_env$anycovs) {
       xhat <- cbind(xhat, covariates)
     }
     if (link == "identity") {
-      stage2 <- lm(Y ~ xhat)
+      stage2 <- stats::lm(Y ~ xhat)
     }
     else if (link == "logadd") {
       stage2 <- glm(Y ~ xhat, family = poisson(link = "log"))
@@ -248,7 +248,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
-      stage1 <- lm(X ~ Z)
+      stage1 <- stats::lm(X ~ Z)
       xhat <- as.matrix(fitted.values(stage1))
     }
 
@@ -308,7 +308,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
-      stage1 <- lm(X ~ Z)
+      stage1 <- stats::lm(X ~ Z)
       xhat <- as.matrix(fitted.values(stage1))
     }
 
@@ -368,7 +368,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
-      stage1 <- lm(X ~ Z)
+      stage1 <- stats::lm(X ~ Z)
       xhat <- as.matrix(fitted.values(stage1))
     }
 
@@ -428,7 +428,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
-      stage1 <- lm(X ~ Z)
+      stage1 <- stats::lm(X ~ Z)
       xhat <- as.matrix(fitted.values(stage1))
     }
 
