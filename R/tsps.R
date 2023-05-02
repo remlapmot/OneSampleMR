@@ -64,7 +64,7 @@
 #' dat <- data.frame(Z, X, Y)
 #' tspslogitfit <- tsps(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tspslogitfit)
-#' @importFrom stats fitted.values glm poisson Gamma binomial
+#' @importFrom stats glm poisson Gamma binomial
 #' @export
 tsps <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
@@ -154,7 +154,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
   if (is.null(t0)) {
     stage1 <- stats::lm(X[,2] ~ -1 + Z)
     t0 <- coef(stage1)
-    xhat <- fitted.values(stage1)
+    xhat <- stats::fitted.values(stage1)
     if (tsps_env$anycovs) {
       xhat <- cbind(xhat, covariates)
     }
@@ -249,7 +249,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
       stage1 <- stats::lm(X ~ Z)
-      xhat <- as.matrix(fitted.values(stage1))
+      xhat <- as.matrix(stats::fitted.values(stage1))
     }
 
     if (tsps_env$anycovs) {
@@ -309,7 +309,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
       stage1 <- stats::lm(X ~ Z)
-      xhat <- as.matrix(fitted.values(stage1))
+      xhat <- as.matrix(stats::fitted.values(stage1))
     }
 
     if (tsps_env$anycovs) {
@@ -369,7 +369,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
       stage1 <- stats::lm(X ~ Z)
-      xhat <- as.matrix(fitted.values(stage1))
+      xhat <- as.matrix(stats::fitted.values(stage1))
     }
 
     if (tsps_env$anycovs) {
@@ -429,7 +429,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
       stage1 <- stats::lm(X ~ Z)
-      xhat <- as.matrix(fitted.values(stage1))
+      xhat <- as.matrix(stats::fitted.values(stage1))
     }
 
     if (tsps_env$anycovs) {
