@@ -40,7 +40,6 @@
 fsw <- function(object) UseMethod("fsw", object)
 
 #' @rdname fsw
-#' @importFrom ivreg ivreg
 #' @importFrom lmtest waldtest
 #' @export
 fsw.ivreg <- function(object) {
