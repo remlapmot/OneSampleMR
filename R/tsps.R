@@ -96,7 +96,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
   )
   stopifnot(length(formula)[1L] == 1L, length(formula)[2L] %in% 1L:2L)
   ## try to handle dots in formula
-  has_dot <- function(formula) inherits(try(terms(formula), silent = TRUE), "try-error")
+  has_dot <- function(formula) inherits(try(stats::terms(formula), silent = TRUE), "try-error")
   if(has_dot(formula)) {
     f1 <- formula(formula, rhs = 1L)
     f2 <- formula(formula, lhs = 0L, rhs = 2L)
@@ -109,14 +109,14 @@ tsps <- function(formula, instruments, data, subset, na.action,
   mf <- eval(mf, parent.frame())
   ## extract response, terms, model matrices
   Y <- model.response(mf, "numeric")
-  mt <- terms(formula, data = data)
-  mtX <- terms(formula, data = data, rhs = 1)
+  mt <- stats::terms(formula, data = data)
+  mtX <- stats::terms(formula, data = data, rhs = 1)
   X <- model.matrix(mtX, mf, contrasts)
   if(length(formula)[2] < 2L) {
     mtZ <- NULL
     Z <- NULL
   } else {
-    mtZ <- delete.response(terms(formula, data = data, rhs = 2))
+    mtZ <- delete.response(stats::terms(formula, data = data, rhs = 2))
     Z <- model.matrix(mtZ, mf, contrasts)
   }
   ## weights and offset
