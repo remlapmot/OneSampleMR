@@ -77,7 +77,7 @@
 #' dat <- data.frame(Z, X, Y)
 #' tsrilogitfit <- tsri(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tsrilogitfit)
-#' @importFrom stats glm poisson Gamma binomial
+#' @importFrom stats poisson Gamma binomial
 #' @export
 tsri <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
@@ -176,16 +176,16 @@ tsri <- function(formula, instruments, data, subset, na.action,
       stage2 <- stats::lm(Y ~ X[,2] + res)
     }
     else if (link == "logadd") {
-      stage2 <- glm(Y ~ X[,2] + res, family = poisson(link = "log"))
+      stage2 <- stats::glm(Y ~ X[,2] + res, family = poisson(link = "log"))
     }
     else if (link == "logmult") {
       Ystar <- Y
       Ystar[Y == 0] <- 0.001
-      stage2 <- glm(Ystar ~ X[,2] + res, family = Gamma(link = "log"),
+      stage2 <- stats::glm(Ystar ~ X[,2] + res, family = Gamma(link = "log"),
                     control = list(maxit = 1E5))
     }
     else if (link == "logit") {
-      stage2 <- glm(Y ~ X[,2] + res, family = binomial(link = "logit"))
+      stage2 <- stats::glm(Y ~ X[,2] + res, family = binomial(link = "logit"))
     }
     t0 <- c(t0, coef(stage2))
 
