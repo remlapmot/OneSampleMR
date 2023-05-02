@@ -116,7 +116,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     mtZ <- NULL
     Z <- NULL
   } else {
-    mtZ <- delete.response(stats::terms(formula, data = data, rhs = 2))
+    mtZ <- stats::delete.response(stats::terms(formula, data = data, rhs = 2))
     Z <- stats::model.matrix(mtZ, mf, contrasts)
   }
   ## weights and offset
