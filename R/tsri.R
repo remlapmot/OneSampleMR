@@ -77,7 +77,7 @@
 #' dat <- data.frame(Z, X, Y)
 #' tsrilogitfit <- tsri(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tsrilogitfit)
-#' @importFrom stats residuals glm poisson Gamma binomial
+#' @importFrom stats glm poisson Gamma binomial
 #' @export
 tsri <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
@@ -168,7 +168,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   if (is.null(t0)) {
     stage1 <- stats::lm(X[,2] ~ -1 + Z)
     t0 <- coef(stage1)
-    res <- residuals(stage1)
+    res <- stats::residuals(stage1)
     if (tsri_env$anycovs) {
       res <- cbind(res, covariates)
     }
@@ -273,7 +273,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
       stage1 <- stats::lm(X ~ Z)
-      res <- as.matrix(residuals(stage1))
+      res <- as.matrix(stats::residuals(stage1))
       res <- cbind(X, res)
     }
 
@@ -344,7 +344,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
       stage1 <- stats::lm(X ~ Z)
-      res <- as.matrix(residuals(stage1))
+      res <- as.matrix(stats::residuals(stage1))
       res <- cbind(X, res)
     }
 
@@ -415,7 +415,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
       stage1 <- stats::lm(X ~ Z)
-      res <- as.matrix(residuals(stage1))
+      res <- as.matrix(stats::residuals(stage1))
       res <- cbind(X, res)
     }
 
@@ -486,7 +486,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
       stage1 <- stats::lm(X ~ Z)
-      res <- as.matrix(residuals(stage1))
+      res <- as.matrix(stats::residuals(stage1))
       res <- cbind(X, res)
     }
 
