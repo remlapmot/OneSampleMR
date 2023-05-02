@@ -64,7 +64,7 @@
 #' dat <- data.frame(Z, X, Y)
 #' tspslogitfit <- tsps(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tspslogitfit)
-#' @importFrom stats poisson Gamma binomial
+#' @importFrom stats Gamma binomial
 #' @export
 tsps <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
@@ -162,7 +162,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
       stage2 <- stats::lm(Y ~ xhat)
     }
     else if (link == "logadd") {
-      stage2 <- stats::glm(Y ~ xhat, family = poisson(link = "log"))
+      stage2 <- stats::glm(Y ~ xhat, family = stats::poisson(link = "log"))
     }
     else if (link == "logmult") {
       Ystar <- Y
