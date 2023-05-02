@@ -141,7 +141,6 @@
 #' fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
 #' summary(fit2)
 #' @export
-#' @importFrom stats vcov
 msmm <- function(formula, instruments, data, subset, na.action,
                  contrasts = NULL,
                  estmethod = c("gmm", "gmmalt", "tsls", "tslsalt"),
@@ -263,7 +262,7 @@ msmm_tsls <- function(x, y, z) {
   logcrr <- log(-1 / beta[2])
 
   # delta-method SE for log crr
-  estvar <- vcov(fit)
+  estvar <- stats::vcov(fit)
   logcrrse <- msm::deltamethod(~ log(-1 / x2), beta, estvar)
 
   # crr with 95% CI
@@ -299,7 +298,7 @@ msmm_tsls_alt <- function(x, y, z) {
   logcrr <- log(-1 * beta[2])
 
   # delta-method SE for log crr
-  estvar <- vcov(fit)
+  estvar <- stats::vcov(fit)
   logcrrse <- msm::deltamethod(~ log(-1 * x2), beta, estvar)
 
   # crr with 95% CI
