@@ -1,6 +1,6 @@
 # OneSampleMR 0.1.2.9000
 
-* Update **roxygen2** version used to generate documentation.
+* Update **roxygen2** version used to generate documentation
 
 # OneSampleMR 0.1.2
 
