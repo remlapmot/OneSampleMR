@@ -111,13 +111,13 @@ tsps <- function(formula, instruments, data, subset, na.action,
   Y <- stats::model.response(mf, "numeric")
   mt <- stats::terms(formula, data = data)
   mtX <- stats::terms(formula, data = data, rhs = 1)
-  X <- model.matrix(mtX, mf, contrasts)
+  X <- stats::model.matrix(mtX, mf, contrasts)
   if(length(formula)[2] < 2L) {
     mtZ <- NULL
     Z <- NULL
   } else {
     mtZ <- delete.response(stats::terms(formula, data = data, rhs = 2))
-    Z <- model.matrix(mtZ, mf, contrasts)
+    Z <- stats::model.matrix(mtZ, mf, contrasts)
   }
   ## weights and offset
   # weights <- model.weights(mf)
