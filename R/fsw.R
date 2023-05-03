@@ -4,7 +4,7 @@
 #' Sanderson and Windmeijer (2016) for each endogenous variable
 #' in the model.
 #' @param object An object of class `"ivreg"` containing the results of
-#' an IV model fitted by [`ivreg::ivreg`] for which to calculate
+#' an IV model fitted by [ivreg::ivreg()] for which to calculate
 #' the conditional F-statistics for each endogenous variable.
 #' @return An object of class `"fsw"` with the following elements:
 #' \describe{
