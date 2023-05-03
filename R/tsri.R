@@ -548,7 +548,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 #'
 #' @return `summary.tsri()` returns an object of class `"summary.tsri"`. A list with the following elements:
 #'
-#' \item{smry}{An object from a call to [`gmm::summary.gmm()`]}
+#' \item{smry}{An object from a call to [gmm::summary.gmm()]}
 #' \item{object}{The object of class `tsps` passed to the function.}
 #'
 #' @examples
