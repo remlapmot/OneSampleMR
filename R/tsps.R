@@ -226,7 +226,6 @@ tsps <- function(formula, instruments, data, subset, na.action,
     return(reslist)
   }
 
-  #' @importFrom stats lm fitted.values
   tspsIdentityMoments <- function(theta, x){
     # extract variables from x
     Y <- as.matrix(x[,"y"])
@@ -286,7 +285,6 @@ tsps <- function(formula, instruments, data, subset, na.action,
     return(moments)
   }
 
-  #' @importFrom stats lm fitted.values
   tspsLogaddMoments <- function(theta, x){
     # extract variables from x
     Y <- as.matrix(x[,"y"])
@@ -346,7 +344,6 @@ tsps <- function(formula, instruments, data, subset, na.action,
     return(moments)
   }
 
-  #' @importFrom stats lm fitted.values
   tspsLogmultMoments <- function(theta, x){
     # extract variables from x
     Y <- as.matrix(x[,"y"])
@@ -406,7 +403,6 @@ tsps <- function(formula, instruments, data, subset, na.action,
     return(moments)
   }
 
-  #' @importFrom stats lm fitted.values plogis
   tspsLogitMoments <- function(theta, x){
     # extract variables from x
     Y <- as.matrix(x[,"y"])
@@ -454,12 +450,12 @@ tsps <- function(formula, instruments, data, subset, na.action,
     }
 
     thetastart <- stage2start + 1
-    moments[,stage2start] <- (Y - plogis(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))
+    moments[,stage2start] <- (Y - stats::plogis(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))
 
     start3 <- stage2start + 1
     j <- 1
     for (i in start3:thetaend) {
-      moments[,i] <- (Y - plogis(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))*xhat[,j]
+      moments[,i] <- (Y - stats::plogis(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))*xhat[,j]
       j <- j + 1
     }
 
