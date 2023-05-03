@@ -501,13 +501,13 @@ tsri <- function(formula, instruments, data, subset, na.action,
     }
 
     if (tsri_env$anycovs) {
-      stage2express <- (Y - plogis(theta[stage2start] +
+      stage2express <- (Y - stats::plogis(theta[stage2start] +
                                      thetacausal*X +
                                      thetares * (X - as.matrix(linearpredictor)) +
                                      as.matrix(covariates) %*% as.matrix(thetacov)))
     }
     else {
-      stage2express <- (Y - plogis(theta[stage2start] +
+      stage2express <- (Y - stats::plogis(theta[stage2start] +
                                      thetacausal*X +
                                      thetares * (X - as.matrix(linearpredictor))))
     }
