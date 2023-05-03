@@ -808,7 +808,7 @@ test_that("Multiple exposure example with different variable names", {
   R <- Y
   dat <- data.frame(G1, G2, G3, E1, E2, R)
   fit24 <- msmm(Y ~ E1 + E2 | G1 + G2 + G3, data = dat)
-  expect_equal(log(fit24$crrci[1,1]), 0.08, tolerance = 0.02)
+  expect_equal(log(fit24$crrci[1,1]), 0.08, tolerance = 0.01)
 })
 
 # Example adjusting for a covariate ----
@@ -834,5 +834,7 @@ test_that("Adjusting for covariate", {
   R <- Y
   dat <- data.frame(G1, G2, G3, E1, E2, R, C)
   fit25 <- msmm(Y ~ E1 + C | G1 + G2 + G3 + C, data = dat)
+  expect_equal(log(fit25$crrci[1,1]), .173, tolerance = .01)
   fit26 <- msmm(Y ~ E1 + E2 + C | G1 + G2 + G3 + C, data = dat)
+  expect_equal(log(fit26$crrci[1,1]), .184, tolerance = .01)
 })
