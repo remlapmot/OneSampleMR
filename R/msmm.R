@@ -48,7 +48,7 @@
 #' @param ... further arguments passed to or from other methods.
 #' @return An object of class `"msmm"`. A list with the following items:
 #'
-#' \item{fit}{The object from either a [`gmm::gmm()`] or [`ivreg::ivreg()`] fit.}
+#' \item{fit}{The object from either a [gmm::gmm()] or [ivreg::ivreg()] fit.}
 #' \item{crrci}{The causal risk ratio/s and it corresponding 95% confidence
 #' interval limits.}
 #' \item{estmethod}{The specified `estmethod`.}
@@ -435,8 +435,8 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
 #'
 #' @return `summary.msmm()` returns an object of class `"summary.msmm"`. A list with the following elements:
 #'
-#' \item{smry}{An object from a call to either [`gmm::summary.gmm()`] or
-#' [`ivreg::summary.ivreg()`].}
+#' \item{smry}{An object from a call to either [gmm::summary.gmm()] or
+#' [ivreg::summary.ivreg()].}
 #' \item{object}{The object of class `msmm` passed to the function.}
 #'
 #' @examples
