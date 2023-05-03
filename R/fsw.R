@@ -129,13 +129,15 @@ fsw.ivreg <- function(object) {
 print.fsw <- function(x, digits = getOption("digits"), ...) {
   cat("\nModel sample size: ", x$n, "\n")
   cat("\nSanderson-Windmeijer conditional F-statistics for first stage model:\n")
-               cs.ind = 2L:3L,
-               tst.ind = 1L,
-               has.Pvalue = TRUE,
-               P.values = TRUE,
-               digits = digits,
-               ...)
   stats::printCoefmat(
+    x$fswres,
+    cs.ind = 2L:3L,
+    tst.ind = 1L,
+    has.Pvalue = TRUE,
+    P.values = TRUE,
+    digits = digits,
+    ...
+  )
   cat("\n")
   invisible(x)
 }
