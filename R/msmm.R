@@ -61,7 +61,7 @@
 #' If `estmethod` is `"tsls"` or `"tslsalt"`:
 #'
 #' \item{stage1}{An object containing the first stage regression from an
-#' [`stats::lm()`] fit.}
+#' [stats::lm()] fit.}
 #' @references
 #' Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
 #' New York, Cambridge University Press. ISBN:1107667275
