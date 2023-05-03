@@ -28,7 +28,7 @@
 #' @param na.action a function that indicates what should happen when the data
 #' contain \code{NA}s. The default is set by the \code{na.action} option.
 #' @param contrasts an optional list. See the \code{contrasts.arg} of
-#' \code{\link[stats:model.matrix]{model.matrix.default}}.
+#' [stats::model.matrix()].
 #' @param estmethod Estimation method, please use one of
 #'
 #'    * `"gmm"` GMM estimation of the MSMM (the default).
