@@ -35,7 +35,7 @@ used in fitting the model.}
 contain \code{NA}s. The default is set by the \code{na.action} option.}
 
 \item{contrasts}{an optional list. See the \code{contrasts.arg} of
-\code{\link[stats:model.matrix]{model.matrix.default}}.}
+\code{\link[stats:model.matrix]{stats::model.matrix()}}.}
 
 \item{estmethod}{Estimation method, please use one of
 \itemize{

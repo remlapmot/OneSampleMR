@@ -35,7 +35,7 @@ used in fitting the model.}
 contain \code{NA}s. The default is set by the \code{na.action} option.}
 
 \item{contrasts}{an optional list. See the \code{contrasts.arg} of
-\code{\link[stats:model.matrix]{model.matrix.default}}.}
+\code{\link[stats:model.matrix]{stats::model.matrix()}}.}
 
 \item{t0}{A vector of starting values for the gmm optimizer. This should
 have length equal to the number of exposures plus 1.}
