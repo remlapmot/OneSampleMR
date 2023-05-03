@@ -5,7 +5,7 @@ exposure regressed upon the instruments (and possibly any measured
 confounders). From this the first stage residuals are estimated.
 A second stage model is then fitted of the outcome regressed upon
 the exposure and first stage residuals (and possibly measured
-confounders)."><title>Two-stage residual inclusion (TSRI) estimators — tsri • OneSampleMR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Two-stage residual inclusion (TSRI) estimators — tsri"><meta property="og:description" content="An excellent description of TSRI estimators is given by Terza et al.
+confounders)."><title>Two-stage residual inclusion (TSRI) estimators — tsri • OneSampleMR</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet"><meta property="og:title" content="Two-stage residual inclusion (TSRI) estimators — tsri"><meta property="og:description" content="An excellent description of TSRI estimators is given by Terza et al.
 (2008). TSRI estimators proceed by fitting a first stage model of the
 exposure regressed upon the instruments (and possibly any measured
 confounders). From this the first stage residuals are estimated.
@@ -22,7 +22,7 @@ confounders)."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
     
     <a class="navbar-brand me-2" href="../index.html">OneSampleMR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,16 +91,7 @@ confounders).</p>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>formula</dt>
-<dd><p>formula specification(s) of the regression
-relationship and the instruments. Either <code>instruments</code> is missing and
-<code>formula</code> has three parts as in <code>y ~ x1 + x2 | z1 + z2 + z3</code>
-(recommended) or <code>formula</code> is <code>y ~ x1 + x2</code> and <code>instruments</code>
-is a one-sided formula <code>~ z1 + z2 + z3</code> (only for backward
-compatibility).</p></dd>
-
-
-<dt>instruments</dt>
+    <dl><dt>formula, instruments</dt>
 <dd><p>formula specification(s) of the regression
 relationship and the instruments. Either <code>instruments</code> is missing and
 <code>formula</code> has three parts as in <code>y ~ x1 + x2 | z1 + z2 + z3</code>
@@ -127,7 +118,7 @@ contain <code>NA</code>s. The default is set by the <code>na.action</code> optio
 
 <dt>contrasts</dt>
 <dd><p>an optional list. See the <code>contrasts.arg</code> of
-<code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix.default</a></code>.</p></dd>
+<code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">stats::model.matrix()</a></code>.</p></dd>
 
 
 <dt>t0</dt>
@@ -152,7 +143,7 @@ regression; <code>"logadd"</code> is log-additive and corresponds to Poisson / l
     
 
 <p>An object of class <code>"tsri"</code> with the following elements</p><dl><dt>fit</dt>
-<dd><p>the fitted object of class <code>"gmm"</code> from the call to <a href="https://rdrr.io/pkg/gmm/man/gmm.html" class="external-link">gmm::gmm</a>.</p></dd>
+<dd><p>the fitted object of class <code>"gmm"</code> from the call to <code><a href="https://rdrr.io/pkg/gmm/man/gmm.html" class="external-link">gmm::gmm()</a></code>.</p></dd>
 
 <dt>estci</dt>
 <dd><p>a matrix of the estimates with their corresponding confidence interval limits.</p></dd>
@@ -239,8 +230,8 @@ The Stata Journal, 2017, 17, 4, 916-938.
 <span class="r-out co"><span class="r-pr">#&gt;</span> res           4.4657e-01  3.4141e-01  1.3080e+00  1.9086e-01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> J-Test: degrees of freedom is 0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                 J-test                P-value             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Test E(g)=0:    4.36189434867539e-23  *******             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 J-test               P-value            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Test E(g)=0:    4.2942179555234e-23  *******            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> #############</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Information related to the numerical optimization</span>
@@ -273,7 +264,7 @@ The Stata Journal, 2017, 17, 4, 916-938.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer></div>
