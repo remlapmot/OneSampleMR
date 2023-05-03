@@ -51,7 +51,7 @@ regression; \code{"logadd"} is log-additive and corresponds to Poisson / log-bin
 \value{
 An object of class \code{"tsri"} with the following elements
 \describe{
-\item{fit}{the fitted object of class \code{"gmm"} from the call to \link[gmm:gmm]{gmm::gmm}.}
+\item{fit}{the fitted object of class \code{"gmm"} from the call to \code{\link[gmm:gmm]{gmm::gmm()}}.}
 \item{estci}{a matrix of the estimates with their corresponding confidence interval limits.}
 \item{link}{a character vector containing the specificed link function.}
 }
