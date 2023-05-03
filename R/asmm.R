@@ -1,7 +1,7 @@
 #' Additive structural mean model
 #'
 #' `asmm` is not a function. This helpfile is to note that the additive structural mean model (ASMM)
-#' is simply fit with a linear IV estimator, such as available in [`ivreg::ivreg()`].
+#' is simply fit with a linear IV estimator, such as available in [ivreg::ivreg()].
 #'
 #' For a binary outcome the ASMM estimates a causal risk difference.
 #'
