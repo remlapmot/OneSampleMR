@@ -250,7 +250,7 @@ msmm_tsls <- function(x, y, z) {
   exposure <- y * x
 
   # first stage
-  stage1 <- lm(exposure ~ z)
+  stage1 <- stats::lm(exposure ~ z)
 
   # tsls fit
   fit <- ivreg::ivreg(outcome ~ exposure | z)
@@ -286,7 +286,7 @@ msmm_tsls_alt <- function(x, y, z) {
   exposure <- y * (1 - x)
 
   # first stage
-  stage1 <- lm(exposure ~ z)
+  stage1 <- stats::lm(exposure ~ z)
 
   # tsls fit
   fit <- ivreg::ivreg(outcome ~ exposure | z)
