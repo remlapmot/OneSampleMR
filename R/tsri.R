@@ -246,7 +246,6 @@ tsri <- function(formula, instruments, data, subset, na.action,
     return(reslist)
   }
 
-  #' @importFrom stats lm residuals
   tsriIdentityMoments <- function(theta, x){
     # extract variables from x
     Y <- as.matrix(x[,"y"])
@@ -317,7 +316,6 @@ tsri <- function(formula, instruments, data, subset, na.action,
     return(moments)
   }
 
-  #' @importFrom stats lm residuals
   tsriLogaddMoments <- function(theta, x){
     # extract variables from x
     Y <- as.matrix(x[,"y"])
@@ -388,7 +386,6 @@ tsri <- function(formula, instruments, data, subset, na.action,
     return(moments)
   }
 
-  #' @importFrom stats lm residuals
   tsriLogmultMoments <- function(theta, x){
     # extract variables from x
     Y <- as.matrix(x[,"y"])
@@ -459,7 +456,6 @@ tsri <- function(formula, instruments, data, subset, na.action,
     return(moments)
   }
 
-  #' @importFrom stats lm residuals
   tsriLogitMoments <- function(theta, x){
     # extract variables from x
     Y <- as.matrix(x[,"y"])
