@@ -11,7 +11,7 @@ fsw(object)
 }
 \arguments{
 \item{object}{An object of class \code{"ivreg"} containing the results of
-an IV model fitted by \code{\link[ivreg:ivreg]{ivreg::ivreg}} for which to calculate
+an IV model fitted by \code{\link[ivreg:ivreg]{ivreg::ivreg()}} for which to calculate
 the conditional F-statistics for each endogenous variable.}
 }
 \value{
