@@ -1,0 +1,15 @@
+bibentry(
+  bibtype = "Manual",
+  key = "onesamplemr",
+  title = "{OneSampleMR: One Sample Mendelian Randomization and Instrumental Variable
+Analyses}",
+  author = c(
+    person("Tom", "Palmer"),
+    person("Wes", "Spiller"),
+    person("Eleanor", "Sanderson")
+  ),
+  year = "2023",
+  organization = "MRC Integrative Epidemiology Unit, University of Bristol",
+  address = "Bristol, UK",
+  url = "https://remlapmot.github.io/OneSampleMR/",
+)
