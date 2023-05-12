@@ -56,7 +56,7 @@ Code run using Stata version 16.1.
 use http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear
 
 // ssc install ivreg2
-ivreg2 lwage (educ exper = age kidslt6 kidsge6) if !missing(lwage,educ,exper,age,kidslt6,kidsge6), first
+ivreg2 lwage (educ exper = age kidslt6 kidsge6) if !missing(lwage, educ, exper, age, kidslt6, kidsge6), first
 ```
 
 ```
