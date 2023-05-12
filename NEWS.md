@@ -2,6 +2,8 @@
 
 * Add `CITATION` file
 
+* Add subsection about GNU Fortran required on macOS 
+
 # OneSampleMR 0.1.3
 
 * Update **roxygen2** version used to generate documentation
