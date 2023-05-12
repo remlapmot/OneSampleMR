@@ -177,9 +177,9 @@
 <span><span class="co">#&gt; attr(,"df1")</span></span>
 <span><span class="co">#&gt; [1] 2</span></span>
 <span><span class="co">#&gt; attr(,"quantiles")</span></span>
-<span><span class="co">#&gt;               2.5%      97.5%</span></span>
-<span><span class="co">#&gt; educ  -0.141382802 0.29643949</span></span>
-<span><span class="co">#&gt; exper -0.001954033 0.03574792</span></span>
+<span><span class="co">#&gt;                2.5%      97.5%</span></span>
+<span><span class="co">#&gt; educ  -1.161881e-01 0.25712642</span></span>
+<span><span class="co">#&gt; exper  3.337577e-05 0.03003957</span></span>
 <span><span class="co">#&gt; attr(,"quantiles")attr(,"q")</span></span>
 <span><span class="co">#&gt; [1] 0.025 0.975</span></span>
 <span><span class="co">#&gt; attr(,"quantiles")attr(,"samples")</span></span>
@@ -192,7 +192,7 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> http:<span class="co">//fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">// ssc install ivreg2</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>ivreg2 lwage (educ exper = age kidslt6 kidsge6) <span class="kw">if</span> !<span class="fu">missing</span>(lwage,educ,exper,age,kidslt6,kidsge6), first</span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>ivreg2 lwage (educ exper = age kidslt6 kidsge6) <span class="kw">if</span> !<span class="fu">missing</span>(lwage, educ, exper, age, kidslt6, kidsge6), first</span></code></pre></div>
 <pre><code>First-stage regressions
 -----------------------
 
