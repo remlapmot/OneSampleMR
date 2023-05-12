@@ -117,6 +117,18 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/update.packages.html" class="external-link">update.packages</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
+<h3 id="on-macos-the-gmm-package-requires-a-gnu-fortran-installation">On macOS the gmm package requires a GNU Fortran installation<a class="anchor" aria-label="anchor" href="#on-macos-the-gmm-package-requires-a-gnu-fortran-installation"></a>
+</h3>
+<ul>
+<li>The <strong>gmm</strong> package is a dependency package of OneSampleMR.</li>
+<li>Even if <strong>gmm</strong> is installed as a binary package when it is loaded it requires GNU Fortran to be installed.</li>
+<li>The Current version of GNU Fortran to install is documented <a href="https://mac.r-project.org/tools/" class="external-link">here</a> and available <a href="https://mac.r-project.org/tools/gfortran-12.2-universal.pkg" class="external-link">here</a>
+</li>
+<li>Note that the version of Fortran available through Homebrew will probably not work</li>
+</ul>
+<p>As far as I know this issue only exists on macOS.</p>
+</div>
+<div class="section level3">
 <h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
 </h3>
 <p>Install the development version of the package from GitHub using</p>
