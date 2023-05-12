@@ -19,15 +19,15 @@
 #' @examples
 #' require(ivreg)
 #' set.seed(12345)
-#' n <- 4000
-#' z1 <- rnorm(n)
-#' z2 <- rnorm(n)
-#' w1 <- rnorm(n)
-#' w2 <- rnorm(n)
-#' u <- rnorm(n)
-#' x1 <- z1 + z2 + 0.2*u + 0.1*w1 + rnorm(n)
-#' x2 <- z1 + 0.94*z2 - 0.3*u + 0.1*w2 + rnorm(n)
-#' y <- x1 + x2 + w1 + w2 + u
+#' n   <- 4000
+#' z1  <- rnorm(n)
+#' z2  <- rnorm(n)
+#' w1  <- rnorm(n)
+#' w2  <- rnorm(n)
+#' u   <- rnorm(n)
+#' x1  <- z1 + z2 + 0.2*u + 0.1*w1 + rnorm(n)
+#' x2  <- z1 + 0.94*z2 - 0.3*u + 0.1*w2 + rnorm(n)
+#' y   <- x1 + x2 + w1 + w2 + u
 #' dat <- data.frame(w1, w2, x1, x2, y, z1, z2)
 #' mod <- ivreg::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
 #' fsw(mod)

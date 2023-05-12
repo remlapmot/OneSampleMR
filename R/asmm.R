@@ -30,28 +30,28 @@
 #' # Single instrument example
 #' # Data generation from the example in the ivtools ivglm() helpfile
 #' set.seed(9)
-#' n <- 1000
+#' n    <- 1000
 #' psi0 <- 0.5
-#' Z <- rbinom(n, 1, 0.5)
-#' X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-#' m0 <- plogis(1 + 0.8*X - 0.39*Z)
-#' Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+#' Z    <- rbinom(n, 1, 0.5)
+#' X    <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+#' m0   <- plogis(1 + 0.8*X - 0.39*Z)
+#' Y    <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
 #' dat1 <- data.frame(Z, X, Y)
 #' fit1 <- ivreg::ivreg(Y ~ X | Z, data = dat1)
 #' summary(fit1)
 #'
 #' # Multiple instrument example
 #' set.seed(123456)
-#' n <- 1000
+#' n    <- 1000
 #' psi0 <- 0.5
-#' G1 <- rbinom(n, 2, 0.5)
-#' G2 <- rbinom(n, 2, 0.3)
-#' G3 <- rbinom(n, 2, 0.4)
-#' U <- runif(n)
-#' pX <- plogis(0.7*G1 + G2 - G3 + U)
-#' X <- rbinom(n, 1, pX)
-#' pY <- plogis(-2 + psi0*X + U)
-#' Y <- rbinom(n, 1, pY)
+#' G1   <- rbinom(n, 2, 0.5)
+#' G2   <- rbinom(n, 2, 0.3)
+#' G3   <- rbinom(n, 2, 0.4)
+#' U    <- runif(n)
+#' pX   <- plogis(0.7*G1 + G2 - G3 + U)
+#' X    <- rbinom(n, 1, pX)
+#' pY   <- plogis(-2 + psi0*X + U)
+#' Y    <- rbinom(n, 1, pY)
 #' dat2 <- data.frame(G1, G2, G3, X, Y)
 #' fit2 <- ivreg::ivreg(Y ~ X | G1 + G2 + G3, data = dat2)
 #' summary(fit2)
