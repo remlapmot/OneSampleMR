@@ -2,6 +2,8 @@
 
 * Add `CITATION` file
 
+* Tweak formatting of code in helpfile examples and vignettes
+
 * Add subsection about GNU Fortran required on macOS 
 
 # OneSampleMR 0.1.3
