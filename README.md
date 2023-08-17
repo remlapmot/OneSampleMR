@@ -56,7 +56,7 @@ To check for and install updates to the development version run the previous com
 remotes::update_packages()
 ```
 
-A binary of the development version of the package (for Windows, macOS, and Ubuntu Jammy Jossa) can be installed from r-universe using
+A binary of the development version of the package (for Windows, macOS, and Ubuntu Jammy Jellyfish) can be installed from r-universe using
 ``` r
 install.packages('OneSampleMR', repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-project.org'))
 ```
