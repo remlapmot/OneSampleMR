@@ -117,26 +117,29 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/update.packages.html" class="external-link">update.packages</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="on-macos-the-gmm-package-requires-a-gnu-fortran-installation">On macOS the gmm package requires a GNU Fortran installation<a class="anchor" aria-label="anchor" href="#on-macos-the-gmm-package-requires-a-gnu-fortran-installation"></a>
+<h3 id="issue-with-gmm-package-versions-16-5-16-6-17-on-macos">Issue with gmm package versions 1.6-5, 1.6-6, 1.7 on macOS<a class="anchor" aria-label="anchor" href="#issue-with-gmm-package-versions-16-5-16-6-17-on-macos"></a>
 </h3>
+<p>Using these old versions of the <strong>gmm</strong> package, a GNU Fortran installation was required even if the binary version of the package was installed.</p>
+<p>The fix is to update to the current version of <strong>gmm</strong>, which is version 1.8.</p>
+<p>If you cannot update your version of <strong>gmm</strong> then</p>
 <ul>
-<li>The <strong>gmm</strong> package is a dependency package of <strong>OneSampleMR</strong>.</li>
-<li>Even if <strong>gmm</strong> is installed as a binary package, when it is loaded a GNU Fortran installation is required.</li>
 <li>The current version of GNU Fortran to install is documented <a href="https://mac.r-project.org/tools/" class="external-link">here</a> and available <a href="https://mac.r-project.org/tools/gfortran-12.2-universal.pkg" class="external-link">here</a>
 </li>
 <li>Note that the version of Fortran available from Homebrew will probably not work</li>
 </ul>
-<p>As far as I know this issue only exists on macOS.</p>
 </div>
 <div class="section level3">
 <h3 id="development-version">Development version<a class="anchor" aria-label="anchor" href="#development-version"></a>
 </h3>
-<p>Install the development version of the package from GitHub using</p>
+<p>Install the development version of the package from source from GitHub using</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes") # uncomment on first run</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"remlapmot/OneSampleMR"</span><span class="op">)</span></span></code></pre></div>
-<p>To check for and install updates to the development version run the previous command again or run</p>
+<p>or from r-universe using</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'OneSampleMR'</span>, repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'https://remlapmot.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>To check for and install updates to the development version run the previous command again or run</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">update_packages</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
