@@ -32,14 +32,16 @@ To check for updates run
 update.packages()
 ```
 
-### On macOS the gmm package requires a GNU Fortran installation
+### Issue with gmm package versions 1.6-5, 1.6-6, 1.7 on macOS
 
-* The **gmm** package is a dependency package of **OneSampleMR**.
-* Even if **gmm** is installed as a binary package, when it is loaded a GNU Fortran installation is required.
+Using these old versions of the **gmm** package, a GNU Fortran installation was required even if the binary version of the package was installed.
+
+The fix is to update to the current version of **gmm**, which is version 1.8.
+
+If you cannot update your version of **gmm** then
+
 * The current version of GNU Fortran to install is documented [here](https://mac.r-project.org/tools/) and available [here](https://mac.r-project.org/tools/gfortran-12.2-universal.pkg)
 * Note that the version of Fortran available from Homebrew will probably not work
-
-As far as I know this issue only exists on macOS.
 
 ### Development version
 
