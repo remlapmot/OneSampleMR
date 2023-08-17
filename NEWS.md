@@ -4,7 +4,7 @@
 
 * Tweak formatting of code in helpfile examples and vignettes
 
-* Add subsection about GNU Fortran required on macOS 
+* Add subsection to README about GNU Fortran requirement for old versions of the gmm package on macOS
 
 # OneSampleMR 0.1.3
 
