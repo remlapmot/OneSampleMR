@@ -22,4 +22,7 @@ html {
 @import url(https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/fira_code.css);
 
 /* Specify in CSS */
-code { font-family: 'Fira Code', monospace; }
+code { font-family: 'Fira Code', monospace;
+       font-variant-ligatures: none;
+       font-feature-settings: "liga" 0;
+}
