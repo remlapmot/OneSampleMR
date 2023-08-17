@@ -51,12 +51,16 @@ Install the development version of the package from source from GitHub using
 remotes::install_github("remlapmot/OneSampleMR")
 ```
 
-or from r-universe using
-``` r
-install.packages('OneSampleMR', repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-project.org'))
-```
-
 To check for and install updates to the development version run the previous command again or run
 ``` r
 remotes::update_packages()
+```
+
+A binary of the development version of the package (for Windows, macOS, and Ubuntu Jammy Jossa) can be installed from r-universe using
+``` r
+install.packages('OneSampleMR', repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-project.org'))
+```
+which can be updated using
+```r
+update.packages(repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-project.org'))
 ```
