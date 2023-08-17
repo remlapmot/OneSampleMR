@@ -45,10 +45,15 @@ If you cannot update your version of **gmm** then
 
 ### Development version
 
-Install the development version of the package from GitHub using
+Install the development version of the package from source from GitHub using
 ``` r
 # install.packages("remotes") # uncomment on first run
 remotes::install_github("remlapmot/OneSampleMR")
+```
+
+or from r-universe using
+``` r
+install.packages('OneSampleMR', repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 To check for and install updates to the development version run the previous command again or run
