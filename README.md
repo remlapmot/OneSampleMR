@@ -1,6 +1,6 @@
 # OneSampleMR
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/remlapmot/OneSampleMR/workflows/R-CMD-check/badge.svg)](https://github.com/remlapmot/OneSampleMR/actions?workflow=R-CMD-check)
+[![R-CMD-check](https://github.com/remlapmot/OneSampleMR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/remlapmot/OneSampleMR/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/OneSampleMR)](https://cran.r-project.org/package=OneSampleMR)
 [![RStudio_CRAN_mirror_downloads_badge](http://cranlogs.r-pkg.org/badges/grand-total/OneSampleMR?color=blue)](https://CRAN.R-project.org/package=OneSampleMR)
 [![Codecov test coverage](https://codecov.io/gh/remlapmot/OneSampleMR/branch/main/graph/badge.svg)](https://app.codecov.io/gh/remlapmot/OneSampleMR?branch=main)
