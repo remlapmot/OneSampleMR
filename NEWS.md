@@ -6,6 +6,8 @@
 
 * Add subsection to README about GNU Fortran requirement for old versions of the gmm package on macOS
 
+* Bumped the minimum required version of R to be 4.1.0. This is because of the same requirement in pbkrtest, which is a dependency of car which is a dependency of ivreg
+
 # OneSampleMR 0.1.3
 
 * Update **roxygen2** version used to generate documentation
