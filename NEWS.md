@@ -8,6 +8,8 @@
 
 * Bumped the minimum required version of R to be 4.1.0. This is because of the same requirement in pbkrtest, which is a dependency of car which is a dependency of ivreg
 
+* Bumped version of roxygen2 used to create the package documentation
+
 # OneSampleMR 0.1.3
 
 * Update **roxygen2** version used to generate documentation
