@@ -2,33 +2,29 @@
 % Please edit documentation in R/onesamplemr-package.R
 \docType{package}
 \name{OneSampleMR-package}
-\alias{OneSampleMR-package}
-\alias{onesamplemr}
 \alias{OneSampleMR}
-\title{OneSampleMR: Useful functions for one-sample Mendelian randomization
-and instrumental variables analyses}
+\alias{OneSampleMR-package}
+\title{OneSampleMR: One Sample Mendelian Randomization and Instrumental Variable Analyses}
 \description{
-Some useful functions for one-sample Mendelian randomization
-and instrumental variables analyses.
+Useful functions for one-sample (individual level data) Mendelian randomization and instrumental variable analyses. The package includes implementations of; the Sanderson and Windmeijer (2016) \doi{10.1016/j.jeconom.2015.06.004} conditional F-statistic, the multiplicative structural mean model Hernán and Robins (2006) \doi{10.1097/01.ede.0000222409.00878.37}, and two-stage predictor substitution and two-stage residual inclusion estimators explained by Terza et al. (2008) \doi{10.1016/j.jhealeco.2007.09.009}.
 }
-\details{
-More details of these estimators can be found in the papers cited in the
-helpfiles and more generally in Palmer et al. (2011).
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/remlapmot/OneSampleMR}
+  \item \url{https://remlapmot.github.io/OneSampleMR/}
+  \item Report bugs at \url{https://github.com/remlapmot/OneSampleMR/issues/}
+}
 
-The two-stage predictor substitution, two-stage residual inclusion,
-and structural mean model estimators are estimated using the generalised
-method of moments estimation as per Clarke et al. (2015).
 }
-\references{
-Clarke PS, Palmer TM, Windmeijer F. Estimating structural
-mean models with multiple instrumental variables using the
-Generalised Method of Moments. Statistical Science, 2015, 30, 1,
-96-117. \doi{10.1214/14-STS503}
+\author{
+\strong{Maintainer}: Tom Palmer \email{remlapmot@hotmail.com} (\href{https://orcid.org/0000-0003-4655-4511}{ORCID})
 
-Palmer TM, Sterne JAC, Harbord RM, Lawlor DA, Sheehan NA, Meng S,
-Granell R, Davey Smith G, Didelez V.
-Instrumental variable estimation of causal risk ratios and causal odds ratios
-in Mendelian randomization analyses.
-American Journal of Epidemiology, 2011, 173, 12, 1392-1403.
-\doi{10.1093/aje/kwr026}
+Authors:
+\itemize{
+  \item Wes Spiller \email{wes.spiller@bristol.ac.uk} (\href{https://orcid.org/0000-0002-8169-5531}{ORCID})
+  \item Eleanor Sanderson \email{eleanor.sanderson@bristol.ac.uk} (\href{https://orcid.org/0000-0001-5188-5775}{ORCID})
 }
+
+}
+\keyword{internal}
