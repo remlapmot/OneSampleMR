@@ -7,7 +7,7 @@ on:
     branches: [main, master]
   workflow_dispatch:
   schedule:
-    - cron: '37 7 * * TUE' # run at 7:37am UTC on Tuesdays
+    - cron: "37 7 * * TUE" # run at 7:37am UTC on Tuesdays
 
 name: R-CMD-check
 
@@ -21,12 +21,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release'}
-          - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: 'oldrel-1'}
-          - {os: ubuntu-latest,   r: 'oldrel-2'}
+          - { os: macOS-latest, r: "release" }
+          - { os: windows-latest, r: "release" }
+          - { os: ubuntu-latest, r: "devel", http-user-agent: "release" }
+          - { os: ubuntu-latest, r: "release" }
+          - { os: ubuntu-latest, r: "oldrel-1" }
+          - { os: ubuntu-latest, r: "oldrel-2" }
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
