@@ -86,7 +86,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://haven.tidyverse.org" class="external-link">haven</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://zeileis.github.io/ivreg/" class="external-link">ivreg</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/MatthieuStigler/lfe" class="external-link">lfe</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-econometrics/lfe" class="external-link">lfe</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: Matrix</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/remlapmot/OneSampleMR" class="external-link">OneSampleMR</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
@@ -177,9 +177,9 @@
 <span><span class="co">#&gt; attr(,"df1")</span></span>
 <span><span class="co">#&gt; [1] 2</span></span>
 <span><span class="co">#&gt; attr(,"quantiles")</span></span>
-<span><span class="co">#&gt;               2.5%     97.5%</span></span>
-<span><span class="co">#&gt; educ  -0.111583757 0.2880001</span></span>
-<span><span class="co">#&gt; exper  0.002533608 0.0325353</span></span>
+<span><span class="co">#&gt;                2.5%     97.5%</span></span>
+<span><span class="co">#&gt; educ  -0.2639190039 0.2669803</span></span>
+<span><span class="co">#&gt; exper  0.0003963827 0.0319857</span></span>
 <span><span class="co">#&gt; attr(,"quantiles")attr(,"q")</span></span>
 <span><span class="co">#&gt; [1] 0.025 0.975</span></span>
 <span><span class="co">#&gt; attr(,"quantiles")attr(,"samples")</span></span>
@@ -189,10 +189,10 @@
 <h2 id="comparison-with-output-from-ivreg2">Comparison with output from ivreg2<a class="anchor" aria-label="anchor" href="#comparison-with-output-from-ivreg2"></a>
 </h2>
 <p>Code run using Stata version 16.1.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> http:<span class="co">//fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">// ssc install ivreg2</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>ivreg2 lwage (educ exper = age kidslt6 kidsge6) <span class="kw">if</span> !<span class="fu">missing</span>(lwage, educ, exper, age, kidslt6, kidsge6), first</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="kw">use</span> http:<span class="co">//fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">// ssc install ivreg2</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>ivreg2 lwage (educ exper = age kidslt6 kidsge6) <span class="kw">if</span> !<span class="fu">missing</span>(lwage, educ, exper, age, kidslt6, kidsge6), first</span></code></pre></div>
 <pre><code>First-stage regressions
 -----------------------
 
