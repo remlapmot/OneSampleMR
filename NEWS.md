@@ -4,11 +4,12 @@
 
 * Tweak formatting of code in helpfile examples and vignettes
 
-* Add subsection to README about GNU Fortran requirement for old versions of the gmm package on macOS
+* Add subsection to README about GNU Fortran requirement for old versions of the **gmm** package on macOS
 
-* Bumped the minimum required version of R to be 4.1.0. This is because of the same requirement in pbkrtest, which is a dependency of car which is a dependency of ivreg
+* Bumped the minimum required version of R to be 4.1.0. This is because of the same requirement in **pbkrtest**, which is a dependency of **car** which is a dependency of **ivreg**
 
-* Bumped version of roxygen2 used to create the package documentation
+* Bumped version of **roxygen2** used to create the package documentation
+
 * Made use of ellipsis `...` in several function definitions safer using the **ellipsis** package
 
 # OneSampleMR 0.1.3
