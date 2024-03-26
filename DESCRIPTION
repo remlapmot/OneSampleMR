@@ -25,6 +25,7 @@ BugReports: https://github.com/remlapmot/OneSampleMR/issues/
 Depends: 
     R (>= 4.1.0)
 Imports:
+    ellipsis,
     Formula,
     gmm,
     ivreg,
