@@ -1,3 +1,4 @@
+#' @aliases onesamplemr OneSampleMR
 "_PACKAGE"
 
 ## usethis namespace: start
