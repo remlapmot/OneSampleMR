@@ -1,4 +1,5 @@
 # OneSampleMR: Useful functions for one-sample Mendelian randomization and instrumental variable analyses
+
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/remlapmot/OneSampleMR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/remlapmot/OneSampleMR/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/OneSampleMR)](https://cran.r-project.org/package=OneSampleMR)
@@ -23,11 +24,13 @@ analyses, including implementations of:
 ### Released version
 
 Install the package from CRAN using
+
 ``` r
 install.packages("OneSampleMR")
 ```
 
 To check for updates run
+
 ``` r
 update.packages()
 ```
@@ -46,21 +49,26 @@ If you cannot update your version of **gmm** then
 ### Development version
 
 Install the development version of the package from source from GitHub using
+
 ``` r
 # install.packages("remotes") # uncomment on first run
 remotes::install_github("remlapmot/OneSampleMR")
 ```
 
 To check for and install updates to the development version run the previous command again or run
+
 ``` r
 remotes::update_packages()
 ```
 
 A binary of the development version of the package (for Windows, macOS, and Ubuntu Jammy Jellyfish) can be installed from r-universe using
+
 ``` r
 install.packages('OneSampleMR', repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-project.org'))
 ```
+
 which can be updated using
+
 ```r
 update.packages(repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-project.org'))
 ```
