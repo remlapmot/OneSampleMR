@@ -1,4 +1,4 @@
-# OneSampleMR
+# OneSampleMR: Useful functions for one-sample Mendelian randomization and instrumental variable analyses
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/remlapmot/OneSampleMR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/remlapmot/OneSampleMR/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/OneSampleMR)](https://cran.r-project.org/package=OneSampleMR)
