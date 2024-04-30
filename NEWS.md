@@ -12,6 +12,8 @@
 
 * Made use of ellipsis `...` in several function definitions safer using the **ellipsis** package
 
+* Bumped required version of R to 4.3.0 because the **Matrix** package, which is a dependency of **ivreg** now requires R 4.4.0. CRAN retain a binary version of **Matrix** 1.6-5 for the previous release of R, and so the minimum version of R can be 4.3.0 rather than 4.4.0.
+
 # OneSampleMR 0.1.3
 
 * Update **roxygen2** version used to generate documentation
