@@ -1,4 +1,4 @@
-# OneSampleMR 0.1.3.9000
+# OneSampleMR 0.1.4
 
 * Add `CITATION` file
 
