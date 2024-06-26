@@ -25,12 +25,12 @@ BugReports: https://github.com/remlapmot/OneSampleMR/issues/
 Depends:
     R (>= 4.3)
 Imports:
-    ellipsis,
     Formula,
     gmm,
     ivreg,
     lmtest,
-    msm
+    msm,
+    rlang (>= 1.0.0)
 Suggests:
     haven,
     knitr,
