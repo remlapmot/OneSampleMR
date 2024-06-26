@@ -1,4 +1,4 @@
-# OneSampleMR 0.1.4.9000
+# OneSampleMR 0.1.5
 
 * Replaced dots checking with rlang instead of the ellipsis package (thanks @olivroy).
 
