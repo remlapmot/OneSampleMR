@@ -87,7 +87,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   # weights, offset,
   # model = TRUE, y = TRUE, x = FALSE,
 
-  ellipsis::check_dots_used()
+  rlang::check_dots_used()
 
   # code from beginning for ivreg::ivreg()
   ## set up model.frame() call
