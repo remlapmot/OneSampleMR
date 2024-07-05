@@ -306,7 +306,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
     thetastart <- stage2start + 1
 
-    moments[,stage2start] <- stage2express
+    moments[, stage2start] <- stage2express
 
     start3 <- stage2start + 1
     j <- 1
@@ -376,7 +376,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
     thetastart <- stage2start + 1
 
-    moments[,stage2start] <- stage2express
+    moments[, stage2start] <- stage2express
 
     start3 <- stage2start + 1
     j <- 1
@@ -446,7 +446,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
     thetastart <- stage2start + 1
 
-    moments[,stage2start] <- stage2express
+    moments[, stage2start] <- stage2express
 
     start3 <- stage2start + 1
     j <- 1
@@ -516,7 +516,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
     thetastart <- stage2start + 1
 
-    moments[,stage2start] <- stage2express
+    moments[, stage2start] <- stage2express
 
     start3 <- stage2start + 1
     j <- 1
