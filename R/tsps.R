@@ -148,7 +148,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
   # check y binary
-  if (link == "logit" & !all(Y %in% 0:1))
+  if (link == "logit" && !all(Y %in% 0:1))
     stop("With the logit link, the outcome must be binary, i.e. take values 0 or 1.")
 
   # initial values
