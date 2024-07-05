@@ -418,7 +418,7 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
   }
   rownames(crrci) <- xnames
   colnames(crrci)[1] <- "CRR"
-  ey0ci <- expests[1,]
+  ey0ci <- expests[1, ]
 
   reslist <- list(fit = fit,
                   crrci = crrci,
