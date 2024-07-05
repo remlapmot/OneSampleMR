@@ -115,7 +115,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   if(has_dot(formula)) {
     f1 <- formula(formula, rhs = 1L)
     f2 <- formula(formula, lhs = 0L, rhs = 2L)
-    if(!has_dot(f1) & has_dot(f2)) formula <- Formula::as.Formula(f1,
+    if (!has_dot(f1) && has_dot(f2)) formula <- Formula::as.Formula(f1,
                                                                   stats::update(formula(formula, lhs = 0L, rhs = 1L), f2))
   }
   ## call model.frame()
