@@ -155,31 +155,31 @@ msmm <- function(formula, instruments, data, subset, na.action,
   # code from beginning for ivreg::ivreg()
   ## set up model.frame() call
   cl <- match.call()
-  if(missing(data)) data <- environment(formula)
+  if (missing(data)) data <- environment(formula)
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data", "subset", "na.action", "weights", "offset"), names(mf), 0)
   mf <- mf[c(1, m)]
   mf$drop.unused.levels <- TRUE
   ## handle instruments for backward compatibility
-  if(!missing(instruments)) {
+  if (!missing(instruments)) {
     formula <- Formula::as.Formula(formula, instruments)
     cl$instruments <- NULL
     cl$formula <- formula(formula)
   } else {
     formula <- Formula::as.Formula(formula)
   }
-  if(length(formula)[2L] == 3L) formula <- Formula::as.Formula(
+  if (length(formula)[2L] == 3L) formula <- Formula::as.Formula(
     formula(formula, rhs = c(2L, 1L), collapse = TRUE),
     formula(formula, lhs = 0L, rhs = c(3L, 1L), collapse = TRUE)
   )
   stopifnot(length(formula)[1L] == 1L, length(formula)[2L] %in% 1L:2L)
   ## try to handle dots in formula
   has_dot <- function(formula) inherits(try(stats::terms(formula), silent = TRUE), "try-error")
-  if(has_dot(formula)) {
+  if (has_dot(formula)) {
     f1 <- formula(formula, rhs = 1L)
     f2 <- formula(formula, lhs = 0L, rhs = 2L)
     if (!has_dot(f1) && has_dot(f2)) formula <- Formula::as.Formula(f1,
-                                                                  stats::update(formula(formula, lhs = 0L, rhs = 1L), f2))
+                                                                    stats::update(formula(formula, lhs = 0L, rhs = 1L), f2))
   }
   ## call model.frame()
   mf$formula <- formula
@@ -190,7 +190,7 @@ msmm <- function(formula, instruments, data, subset, na.action,
   mt <- stats::terms(formula, data = data)
   mtX <- stats::terms(formula, data = data, rhs = 1)
   X <- stats::model.matrix(mtX, mf, contrasts)
-  if(length(formula)[2] < 2L) {
+  if (length(formula)[2] < 2L) {
     mtZ <- NULL
     Z <- NULL
   } else {
@@ -234,13 +234,13 @@ msmm <- function(formula, instruments, data, subset, na.action,
     stop("With tsls and tslsalt, only 1 exposure variable is allowed.")
 
   if (estmethod == "gmm")
-    output = msmm_gmm(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0)
+    output <- msmm_gmm(x = X[, -1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0)
   if (estmethod == "gmmalt")
-    output = msmm_gmm_alt(x = X[,-1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0)
+    output <- msmm_gmm_alt(x = X[, -1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0)
   if (estmethod == "tsls")
-    output = msmm_tsls(x = X[,-1], y = Y, z = Z[,-1])
+    output <- msmm_tsls(x = X[, -1], y = Y, z = Z[,-1])
   if (estmethod == "tslsalt")
-    output = msmm_tsls_alt(x = X[,-1], y = Y, z = Z[,-1])
+    output <- msmm_tsls_alt(x = X[, -1], y = Y, z = Z[,-1])
 
   class(output) <- append("msmm", class(output))
   output
@@ -268,10 +268,10 @@ msmm_tsls <- function(x, y, z) {
   logcrrse <- msm::deltamethod(~ log(-1 / x2), beta, estvar)
 
   # crr with 95% CI
-  crrci <- unname(c(-1/beta[2], exp(logcrr - 1.96*logcrrse), exp(logcrr + 1.96*logcrrse)))
+  crrci <- unname(c(-1 / beta[2], exp(logcrr - 1.96 * logcrrse), exp(logcrr + 1.96 * logcrrse)))
 
   # baseline risk
-  ey0ci <- cbind(stats::coef(fit), stats::confint(fit))[1,]
+  ey0ci <- cbind(stats::coef(fit), stats::confint(fit))[1, ]
 
   # list of results to return
   reslist <- list(stage1 = stage1,
@@ -304,7 +304,7 @@ msmm_tsls_alt <- function(x, y, z) {
   logcrrse <- msm::deltamethod(~ log(-1 * x2), beta, estvar)
 
   # crr with 95% CI
-  crrci <- unname(c(-1*beta[2], exp(logcrr - 1.96*logcrrse), exp(logcrr + 1.96*logcrrse)))
+  crrci <- unname(c(-1 * beta[2], exp(logcrr - 1.96 * logcrrse), exp(logcrr + 1.96 * logcrrse)))
 
   # list of results to return
   reslist <- list(stage1 = stage1,
@@ -314,14 +314,14 @@ msmm_tsls_alt <- function(x, y, z) {
   return(reslist)
 }
 
-msmmMoments <- function(theta, x){
+msmmMoments <- function(theta, x) {
   # extract variables from x
-  Y <- as.matrix(x[,"y"])
+  Y <- as.matrix(x[, "y"])
   xcolstop <- length(theta)
-  X <- as.matrix(x[,2:xcolstop])
+  X <- as.matrix(x[, 2:xcolstop])
   zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
   zcolstop <- ncol(x)
-  Z <- as.matrix(x[,zcolstart:zcolstop])
+  Z <- as.matrix(x[, zcolstart:zcolstop])
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
 
@@ -329,15 +329,15 @@ msmmMoments <- function(theta, x){
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
-  moments[,1] <- (Y*exp(linearpredictor) - theta[1])
+  moments[, 1] <- (Y*exp(linearpredictor) - theta[1])
   for (i in 1:nZ) {
     j <- i + 1
-    moments[,j] <- (Y*exp(linearpredictor) - theta[1])*Z[,i]
+    moments[, j] <- (Y*exp(linearpredictor) - theta[1])*Z[, i]
   }
   return(moments)
 }
 
-msmm_gmm <- function(x, y, z, xnames, t0){
+msmm_gmm <- function(x, y, z, xnames, t0) {
 
   x <- as.matrix(x)
   dat = data.frame(y, x, z)

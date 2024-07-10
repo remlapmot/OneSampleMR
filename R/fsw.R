@@ -113,9 +113,9 @@ fsw.ivreg <- function(object) {
     fswp[i] <- stats::pf(fsw[i], nendog, wldtst$Res.Df[2L], lower.tail = FALSE)
   }
 
-  fswres = cbind(fsw, fswdf, fswresdf, fswp)
-  rownames(fswres) = namesendog
-  colnames(fswres) = c("F value","d.f.","Residual d.f.","Pr(>F)")
+  fswres <- cbind(fsw, fswdf, fswresdf, fswp)
+  rownames(fswres) <- namesendog
+  colnames(fswres) <- c("F value", "d.f.", "Residual d.f.", "Pr(>F)")
 
   output <- list(fswres = fswres,
                  namesendog = namesendog,

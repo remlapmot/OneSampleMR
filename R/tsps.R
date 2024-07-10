@@ -328,8 +328,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
     if (tsps_env$anycovs) {
       stage2linpred <- as.matrix(cbind(linearpredictor, covariates))
-    }
-    else {
+    } else {
       stage2linpred <- linearpredictor
     }
 
@@ -387,8 +386,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
     if (tsps_env$anycovs) {
       stage2linpred <- as.matrix(cbind(linearpredictor, covariates))
-    }
-    else {
+    } else {
       stage2linpred <- linearpredictor
     }
 
@@ -405,7 +403,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     return(moments)
   }
 
-  tspsLogitMoments <- function(theta, x){
+  tspsLogitMoments <- function(theta, x) {
     # extract variables from x
     Y <- as.matrix(x[,"y"])
     X <- x[, tsps_env$xnames]

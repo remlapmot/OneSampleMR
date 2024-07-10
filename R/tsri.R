@@ -98,21 +98,21 @@ tsri <- function(formula, instruments, data, subset, na.action,
   mf <- mf[c(1, m)]
   mf$drop.unused.levels <- TRUE
   ## handle instruments for backward compatibility
-  if(!missing(instruments)) {
+  if (!missing(instruments)) {
     formula <- Formula::as.Formula(formula, instruments)
     cl$instruments <- NULL
     cl$formula <- formula(formula)
   } else {
     formula <- Formula::as.Formula(formula)
   }
-  if(length(formula)[2L] == 3L) formula <- Formula::as.Formula(
+  if (length(formula)[2L] == 3L) formula <- Formula::as.Formula(
     formula(formula, rhs = c(2L, 1L), collapse = TRUE),
     formula(formula, lhs = 0L, rhs = c(3L, 1L), collapse = TRUE)
   )
   stopifnot(length(formula)[1L] == 1L, length(formula)[2L] %in% 1L:2L)
   ## try to handle dots in formula
   has_dot <- function(formula) inherits(try(stats::terms(formula), silent = TRUE), "try-error")
-  if(has_dot(formula)) {
+  if (has_dot(formula)) {
     f1 <- formula(formula, rhs = 1L)
     f2 <- formula(formula, lhs = 0L, rhs = 2L)
     if (!has_dot(f1) && has_dot(f2)) formula <- Formula::as.Formula(f1,
@@ -175,18 +175,15 @@ tsri <- function(formula, instruments, data, subset, na.action,
     }
     if (link == "identity") {
       stage2 <- stats::lm(Y ~ X[,2] + res)
-    }
-    else if (link == "logadd") {
+    } else if (link == "logadd") {
       stage2 <- stats::glm(Y ~ X[,2] + res, family = stats::poisson(link = "log"))
-    }
-    else if (link == "logmult") {
+    } else if (link == "logmult") {
       Ystar <- Y
       Ystar[Y == 0] <- 0.001
-      stage2 <- stats::glm(Ystar ~ X[,2] + res, family = stats::Gamma(link = "log"),
+      stage2 <- stats::glm(Ystar ~ X[, 2] + res, family = stats::Gamma(link = "log"),
                     control = list(maxit = 1E5))
-    }
-    else if (link == "logit") {
-      stage2 <- stats::glm(Y ~ X[,2] + res, family = stats::binomial(link = "logit"))
+    } else if (link == "logit") {
+      stage2 <- stats::glm(Y ~ X[, 2] + res, family = stats::binomial(link = "logit"))
     }
     t0 <- c(t0, stats::coef(stage2))
 
@@ -216,7 +213,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
       x <- x[,!(colnames(x) %in% tsri_env$covariatenames), drop = FALSE]
     }
 
-    dat = data.frame(y, x, z)
+    dat <- data.frame(y, x, z)
 
     if (is.null(t0))
       t0 <- rep(0, ncol(x) + 1)
@@ -224,15 +221,12 @@ tsri <- function(formula, instruments, data, subset, na.action,
     # gmm fit
     if (link == "identity") {
       fit <- gmm::gmm(tsriIdentityMoments, x = dat, t0 = t0, vcov = "iid")
-    }
-    else if (link == "logadd") {
+    } else if (link == "logadd") {
       fit <- gmm::gmm(tsriLogaddMoments, x = dat, t0 = t0, vcov = "iid")
-    }
-    else if (link == "logmult") {
+    } else if (link == "logmult") {
       fit <- gmm::gmm(tsriLogmultMoments, x = dat, t0 = t0, vcov = "iid",
                       itermax = 1E7)
-    }
-    else if (link == "logit") {
+    } else if (link == "logit") {
       fit <- gmm::gmm(tsriLogitMoments, x = dat, t0 = t0, vcov = "iid")
     }
 
