@@ -20,7 +20,8 @@ Description: Useful functions for one-sample (individual level data)
     Terza et al. (2008) <doi:10.1016/j.jhealeco.2007.09.009>.
 License: GPL (>= 3)
 URL: https://github.com/remlapmot/OneSampleMR,
-    https://remlapmot.github.io/OneSampleMR/
+    https://remlapmot.github.io/OneSampleMR/,
+    https://mrcieu.r-universe.dev/OneSampleMR
 BugReports: https://github.com/remlapmot/OneSampleMR/issues/
 Depends:
     R (>= 4.3)
