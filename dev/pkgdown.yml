@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   compare-smm-fits: compare-smm-fits.html
   f-statistic-comparison: f-statistic-comparison.html
-last_built: 2024-08-22T08:45Z
+last_built: 2024-08-22T09:33Z
 urls:
   reference: https://remlapmot.github.io/OneSampleMR/reference
   article: https://remlapmot.github.io/OneSampleMR/articles
