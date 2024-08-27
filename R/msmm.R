@@ -234,13 +234,13 @@ msmm <- function(formula, instruments, data, subset, na.action,
     stop("With tsls and tslsalt, only 1 exposure variable is allowed.")
 
   if (estmethod == "gmm")
-    output <- msmm_gmm(x = X[, -1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0)
+    output <- msmm_gmm(x = X[, -1], y = Y, z = Z[, -1], xnames = xnames, t0 = t0)
   if (estmethod == "gmmalt")
-    output <- msmm_gmm_alt(x = X[, -1], y = Y, z = Z[,-1], xnames = xnames, t0 = t0)
+    output <- msmm_gmm_alt(x = X[, -1], y = Y, z = Z[, -1], xnames = xnames, t0 = t0)
   if (estmethod == "tsls")
-    output <- msmm_tsls(x = X[, -1], y = Y, z = Z[,-1])
+    output <- msmm_tsls(x = X[, -1], y = Y, z = Z[, -1])
   if (estmethod == "tslsalt")
-    output <- msmm_tsls_alt(x = X[, -1], y = Y, z = Z[,-1])
+    output <- msmm_tsls_alt(x = X[, -1], y = Y, z = Z[, -1])
 
   class(output) <- append("msmm", class(output))
   output
@@ -340,7 +340,7 @@ msmmMoments <- function(theta, x) {
 msmm_gmm <- function(x, y, z, xnames, t0) {
 
   x <- as.matrix(x)
-  dat = data.frame(y, x, z)
+  dat <- data.frame(y, x, z)
 
   if (is.null(t0))
     t0 <- rep(0, ncol(x) + 1)
@@ -352,7 +352,7 @@ msmm_gmm <- function(x, y, z, xnames, t0) {
     warning("The GMM fit has not converged, perhaps try different initial parameter values")
 
   # causal risk ratio
-  crrci <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[-1,])
+  crrci <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[-1, ])
   if (ncol(x) >= 2) {
     crrci <- as.matrix(crrci)
   } else {
@@ -362,7 +362,7 @@ msmm_gmm <- function(x, y, z, xnames, t0) {
   colnames(crrci)[1] <- "CRR"
 
   # E[Y(0)]
-  ey0ci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[1,]
+  ey0ci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[1, ]
 
   reslist <- list(fit = fit,
                   crrci = crrci,
@@ -371,14 +371,14 @@ msmm_gmm <- function(x, y, z, xnames, t0) {
   return(reslist)
 }
 
-msmmAltMoments <- function(theta, x){
+msmmAltMoments <- function(theta, x) {
   # extract variables from x
-  Y <- as.matrix(x[,"y"])
+  Y <- as.matrix(x[, "y"])
   xcolstop <- length(theta)
-  X <- cbind(rep(1, nrow(x)), as.matrix(x[,2:xcolstop]))
+  X <- cbind(rep(1, nrow(x)), as.matrix(x[, 2:xcolstop]))
   zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
   zcolstop <- ncol(x)
-  Z <- as.matrix(x[,zcolstart:zcolstop])
+  Z <- as.matrix(x[, zcolstart:zcolstop])
   nZ <- zcolstop - zcolstart + 1
   nZp1 <- nZ + 1
 
@@ -386,10 +386,10 @@ msmmAltMoments <- function(theta, x){
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
-  moments[,1] <- (Y*exp(linearpredictor) - 1)
+  moments[, 1] <- (Y*exp(linearpredictor) - 1)
   for (i in 1:nZ) {
     j <- i + 1
-    moments[,j] <- (Y*exp(linearpredictor) - 1)*Z[,i]
+    moments[, j] <- (Y*exp(linearpredictor) - 1)*Z[, i]
   }
   return(moments)
 }
@@ -397,7 +397,7 @@ msmmAltMoments <- function(theta, x){
 msmm_gmm_alt <- function(x, y, z, xnames, t0) {
 
   x <- as.matrix(x)
-  dat = data.frame(y, x, z)
+  dat <- data.frame(y, x, z)
 
   if (is.null(t0))
     t0 <- rep(0, ncol(x) + 1)
@@ -410,7 +410,7 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
 
   # exponentiate estimates
   expests <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test))
-  crrci <- as.matrix(expests[-1,])
+  crrci <- as.matrix(expests[-1, ])
   if (ncol(x) >= 2) {
     crrci <- as.matrix(crrci)
   } else {
