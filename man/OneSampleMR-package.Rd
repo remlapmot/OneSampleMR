@@ -14,6 +14,7 @@ Useful links:
 \itemize{
   \item \url{https://github.com/remlapmot/OneSampleMR}
   \item \url{https://remlapmot.github.io/OneSampleMR/}
+  \item \url{https://mrcieu.r-universe.dev/OneSampleMR}
   \item Report bugs at \url{https://github.com/remlapmot/OneSampleMR/issues/}
 }
 
