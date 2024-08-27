@@ -593,9 +593,9 @@ test_that("Single instrument example", {
   n <- 1000
   psi0 <- 0.5
   Z <- rbinom(n, 1, 0.5)
-  X <- rbinom(n, 1, 0.7*Z + 0.2 * (1 - Z))
-  m0 <- plogis(1 + 0.8*X - 0.39*Z)
-  Y <- rbinom(n, 1, plogis(psi0*X + log(m0 / (1 - m0))))
+  X <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+  m0 <- plogis(1 + 0.8 * X - 0.39 * Z)
+  Y <- rbinom(n, 1, plogis(psi0 * X + log(m0 / (1 - m0))))
   dat <- data.frame(Z, X, Y)
 
   # ivtools for comparison fit
@@ -682,9 +682,9 @@ test_that("Multiple instrument example", {
   G2 <- rbinom(n, 2, 0.3)
   G3 <- rbinom(n, 2, 0.4)
   U <- runif(n)
-  pX <- plogis(0.7*G1 + G2 - G3 + U)
+  pX <- plogis(0.7 * G1 + G2 - G3 + U)
   X <- rbinom(n, 1, pX)
-  pY <- plogis(-2 + psi0*X + U)
+  pY <- plogis(-2 + psi0 * X + U)
   Y <- rbinom(n, 1, pY)
   dat <- data.frame(G1, G2, G3, X, Y)
 
@@ -765,11 +765,11 @@ test_that("Multiple exposure example", {
   G2 <- rbinom(n, 2, 0.3)
   G3 <- rbinom(n, 2, 0.4)
   U <- runif(n)
-  pX1 <- plogis(0.7*G1 + G2 - G3 + U)
+  pX1 <- plogis(0.7 * G1 + G2 - G3 + U)
   X1 <- rbinom(n, 1, pX1)
-  pX2 <- plogis(-1 + 0.2*G1 - 0.2*G2 + 0.4*G3 + U)
+  pX2 <- plogis(-1 + 0.2 * G1 - 0.2 * G2 + 0.4*G3 + U)
   X2 <- rbinom(n, 1, pX2)
-  pY <- plogis(-2 + psi0*X1 + psi1*X2 + U)
+  pY <- plogis(-2 + psi0 * X1 + psi1 * X2 + U)
   Y <- rbinom(n, 1, pY)
   dat <- data.frame(G1, G2, G3, X1, X2, Y)
 
@@ -797,11 +797,11 @@ test_that("Multiple exposure example with different variable names", {
   G2 <- rbinom(n, 2, 0.3)
   G3 <- rbinom(n, 2, 0.4)
   U <- runif(n)
-  pX1 <- plogis(0.7*G1 + G2 - G3 + U)
+  pX1 <- plogis(0.7 * G1 + G2 - G3 + U)
   X1 <- rbinom(n, 1, pX1)
-  pX2 <- plogis(-1 + 0.2*G1 - 0.2*G2 + 0.4*G3 + U)
+  pX2 <- plogis(-1 + 0.2 * G1 - 0.2 * G2 + 0.4 * G3 + U)
   X2 <- rbinom(n, 1, pX2)
-  pY <- plogis(-2 + psi0*X1 + psi1*X2 + U)
+  pY <- plogis(-2 + psi0 * X1 + psi1 * X2 + U)
   Y <- rbinom(n, 1, pY)
   E1 <- X1
   E2 <- X2
@@ -823,11 +823,11 @@ test_that("Adjusting for covariate", {
   G3 <- rbinom(n, 2, 0.4)
   U <- runif(n)
   C <- runif(n)
-  pX1 <- plogis(0.7*G1 + G2 - G3 + U + C)
+  pX1 <- plogis(0.7 * G1 + G2 - G3 + U + C)
   X1 <- rbinom(n, 1, pX1)
-  pX2 <- plogis(-1 + 0.2*G1 - 0.2*G2 + 0.4*G3 + U + C)
+  pX2 <- plogis(-1 + 0.2 * G1 - 0.2 * G2 + 0.4 * G3 + U + C)
   X2 <- rbinom(n, 1, pX2)
-  pY <- plogis(-2 + psi0*X1 + psi1*X2 + U + C)
+  pY <- plogis(-2 + psi0 * X1 + psi1 * X2 + U + C)
   Y <- rbinom(n, 1, pY)
   E1 <- X1
   E2 <- X2

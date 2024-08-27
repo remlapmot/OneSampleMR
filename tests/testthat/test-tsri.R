@@ -62,8 +62,8 @@ test_that("gmm identity link check", {
     a1 <- (X - theta[1] - Z1 * theta[2])
     a2 <- (X - theta[1] - Z1 * theta[2]) * Z1
     m1 <- (Y - (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2])))
-    m2 <- (Y - (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2])))*X
-    m3 <- (Y - (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2])))*res
+    m2 <- (Y - (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2]))) * X
+    m3 <- (Y - (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2]))) * res
     return(cbind(a1, a2, m1, m2, m3))
   }
 
@@ -217,9 +217,9 @@ G3 <- rbinom(n, 2, 0.4)
 C1 <- runif(n)
 C2 <- runif(n)
 U <- runif(n)
-pX <- plogis(0.7*G1 + G2 - G3 + U + C1 + C2)
+pX <- plogis(0.7 * G1 + G2 - G3 + U + C1 + C2)
 X <- rbinom(n, 1, pX)
-pY <- plogis(-2 + psi0*X + U + C1 + C2)
+pY <- plogis(-2 + psi0 * X + U + C1 + C2)
 Y <- rbinom(n, 1, pY)
 dat <- data.frame(G1, G2, G3, X, Y, C1, C2)
 

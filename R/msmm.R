@@ -329,10 +329,10 @@ msmmMoments <- function(theta, x) {
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
-  moments[, 1] <- (Y*exp(linearpredictor) - theta[1])
+  moments[, 1] <- (Y * exp(linearpredictor) - theta[1])
   for (i in 1:nZ) {
     j <- i + 1
-    moments[, j] <- (Y*exp(linearpredictor) - theta[1])*Z[, i]
+    moments[, j] <- (Y * exp(linearpredictor) - theta[1]) * Z[, i]
   }
   return(moments)
 }
@@ -386,10 +386,10 @@ msmmAltMoments <- function(theta, x) {
 
   # moments
   moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
-  moments[, 1] <- (Y*exp(linearpredictor) - 1)
+  moments[, 1] <- (Y * exp(linearpredictor) - 1)
   for (i in 1:nZ) {
     j <- i + 1
-    moments[, j] <- (Y*exp(linearpredictor) - 1)*Z[, i]
+    moments[, j] <- (Y * exp(linearpredictor) - 1) * Z[, i]
   }
   return(moments)
 }

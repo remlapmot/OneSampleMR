@@ -257,7 +257,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
+      moments[, i] <- (X - linearpredictor) * Zwithcons[, i]
     }
 
     if (tsps_env$anycovs) {
@@ -315,7 +315,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
+      moments[, i] <- (X - linearpredictor) * Zwithcons[, i]
     }
 
     if (tsps_env$anycovs) {
@@ -373,7 +373,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
+      moments[, i] <- (X - linearpredictor) * Zwithcons[, i]
     }
 
     if (tsps_env$anycovs) {
@@ -431,7 +431,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
+      moments[, i] <- (X - linearpredictor) * Zwithcons[, i]
     }
 
     if (tsps_env$anycovs) {
