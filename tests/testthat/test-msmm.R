@@ -767,7 +767,7 @@ test_that("Multiple exposure example", {
   U <- runif(n)
   pX1 <- plogis(0.7 * G1 + G2 - G3 + U)
   X1 <- rbinom(n, 1, pX1)
-  pX2 <- plogis(-1 + 0.2 * G1 - 0.2 * G2 + 0.4*G3 + U)
+  pX2 <- plogis(-1 + 0.2 * G1 - 0.2 * G2 + 0.4 * G3 + U)
   X2 <- rbinom(n, 1, pX2)
   pY <- plogis(-2 + psi0 * X1 + psi1 * X2 + U)
   Y <- rbinom(n, 1, pY)
