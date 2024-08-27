@@ -50,7 +50,7 @@ test_that("Single instrument example - identity link", {
 
 test_that("gmm identity link check", {
   skip_on_cran()
-  tsriIdentAddMoments <- function(theta, x){
+  tsriIdentAddMoments <- function(theta, x) {
     # extract variables from x
     Y <- x[,"Y"]
     X <- x[,"X"]

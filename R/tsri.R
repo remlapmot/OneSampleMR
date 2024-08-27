@@ -200,13 +200,12 @@ tsri <- function(formula, instruments, data, subset, na.action,
   Ztopass <- as.data.frame(Z[, -1])
   if (tsri_env$anycovs) {
     colnames(Ztopass) <- c(tsri_env$znames, tsri_env$covariatenames)
-  }
-  else {
+  } else {
     colnames(Ztopass) <- tsri_env$znames
   }
 
   # functions for tsri fit
-  tsri_gmm <- function(x, y, z, xnames, t0, link){
+  tsri_gmm <- function(x, y, z, xnames, t0, link) {
     x <- as.matrix(x)
 
     if (!identical(tsri_env$covariatenames, character(0))) {
@@ -242,7 +241,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     return(reslist)
   }
 
-  tsriIdentityMoments <- function(theta, x){
+  tsriIdentityMoments <- function(theta, x) {
     # extract variables from x
     Y <- as.matrix(x[,"y"])
     X <- x[, tsri_env$xnames]
@@ -311,7 +310,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     return(moments)
   }
 
-  tsriLogaddMoments <- function(theta, x){
+  tsriLogaddMoments <- function(theta, x) {
     # extract variables from x
     Y <- as.matrix(x[, "y"])
     X <- x[, tsri_env$xnames]

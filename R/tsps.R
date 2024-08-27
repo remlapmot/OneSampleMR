@@ -185,7 +185,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
   }
 
   # functions for the tsps fit
-  tsps_gmm <- function(x, y, z, xnames, t0, link){
+  tsps_gmm <- function(x, y, z, xnames, t0, link) {
     x <- as.matrix(x)
 
     if (!identical(tsps_env$covariatenames, character(0))) {
@@ -436,8 +436,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
     if (tsps_env$anycovs) {
       stage2linpred <- as.matrix(cbind(linearpredictor, covariates))
-    }
-    else {
+    } else {
       stage2linpred <- linearpredictor
     }
 
