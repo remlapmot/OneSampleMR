@@ -14,8 +14,8 @@ test_that("Check run after ivreg model", {
   object <- ivreg(packs ~ rprice + rincome | salestax + cigtax + packsdiff,
                   data = CigaretteDemand)
   res <- fsw(object)
-  expect_equal(res$fswres[1,1], 4.884, tolerance = 1e-2)
-  expect_equal(res$fswres[2,1], 3.450, tolerance = 1e-2)
+  expect_equal(res$fswres[1, 1], 4.884, tolerance = 1e-2)
+  expect_equal(res$fswres[2, 1], 3.450, tolerance = 1e-2)
 })
 
 test_that("Check run with ivreg model object with transformations of outcome", {
@@ -23,8 +23,8 @@ test_that("Check run with ivreg model object with transformations of outcome", {
                     salestax + cigtax + packsdiff,
                   data = CigaretteDemand)
   res <- fsw(object)
-  expect_equal(res$fswres[1,1], 4.884, tolerance = 1e-2)
-  expect_equal(res$fswres[2,1], 3.450, tolerance = 1e-2)
+  expect_equal(res$fswres[1, 1], 4.884, tolerance = 1e-2)
+  expect_equal(res$fswres[2, 1], 3.450, tolerance = 1e-2)
 })
 
 test_that("Check error with transformation of exposure", {
@@ -68,10 +68,10 @@ test_that("Check approx. equivalence with lfe package", {
   z2 <- rnorm(n)
   u <- rnorm(n)
   # make x1, x2 correlated with errors u
-  x1 <- z1 + z2 + 0.2*u + rnorm(n)
-  x2 <- z1 + 0.94*z2 - 0.3*u + rnorm(n)
+  x1 <- z1 + z2 + 0.2 * u + rnorm(n)
+  x2 <- z1 + 0.94 * z2 - 0.3 * u + rnorm(n)
   y <- x1 + x2 + u
-  dat <- data.frame(x1,x2,y,z1,z2)
+  dat <- data.frame(x1, x2, y, z1, z2)
   est <- felm(y ~ 1 | 0 | (x1 | x2 ~ z1 + z2), data = dat)
   # summary(est)
   ## Not run:
@@ -87,8 +87,8 @@ test_that("Check approx. equivalence with lfe package", {
   lfefstat <- condfstat(est, quantiles = c(0.05, 0.95))
   mod2 <- ivreg(y ~ x1 + x2 | z1 + z2, data = dat)
   fstat <- fsw(mod2)
-  expect_equal(lfefstat[1], fstat$fswres[1,1], tolerance = 1e-2)
-  expect_equal(lfefstat[2], fstat$fswres[2,1], tolerance = 1e-2)
+  expect_equal(lfefstat[1], fstat$fswres[1, 1], tolerance = 1e-2)
+  expect_equal(lfefstat[2], fstat$fswres[2, 1], tolerance = 1e-2)
 })
 
 
@@ -104,8 +104,8 @@ test_that("Compare with Stata ivreg2 output", {
   dat <- haven::read_dta(url)
   mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
   condf <- fsw(mod)
-  expect_equal(condf$fswres[1,1], 6.69, tolerance = 1e-2)
-  expect_equal(condf$fswres[2,1], 81.81, tolerance = 1e-2)
+  expect_equal(condf$fswres[1, 1], 6.69, tolerance = 1e-2)
+  expect_equal(condf$fswres[2, 1], 81.81, tolerance = 1e-2)
 })
 
 

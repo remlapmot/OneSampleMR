@@ -138,7 +138,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
   tsps_env$anycovs <- FALSE
   if (!identical(covariatenames, character(0))) {
     tsps_env$anycovs <- TRUE
-    covariates <- X[,covariatenames]
+    covariates <- X[, covariatenames]
   }
 
   tsps_env$xnames <- xnames[!(xnames %in% covariatenames)]
@@ -153,7 +153,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
 
   # initial values
   if (is.null(t0)) {
-    stage1 <- stats::lm(X[,2] ~ -1 + Z)
+    stage1 <- stats::lm(X[, 2] ~ -1 + Z)
     t0 <- stats::coef(stage1)
     xhat <- stats::fitted.values(stage1)
     if (tsps_env$anycovs) {
@@ -189,7 +189,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     x <- as.matrix(x)
 
     if (!identical(tsps_env$covariatenames, character(0))) {
-      x <- x[,!(colnames(x) %in% tsps_env$covariatenames), drop = FALSE]
+      x <- x[, !(colnames(x) %in% tsps_env$covariatenames), drop = FALSE]
     }
 
     dat <- data.frame(y, x, z)
@@ -254,10 +254,10 @@ tsps <- function(formula, instruments, data, subset, na.action,
     # moments
     moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
 
-    moments[,1] <- (X - linearpredictor)
+    moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
+      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
     }
 
     if (tsps_env$anycovs) {
@@ -267,12 +267,12 @@ tsps <- function(formula, instruments, data, subset, na.action,
     }
 
     thetastart <- stage2start + 1
-    moments[,stage2start] <- (Y - (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))
+    moments[, stage2start] <- (Y - (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))
 
     start3 <- stage2start + 1
     j <- 1
     for (i in start3:thetaend) {
-      moments[,i] <- (Y - (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))*xhat[,j]
+      moments[, i] <- (Y - (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend]))) * xhat[, j]
       j <- j + 1
     }
 
@@ -315,7 +315,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor)*Zwithcons[,i]
+      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
     }
 
     if (tsps_env$anycovs) {
@@ -330,7 +330,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     start3 <- stage2start + 1
     j <- 1
     for (i in start3:thetaend) {
-      moments[, i] <- (Y - exp(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))*xhat[,j]
+      moments[, i] <- (Y - exp(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend]))) * xhat[, j]
       j <- j + 1
     }
 
@@ -373,7 +373,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor)*Zwithcons[,i]
+      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
     }
 
     if (tsps_env$anycovs) {
@@ -383,12 +383,12 @@ tsps <- function(formula, instruments, data, subset, na.action,
     }
 
     thetastart <- stage2start + 1
-    moments[,stage2start] <- ((Y * exp(-1 * (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))) - 1)
+    moments[, stage2start] <- ((Y * exp(-1 * (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))) - 1)
 
     start3 <- stage2start + 1
     j <- 1
     for (i in start3:thetaend) {
-      moments[, i] <- ((Y * exp(-1 * (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))) - 1)*xhat[,j]
+      moments[, i] <- ((Y * exp(-1 * (theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))) - 1) * xhat[, j]
       j <- j + 1
     }
 
@@ -431,7 +431,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor)*Zwithcons[,i]
+      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
     }
 
     if (tsps_env$anycovs) {
@@ -446,7 +446,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
     start3 <- stage2start + 1
     j <- 1
     for (i in start3:thetaend) {
-      moments[, i] <- (Y - stats::plogis(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend])))*xhat[,j]
+      moments[, i] <- (Y - stats::plogis(theta[stage2start] + as.matrix(stage2linpred) %*% as.matrix(theta[thetastart:thetaend]))) * xhat[, j]
       j <- j + 1
     }
 
@@ -508,7 +508,7 @@ print.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...) {
     if (x$link %in% c("logadd", "logmult"))
       parname <- "Causal risk ratio"
     cat("\n", parname, " with 95% CI limits:\n", sep = "")
-    print(exp(x$estci[rowstart:rowstop,]), digits = digits, ...)
+    print(exp(x$estci[rowstart:rowstop, ]), digits = digits, ...)
   }
 
   cat("\n")
@@ -531,7 +531,7 @@ print.summary.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...)
     if (x$object$link %in% c("logadd", "logmult"))
       parname <- "Causal risk ratio"
     cat("\n", parname, " with 95% CI limits:\n", sep = "")
-    print(exp(x$object$estci[rowstart:rowstop,]), digits = digits, ...)
+    print(exp(x$object$estci[rowstart:rowstop, ]), digits = digits, ...)
   }
 
   cat("\n")

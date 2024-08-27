@@ -151,7 +151,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   tsri_env$anycovs <- FALSE
   if (!identical(covariatenames, character(0))) {
     tsri_env$anycovs <- TRUE
-    covariates <- X[,covariatenames]
+    covariates <- X[, covariatenames]
   }
 
   tsri_env$xnames <- xnames[!(xnames %in% covariatenames)]
@@ -167,16 +167,16 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
   # initial values
   if (is.null(t0)) {
-    stage1 <- stats::lm(X[,2] ~ -1 + Z)
+    stage1 <- stats::lm(X[, 2] ~ -1 + Z)
     t0 <- stats::coef(stage1)
     res <- stats::residuals(stage1)
     if (tsri_env$anycovs) {
       res <- cbind(res, covariates)
     }
     if (link == "identity") {
-      stage2 <- stats::lm(Y ~ X[,2] + res)
+      stage2 <- stats::lm(Y ~ X[, 2] + res)
     } else if (link == "logadd") {
-      stage2 <- stats::glm(Y ~ X[,2] + res, family = stats::poisson(link = "log"))
+      stage2 <- stats::glm(Y ~ X[, 2] + res, family = stats::poisson(link = "log"))
     } else if (link == "logmult") {
       Ystar <- Y
       Ystar[Y == 0] <- 0.001
@@ -209,7 +209,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     x <- as.matrix(x)
 
     if (!identical(tsri_env$covariatenames, character(0))) {
-      x <- x[,!(colnames(x) %in% tsri_env$covariatenames), drop = FALSE]
+      x <- x[, !(colnames(x) %in% tsri_env$covariatenames), drop = FALSE]
     }
 
     dat <- data.frame(y, x, z)
@@ -243,7 +243,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
   tsriIdentityMoments <- function(theta, x) {
     # extract variables from x
-    Y <- as.matrix(x[,"y"])
+    Y <- as.matrix(x[, "y"])
     X <- x[, tsri_env$xnames]
     Z <- as.matrix(x[, tsri_env$znames])
     nZ <- ncol(Z)
@@ -279,15 +279,15 @@ tsri <- function(formula, instruments, data, subset, na.action,
     # moments
     moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
 
-    moments[,1] <- (X - linearpredictor)
+    moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
+      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
     }
 
     if (tsri_env$anycovs) {
       stage2express <- (Y - (theta[stage2start] +
-                               thetacausal*X +
+                               thetacausal * X +
                                thetares * (X - as.matrix(linearpredictor)) +
                                as.matrix(covariates) %*% as.matrix(thetacov)))
     } else {
@@ -303,7 +303,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     start3 <- stage2start + 1
     j <- 1
     for (i in start3:thetaend) {
-      moments[, i] <- (stage2express)*res[,j]
+      moments[, i] <- (stage2express) * res[, j]
       j <- j + 1
     }
 
@@ -351,7 +351,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor)*Zwithcons[,i]
+      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
     }
 
     if (tsri_env$anycovs) {
@@ -372,7 +372,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     start3 <- stage2start + 1
     j <- 1
     for (i in start3:thetaend) {
-      moments[, i] <- (stage2express)*res[,j]
+      moments[, i] <- (stage2express)*res[, j]
       j <- j + 1
     }
 
@@ -441,7 +441,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     start3 <- stage2start + 1
     j <- 1
     for (i in start3:thetaend) {
-      moments[,i] <- (stage2express)*res[,j]
+      moments[, i] <- (stage2express)*res[, j]
       j <- j + 1
     }
 
@@ -572,7 +572,7 @@ print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
     if (x$link %in% c("logadd", "logmult"))
       parname <- "Causal risk ratio"
     cat("\n", parname, " with 95% CI limits:\n", sep = "")
-    print(exp(x$estci[rowstart:rowstop,]), digits = digits, ...)
+    print(exp(x$estci[rowstart:rowstop, ]), digits = digits, ...)
   }
 
   cat("\n")
@@ -595,7 +595,7 @@ print.summary.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...)
     if (x$object$link %in% c("logadd", "logmult"))
       parname <- "Causal risk ratio"
     cat("\n", parname, " with 95% CI limits:\n", sep = "")
-    print(exp(x$object$estci[rowstart:rowstop,]), digits = digits, ...)
+    print(exp(x$object$estci[rowstart:rowstop, ]), digits = digits, ...)
   }
 
   cat("\n")

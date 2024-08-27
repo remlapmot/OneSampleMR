@@ -9,7 +9,7 @@ test_that("Stata output check", {
   fit1 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
                  cbd + ptn + worker + weekend + pt,
                data = dat, estmethod = "gmmalt")
-  expect_equal(log(fit1$crrci["tcost",1]), log(1.036),  tolerance = 0.05)
+  expect_equal(log(fit1$crrci["tcost", 1]), log(1.036),  tolerance = 0.05)
   # fit2 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
   #                cbd + ptn + worker + weekend + pt,
   #              data = dat)
@@ -774,13 +774,13 @@ test_that("Multiple exposure example", {
   dat <- data.frame(G1, G2, G3, X1, X2, Y)
 
   fit21 <- msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat)
-  expect_equal(log(fit21$crrci[1,1]), 0.08, tolerance = 0.02)
+  expect_equal(log(fit21$crrci[1, 1]), 0.08, tolerance = 0.02)
 
   fit22 <- msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "gmm")
-  expect_equal(log(fit22$crrci[1,1]), 0.08, tolerance = 0.02)
+  expect_equal(log(fit22$crrci[1, 1]), 0.08, tolerance = 0.02)
 
   fit23 <- msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
-  expect_equal(log(fit23$crrci[1,1]), 0.08, tolerance = 0.1)
+  expect_equal(log(fit23$crrci[1, 1]), 0.08, tolerance = 0.1)
 
   expect_error(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tsls"))
   expect_error(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tslsalt"))
@@ -808,7 +808,7 @@ test_that("Multiple exposure example with different variable names", {
   R <- Y
   dat <- data.frame(G1, G2, G3, E1, E2, R)
   fit24 <- msmm(Y ~ E1 + E2 | G1 + G2 + G3, data = dat)
-  expect_equal(log(fit24$crrci[1,1]), 0.08, tolerance = 0.01)
+  expect_equal(log(fit24$crrci[1, 1]), 0.08, tolerance = 0.01)
 })
 
 # Example adjusting for a covariate ----
@@ -834,7 +834,7 @@ test_that("Adjusting for covariate", {
   R <- Y
   dat <- data.frame(G1, G2, G3, E1, E2, R, C)
   fit25 <- msmm(Y ~ E1 + C | G1 + G2 + G3 + C, data = dat)
-  expect_equal(log(fit25$crrci[1,1]), .173, tolerance = .01)
+  expect_equal(log(fit25$crrci[1, 1]), .173, tolerance = .01)
   fit26 <- msmm(Y ~ E1 + E2 + C | G1 + G2 + G3 + C, data = dat)
-  expect_equal(log(fit26$crrci[1,1]), .184, tolerance = .01)
+  expect_equal(log(fit26$crrci[1, 1]), .184, tolerance = .01)
 })
