@@ -92,7 +92,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   # code from beginning for ivreg::ivreg()
   ## set up model.frame() call
   cl <- match.call()
-  if(missing(data)) data <- environment(formula)
+  if (missing(data)) data <- environment(formula)
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data", "subset", "na.action", "weights", "offset"), names(mf), 0)
   mf <- mf[c(1, m)]
@@ -127,7 +127,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   mt <- stats::terms(formula, data = data)
   mtX <- stats::terms(formula, data = data, rhs = 1)
   X <- stats::model.matrix(mtX, mf, contrasts)
-  if(length(formula)[2] < 2L) {
+  if (length(formula)[2] < 2L) {
     mtZ <- NULL
     Z <- NULL
   } else {
@@ -424,13 +424,13 @@ tsri <- function(formula, instruments, data, subset, na.action,
     }
 
     if (tsri_env$anycovs) {
-      stage2express <- (Y * exp(-1*(theta[stage2start] +
-                                      thetacausal*X +
+      stage2express <- (Y * exp(-1 * (theta[stage2start] +
+                                      thetacausal * X +
                                       thetares * (X - as.matrix(linearpredictor)) +
                                       as.matrix(covariates) %*% as.matrix(thetacov))) - 1)
     } else {
-      stage2express <- (Y * exp(-1*(theta[stage2start] +
-                                      thetacausal*X +
+      stage2express <- (Y * exp(-1 * (theta[stage2start] +
+                                      thetacausal * X +
                                       thetares * (X - as.matrix(linearpredictor)))) - 1)
     }
 

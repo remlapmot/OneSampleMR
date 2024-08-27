@@ -79,27 +79,27 @@ tsps <- function(formula, instruments, data, subset, na.action,
   # code from beginning for ivreg::ivreg()
   ## set up model.frame() call
   cl <- match.call()
-  if(missing(data)) data <- environment(formula)
+  if (missing(data)) data <- environment(formula)
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data", "subset", "na.action", "weights", "offset"), names(mf), 0)
   mf <- mf[c(1, m)]
   mf$drop.unused.levels <- TRUE
   ## handle instruments for backward compatibility
-  if(!missing(instruments)) {
+  if (!missing(instruments)) {
     formula <- Formula::as.Formula(formula, instruments)
     cl$instruments <- NULL
     cl$formula <- formula(formula)
   } else {
     formula <- Formula::as.Formula(formula)
   }
-  if(length(formula)[2L] == 3L) formula <- Formula::as.Formula(
+  if (length(formula)[2L] == 3L) formula <- Formula::as.Formula(
     formula(formula, rhs = c(2L, 1L), collapse = TRUE),
     formula(formula, lhs = 0L, rhs = c(3L, 1L), collapse = TRUE)
   )
   stopifnot(length(formula)[1L] == 1L, length(formula)[2L] %in% 1L:2L)
   ## try to handle dots in formula
   has_dot <- function(formula) inherits(try(stats::terms(formula), silent = TRUE), "try-error")
-  if(has_dot(formula)) {
+  if (has_dot(formula)) {
     f1 <- formula(formula, rhs = 1L)
     f2 <- formula(formula, lhs = 0L, rhs = 2L)
     if (!has_dot(f1) && has_dot(f2)) formula <- Formula::as.Formula(f1,
@@ -114,7 +114,7 @@ tsps <- function(formula, instruments, data, subset, na.action,
   mt <- stats::terms(formula, data = data)
   mtX <- stats::terms(formula, data = data, rhs = 1)
   X <- stats::model.matrix(mtX, mf, contrasts)
-  if(length(formula)[2] < 2L) {
+  if (length(formula)[2] < 2L) {
     mtZ <- NULL
     Z <- NULL
   } else {

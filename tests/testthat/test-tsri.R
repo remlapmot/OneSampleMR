@@ -5,9 +5,9 @@ set.seed(9)
 n <- 1000
 psi0 <- 0.5
 Z <- rbinom(n, 1, 0.5)
-X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-m0 <- plogis(1 + 0.8*X - 0.39*Z)
-Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+X <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+m0 <- plogis(1 + 0.8 * X - 0.39 * Z)
+Y <- rbinom(n, 1, plogis(psi0 * X + log(m0 / (1 - m0))))
 dat <- data.frame(Z, X, Y)
 
 test_that("Single instrument example - identity link", {
@@ -59,11 +59,11 @@ test_that("gmm identity link check", {
     stage1 <- lm(X ~ Z1)
     res <- residuals(stage1)
     # moments
-    a1 <- (X - theta[1] - Z1*theta[2])
-    a2 <- (X - theta[1] - Z1*theta[2])*Z1
-    m1 <- (Y - (theta[3] + X*theta[4] + theta[5]*(X - theta[1] - Z1*theta[2])))
-    m2 <- (Y - (theta[3] + X*theta[4] + theta[5]*(X - theta[1] - Z1*theta[2])))*X
-    m3 <- (Y - (theta[3] + X*theta[4] + theta[5]*(X - theta[1] - Z1*theta[2])))*res
+    a1 <- (X - theta[1] - Z1 * theta[2])
+    a2 <- (X - theta[1] - Z1 * theta[2]) * Z1
+    m1 <- (Y - (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2])))
+    m2 <- (Y - (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2])))*X
+    m3 <- (Y - (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2])))*res
     return(cbind(a1, a2, m1, m2, m3))
   }
 

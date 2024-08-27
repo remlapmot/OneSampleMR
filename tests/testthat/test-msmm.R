@@ -593,9 +593,9 @@ test_that("Single instrument example", {
   n <- 1000
   psi0 <- 0.5
   Z <- rbinom(n, 1, 0.5)
-  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
+  X <- rbinom(n, 1, 0.7*Z + 0.2 * (1 - Z))
   m0 <- plogis(1 + 0.8*X - 0.39*Z)
-  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  Y <- rbinom(n, 1, plogis(psi0*X + log(m0 / (1 - m0))))
   dat <- data.frame(Z, X, Y)
 
   # ivtools for comparison fit
@@ -644,11 +644,11 @@ test_that("Check subset argument", {
   n <- 1000
   psi0 <- 0.5
   Z <- rbinom(n, 1, 0.5)
-  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-  m0 <- plogis(1 + 0.8*X - 0.39*Z)
-  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  X <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+  m0 <- plogis(1 + 0.8 * X - 0.39 * Z)
+  Y <- rbinom(n, 1, plogis(psi0 * X + log(m0 / (1 - m0))))
   dat <- data.frame(Z, X, Y)
-  datfifty <- dat[1:50,]
+  datfifty <- dat[1:50, ]
   fitcompare <- msmm(Y ~ X | Z, dat = datfifty)
   fitcheck <- msmm(Y ~ X | Z, dat = dat, subset = 1:50)
   expect_equal(fitcheck$crrci, fitcompare$crrci)
@@ -661,9 +661,9 @@ test_that("Check using different variable names", {
   n <- 1000
   psi0 <- 0.5
   Z <- rbinom(n, 1, 0.5)
-  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-  m0 <- plogis(1 + 0.8*X - 0.39*Z)
-  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  X <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+  m0 <- plogis(1 + 0.8 * X - 0.39 * Z)
+  Y <- rbinom(n, 1, plogis(psi0 * X + log(m0 / (1 - m0))))
   dat <- data.frame(Z, X, Y)
   dat$E <- dat$X
   dat$R <- dat$Y
@@ -711,9 +711,9 @@ test_that("Non-binary x with tsls and tslsalt methods should produce an error", 
   n <- 1000
   psi0 <- 0.5
   Z <- rbinom(n, 1, 0.5)
-  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-  m0 <- plogis(1 + 0.8*X - 0.39*Z)
-  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  X <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+  m0 <- plogis(1 + 0.8 * X - 0.39 * Z)
+  Y <- rbinom(n, 1, plogis(psi0 * X + log(m0 / (1 - m0))))
   dat <- data.frame(Z, X, Y)
   dat$X[1] <- 2
   expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "tsls"))
@@ -727,9 +727,9 @@ test_that("Y needs to be binary for the TSLS methods", {
   n <- 1000
   psi0 <- 0.5
   Z <- rbinom(n, 1, 0.5)
-  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-  m0 <- plogis(1 + 0.8*X - 0.39*Z)
-  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  X <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+  m0 <- plogis(1 + 0.8 * X - 0.39 * Z)
+  Y <- rbinom(n, 1, plogis(psi0 * X + log(m0 / (1 - m0))))
   dat <- data.frame(Z, X, Y)
   dat$Y[1] <- 2
   expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "tsls"))
@@ -743,9 +743,9 @@ test_that("Methods fail for non-integer Y", {
   n <- 1000
   psi0 <- 0.5
   Z <- rbinom(n, 1, 0.5)
-  X <- rbinom(n, 1, 0.7*Z + 0.2*(1 - Z))
-  m0 <- plogis(1 + 0.8*X - 0.39*Z)
-  Y <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
+  X <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+  m0 <- plogis(1 + 0.8 * X - 0.39 * Z)
+  Y <- rbinom(n, 1, plogis(psi0 * X + log(m0 / (1 - m0))))
   dat <- data.frame(Z, X, Y)
   dat$Y[1] <- 1.5
   expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "gmm"))
