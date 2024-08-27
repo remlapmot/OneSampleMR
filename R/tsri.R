@@ -162,7 +162,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
   # check y binary
-  if (link == "logit" & !all(Y %in% 0:1))
+  if (link == "logit" && !all(Y %in% 0:1))
     stop("With the logit link, the outcome must be binary, i.e. take values 0 or 1.")
 
   # initial values
@@ -291,8 +291,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
                                thetacausal*X +
                                thetares * (X - as.matrix(linearpredictor)) +
                                as.matrix(covariates) %*% as.matrix(thetacov)))
-    }
-    else {
+    } else {
       stage2express <- (Y - (theta[stage2start] +
                                thetacausal*X +
                                thetares * (X - as.matrix(linearpredictor))))
@@ -305,7 +304,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     start3 <- stage2start + 1
     j <- 1
     for (i in start3:thetaend) {
-      moments[,i] <- (stage2express)*res[,j]
+      moments[, i] <- (stage2express)*res[,j]
       j <- j + 1
     }
 
@@ -314,7 +313,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
 
   tsriLogaddMoments <- function(theta, x){
     # extract variables from x
-    Y <- as.matrix(x[,"y"])
+    Y <- as.matrix(x[, "y"])
     X <- x[, tsri_env$xnames]
     Z <- as.matrix(x[, tsri_env$znames])
     nZ <- ncol(Z)
@@ -350,10 +349,10 @@ tsri <- function(formula, instruments, data, subset, na.action,
     # moments
     moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
 
-    moments[,1] <- (X - linearpredictor)
+    moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
+      moments[, i] <- (X - linearpredictor)*Zwithcons[,i]
     }
 
     if (tsri_env$anycovs) {
@@ -361,8 +360,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
                                   thetacausal*X +
                                   thetares * (X - as.matrix(linearpredictor)) +
                                   as.matrix(covariates) %*% as.matrix(thetacov)))
-    }
-    else {
+    } else {
       stage2express <- (Y - exp(theta[stage2start] +
                                   thetacausal*X +
                                   thetares * (X - as.matrix(linearpredictor))))
@@ -375,16 +373,16 @@ tsri <- function(formula, instruments, data, subset, na.action,
     start3 <- stage2start + 1
     j <- 1
     for (i in start3:thetaend) {
-      moments[,i] <- (stage2express)*res[,j]
+      moments[, i] <- (stage2express)*res[,j]
       j <- j + 1
     }
 
     return(moments)
   }
 
-  tsriLogmultMoments <- function(theta, x){
+  tsriLogmultMoments <- function(theta, x) {
     # extract variables from x
-    Y <- as.matrix(x[,"y"])
+    Y <- as.matrix(x[, "y"])
     X <- x[, tsri_env$xnames]
     Z <- as.matrix(x[, tsri_env$znames])
     nZ <- ncol(Z)
@@ -420,10 +418,10 @@ tsri <- function(formula, instruments, data, subset, na.action,
     # moments
     moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
 
-    moments[,1] <- (X - linearpredictor)
+    moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
+      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
     }
 
     if (tsri_env$anycovs) {
@@ -431,8 +429,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
                                       thetacausal*X +
                                       thetares * (X - as.matrix(linearpredictor)) +
                                       as.matrix(covariates) %*% as.matrix(thetacov))) - 1)
-    }
-    else {
+    } else {
       stage2express <- (Y * exp(-1*(theta[stage2start] +
                                       thetacausal*X +
                                       thetares * (X - as.matrix(linearpredictor)))) - 1)
@@ -452,9 +449,9 @@ tsri <- function(formula, instruments, data, subset, na.action,
     return(moments)
   }
 
-  tsriLogitMoments <- function(theta, x){
+  tsriLogitMoments <- function(theta, x) {
     # extract variables from x
-    Y <- as.matrix(x[,"y"])
+    Y <- as.matrix(x[, "y"])
     X <- x[, tsri_env$xnames]
     Z <- as.matrix(x[, tsri_env$znames])
     nZ <- ncol(Z)
@@ -490,10 +487,10 @@ tsri <- function(formula, instruments, data, subset, na.action,
     # moments
     moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
 
-    moments[,1] <- (X - linearpredictor)
+    moments[, 1] <- (X - linearpredictor)
 
     for (i in 2:stage1end) {
-      moments[,i] <- (X - linearpredictor)*Zwithcons[,i]
+      moments[, i] <- (X - linearpredictor)*Zwithcons[, i]
     }
 
     if (tsri_env$anycovs) {
@@ -501,8 +498,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
                                      thetacausal*X +
                                      thetares * (X - as.matrix(linearpredictor)) +
                                      as.matrix(covariates) %*% as.matrix(thetacov)))
-    }
-    else {
+    } else {
       stage2express <- (Y - stats::plogis(theta[stage2start] +
                                      thetacausal*X +
                                      thetares * (X - as.matrix(linearpredictor))))
@@ -515,7 +511,7 @@ tsri <- function(formula, instruments, data, subset, na.action,
     start3 <- stage2start + 1
     j <- 1
     for (i in start3:thetaend) {
-      moments[,i] <- (stage2express)*res[,j]
+      moments[, i] <- (stage2express)*res[, j]
       j <- j + 1
     }
 
