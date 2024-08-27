@@ -79,16 +79,16 @@ fsw.ivreg <- function(object) {
     }
     modelfor <- stats::as.formula(modelstr)
     condmod <- try(ivreg::ivreg(modelfor, data = object$model), silent = TRUE)
-    condmoderrmsg = paste("The IV regression of one of the exposures",
-                          "on the other/s has failed.",
-                          "This is most likely because you have a transformation",
-                          "on one or more of the exposure or instrumental variables.",
-                          "Please create the transformed variable/s in your",
-                          "data.frame and refit,",
-                          "e.g. instead of creating your ivreg object from",
-                          "ivreg(y ~ log(x1) + x2 | z1 + z2 + z3)",
-                          "please create dat$logx1 = log(x1) in your data.frame",
-                          "and fit ivreg(y ~ logx1 + x2 | z1 + z2 + z3).")
+    condmoderrmsg <- paste("The IV regression of one of the exposures",
+                           "on the other/s has failed.",
+                           "This is most likely because you have a transformation",
+                           "on one or more of the exposure or instrumental variables.",
+                           "Please create the transformed variable/s in your",
+                           "data.frame and refit,",
+                           "e.g. instead of creating your ivreg object from",
+                           "ivreg(y ~ log(x1) + x2 | z1 + z2 + z3)",
+                           "please create dat$logx1 = log(x1) in your data.frame",
+                           "and fit ivreg(y ~ logx1 + x2 | z1 + z2 + z3).")
     if (inherits(condmod, "try-error")) stop(condmoderrmsg)
     condres <- condmod$residuals
     if (nexogenous > 0) {
