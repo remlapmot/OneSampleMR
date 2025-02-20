@@ -28,7 +28,7 @@ Depends:
 Imports:
     Formula,
     gmm,
-    ivreg,
+    ivreg (>= 0.6-5),
     lmtest,
     msm,
     rlang (>= 1.0.0)
