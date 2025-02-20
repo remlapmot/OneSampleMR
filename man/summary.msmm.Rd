@@ -27,7 +27,7 @@ S3 summary and print methods for objects of class \code{msmm} and \code{summary.
 \code{summary.msmm()} returns an object of class \code{"summary.msmm"}. A list with the following elements:
 
 \item{smry}{An object from a call to either \code{\link[gmm:summary]{gmm::summary.gmm()}} or
-\code{\link[ivreg:ivregMethods]{ivreg::summary.ivreg()}}.}
+\code{\link[ivreg:summary.ivreg]{ivreg::summary.ivreg()}}.}
 \item{object}{The object of class \code{msmm} passed to the function.}
 }
 \description{
