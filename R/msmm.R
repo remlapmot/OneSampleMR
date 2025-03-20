@@ -141,7 +141,11 @@
 #' fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
 #' summary(fit2)
 #' @export
-msmm <- function(formula, instruments, data, subset, na.action,
+msmm <- function(formula,
+                 instruments,
+                 data,
+                 subset,
+                 na.action,
                  contrasts = NULL,
                  estmethod = c("gmm", "gmmalt", "tsls", "tslsalt"),
                  t0 = NULL,
@@ -178,8 +182,10 @@ msmm <- function(formula, instruments, data, subset, na.action,
   if (has_dot(formula)) {
     f1 <- formula(formula, rhs = 1L)
     f2 <- formula(formula, lhs = 0L, rhs = 2L)
-    if (!has_dot(f1) && has_dot(f2)) formula <- Formula::as.Formula(f1,
-                                                                    stats::update(formula(formula, lhs = 0L, rhs = 1L), f2))
+    if (!has_dot(f1) && has_dot(f2)) formula <- Formula::as.Formula(
+      f1,
+      stats::update(formula(formula, lhs = 0L, rhs = 1L), f2)
+    )
   }
   ## call model.frame()
   mf$formula <- formula
@@ -212,42 +218,38 @@ msmm <- function(formula, instruments, data, subset, na.action,
 
   # check y greater than or equal to 0
   ygr0chck <- sum(Y < 0)
-  if (as.logical(ygr0chck))
-    stop("All of the values of the outcome must be greater than 0.")
+  if (as.logical(ygr0chck)) stop("All of the values of the outcome must be greater than 0.")
 
   # check y all integers
   yintchck <- all.equal(Y, as.integer(Y), check.attributes = FALSE)
-  if (!yintchck)
-    stop("All of the values of the outcome must be integers.")
+  if (!yintchck) stop("All of the values of the outcome must be integers.")
 
   # for tsls methods check y binary
-  if (estmethod %in% c("tsls", "tslsalt") && !all(Y %in% 0:1))
-    stop("For tsls and tslsalt, the outcome must be binary, i.e. take values 0 or 1.")
+  if (estmethod %in% c("tsls", "tslsalt") && !all(Y %in% 0:1)) stop(
+    "For tsls and tslsalt, the outcome must be binary, i.e. take values 0 or 1."
+  )
 
   # for TSLS methods check X binary
-  if (estmethod %in% c("tsls", "tslsalt") && !all(X %in% 0:1))
-    stop("For tsls and tslsalt, the exposure must be binary, i.e. take values 0 or 1.")
+  if (estmethod %in% c("tsls", "tslsalt") && !all(X %in% 0:1)) stop(
+    "For tsls and tslsalt, the exposure must be binary, i.e. take values 0 or 1."
+  )
 
   # check for only 1 exposure for tsls methods
   nX <- ncol(X) - 1
-  if (nX != 1 && estmethod %in% c("tsls", "tslsalt"))
-    stop("With tsls and tslsalt, only 1 exposure variable is allowed.")
+  if (nX != 1 && estmethod %in% c("tsls", "tslsalt")) stop(
+    "With tsls and tslsalt, only 1 exposure variable is allowed."
+  )
 
-  if (estmethod == "gmm")
-    output <- msmm_gmm(x = X[, -1], y = Y, z = Z[, -1], xnames = xnames, t0 = t0)
-  if (estmethod == "gmmalt")
-    output <- msmm_gmm_alt(x = X[, -1], y = Y, z = Z[, -1], xnames = xnames, t0 = t0)
-  if (estmethod == "tsls")
-    output <- msmm_tsls(x = X[, -1], y = Y, z = Z[, -1])
-  if (estmethod == "tslsalt")
-    output <- msmm_tsls_alt(x = X[, -1], y = Y, z = Z[, -1])
+  if (estmethod == "gmm") output <- msmm_gmm(x = X[, -1], y = Y, z = Z[, -1], xnames = xnames, t0 = t0)
+  if (estmethod == "gmmalt") output <- msmm_gmm_alt(x = X[, -1], y = Y, z = Z[, -1], xnames = xnames, t0 = t0)
+  if (estmethod == "tsls") output <- msmm_tsls(x = X[, -1], y = Y, z = Z[, -1])
+  if (estmethod == "tslsalt") output <- msmm_tsls_alt(x = X[, -1], y = Y, z = Z[, -1])
 
   class(output) <- append("msmm", class(output))
   output
 }
 
 msmm_tsls <- function(x, y, z) {
-
   outcome <- y * (1 - x)
   exposure <- y * x
 
@@ -274,16 +276,11 @@ msmm_tsls <- function(x, y, z) {
   ey0ci <- cbind(stats::coef(fit), stats::confint(fit))[1, ]
 
   # list of results to return
-  reslist <- list(stage1 = stage1,
-                  fit = fit,
-                  crrci = crrci,
-                  ey0ci = ey0ci,
-                  estmethod = "tsls")
+  reslist <- list(stage1 = stage1, fit = fit, crrci = crrci, ey0ci = ey0ci, estmethod = "tsls")
   return(reslist)
 }
 
 msmm_tsls_alt <- function(x, y, z) {
-
   outcome <- y * x
   exposure <- y * (1 - x)
 
@@ -307,10 +304,7 @@ msmm_tsls_alt <- function(x, y, z) {
   crrci <- unname(c(-1 * beta[2], exp(logcrr - 1.96 * logcrrse), exp(logcrr + 1.96 * logcrrse)))
 
   # list of results to return
-  reslist <- list(stage1 = stage1,
-                  fit = fit,
-                  crrci = crrci,
-                  estmethod = "tslsalt")
+  reslist <- list(stage1 = stage1, fit = fit, crrci = crrci, estmethod = "tslsalt")
   return(reslist)
 }
 
@@ -338,18 +332,17 @@ msmmMoments <- function(theta, x) {
 }
 
 msmm_gmm <- function(x, y, z, xnames, t0) {
-
   x <- as.matrix(x)
   dat <- data.frame(y, x, z)
 
-  if (is.null(t0))
-    t0 <- rep(0, ncol(x) + 1)
+  if (is.null(t0)) t0 <- rep(0, ncol(x) + 1)
 
   # gmm fit
   fit <- gmm::gmm(msmmMoments, x = dat, t0 = t0, vcov = "iid")
 
-  if (fit$algoInfo$convergence != 0)
-    warning("The GMM fit has not converged, perhaps try different initial parameter values")
+  if (fit$algoInfo$convergence != 0) warning(
+    "The GMM fit has not converged, perhaps try different initial parameter values"
+  )
 
   # causal risk ratio
   crrci <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[-1, ])
@@ -364,10 +357,7 @@ msmm_gmm <- function(x, y, z, xnames, t0) {
   # E[Y(0)]
   ey0ci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)[1, ]
 
-  reslist <- list(fit = fit,
-                  crrci = crrci,
-                  ey0ci = ey0ci,
-                  estmethod = "gmm")
+  reslist <- list(fit = fit, crrci = crrci, ey0ci = ey0ci, estmethod = "gmm")
   return(reslist)
 }
 
@@ -395,18 +385,17 @@ msmmAltMoments <- function(theta, x) {
 }
 
 msmm_gmm_alt <- function(x, y, z, xnames, t0) {
-
   x <- as.matrix(x)
   dat <- data.frame(y, x, z)
 
-  if (is.null(t0))
-    t0 <- rep(0, ncol(x) + 1)
+  if (is.null(t0)) t0 <- rep(0, ncol(x) + 1)
 
   # gmm fit
   fit <- gmm::gmm(msmmAltMoments, x = dat, t0 = t0, vcov = "iid")
 
-  if (fit$algoInfo$convergence != 0)
-    warning("The GMM fit has not converged, perhaps try different initial parameter values")
+  if (fit$algoInfo$convergence != 0) warning(
+    "The GMM fit has not converged, perhaps try different initial parameter values"
+  )
 
   # exponentiate estimates
   expests <- exp(cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test))
@@ -420,10 +409,7 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
   colnames(crrci)[1] <- "CRR"
   ey0ci <- expests[1, ]
 
-  reslist <- list(fit = fit,
-                  crrci = crrci,
-                  ey0ci = ey0ci,
-                  estmethod = "gmmalt")
+  reslist <- list(fit = fit, crrci = crrci, ey0ci = ey0ci, estmethod = "gmmalt")
 }
 
 #' Summarizing MSMM Fits
@@ -445,7 +431,6 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
 #' # For examples see the examples at the bottom of help('msmm')
 #' @export
 summary.msmm <- function(object, ...) {
-
   if (object$estmethod %in% c("tsls", "tslsalt")) {
     requireNamespace("ivreg", quietly = TRUE)
     smry <- summary(object$fit)
@@ -455,8 +440,7 @@ summary.msmm <- function(object, ...) {
     smry <- gmm::summary.gmm(object$fit)
   }
 
-  res <- list(smry = smry,
-              object = object)
+  res <- list(smry = smry, object = object)
 
   class(res) <- append(class(res), "summary.msmm")
   return(res)
@@ -522,3 +506,4 @@ print.summary.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...)
   cat("\n")
   invisible(x)
 }
+

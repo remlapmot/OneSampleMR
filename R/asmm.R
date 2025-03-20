@@ -57,3 +57,4 @@
 #' summary(fit2)
 #' @name asmm
 NULL
+

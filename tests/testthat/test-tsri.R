@@ -291,3 +291,4 @@ test_that("Multiple instrument example with covariates - logit link", {
   betamanual <- c(betamanual, coef(stage2))
   expect_equal(fit33$estci[, 1], betamanual, ignore_attr = TRUE)
 })
+

@@ -2,26 +2,28 @@
 
 # Test equivalence to Stata output ----
 test_that("Stata output check", {
-  skip_on_cran()
-  skip_if_not_installed("haven")
-  library(haven)
-  dat <- read_dta("https://www.stata-press.com/data/r17/trip.dta")
-  fit1 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
-                 cbd + ptn + worker + weekend + pt,
-               data = dat, estmethod = "gmmalt")
-  expect_equal(log(fit1$crrci["tcost", 1]), log(1.036),  tolerance = 0.05)
-  # fit2 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
-  #                cbd + ptn + worker + weekend + pt,
-  #              data = dat)
-  # fit3 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
-  #                cbd + ptn + worker + weekend + pt,
-  #              data = dat, estmethod = "gmmalt",
-  #              t0 = c(.265, -.008, -.011, .662, .301, .035))
-  # fit4 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
-  #                cbd + ptn + worker + weekend + pt,
-  #              data = dat,
-  #              t0 = c(exp(.265), -.008, -.011, .662, .301, .035))
-})
+    skip_on_cran()
+    skip_if_not_installed("haven")
+    library(haven)
+    dat <- read_dta("https://www.stata-press.com/data/r17/trip.dta")
+    fit1 <- msmm(
+      trips ~ cbd + ptn + worker + weekend + tcost | cbd + ptn + worker + weekend + pt,
+      data = dat,
+      estmethod = "gmmalt"
+    )
+    expect_equal(log(fit1$crrci["tcost", 1]), log(1.036), tolerance = 0.05)
+    # fit2 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
+    #                cbd + ptn + worker + weekend + pt,
+    #              data = dat)
+    # fit3 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
+    #                cbd + ptn + worker + weekend + pt,
+    #              data = dat, estmethod = "gmmalt",
+    #              t0 = c(.265, -.008, -.011, .662, .301, .035))
+    # fit4 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
+    #                cbd + ptn + worker + weekend + pt,
+    #              data = dat,
+    #              t0 = c(exp(.265), -.008, -.011, .662, .301, .035))
+  })
 
 # . * Setup
 # . webuse trip, clear
@@ -838,3 +840,4 @@ test_that("Adjusting for covariate", {
   fit26 <- msmm(Y ~ E1 + E2 + C | G1 + G2 + G3 + C, data = dat)
   expect_equal(log(fit26$crrci[1, 1]), .184, tolerance = .01)
 })
+
