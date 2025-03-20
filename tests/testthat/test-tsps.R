@@ -65,7 +65,12 @@ test_that("Single instrument example - logadd link", {
   logcrrse <- 0.06035374 # sqrt(fitLogGest$vcov)
 
   fit11 <- tsps(Y ~ X | Z, data = dat, link = "logadd")
-  expect_equal(fit11$estci[4, 1], logcrr, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(
+    fit11$estci[4, 1],
+    logcrr,
+    tolerance = 0.05,
+    ignore_attr = "names"
+  )
 
   expect_s3_class(fit11, "tsps")
 
@@ -103,7 +108,12 @@ test_that("Single instrument example - logmult link", {
   logcrrse <- 0.06027666 # sqrt(fitLogGest$vcov)
 
   fit12 <- tsps(Y ~ X | Z, data = dat, link = "logmult")
-  expect_equal(fit12$estci[4, 1], logcrr, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(
+    fit12$estci[4, 1],
+    logcrr,
+    tolerance = 0.05,
+    ignore_attr = "names"
+  )
 
   expect_s3_class(fit12, "tsps")
 
@@ -120,7 +130,12 @@ test_that("Single instrument example - logmult link", {
   Y[Y == 0] <- 0.001
   stage2 <- glm(Y ~ xhat, family = Gamma(link = "log"))
   betamanual <- c(betamanual, coef(stage2))
-  expect_equal(fit12$estci[, 1], betamanual, ignore_attr = "names", tolerance = 1e-3)
+  expect_equal(
+    fit12$estci[, 1],
+    betamanual,
+    ignore_attr = "names",
+    tolerance = 1e-3
+  )
   dat$Y[dat$Y == 0.001] <- 0
 })
 
@@ -142,7 +157,12 @@ test_that("Single instrument example - logit link", {
   logcorse <- 0.2895276 # sqrt(fitLogitGest$vcov)
 
   fit21 <- tsps(Y ~ X | Z, data = dat, link = "logit")
-  expect_equal(fit21$estci[4, 1], logcor, tolerance = 0.1, ignore_attr = "names")
+  expect_equal(
+    fit21$estci[4, 1],
+    logcor,
+    tolerance = 0.1,
+    ignore_attr = "names"
+  )
 
   expect_s3_class(fit21, "tsps")
 
@@ -207,7 +227,11 @@ test_that("Multiple instrument example with covariates - identity link", {
 test_that("Multiple instrument example with covariates - logadd link", {
   skip_on_cran()
 
-  fit31 <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logadd")
+  fit31 <- tsps(
+    Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+    data = dat,
+    link = "logadd"
+  )
   expect_output(print(fit31))
   smry31 <- summary(fit31)
   expect_output(print(smry31))
@@ -225,7 +249,11 @@ test_that("Multiple instrument example with covariates - logmult link", {
   skip_on_cran()
 
   dat$Y[dat$Y == 0] <- 0.001
-  fit32 <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logmult")
+  fit32 <- tsps(
+    Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+    data = dat,
+    link = "logmult"
+  )
   expect_output(print(fit32))
   smry32 <- summary(fit32)
   expect_output(print(smry32))
@@ -235,16 +263,29 @@ test_that("Multiple instrument example with covariates - logmult link", {
   betamanual <- coef(stage1)
   xhat <- fitted.values(stage1)
   Y[Y == 0] <- 0.001
-  stage2 <- glm(Y ~ xhat + C1 + C2, family = Gamma(link = "log"), control = list(maxit = 1E2))
+  stage2 <- glm(
+    Y ~ xhat + C1 + C2,
+    family = Gamma(link = "log"),
+    control = list(maxit = 1E2)
+  )
   betamanual <- c(betamanual, coef(stage2))
-  expect_equal(fit32$estci[, 1], betamanual, tolerance = 0.01, ignore_attr = TRUE)
+  expect_equal(
+    fit32$estci[, 1],
+    betamanual,
+    tolerance = 0.01,
+    ignore_attr = TRUE
+  )
   dat$Y[dat$Y == 0.001] <- 0
 })
 
 test_that("Multiple instrument example with covariates - logit link", {
   skip_on_cran()
 
-  fit33 <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logit")
+  fit33 <- tsps(
+    Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+    data = dat,
+    link = "logit"
+  )
   expect_output(print(fit33))
   smry33 <- summary(fit33)
   expect_output(print(smry33))

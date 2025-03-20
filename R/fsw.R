@@ -42,8 +42,8 @@ fsw <- function(object) UseMethod("fsw", object)
 #' @rdname fsw
 #' @export
 fsw.ivreg <- function(object) {
-
-  if (is.null(object$model)) stop("Please re-run your ivreg() model with the option model=TRUE")
+  if (is.null(object$model))
+    stop("Please re-run your ivreg() model with the option model=TRUE")
 
   nendog <- length(object$endogenous)
   if (nendog < 2) stop("The number of exposures must be 2 or more.")
@@ -59,40 +59,55 @@ fsw.ivreg <- function(object) {
   instrplus <- paste(namesinstruments, collapse = " + ")
 
   for (i in 1:nendog) {
-
     endogoutcome <- namesendog[i]
     endogothers <- namesendog[-i]
 
     if (nexogenous > 0) {
       exogplus <- paste(namesexog, collapse = " + ")
-      modelstr <- paste(endogoutcome,
-                        "~",
-                        paste(endogothers, collapse = " + "),
-                        "+",
-                        exogplus,
-                        "|",
-                        instrplus, "+", exogplus)
+      modelstr <- paste(
+        endogoutcome,
+        "~",
+        paste(endogothers, collapse = " + "),
+        "+",
+        exogplus,
+        "|",
+        instrplus,
+        "+",
+        exogplus
+      )
     } else {
-      modelstr <- paste(endogoutcome, "~",
-                        paste(endogothers, collapse = " + "),
-                        "|", instrplus)
+      modelstr <- paste(
+        endogoutcome,
+        "~",
+        paste(endogothers, collapse = " + "),
+        "|",
+        instrplus
+      )
     }
     modelfor <- stats::as.formula(modelstr)
     condmod <- try(ivreg::ivreg(modelfor, data = object$model), silent = TRUE)
-    condmoderrmsg <- paste("The IV regression of one of the exposures",
-                           "on the other/s has failed.",
-                           "This is most likely because you have a transformation",
-                           "on one or more of the exposure or instrumental variables.",
-                           "Please create the transformed variable/s in your",
-                           "data.frame and refit,",
-                           "e.g. instead of creating your ivreg object from",
-                           "ivreg(y ~ log(x1) + x2 | z1 + z2 + z3)",
-                           "please create dat$logx1 = log(x1) in your data.frame",
-                           "and fit ivreg(y ~ logx1 + x2 | z1 + z2 + z3).")
+    condmoderrmsg <- paste(
+      "The IV regression of one of the exposures",
+      "on the other/s has failed.",
+      "This is most likely because you have a transformation",
+      "on one or more of the exposure or instrumental variables.",
+      "Please create the transformed variable/s in your",
+      "data.frame and refit,",
+      "e.g. instead of creating your ivreg object from",
+      "ivreg(y ~ log(x1) + x2 | z1 + z2 + z3)",
+      "please create dat$logx1 = log(x1) in your data.frame",
+      "and fit ivreg(y ~ logx1 + x2 | z1 + z2 + z3)."
+    )
     if (inherits(condmod, "try-error")) stop(condmoderrmsg)
     condres <- condmod$residuals
     if (nexogenous > 0) {
-      resfor <- stats::as.formula(paste("condres", "~", instrplus, "+", exogplus))
+      resfor <- stats::as.formula(paste(
+        "condres",
+        "~",
+        instrplus,
+        "+",
+        exogplus
+      ))
     } else {
       resfor <- stats::as.formula(paste("condres", "~", instrplus))
     }
@@ -117,10 +132,12 @@ fsw.ivreg <- function(object) {
   rownames(fswres) <- namesendog
   colnames(fswres) <- c("F value", "d.f.", "Residual d.f.", "Pr(>F)")
 
-  output <- list(fswres = fswres,
-                 namesendog = namesendog,
-                 nendog = nendog,
-                 n = n)
+  output <- list(
+    fswres = fswres,
+    namesendog = namesendog,
+    nendog = nendog,
+    n = n
+  )
   class(output) <- append("fsw", class(output))
   return(output)
 }
@@ -128,7 +145,9 @@ fsw.ivreg <- function(object) {
 #' @export
 print.fsw <- function(x, digits = getOption("digits"), ...) {
   cat("\nModel sample size: ", x$n, "\n")
-  cat("\nSanderson-Windmeijer conditional F-statistics for first stage model:\n")
+  cat(
+    "\nSanderson-Windmeijer conditional F-statistics for first stage model:\n"
+  )
   stats::printCoefmat(
     x$fswres,
     cs.ind = 2L:3L,

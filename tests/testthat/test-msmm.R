@@ -6,10 +6,13 @@ test_that("Stata output check", {
   skip_if_not_installed("haven")
   library(haven)
   dat <- read_dta("https://www.stata-press.com/data/r17/trip.dta")
-  fit1 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
-                 cbd + ptn + worker + weekend + pt,
-               data = dat, estmethod = "gmmalt")
-  expect_equal(log(fit1$crrci["tcost", 1]), log(1.036),  tolerance = 0.05)
+  fit1 <- msmm(
+    trips ~
+      cbd + ptn + worker + weekend + tcost | cbd + ptn + worker + weekend + pt,
+    data = dat,
+    estmethod = "gmmalt"
+  )
+  expect_equal(log(fit1$crrci["tcost", 1]), log(1.036), tolerance = 0.05)
   # fit2 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
   #                cbd + ptn + worker + weekend + pt,
   #              data = dat)
@@ -613,19 +616,44 @@ test_that("Single instrument example", {
   logcrrse <- 0.06035374 # sqrt(fitLogGest$vcov)
 
   fit01 <- msmm(Y ~ X | Z, data = dat)
-  expect_equal(log(fit01$crrci[1]), logcrr, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(
+    log(fit01$crrci[1]),
+    logcrr,
+    tolerance = 0.05,
+    ignore_attr = "names"
+  )
 
   fit02 <- msmm(Y ~ X | Z, data = dat, estmethod = "gmm")
-  expect_equal(log(fit02$crrci[1]), logcrr, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(
+    log(fit02$crrci[1]),
+    logcrr,
+    tolerance = 0.05,
+    ignore_attr = "names"
+  )
 
   fit03 <- msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
-  expect_equal(log(fit03$crrci[1]), logcrr, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(
+    log(fit03$crrci[1]),
+    logcrr,
+    tolerance = 0.05,
+    ignore_attr = "names"
+  )
 
   fit04 <- msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
-  expect_equal(log(fit04$crrci[1]), logcrr, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(
+    log(fit04$crrci[1]),
+    logcrr,
+    tolerance = 0.05,
+    ignore_attr = "names"
+  )
 
   fit05 <- msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
-  expect_equal(log(fit05$crrci[1]), logcrr, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(
+    log(fit05$crrci[1]),
+    logcrr,
+    tolerance = 0.05,
+    ignore_attr = "names"
+  )
 
   expect_s3_class(fit01, "msmm")
 
@@ -669,7 +697,12 @@ test_that("Check using different variable names", {
   dat$R <- dat$Y
   dat$W <- dat$Z
   fit06 <- msmm(R ~ E | W, data = dat)
-  expect_equal(log(fit06$crrci[1]), 0.1314654, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(
+    log(fit06$crrci[1]),
+    0.1314654,
+    tolerance = 0.05,
+    ignore_attr = "names"
+  )
 })
 
 # Multiple instrument example ----
@@ -783,7 +816,11 @@ test_that("Multiple exposure example", {
   expect_equal(log(fit23$crrci[1, 1]), 0.08, tolerance = 0.1)
 
   expect_error(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tsls"))
-  expect_error(msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "tslsalt"))
+  expect_error(msmm(
+    Y ~ X1 + X2 | G1 + G2 + G3,
+    data = dat,
+    estmethod = "tslsalt"
+  ))
 })
 
 # Multiple exposure example with different variable names ----

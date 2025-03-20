@@ -5,54 +5,62 @@ library(ivreg)
 data("CigaretteDemand", package = "ivreg")
 
 test_that("Expect error when object from ivreg(..., model=FALSE)", {
-  merror <- ivreg(packs ~ rprice + rincome | salestax + rincome,
-                  data = CigaretteDemand, model = FALSE)
+  merror <- ivreg(
+    packs ~ rprice + rincome | salestax + rincome,
+    data = CigaretteDemand,
+    model = FALSE
+  )
   expect_error(fsw(merror))
 })
 
 test_that("Check run after ivreg model", {
-  object <- ivreg(packs ~ rprice + rincome | salestax + cigtax + packsdiff,
-                  data = CigaretteDemand)
+  object <- ivreg(
+    packs ~ rprice + rincome | salestax + cigtax + packsdiff,
+    data = CigaretteDemand
+  )
   res <- fsw(object)
   expect_equal(res$fswres[1, 1], 4.884, tolerance = 1e-2)
   expect_equal(res$fswres[2, 1], 3.450, tolerance = 1e-2)
 })
 
 test_that("Check run with ivreg model object with transformations of outcome", {
-  object <- ivreg(log(packs) ~ rprice + rincome |
-                    salestax + cigtax + packsdiff,
-                  data = CigaretteDemand)
+  object <- ivreg(
+    log(packs) ~ rprice + rincome | salestax + cigtax + packsdiff,
+    data = CigaretteDemand
+  )
   res <- fsw(object)
   expect_equal(res$fswres[1, 1], 4.884, tolerance = 1e-2)
   expect_equal(res$fswres[2, 1], 3.450, tolerance = 1e-2)
 })
 
 test_that("Check error with transformation of exposure", {
-# Note check if there is a way to work out if there is a transformed variable in a formula
-  object <- ivreg(packs ~ log(rprice) + rincome |
-                    salestax + cigtax + packsdiff,
-                  data = CigaretteDemand)
+  # Note check if there is a way to work out if there is a transformed variable in a formula
+  object <- ivreg(
+    packs ~ log(rprice) + rincome | salestax + cigtax + packsdiff,
+    data = CigaretteDemand
+  )
   expect_error(fsw(object))
 })
 
 test_that("Check error with two transformed exposures", {
-  object <- ivreg(packs ~ log(rprice) + log(rincome) |
-                    salestax + cigtax + packsdiff,
-                  data = CigaretteDemand)
+  object <- ivreg(
+    packs ~ log(rprice) + log(rincome) | salestax + cigtax + packsdiff,
+    data = CigaretteDemand
+  )
   expect_error(fsw(object))
 })
 
 test_that("Check run with transformation of instrument", {
-  object <- ivreg(packs ~ rprice + rincome |
-                    salestax + cigtax + I(packsdiff^2),
-                  data = CigaretteDemand)
+  object <- ivreg(
+    packs ~ rprice + rincome | salestax + cigtax + I(packsdiff^2),
+    data = CigaretteDemand
+  )
   expect_error(fsw(object))
 })
 
 # Check error with a single endogenous variable
 test_that("Require two or more exposures", {
-  object <- ivreg(packs ~ rprice | salestax + rincome,
-                  data = CigaretteDemand)
+  object <- ivreg(packs ~ rprice | salestax + rincome, data = CigaretteDemand)
   expect_error(fsw(object))
 })
 
@@ -107,7 +115,6 @@ test_that("Compare with Stata ivreg2 output", {
   expect_equal(condf$fswres[1, 1], 6.69, tolerance = 1e-2)
   expect_equal(condf$fswres[2, 1], 81.81, tolerance = 1e-2)
 })
-
 
 # Copy-pasted output from some model fits
 
@@ -563,7 +570,6 @@ test_that("Compare with Stata ivreg2 output", {
 # APchi2  5.2290154  3.1624138
 # APchi2p  .26459576  .53102306
 # APr2  .00130555  .00078998
-
 
 # . use http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear
 #
