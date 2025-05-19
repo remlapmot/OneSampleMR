@@ -974,3 +974,65 @@ test_that("Compare with Stata ivreg2 output", {
 #
 # . di Fsw21
 # 81.812373
+
+set.seed(20250519)
+
+# Define the number of observations you want to generate
+n <- 300000
+
+# Define the data structure
+# Binary alc_deaths variable
+alc_deaths <- rbinom(n, 1, p = 0.01)
+# Binary sex variable
+sex <- rbinom(n, 1, p = 0.5)
+# Binary belief variable
+bileve <- rbinom(n, 1, p = 0.1)
+# Normal distribution for log_dpw
+log_dpw <- rnorm(n, 2, 1)
+# Normal distribution for education years
+eduyears <- rnorm(n, 14, 5)
+# Normal distribution for intervention
+inter <- rnorm(n, 30, 18)
+# Normal distribution for age
+age <- rnorm(n, 57, 8)
+# Normal distribution for dpw_main_grs
+dpw_main_grs <- rnorm(n, 0, 1)
+# Normal distribution for edu_main_grs
+edu_main_grs <- rnorm(n, 0, 1)
+# Normal distribution for inter_grs
+inter_grs <- rnorm(n, 0.2, 1)
+
+# Create data.frame
+simulated_data <- data.frame(alc_deaths, sex, bileve, log_dpw, eduyears, inter, age, dpw_main_grs, edu_main_grs, inter_grs)
+
+test_that("Example from Zoe Reed with factor variables in covariate list", {
+  # Run with no error
+  tsls_sim <- ivreg::ivreg(alc_deaths ~ log_dpw + eduyears + inter + age + sex + bileve | dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve, data = simulated_data)
+
+  expect_no_error({fswres1 <- fsw(tsls_sim)})
+
+  # Including factor variable causes error
+  simulated_data$sex <- as.factor(simulated_data$sex)
+
+  tsls_sim2 <- ivreg::ivreg(alc_deaths ~ log_dpw + eduyears + inter + age + sex + bileve | dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve, data = simulated_data)
+
+  expect_no_error({fswres2 <- fsw(tsls_sim2)})
+
+  expect_equal(fswres1, fswres2)
+})
+
+# Expect failure if a binary exposure is a factor
+simulated_data$expfct <- as.factor(rbinom(n, 1, p = 0.4))
+
+test_that("Test fsw() when exposure is class factor", {
+  tsls_sim3 <- ivreg::ivreg(alc_deaths ~ log_dpw + eduyears + expfct + age + sex + bileve | dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve, data = simulated_data)
+  expect_error({fsw(tsls_sim3)})
+})
+
+# Expect no error if a binary exposure is numeric
+simulated_data$expfct <- as.numeric(simulated_data$expfct)
+
+test_that("Test fsw() when exposure is binary but numeric", {
+  tsls_sim4 <- ivreg::ivreg(alc_deaths ~ log_dpw + eduyears + expfct + age + sex + bileve | dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve, data = simulated_data)
+  expect_no_error({fswres4 <- fsw(tsls_sim4)})
+})
