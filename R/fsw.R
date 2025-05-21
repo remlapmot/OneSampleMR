@@ -50,7 +50,12 @@ fsw.ivreg <- function(object) {
 
   ninstruments <- length(object$instruments)
   nexogenous <- length(object$exogenous) - 1
-  namesendog <- names(object$endogenous)
+  namesendog <- labels(object$terms$regressors)[1:nendog]
+  endogfcterrmsg <- paste("One or more of your exposure variables is a factor.",
+                          "Please convert to numeric with say as.numeric(),",
+                          "refit your ivreg() model, and rerun fsw().")
+  if ("factor" %in% lapply(object$model[namesendog], class)) stop(endogfcterrmsg)
+
   namesexog <- labels(object$terms$regressors)[-(1:nendog)]
   namesinstruments <- names(object$instruments)
   n <- object$n
