@@ -1,5 +1,9 @@
 # OneSampleMR 0.1.5.9000
 
+* Fixed a bug in `fsw()` when an exogenous covariate was a factor (thanks @ZoeReed)
+
+* The `fsw()` function now returns an error if any of the exposures are factors
+
 # OneSampleMR 0.1.5
 
 * Replaced dots checking with rlang instead of the ellipsis package (thanks @olivroy).
