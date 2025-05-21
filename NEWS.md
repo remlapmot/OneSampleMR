@@ -1,4 +1,4 @@
-# OneSampleMR 0.1.5.9000
+# OneSampleMR 0.1.6
 
 * Fixed a bug in `fsw()` when an exogenous covariate was a factor (thanks @ZoeReed)
 
