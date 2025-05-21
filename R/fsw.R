@@ -51,7 +51,7 @@ fsw.ivreg <- function(object) {
   ninstruments <- length(object$instruments)
   nexogenous <- length(object$exogenous) - 1
   namesendog <- names(object$endogenous)
-  namesexog <- names(object$exogenous[-1])
+  namesexog <- labels(object$terms$regressors)[-(1:nendog)]
   namesinstruments <- names(object$instruments)
   n <- object$n
   fsw <- fswdf <- fswresdf <- fswp <- numeric(nendog)
