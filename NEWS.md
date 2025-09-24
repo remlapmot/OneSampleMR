@@ -1,3 +1,7 @@
+# OneSampleMR 0.1.6.9000
+
+* Replaced `stats::glm()` calls with `parglm::parglm()` calls to improve speed
+
 # OneSampleMR 0.1.6
 
 * Fixed a bug in `fsw()` when an exogenous covariate was a factor (thanks @ZoeReed)
