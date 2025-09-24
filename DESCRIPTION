@@ -26,6 +26,7 @@ BugReports: https://github.com/remlapmot/OneSampleMR/issues/
 Depends:
     R (>= 4.3)
 Imports:
+    fastglm,
     Formula,
     gmm,
     ivreg (>= 0.6-5),

@@ -176,14 +176,14 @@ tsri <- function(formula, instruments, data, subset, na.action,
     if (link == "identity") {
       stage2 <- stats::lm(Y ~ X[, 2] + res)
     } else if (link == "logadd") {
-      stage2 <- stats::glm(Y ~ X[, 2] + res, family = stats::poisson(link = "log"))
+      stage2 <- fastglm::fastglm(Y ~ X[, 2] + res, family = stats::poisson(link = "log"))
     } else if (link == "logmult") {
       Ystar <- Y
       Ystar[Y == 0] <- 0.001
-      stage2 <- stats::glm(Ystar ~ X[, 2] + res, family = stats::Gamma(link = "log"),
+      stage2 <- fastglm::fastglm(Ystar ~ X[, 2] + res, family = stats::Gamma(link = "log"),
                     control = list(maxit = 1E5))
     } else if (link == "logit") {
-      stage2 <- stats::glm(Y ~ X[, 2] + res, family = stats::binomial(link = "logit"))
+      stage2 <- fastglm::fastglm(Y ~ X[, 2] + res, family = stats::binomial(link = "logit"))
     }
     t0 <- c(t0, stats::coef(stage2))
 
