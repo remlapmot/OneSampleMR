@@ -577,18 +577,31 @@ fsw.fixest <- function(object) {
 
 
 
-#' Retrieve the data frame from a fitted model object
-#' Tries call_env (fixest), then the formula environment (estimatr)
+#' Retrieve the data frame used by a fitted model object (complete cases only)
+#' Tries call_env (fixest), then the formula environment (estimatr).
+#' Subsets to the rows actually used in the model fit to handle NA removal.
 #' @param object a fitted model object
 #' @noRd
 get_data <- function(object) {
   data_name <- object$call$data
   # fixest stores the environment where the model was fitted
   if (!is.null(object$call_env)) {
-    return(eval(data_name, envir = object$call_env))
+    d <- eval(data_name, envir = object$call_env)
+    # fixest$obs_selection$obsRemoved contains (negative) indices of removed rows
+    if (!is.null(object$obs_selection$obsRemoved)) {
+      removed <- abs(object$obs_selection$obsRemoved)
+      d <- d[setdiff(seq_len(nrow(d)), removed), , drop = FALSE]
+    }
+    return(d)
   }
   # for estimatr and others, the formula captures the fitting environment
-  eval(data_name, envir = environment(object$formula))
+  d <- eval(data_name, envir = environment(object$formula))
+  # iv_robust names fitted.values with the row indices actually used
+  if (!is.null(names(object$fitted.values))) {
+    used <- as.integer(names(object$fitted.values))
+    d <- d[used, , drop = FALSE]
+  }
+  d
 }
 
 
