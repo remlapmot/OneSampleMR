@@ -498,6 +498,7 @@ fsw.fixest <- function(object) {
   # Create equations of the unrestricted and restricted models compared in the Wald test:
   equations <- wald_equations(nexogenous, instrplus, exogplus)
 
+  dat <- get_data(object)
 
   # Obtain conditional F statistic for each endogenous explanatory variables:
   fswres <- sapply(namesendog, function(endogoutcome) {
@@ -528,7 +529,7 @@ fsw.fixest <- function(object) {
     # Convert condit. model equation to formula:
     modelfor <- stats::as.formula(modelstr)
     # Estimate condit. model using feols:
-    condmod <- try(fixest::feols(modelfor, data = eval(object$call$data)), silent = TRUE)
+    condmod <- try(fixest::feols(modelfor, data = dat), silent = TRUE)
 
     # Error message if condit. model estimation fails:
     condmoderrmsg <- paste("The IV regression of one of the exposures",
@@ -548,12 +549,12 @@ fsw.fixest <- function(object) {
 
     # Unrestricted model for Wald test:
     # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-    resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = eval(object$call$data))
+    resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = dat)
     # summary(resmod)
 
     # Restricted model for Wald test:
     # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-    resbase <- stats::lm(stats::as.formula(equations$restricted), data = eval(object$call$data))
+    resbase <- stats::lm(stats::as.formula(equations$restricted), data = dat)
     # summary(resbase)
 
     # Compute conditional F-Statistic using Wald test for restricted vs unrestricted model:
