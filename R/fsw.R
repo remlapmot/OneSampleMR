@@ -619,8 +619,12 @@ fsw_wald_test <- function(restricted,unrestricted,nendog) {
 }
 
 
-#' Print function for fsw results:
-#' @noRd
+#' S3 method for class 'fsw'
+#' @param x an object of class "[fsw]".
+#' @param digits minimal number of significant digits, see print.default.
+#' @param ... further arguments passed to or from other methods.
+#' @rdname fsw
+#' @export
 print.fsw <- function(x, digits = getOption("digits"), ...) {
   cat("\nModel sample size: ", x$n, "\n")
   cat("\nSanderson-Windmeijer conditional F-statistics for first stage model:\n")
