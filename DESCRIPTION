@@ -35,6 +35,9 @@ Imports:
     msm,
     rlang (>= 1.0.0)
 Suggests:
+    AER,
+    estimatr,
+    fixest,
     haven,
     knitr,
     lfe,
