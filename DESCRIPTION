@@ -8,7 +8,9 @@ Authors@R: c(
     person("Wes", "Spiller", , "wes.spiller@bristol.ac.uk", role = "aut",
            comment = c(ORCID = "0000-0002-8169-5531")),
     person("Eleanor", "Sanderson", , "eleanor.sanderson@bristol.ac.uk", role = "aut",
-           comment = c(ORCID = "0000-0001-5188-5775"))
+           comment = c(ORCID = "0000-0001-5188-5775")),
+    person("Nicolai", "Vitt", , "nicolai.vitt@bristol.ac.uk", role = "aut",
+           comment = c(ORCID = "0000-0002-5988-9372"))
   )
 Description: Useful functions for one-sample (individual level data)
     Mendelian randomization and instrumental variable analyses. The
