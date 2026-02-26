@@ -1098,3 +1098,57 @@ test_that("Test fsw() when exposure is binary but numeric", {
     fswres4 <- fsw(tsls_sim4)
   })
 })
+
+# Tests for AER, estimatr, fixest methods against Stata ivreg2 reference values
+
+test_that("AER::ivreg fsw matches Stata ivreg2 output", {
+  skip_if_not_installed("haven")
+  skip_if_not_installed("AER")
+  library(haven)
+  library(AER)
+  url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
+  dat <- haven::read_dta(url)
+  mod <- AER::ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
+  condf <- fsw(mod)
+  expect_equal(condf$fswres[1, 1], 6.69, tolerance = 1e-2)
+  expect_equal(condf$fswres[2, 1], 81.81, tolerance = 1e-2)
+  expect_equal(condf$fswres[1, 3], 424, tolerance = 1)
+  expect_equal(condf$fswres[2, 3], 424, tolerance = 1)
+})
+
+test_that("estimatr::iv_robust fsw matches Stata ivreg2 output", {
+  skip_if_not_installed("haven")
+  skip_if_not_installed("estimatr")
+  library(haven)
+  library(estimatr)
+  url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
+  dat <- haven::read_dta(url)
+  mod <- estimatr::iv_robust(
+    lwage ~ educ + exper | age + kidslt6 + kidsge6,
+    data = dat,
+    se_type = "classical"
+  )
+  condf <- fsw(mod)
+  expect_equal(condf$fswres[1, 1], 6.69, tolerance = 1e-2)
+  expect_equal(condf$fswres[2, 1], 81.81, tolerance = 1e-2)
+  expect_equal(condf$fswres[1, 3], 424, tolerance = 1)
+  expect_equal(condf$fswres[2, 3], 424, tolerance = 1)
+})
+
+test_that("fixest::feols fsw matches Stata ivreg2 output", {
+  skip_if_not_installed("haven")
+  skip_if_not_installed("fixest")
+  library(haven)
+  library(fixest)
+  url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
+  dat <- haven::read_dta(url)
+  mod <- fixest::feols(
+    lwage ~ 1 | educ + exper ~ age + kidslt6 + kidsge6,
+    data = dat
+  )
+  condf <- fsw(mod)
+  expect_equal(condf$fswres[1, 1], 6.69, tolerance = 1e-2)
+  expect_equal(condf$fswres[2, 1], 81.81, tolerance = 1e-2)
+  expect_equal(condf$fswres[1, 3], 424, tolerance = 1)
+  expect_equal(condf$fswres[2, 3], 424, tolerance = 1)
+})
