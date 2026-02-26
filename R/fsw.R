@@ -37,7 +37,7 @@
 #' mod1 <- ivreg::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
 #' mod2 <- AER::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
 #' mod3 <- estimatr::iv_robust(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2,
-#'         data = dat, se_type="classical")
+#'         data = dat, se_type = "classical")
 #' mod4 <- fixest::feols(y ~ w1 + w2 | x1 + x2 ~ z1 + z2, data = dat)
 #' fsw(mod1)
 #' fsw(mod2)
@@ -51,7 +51,7 @@
 #' @export
 fsw <- function(object) UseMethod("fsw", object)
 
-### FSW function for object returned by ivreg::ivreg or AER::ivreg
+#' S3 fsw method for object returned by [ivreg::ivreg()] or [AER::ivreg()]
 #' @rdname fsw
 #' @export
 fsw.ivreg <- function(object) {
@@ -191,9 +191,9 @@ fsw.ivreg <- function(object) {
     }
 
     # Explanatory variables (both endogenous and exogenous):
-    xvars<-attr(stats::terms(Formula::Formula(object$formula), rhs = 1), "term.labels")
+    xvars <- attr(stats::terms(Formula::Formula(object$formula), rhs = 1), "term.labels")
     # Instruments (both excluded and included - i.e. includes exogenous expl. vars):
-    zvars<-attr(stats::terms(Formula::Formula(object$formula), rhs = 2), "term.labels")
+    zvars <- attr(stats::terms(Formula::Formula(object$formula), rhs = 2), "term.labels")
 
     # Number of endogenous variables:
     nendog <- length(xvars[!xvars %in% zvars])
@@ -239,7 +239,7 @@ fsw.ivreg <- function(object) {
 
 
     # Obtain conditional F statistic for each endogenous explanatory variables:
-    fswres<-sapply(namesendog, function(endogoutcome) {
+    fswres <- sapply(namesendog, function(endogoutcome) {
 
       # Names of other endogenous explanatory variables:
       endogothers <- namesendog[!(namesendog %in% endogoutcome)]
@@ -300,7 +300,7 @@ fsw.ivreg <- function(object) {
     })
 
     # Prepare results vectors:
-    fswres<-t(fswres)
+    fswres <- t(fswres)
     rownames(fswres) <- namesendog
     colnames(fswres) <- c("F value", "d.f.", "Residual d.f.", "Pr(>F)")
 
@@ -315,7 +315,7 @@ fsw.ivreg <- function(object) {
 }
 
 
-### FSW function for object returned by estimatr::iv_robust
+#' S3 fsw method for object returned by [estimatr::iv_robust()]
 #' @rdname fsw
 #' @export
 fsw.iv_robust <- function(object) {
@@ -328,9 +328,9 @@ fsw.iv_robust <- function(object) {
   }
 
   # Explanatory variables (both endogenous and exogenous):
-  xvars<-attr(stats::terms(Formula::Formula(object$formula), rhs = 1), "term.labels")
+  xvars <- attr(stats::terms(Formula::Formula(object$formula), rhs = 1), "term.labels")
   # Instruments (both excluded and included - i.e. includes exogenous expl. vars):
-  zvars<-attr(stats::terms(Formula::Formula(object$formula), rhs = 2), "term.labels")
+  zvars <- attr(stats::terms(Formula::Formula(object$formula), rhs = 2), "term.labels")
 
   # Number of endogenous variables:
   nendog <- length(xvars[!xvars %in% zvars])
@@ -372,11 +372,11 @@ fsw.iv_robust <- function(object) {
   }
 
   # Create equations of the unrestricted and restricted models compared in the Wald test:
-  equations<-wald_equations(nexogenous,instrplus,exogplus)
+  equations <- wald_equations(nexogenous, instrplus, exogplus)
 
 
   # Obtain conditional F statistic for each endogenous explanatory variables:
-  fswres<-sapply(namesendog, function(endogoutcome) {
+  fswres <- sapply(namesendog, function(endogoutcome) {
 
     # Names of other endogenous explanatory variables:
     endogothers <- namesendog[!(namesendog %in% endogoutcome)]
@@ -449,7 +449,7 @@ fsw.iv_robust <- function(object) {
 }
 
 
-### FSW function for object returned by fixest::feols
+#' S3 fsw method for object returned by [fixest::feols()]
 #' @rdname fsw
 #' @export
 fsw.fixest <- function(object) {
@@ -495,11 +495,11 @@ fsw.fixest <- function(object) {
   }
 
   # Create equations of the unrestricted and restricted models compared in the Wald test:
-  equations<-wald_equations(nexogenous,instrplus,exogplus)
+  equations <- wald_equations(nexogenous, instrplus, exogplus)
 
 
   # Obtain conditional F statistic for each endogenous explanatory variables:
-  fswres<-sapply(namesendog, function(endogoutcome) {
+  fswres <- sapply(namesendog, function(endogoutcome) {
 
     # Names of other endogenous explanatory variables:
     endogothers <- namesendog[!(namesendog %in% endogoutcome)]
@@ -582,7 +582,7 @@ fsw.fixest <- function(object) {
 #' @param instrplus plus-separated string of excluded instruments (e.g. "z1 + z2 + ...")
 #' @param exogplus plus-separated string of exogenous explanatory variables
 #' @noRd
-wald_equations<-function(nexogenous,instrplus,exogplus){
+wald_equations <- function(nexogenous, instrplus, exogplus){
   if (nexogenous > 0) { # with exogenous explanatory variables
     unrestricted <- paste("condres", "~", instrplus, "+", exogplus)
     restricted <- paste("condres ~ 1 +", exogplus)
@@ -600,9 +600,9 @@ wald_equations<-function(nexogenous,instrplus,exogplus){
 #' @param unrestricted lm object for unrestricted model
 #' @param nendog number of endogenous variables (for degrees of freedom)
 #' @noRd
-fsw_wald_test <- function(restricted,unrestricted,nendog) {
+fsw_wald_test <- function(restricted, unrestricted, nendog) {
   # Wald test for restricted vs unrestricted model:
-  wldtst <- lmtest::waldtest(restricted,unrestricted)
+  wldtst <- lmtest::waldtest(restricted, unrestricted)
 
 
   # Add to results vectors:
