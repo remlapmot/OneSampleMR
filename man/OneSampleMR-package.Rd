@@ -26,6 +26,7 @@ Authors:
 \itemize{
   \item Wes Spiller \email{wes.spiller@bristol.ac.uk} (\href{https://orcid.org/0000-0002-8169-5531}{ORCID})
   \item Eleanor Sanderson \email{eleanor.sanderson@bristol.ac.uk} (\href{https://orcid.org/0000-0001-5188-5775}{ORCID})
+  \item Nicolai Vitt \email{nicolai.vitt@bristol.ac.uk} (\href{https://orcid.org/0000-0002-5988-9372}{ORCID})
 }
 
 }
