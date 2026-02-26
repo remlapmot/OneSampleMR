@@ -351,7 +351,7 @@ fsw.iv_robust <- function(object) {
   endogfcterrmsg <- paste("One or more of your exposure variables is a factor.",
                           "Please convert to numeric with say as.numeric(),",
                           "refit your iv_robust() model, and rerun fsw().")
-  if ("factor" %in% lapply(eval(object$call$data)[namesendog], class)) stop(endogfcterrmsg)
+  if ("factor" %in% lapply(get_data(object)[namesendog], class)) stop(endogfcterrmsg)
 
   # Names of exogenous explanatory variables:
   namesexog <- xvars[xvars %in% zvars]
@@ -374,6 +374,7 @@ fsw.iv_robust <- function(object) {
   # Create equations of the unrestricted and restricted models compared in the Wald test:
   equations <- wald_equations(nexogenous, instrplus, exogplus)
 
+  dat <- get_data(object)
 
   # Obtain conditional F statistic for each endogenous explanatory variables:
   fswres <- sapply(namesendog, function(endogoutcome) {
@@ -401,7 +402,7 @@ fsw.iv_robust <- function(object) {
     # Convert condit. model equation to formula:
     modelfor <- stats::as.formula(modelstr)
     # Estimate condit. model using iv_robust:
-    condmod <- try(estimatr::iv_robust(modelfor, data = eval(object$call$data), se_type="classical"), silent = TRUE)
+    condmod <- try(estimatr::iv_robust(modelfor, data = dat, se_type="classical"), silent = TRUE)
 
     # Error message if condit. model estimation fails:
     condmoderrmsg <- paste("The IV regression of one of the exposures",
@@ -417,16 +418,16 @@ fsw.iv_robust <- function(object) {
     if (inherits(condmod, "try-error")) stop(condmoderrmsg)
 
     # Residuals of the condit. model:
-    condres <- eval(object$call$data)[,endogoutcome]-condmod$fitted.values
+    condres <- dat[,endogoutcome]-condmod$fitted.values
 
     # Unrestricted model for Wald test:
     # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-    resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = eval(object$call$data))
+    resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = dat)
     # summary(resmod)
 
     # Restricted model for Wald test:
     # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-    resbase <- stats::lm(stats::as.formula(equations$restricted), data = eval(object$call$data))
+    resbase <- stats::lm(stats::as.formula(equations$restricted), data = dat)
     # summary(resbase)
 
     # Compute conditional F-Statistic using Wald test for restricted vs unrestricted model:
@@ -480,7 +481,7 @@ fsw.fixest <- function(object) {
   endogfcterrmsg <- paste("One or more of your exposure variables is a factor.",
                           "Please convert to numeric with say as.numeric(),",
                           "refit your iv_robust() model, and rerun fsw().")
-  if ("factor" %in% lapply(eval(object$call$data)[namesendog], class)) stop(endogfcterrmsg)
+  if ("factor" %in% lapply(get_data(object)[namesendog], class)) stop(endogfcterrmsg)
 
   # Sample size:
   n <- object$nobs
