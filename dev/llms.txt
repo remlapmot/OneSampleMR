@@ -1,0 +1,125 @@
+# OneSampleMR: Useful functions for one-sample Mendelian randomization and instrumental variable analyses
+
+Useful functions for one sample, individual level data, Mendelian
+randomization / instrumental variable analyses, including
+implementations of:
+
+- The [Sanderson and Windmeijer
+  (2016)](https://doi.org/10.1016/j.jeconom.2015.06.004) conditional
+  F-statistic for multiple exposure models.
+- Various one-sample instrumental variable estimators including the
+  - Multiplicative structural mean model (Robins, 1989; [Hernán and
+    Robins, 2006](https://doi.org/10.1097/01.ede.0000222409.00878.37))
+  - Two-stage predictor substitution estimators ([Terza,
+    2008](https://doi.org/10.1016/j.jhealeco.2007.09.009))
+  - Two-stage residual inclusion estimators ([Terza,
+    2008](https://doi.org/10.1016/j.jhealeco.2007.09.009))
+
+**OneSampleMR** was included in the R Views November 2021 “Top 40” New
+CRAN Packages
+[here](https://rviews.rstudio.com/2021/12/21/november-2021-top-40-new-cran-packages/)!
+
+## Installation
+
+### Released version
+
+Install the package from CRAN using
+
+``` r
+install.packages("OneSampleMR")
+```
+
+To check for updates run
+
+``` r
+update.packages()
+```
+
+### Issue with gmm package versions 1.6-5, 1.6-6, 1.7 on macOS
+
+Using these old versions of the **gmm** package, a GNU Fortran
+installation was required even if the binary version of the package was
+installed.
+
+The fix is to update to the current version of **gmm**, which is version
+1.8.
+
+If you cannot update your version of **gmm** then
+
+- The current version of GNU Fortran to install is documented
+  [here](https://mac.r-project.org/tools/) and available
+  [here](https://mac.r-project.org/tools/gfortran-12.2-universal.pkg)
+- Note that the version of Fortran available from Homebrew will probably
+  not work
+
+### Development version
+
+Install the development version of the package from source from GitHub
+using
+
+``` r
+# install.packages("remotes") # uncomment on first run
+remotes::install_github("remlapmot/OneSampleMR")
+```
+
+To check for and install updates to the development version run the
+previous command again or run
+
+``` r
+remotes::update_packages()
+```
+
+A binary of the development version of the package (for Windows, macOS,
+and Ubuntu Jammy Jellyfish) can be installed from r-universe using
+
+``` r
+install.packages('OneSampleMR', repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-project.org'))
+```
+
+which can be updated using
+
+``` r
+update.packages(repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-project.org'))
+```
+
+# Package index
+
+## All functions
+
+- [`OneSampleMR-package`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-package.md)
+  [`onesamplemr`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-package.md)
+  [`OneSampleMR`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-package.md)
+  : OneSampleMR: One Sample Mendelian Randomization and Instrumental
+  Variable Analyses
+- [`asmm`](https://remlapmot.github.io/OneSampleMR/dev/reference/asmm.md)
+  : Additive structural mean model
+- [`fsw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
+  [`print(`*`<fsw>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
+  : Conditional F-statistic of Sanderson and Windmeijer (2016)
+- [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md)
+  : Multiplicative structural mean model
+- [`summary(`*`<msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.msmm.md)
+  [`print(`*`<msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.msmm.md)
+  [`print(`*`<summary.msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.msmm.md)
+  : Summarizing MSMM Fits
+- [`summary(`*`<tsps>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.tsps.md)
+  [`print(`*`<tsps>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.tsps.md)
+  [`print(`*`<summary.tsps>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.tsps.md)
+  : Summarizing TSPS Fits
+- [`summary(`*`<tsri>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.tsri.md)
+  [`print(`*`<tsri>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.tsri.md)
+  [`print(`*`<summary.tsri>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.tsri.md)
+  : Summarizing TSRI Fits
+- [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md)
+  : Two-stage predictor substitution (TSPS) estimators
+- [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md)
+  : Two-stage residual inclusion (TSRI) estimators
+
+# Articles
+
+### All vignettes
+
+- [Comparison fits of the multiplicative structural mean
+  model](https://remlapmot.github.io/OneSampleMR/dev/articles/compare-smm-fits.md):
+- [Comparison of conditional
+  F-statistics](https://remlapmot.github.io/OneSampleMR/dev/articles/f-statistic-comparison.md):
