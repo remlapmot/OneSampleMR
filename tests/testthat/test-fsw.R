@@ -5,54 +5,62 @@ library(ivreg)
 data("CigaretteDemand", package = "ivreg")
 
 test_that("Expect error when object from ivreg(..., model=FALSE)", {
-  merror <- ivreg(packs ~ rprice + rincome | salestax + rincome,
-                  data = CigaretteDemand, model = FALSE)
+  merror <- ivreg(
+    packs ~ rprice + rincome | salestax + rincome,
+    data = CigaretteDemand,
+    model = FALSE
+  )
   expect_error(fsw(merror))
 })
 
 test_that("Check run after ivreg model", {
-  object <- ivreg(packs ~ rprice + rincome | salestax + cigtax + packsdiff,
-                  data = CigaretteDemand)
+  object <- ivreg(
+    packs ~ rprice + rincome | salestax + cigtax + packsdiff,
+    data = CigaretteDemand
+  )
   res <- fsw(object)
   expect_equal(res$fswres[1, 1], 4.884, tolerance = 1e-2)
   expect_equal(res$fswres[2, 1], 3.450, tolerance = 1e-2)
 })
 
 test_that("Check run with ivreg model object with transformations of outcome", {
-  object <- ivreg(log(packs) ~ rprice + rincome |
-                    salestax + cigtax + packsdiff,
-                  data = CigaretteDemand)
+  object <- ivreg(
+    log(packs) ~ rprice + rincome | salestax + cigtax + packsdiff,
+    data = CigaretteDemand
+  )
   res <- fsw(object)
   expect_equal(res$fswres[1, 1], 4.884, tolerance = 1e-2)
   expect_equal(res$fswres[2, 1], 3.450, tolerance = 1e-2)
 })
 
 test_that("Check error with transformation of exposure", {
-# Note check if there is a way to work out if there is a transformed variable in a formula
-  object <- ivreg(packs ~ log(rprice) + rincome |
-                    salestax + cigtax + packsdiff,
-                  data = CigaretteDemand)
+  # Note check if there is a way to work out if there is a transformed variable in a formula
+  object <- ivreg(
+    packs ~ log(rprice) + rincome | salestax + cigtax + packsdiff,
+    data = CigaretteDemand
+  )
   expect_error(fsw(object))
 })
 
 test_that("Check error with two transformed exposures", {
-  object <- ivreg(packs ~ log(rprice) + log(rincome) |
-                    salestax + cigtax + packsdiff,
-                  data = CigaretteDemand)
+  object <- ivreg(
+    packs ~ log(rprice) + log(rincome) | salestax + cigtax + packsdiff,
+    data = CigaretteDemand
+  )
   expect_error(fsw(object))
 })
 
 test_that("Check run with transformation of instrument", {
-  object <- ivreg(packs ~ rprice + rincome |
-                    salestax + cigtax + I(packsdiff^2),
-                  data = CigaretteDemand)
+  object <- ivreg(
+    packs ~ rprice + rincome | salestax + cigtax + I(packsdiff^2),
+    data = CigaretteDemand
+  )
   expect_error(fsw(object))
 })
 
 # Check error with a single endogenous variable
 test_that("Require two or more exposures", {
-  object <- ivreg(packs ~ rprice | salestax + rincome,
-                  data = CigaretteDemand)
+  object <- ivreg(packs ~ rprice | salestax + rincome, data = CigaretteDemand)
   expect_error(fsw(object))
 })
 
@@ -564,7 +572,6 @@ test_that("Compare with Stata ivreg2 output", {
 # APchi2p  .26459576  .53102306
 # APr2  .00130555  .00078998
 
-
 # . use http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear
 #
 # .
@@ -1003,20 +1010,53 @@ edu_main_grs <- rnorm(n, 0, 1)
 inter_grs <- rnorm(n, 0.2, 1)
 
 # Create data.frame
-simulated_data <- data.frame(alc_deaths, sex, bileve, log_dpw, eduyears, inter, age, dpw_main_grs, edu_main_grs, inter_grs)
+simulated_data <- data.frame(
+  alc_deaths,
+  sex,
+  bileve,
+  log_dpw,
+  eduyears,
+  inter,
+  age,
+  dpw_main_grs,
+  edu_main_grs,
+  inter_grs
+)
 
 test_that("Example from Zoe Reed with factor variables in covariate list", {
   # Run with no error
-  tsls_sim <- ivreg::ivreg(alc_deaths ~ log_dpw + eduyears + inter + age + sex + bileve | dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve, data = simulated_data)
+  tsls_sim <- ivreg::ivreg(
+    alc_deaths ~ log_dpw +
+      eduyears +
+      inter +
+      age +
+      sex +
+      bileve |
+      dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve,
+    data = simulated_data
+  )
 
-  expect_no_error({fswres1 <- fsw(tsls_sim)})
+  expect_no_error({
+    fswres1 <- fsw(tsls_sim)
+  })
 
   # Including factor variable causes error
   simulated_data$sex <- as.factor(simulated_data$sex)
 
-  tsls_sim2 <- ivreg::ivreg(alc_deaths ~ log_dpw + eduyears + inter + age + sex + bileve | dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve, data = simulated_data)
+  tsls_sim2 <- ivreg::ivreg(
+    alc_deaths ~ log_dpw +
+      eduyears +
+      inter +
+      age +
+      sex +
+      bileve |
+      dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve,
+    data = simulated_data
+  )
 
-  expect_no_error({fswres2 <- fsw(tsls_sim2)})
+  expect_no_error({
+    fswres2 <- fsw(tsls_sim2)
+  })
 
   expect_equal(fswres1, fswres2)
 })
@@ -1025,14 +1065,90 @@ test_that("Example from Zoe Reed with factor variables in covariate list", {
 simulated_data$expfct <- as.factor(rbinom(n, 1, p = 0.4))
 
 test_that("Test fsw() when exposure is class factor", {
-  tsls_sim3 <- ivreg::ivreg(alc_deaths ~ log_dpw + eduyears + expfct + age + sex + bileve | dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve, data = simulated_data)
-  expect_error({fsw(tsls_sim3)})
+  tsls_sim3 <- ivreg::ivreg(
+    alc_deaths ~ log_dpw +
+      eduyears +
+      expfct +
+      age +
+      sex +
+      bileve |
+      dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve,
+    data = simulated_data
+  )
+  expect_error({
+    fsw(tsls_sim3)
+  })
 })
 
 # Expect no error if a binary exposure is numeric
 simulated_data$expfct <- as.numeric(simulated_data$expfct)
 
 test_that("Test fsw() when exposure is binary but numeric", {
-  tsls_sim4 <- ivreg::ivreg(alc_deaths ~ log_dpw + eduyears + expfct + age + sex + bileve | dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve, data = simulated_data)
-  expect_no_error({fswres4 <- fsw(tsls_sim4)})
+  tsls_sim4 <- ivreg::ivreg(
+    alc_deaths ~ log_dpw +
+      eduyears +
+      expfct +
+      age +
+      sex +
+      bileve |
+      dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve,
+    data = simulated_data
+  )
+  expect_no_error({
+    fswres4 <- fsw(tsls_sim4)
+  })
+})
+
+# Tests for AER, estimatr, fixest methods against Stata ivreg2 reference values
+
+test_that("AER::ivreg fsw matches Stata ivreg2 output", {
+  skip_if_not_installed("haven")
+  skip_if_not_installed("AER")
+  library(haven)
+  library(AER)
+  url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
+  dat <- haven::read_dta(url)
+  mod <- AER::ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
+  condf <- fsw(mod)
+  expect_equal(condf$fswres[1, 1], 6.69, tolerance = 1e-2)
+  expect_equal(condf$fswres[2, 1], 81.81, tolerance = 1e-2)
+  expect_equal(condf$fswres[1, 3], 424, tolerance = 1)
+  expect_equal(condf$fswres[2, 3], 424, tolerance = 1)
+})
+
+test_that("estimatr::iv_robust fsw matches Stata ivreg2 output", {
+  skip_if_not_installed("haven")
+  skip_if_not_installed("estimatr")
+  library(haven)
+  library(estimatr)
+  url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
+  dat <- haven::read_dta(url)
+  mod <- estimatr::iv_robust(
+    lwage ~ educ + exper | age + kidslt6 + kidsge6,
+    data = dat,
+    se_type = "classical"
+  )
+  condf <- fsw(mod)
+  expect_equal(condf$fswres[1, 1], 6.69, tolerance = 1e-2)
+  expect_equal(condf$fswres[2, 1], 81.81, tolerance = 1e-2)
+  expect_equal(condf$fswres[1, 3], 424, tolerance = 1)
+  expect_equal(condf$fswres[2, 3], 424, tolerance = 1)
+})
+
+test_that("fixest::feols fsw matches Stata ivreg2 output", {
+  skip_if_not_installed("haven")
+  skip_if_not_installed("fixest")
+  library(haven)
+  library(fixest)
+  url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
+  dat <- haven::read_dta(url)
+  mod <- fixest::feols(
+    lwage ~ 1 | educ + exper ~ age + kidslt6 + kidsge6,
+    data = dat
+  )
+  condf <- fsw(mod)
+  expect_equal(condf$fswres[1, 1], 6.69, tolerance = 1e-2)
+  expect_equal(condf$fswres[2, 1], 81.81, tolerance = 1e-2)
+  expect_equal(condf$fswres[1, 3], 424, tolerance = 1)
+  expect_equal(condf$fswres[2, 3], 424, tolerance = 1)
 })

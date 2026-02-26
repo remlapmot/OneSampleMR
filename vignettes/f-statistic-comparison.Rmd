@@ -10,7 +10,7 @@ vignette: >
 ```{r, include=FALSE}
 # Only run code chunks if Suggests packages available
 suggestsavailable <-
-  sapply(c("lfe", "haven"), requireNamespace, quietly = TRUE)
+  sapply(c("lfe", "haven", "AER", "estimatr", "fixest"), requireNamespace, quietly = TRUE)
 evalcond <- all(suggestsavailable)
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -22,6 +22,9 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(haven)
 library(ivreg)
+library(AER)
+library(estimatr)
+library(fixest)
 library(lfe)
 library(OneSampleMR)
 ```
@@ -31,9 +34,35 @@ library(OneSampleMR)
 ```{r}
 url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
 dat <- haven::read_dta(url)
-mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
+mod <- ivreg::ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
 summary(mod)
 fsw(mod)
+```
+
+## Run fsw() on AER::ivreg() model object
+
+```{r}
+mod2 <- AER::ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
+summary(mod2)
+fsw(mod2)
+```
+
+## Run fsw() on estimatr::iv_robust() model object
+
+```{r}
+library(estimatr)
+mod3 <- iv_robust(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat, se_type = "classical")
+tidy(mod3)
+fsw(mod3)
+```
+
+## Run fsw() on fixest::feols() model object
+
+```{r}
+library(fixest)
+mod4 <- feols(lwage ~ 1 | educ + exper ~ age + kidslt6 + kidsge6, data = dat)
+summary(mod4)
+fsw(mod4)
 ```
 
 ## Comparison with F-statistic from lfe package

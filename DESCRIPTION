@@ -1,14 +1,16 @@
 Package: OneSampleMR
 Title: One Sample Mendelian Randomization and Instrumental Variable
     Analyses
-Version: 0.1.6
+Version: 0.1.6.9000
 Authors@R: c(
     person("Tom", "Palmer", , "remlapmot@hotmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-4655-4511")),
     person("Wes", "Spiller", , "wes.spiller@bristol.ac.uk", role = "aut",
            comment = c(ORCID = "0000-0002-8169-5531")),
     person("Eleanor", "Sanderson", , "eleanor.sanderson@bristol.ac.uk", role = "aut",
-           comment = c(ORCID = "0000-0001-5188-5775"))
+           comment = c(ORCID = "0000-0001-5188-5775")),
+    person("Nicolai", "Vitt", , "nicolai.vitt@bristol.ac.uk", role = "aut",
+           comment = c(ORCID = "0000-0002-5988-9372"))
   )
 Description: Useful functions for one-sample (individual level data)
     Mendelian randomization and instrumental variable analyses. The
@@ -33,6 +35,9 @@ Imports:
     msm,
     rlang (>= 1.0.0)
 Suggests:
+    AER,
+    estimatr,
+    fixest,
     haven,
     knitr,
     lfe,

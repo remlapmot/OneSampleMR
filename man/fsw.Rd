@@ -3,16 +3,33 @@
 \name{fsw}
 \alias{fsw}
 \alias{fsw.ivreg}
+\alias{fsw.iv_robust}
+\alias{fsw.fixest}
+\alias{print.fsw}
 \title{Conditional F-statistic of Sanderson and Windmeijer (2016)}
 \usage{
 fsw(object)
 
 \method{fsw}{ivreg}(object)
+
+\method{fsw}{iv_robust}(object)
+
+\method{fsw}{fixest}(object)
+
+\method{print}{fsw}(x, digits = getOption("digits"), ...)
 }
 \arguments{
-\item{object}{An object of class \code{"ivreg"} containing the results of
-an IV model fitted by \code{\link[ivreg:ivreg]{ivreg::ivreg()}} for which to calculate
-the conditional F-statistics for each endogenous variable.}
+\item{object}{An object of class \code{"ivreg"} / \code{"iv_robust"} /
+\code{"fixest"} containing the results of an IV model fitted by
+\code{\link[ivreg:ivreg]{ivreg::ivreg()}} / \code{\link[AER:ivreg]{AER::ivreg()}} / \code{\link[estimatr:iv_robust]{estimatr::iv_robust()}} /
+\code{\link[fixest:feols]{fixest::feols()}} for which to calculate the conditional
+F-statistics for each endogenous variable.}
+
+\item{x}{an object of class "\link{fsw}".}
+
+\item{digits}{minimal number of significant digits, see print.default.}
+
+\item{...}{further arguments passed to or from other methods.}
 }
 \value{
 An object of class \code{"fsw"} with the following elements:
@@ -33,6 +50,9 @@ in the model.
 }
 \examples{
 require(ivreg)
+require(AER)
+require(estimatr)
+require(fixest)
 set.seed(12345)
 n   <- 4000
 z1  <- rnorm(n)
@@ -44,8 +64,15 @@ x1  <- z1 + z2 + 0.2*u + 0.1*w1 + rnorm(n)
 x2  <- z1 + 0.94*z2 - 0.3*u + 0.1*w2 + rnorm(n)
 y   <- x1 + x2 + w1 + w2 + u
 dat <- data.frame(w1, w2, x1, x2, y, z1, z2)
-mod <- ivreg::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
-fsw(mod)
+mod1 <- ivreg::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
+mod2 <- AER::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
+mod3 <- estimatr::iv_robust(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2,
+        data = dat, se_type = "classical")
+mod4 <- fixest::feols(y ~ w1 + w2 | x1 + x2 ~ z1 + z2, data = dat)
+fsw(mod1)
+fsw(mod2)
+fsw(mod3)
+fsw(mod4)
 
 }
 \references{
