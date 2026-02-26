@@ -418,7 +418,7 @@ fsw.iv_robust <- function(object) {
     if (inherits(condmod, "try-error")) stop(condmoderrmsg)
 
     # Residuals of the condit. model:
-    condres <- dat[,endogoutcome]-condmod$fitted.values
+    condres <- dat[[endogoutcome]]-condmod$fitted.values
 
     # Unrestricted model for Wald test:
     # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
