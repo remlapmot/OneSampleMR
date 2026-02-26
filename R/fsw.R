@@ -153,12 +153,12 @@ fsw.ivreg <- function(object) {
 
       # Unrestricted model for Wald test:
       # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-      resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = eval(object$call$data))
+      resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = object$model)
       # summary(resmod)
 
       # Restricted model for Wald test:
       # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-      resbase <- stats::lm(stats::as.formula(equations$restricted), data = eval(object$call$data))
+      resbase <- stats::lm(stats::as.formula(equations$restricted), data = object$model)
       # summary(resbase)
 
       # Compute conditional F-Statistic using Wald test for restricted vs unrestricted model:
@@ -214,7 +214,7 @@ fsw.ivreg <- function(object) {
     endogfcterrmsg <- paste("One or more of your exposure variables is a factor.",
                             "Please convert to numeric with say as.numeric(),",
                             "refit your iv_robust() model, and rerun fsw().")
-    if ("factor" %in% lapply(eval(object$model)[namesendog], class)) stop(endogfcterrmsg)
+    if ("factor" %in% lapply(object$model[namesendog], class)) stop(endogfcterrmsg)
 
     # Names of exogenous explanatory variables:
     namesexog <- xvars[xvars %in% zvars]
@@ -286,12 +286,12 @@ fsw.ivreg <- function(object) {
 
       # Unrestricted model for Wald test:
       # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-      resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = eval(object$call$data))
+      resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = object$model)
       # summary(resmod)
 
       # Restricted model for Wald test:
       # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-      resbase <- stats::lm(stats::as.formula(equations$restricted), data = eval(object$call$data))
+      resbase <- stats::lm(stats::as.formula(equations$restricted), data = object$model)
       # summary(resbase)
 
       # Compute conditional F-Statistic using Wald test for restricted vs unrestricted model:
