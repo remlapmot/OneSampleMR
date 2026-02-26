@@ -61,18 +61,33 @@ test_that("gmm identity link check", {
     # moments
     a1 <- (X - theta[1] - Z1 * theta[2])
     a2 <- (X - theta[1] - Z1 * theta[2]) * Z1
-    m1 <- (Y - (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2])))
-    m2 <- (Y - (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2]))) * X
-    m3 <- (Y - (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2]))) * res
+    m1 <- (Y -
+      (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2])))
+    m2 <- (Y -
+      (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2]))) *
+      X
+    m3 <- (Y -
+      (theta[3] + X * theta[4] + theta[5] * (X - theta[1] - Z1 * theta[2]))) *
+      res
     return(cbind(a1, a2, m1, m2, m3))
   }
 
   library(gmm)
-  tsrigmmident <- gmm(tsriIdentAddMoments, x = dat, t0 = rep(0, 5), vcov = "iid")
+  tsrigmmident <- gmm(
+    tsriIdentAddMoments,
+    x = dat,
+    t0 = rep(0, 5),
+    vcov = "iid"
+  )
   fit01 <- tsri(Y ~ X | Z, data = dat)
 
   # compare estimates
-  expect_equal(fit01$estci[, 1], tsrigmmident$coefficients, tolerance = 0.005, ignore_attr = TRUE)
+  expect_equal(
+    fit01$estci[, 1],
+    tsrigmmident$coefficients,
+    tolerance = 0.005,
+    ignore_attr = TRUE
+  )
 
   # compare SEs
   SEs <- sqrt(diag(vcov(tsrigmmident)))
@@ -99,7 +114,12 @@ test_that("Single instrument example - logadd link", {
   logcrrse <- 0.06035374 # sqrt(fitLogGest$vcov)
 
   fit11 <- tsri(Y ~ X | Z, data = dat, link = "logadd")
-  expect_equal(fit11$estci[4, 1], logcrr, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(
+    fit11$estci[4, 1],
+    logcrr,
+    tolerance = 0.05,
+    ignore_attr = "names"
+  )
 
   expect_s3_class(fit11, "tsri")
 
@@ -138,7 +158,12 @@ test_that("Single instrument example - logmult link", {
   logcrrse <- 0.06027666 # sqrt(fitLogGest$vcov)
 
   fit12 <- tsri(Y ~ X | Z, data = dat, link = "logmult")
-  expect_equal(fit12$estci[4, 1], logcrr, tolerance = 0.05, ignore_attr = "names")
+  expect_equal(
+    fit12$estci[4, 1],
+    logcrr,
+    tolerance = 0.05,
+    ignore_attr = "names"
+  )
 
   expect_s3_class(fit12, "tsri")
 
@@ -155,7 +180,12 @@ test_that("Single instrument example - logmult link", {
   Y[Y == 0] <- 0.001
   stage2 <- glm(Y ~ X + res, family = Gamma(link = "log"))
   betamanual <- c(betamanual, coef(stage2))
-  expect_equal(fit12$estci[, 1], betamanual, tolerance = 0.01, ignore_attr = "names")
+  expect_equal(
+    fit12$estci[, 1],
+    betamanual,
+    tolerance = 0.01,
+    ignore_attr = "names"
+  )
   dat$Y[dat$Y == 0.001] <- 0
 })
 
@@ -178,7 +208,12 @@ test_that("Single instrument example - logit link", {
   logcorse <- 0.2896101 # sqrt(fitLogitGest$vcov)
 
   fit21 <- tsri(Y ~ X | Z, data = dat, link = "logit")
-  expect_equal(fit21$estci[4, 1], logcor, tolerance = 0.1, ignore_attr = "names")
+  expect_equal(
+    fit21$estci[4, 1],
+    logcor,
+    tolerance = 0.1,
+    ignore_attr = "names"
+  )
 
   expect_s3_class(fit21, "tsri")
 
@@ -243,7 +278,11 @@ test_that("Multiple instrument example with covariates - identity link", {
 test_that("Multiple instrument example with covariates - logadd link", {
   skip_on_cran()
 
-  fit31 <- tsri(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logadd")
+  fit31 <- tsri(
+    Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+    data = dat,
+    link = "logadd"
+  )
   expect_output(print(fit31))
   smry31 <- summary(fit31)
   expect_output(print(smry31))
@@ -260,7 +299,11 @@ test_that("Multiple instrument example with covariates - logadd link", {
 test_that("Multiple instrument example with covariates - logmult link", {
   skip_on_cran()
 
-  fit32 <- tsri(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logmult")
+  fit32 <- tsri(
+    Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+    data = dat,
+    link = "logmult"
+  )
   expect_output(print(fit32))
   smry32 <- summary(fit32)
   expect_output(print(smry32))
@@ -270,15 +313,28 @@ test_that("Multiple instrument example with covariates - logmult link", {
   betamanual <- coef(stage1)
   res <- residuals(stage1)
   Y[Y == 0] <- 0.001
-  stage2 <- glm(Y ~ X + res + C1 + C2, family = Gamma(link = "log"), control = list(maxit = 1E2))
+  stage2 <- glm(
+    Y ~ X + res + C1 + C2,
+    family = Gamma(link = "log"),
+    control = list(maxit = 1E2)
+  )
   betamanual <- c(betamanual, coef(stage2))
-  expect_equal(fit32$estci[, 1], betamanual, tolerance = 0.01, ignore_attr = TRUE)
+  expect_equal(
+    fit32$estci[, 1],
+    betamanual,
+    tolerance = 0.01,
+    ignore_attr = TRUE
+  )
 })
 
 test_that("Multiple instrument example with covariates - logit link", {
   skip_on_cran()
 
-  fit33 <- tsri(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, link = "logit")
+  fit33 <- tsri(
+    Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+    data = dat,
+    link = "logit"
+  )
   expect_output(print(fit33))
   smry33 <- summary(fit33)
   expect_output(print(smry33))
