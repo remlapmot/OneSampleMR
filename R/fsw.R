@@ -575,6 +575,21 @@ fsw.fixest <- function(object) {
 
 
 
+#' Retrieve the data frame from a fitted model object
+#' Tries call_env (fixest), then the formula environment (estimatr)
+#' @param object a fitted model object
+#' @noRd
+get_data <- function(object) {
+  data_name <- object$call$data
+  # fixest stores the environment where the model was fitted
+  if (!is.null(object$call_env)) {
+    return(eval(data_name, envir = object$call_env))
+  }
+  # for estimatr and others, the formula captures the fitting environment
+  eval(data_name, envir = environment(object$formula))
+}
+
+
 #' Create the equations for the Wald test:
 #' unrestricted - regression of condit. residuals against instruments (and any exogenous regressors)
 #' restricted - regression of condit. residuals against intercept (and any exogenous regressors)
