@@ -183,6 +183,13 @@ fsw.ivreg <- function(object) {
 
     ### Object is from AER::ivreg
 
+    if (!requireNamespace("AER", quietly = TRUE)) {
+      stop(
+        "Package \"AER\" must be installed to use this function.",
+        call. = FALSE
+      )
+    }
+
     # Explanatory variables (both endogenous and exogenous):
     xvars<-attr(stats::terms(Formula::Formula(object$formula), rhs = 1), "term.labels")
     # Instruments (both excluded and included - i.e. includes exogenous expl. vars):
@@ -313,6 +320,13 @@ fsw.ivreg <- function(object) {
 #' @export
 fsw.iv_robust <- function(object) {
 
+  if (!requireNamespace("estimatr", quietly = TRUE)) {
+    stop(
+      "Package \"estimatr\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
+
   # Explanatory variables (both endogenous and exogenous):
   xvars<-attr(stats::terms(Formula::Formula(object$formula), rhs = 1), "term.labels")
   # Instruments (both excluded and included - i.e. includes exogenous expl. vars):
@@ -439,6 +453,13 @@ fsw.iv_robust <- function(object) {
 #' @rdname fsw
 #' @export
 fsw.fixest <- function(object) {
+
+  if (!requireNamespace("fixest", quietly = TRUE)) {
+    stop(
+      "Package \"fixest\" must be installed to use this function.",
+      call. = FALSE
+    )
+  }
 
   # Names and number of endogenous variables:
   namesendog <- object$iv_endo_names
