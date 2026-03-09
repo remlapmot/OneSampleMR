@@ -1,6 +1,6 @@
-# OneSampleMR (development version)
+# OneSampleMR 0.1.7
 
-* `fsw()` can now calculate Sanderson-Windmiejer conditional F statistics for models fitted by `AER::ivreg()`, `estimatr::iv_robust()`, and `fixest::feols()` (thanks @nvitt)
+* `fsw()` can now calculate Sanderson-Windmeijer conditional F statistics for models fitted by `AER::ivreg()`, `estimatr::iv_robust()`, and `fixest::feols()` (thanks @nvitt)
 
 # OneSampleMR 0.1.6
 
