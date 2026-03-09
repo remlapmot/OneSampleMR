@@ -10,6 +10,8 @@
 - **Eleanor Sanderson**. Author.
   [](https://orcid.org/0000-0001-5188-5775)
 
+- **Nicolai Vitt**. Author. [](https://orcid.org/0000-0002-5988-9372)
+
 ## Citation
 
 Source:

@@ -9,8 +9,9 @@
   Variable Analyses
 - [`asmm`](https://remlapmot.github.io/OneSampleMR/reference/asmm.md) :
   Additive structural mean model
-- [`fsw()`](https://remlapmot.github.io/OneSampleMR/reference/fsw.md) :
-  Conditional F-statistic of Sanderson and Windmeijer (2016)
+- [`fsw()`](https://remlapmot.github.io/OneSampleMR/reference/fsw.md)
+  [`print(`*`<fsw>`*`)`](https://remlapmot.github.io/OneSampleMR/reference/fsw.md)
+  : Conditional F-statistic of Sanderson and Windmeijer (2016)
 - [`msmm()`](https://remlapmot.github.io/OneSampleMR/reference/msmm.md)
   : Multiplicative structural mean model
 - [`summary(`*`<msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/reference/summary.msmm.md)

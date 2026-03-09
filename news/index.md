@@ -1,5 +1,18 @@
 # Changelog
 
+## OneSampleMR 0.1.7
+
+CRAN release: 2026-03-09
+
+- [`fsw()`](https://remlapmot.github.io/OneSampleMR/reference/fsw.md)
+  can now calculate Sanderson-Windmeijer conditional F statistics for
+  models fitted by
+  [`AER::ivreg()`](https://rdrr.io/pkg/AER/man/ivreg.html),
+  [`estimatr::iv_robust()`](https://declaredesign.org/r/estimatr/reference/iv_robust.html),
+  and
+  [`fixest::feols()`](https://lrberge.github.io/fixest/reference/feols.html)
+  (thanks [@nvitt](https://github.com/nvitt))
+
 ## OneSampleMR 0.1.6
 
 CRAN release: 2025-05-21

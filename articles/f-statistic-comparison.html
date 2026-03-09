@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">OneSampleMR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,8 +79,47 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://haven.tidyverse.org" class="external-link">haven</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://zeileis.github.io/ivreg/" class="external-link">ivreg</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Registered S3 methods overwritten by 'ivreg':</span></span>
+<span><span class="co">#&gt;   method              from</span></span>
+<span><span class="co">#&gt;   anova.ivreg         AER </span></span>
+<span><span class="co">#&gt;   hatvalues.ivreg     AER </span></span>
+<span><span class="co">#&gt;   model.matrix.ivreg  AER </span></span>
+<span><span class="co">#&gt;   predict.ivreg       AER </span></span>
+<span><span class="co">#&gt;   print.ivreg         AER </span></span>
+<span><span class="co">#&gt;   print.summary.ivreg AER </span></span>
+<span><span class="co">#&gt;   summary.ivreg       AER </span></span>
+<span><span class="co">#&gt;   terms.ivreg         AER </span></span>
+<span><span class="co">#&gt;   update.ivreg        AER </span></span>
+<span><span class="co">#&gt;   vcov.ivreg          AER</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">AER</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: car</span></span>
+<span><span class="co">#&gt; Loading required package: carData</span></span>
+<span><span class="co">#&gt; Loading required package: lmtest</span></span>
+<span><span class="co">#&gt; Loading required package: zoo</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'zoo'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     as.Date, as.Date.numeric</span></span>
+<span><span class="co">#&gt; Loading required package: sandwich</span></span>
+<span><span class="co">#&gt; Loading required package: survival</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'AER'</span></span>
+<span><span class="co">#&gt; The following objects are masked from 'package:ivreg':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     ivreg, ivreg.fit</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://declaredesign.org/r/estimatr/" class="external-link">estimatr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lrberge.github.io/fixest/" class="external-link">fixest</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-econometrics/lfe" class="external-link">lfe</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: Matrix</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'lfe'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:fixest':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     fepois</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:lmtest':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     waldtest</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/remlapmot/OneSampleMR" class="external-link">OneSampleMR</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="run-fsw-on-ivreg-model-object">Run fsw() on ivreg() model object<a class="anchor" aria-label="anchor" href="#run-fsw-on-ivreg-model-object"></a>
@@ -88,12 +127,12 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">haven</span><span class="fu">::</span><span class="fu"><a href="https://haven.tidyverse.org/reference/read_dta.html" class="external-link">read_dta</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://zeileis.github.io/ivreg/reference/ivreg.html" class="external-link">ivreg</a></span><span class="op">(</span><span class="va">lwage</span> <span class="op">~</span> <span class="va">educ</span> <span class="op">+</span> <span class="va">exper</span> <span class="op">|</span> <span class="va">age</span> <span class="op">+</span> <span class="va">kidslt6</span> <span class="op">+</span> <span class="va">kidsge6</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">ivreg</span><span class="fu">::</span><span class="fu"><a href="https://zeileis.github.io/ivreg/reference/ivreg.html" class="external-link">ivreg</a></span><span class="op">(</span><span class="va">lwage</span> <span class="op">~</span> <span class="va">educ</span> <span class="op">+</span> <span class="va">exper</span> <span class="op">|</span> <span class="va">age</span> <span class="op">+</span> <span class="va">kidslt6</span> <span class="op">+</span> <span class="va">kidsge6</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
-<span><span class="co">#&gt; ivreg(formula = lwage ~ educ + exper | age + kidslt6 + kidsge6, </span></span>
-<span><span class="co">#&gt;     data = dat)</span></span>
+<span><span class="co">#&gt; ivreg::ivreg(formula = lwage ~ educ + exper | age + kidslt6 + </span></span>
+<span><span class="co">#&gt;     kidsge6, data = dat)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Residuals:</span></span>
 <span><span class="co">#&gt;      Min       1Q   Median       3Q      Max </span></span>
@@ -129,9 +168,108 @@
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="comparison-with-f-statistic-from-lfe-package">Comparison with F-statistic from lfe package<a class="anchor" aria-label="anchor" href="#comparison-with-f-statistic-from-lfe-package"></a>
+<h2 id="run-fsw-on-aerivreg-model-object">Run fsw() on AER::ivreg() model object<a class="anchor" aria-label="anchor" href="#run-fsw-on-aerivreg-model-object"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">mod2</span> <span class="op">&lt;-</span> <span class="fu">AER</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AER/man/ivreg.html" class="external-link">ivreg</a></span><span class="op">(</span><span class="va">lwage</span> <span class="op">~</span> <span class="va">educ</span> <span class="op">+</span> <span class="va">exper</span> <span class="op">|</span> <span class="va">age</span> <span class="op">+</span> <span class="va">kidslt6</span> <span class="op">+</span> <span class="va">kidsge6</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; AER::ivreg(formula = lwage ~ educ + exper | age + kidslt6 + kidsge6, </span></span>
+<span><span class="co">#&gt;     data = dat)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Residuals:</span></span>
+<span><span class="co">#&gt;      Min       1Q   Median       3Q      Max </span></span>
+<span><span class="co">#&gt; -3.04973 -0.30711  0.05531  0.38952  2.27672 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Coefficients:</span></span>
+<span><span class="co">#&gt;              Estimate Std. Error t value Pr(&gt;|t|)  </span></span>
+<span><span class="co">#&gt; (Intercept) -0.360182   1.033416  -0.349    0.728  </span></span>
+<span><span class="co">#&gt; educ         0.105836   0.080982   1.307    0.192  </span></span>
+<span><span class="co">#&gt; exper        0.016153   0.007595   2.127    0.034 *</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Residual standard error: 0.669 on 425 degrees of freedom</span></span>
+<span><span class="co">#&gt; Multiple R-Squared: 0.1482,  Adjusted R-squared: 0.1442 </span></span>
+<span><span class="co">#&gt; Wald test: 3.034 on 2 and 425 DF,  p-value: 0.04917</span></span>
+<span><span class="fu"><a href="../reference/fsw.html">fsw</a></span><span class="op">(</span><span class="va">mod2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model sample size:  428 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sanderson-Windmeijer conditional F-statistics for first stage model:</span></span>
+<span><span class="co">#&gt;        F value d.f. Residual d.f.   Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; educ   6.69425    2           424 0.001373 ** </span></span>
+<span><span class="co">#&gt; exper 81.81237    2           424  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="run-fsw-on-estimatriv_robust-model-object">Run fsw() on estimatr::iv_robust() model object<a class="anchor" aria-label="anchor" href="#run-fsw-on-estimatriv_robust-model-object"></a>
+</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://declaredesign.org/r/estimatr/" class="external-link">estimatr</a></span><span class="op">)</span></span>
+<span><span class="va">mod3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://declaredesign.org/r/estimatr/reference/iv_robust.html" class="external-link">iv_robust</a></span><span class="op">(</span><span class="va">lwage</span> <span class="op">~</span> <span class="va">educ</span> <span class="op">+</span> <span class="va">exper</span> <span class="op">|</span> <span class="va">age</span> <span class="op">+</span> <span class="va">kidslt6</span> <span class="op">+</span> <span class="va">kidsge6</span>, data <span class="op">=</span> <span class="va">dat</span>, se_type <span class="op">=</span> <span class="st">"classical"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html" class="external-link">tidy</a></span><span class="op">(</span><span class="va">mod3</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          term    estimate   std.error  statistic    p.value     conf.low</span></span>
+<span><span class="co">#&gt; 1 (Intercept) -0.36018214 1.033415610 -0.3485356 0.72761056 -2.391424035</span></span>
+<span><span class="co">#&gt; 2        educ  0.10583608 0.080981803  1.3069119 0.19194932 -0.053338627</span></span>
+<span><span class="co">#&gt; 3       exper  0.01615273 0.007594673  2.1268499 0.03400801  0.001224933</span></span>
+<span><span class="co">#&gt;    conf.high  df outcome</span></span>
+<span><span class="co">#&gt; 1 1.67105975 425   lwage</span></span>
+<span><span class="co">#&gt; 2 0.26501080 425   lwage</span></span>
+<span><span class="co">#&gt; 3 0.03108053 425   lwage</span></span>
+<span><span class="fu"><a href="../reference/fsw.html">fsw</a></span><span class="op">(</span><span class="va">mod3</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model sample size:  428 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sanderson-Windmeijer conditional F-statistics for first stage model:</span></span>
+<span><span class="co">#&gt;        F value d.f. Residual d.f.   Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; educ   6.69425    2           424 0.001373 ** </span></span>
+<span><span class="co">#&gt; exper 81.81237    2           424  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="run-fsw-on-fixestfeols-model-object">Run fsw() on fixest::feols() model object<a class="anchor" aria-label="anchor" href="#run-fsw-on-fixestfeols-model-object"></a>
+</h2>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lrberge.github.io/fixest/" class="external-link">fixest</a></span><span class="op">)</span></span>
+<span><span class="va">mod4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://lrberge.github.io/fixest/reference/feols.html" class="external-link">feols</a></span><span class="op">(</span><span class="va">lwage</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">educ</span> <span class="op">+</span> <span class="va">exper</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">kidslt6</span> <span class="op">+</span> <span class="va">kidsge6</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="co">#&gt; NOTE: 325 observations removed because of NA values (LHS: 325).</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod4</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TSLS estimation - Dep. Var.: lwage</span></span>
+<span><span class="co">#&gt;                   Endo.    : educ, exper</span></span>
+<span><span class="co">#&gt;                   Instr.   : age, kidslt6, kidsge6</span></span>
+<span><span class="co">#&gt; Second stage: Dep. Var.: lwage</span></span>
+<span><span class="co">#&gt; Observations: 428</span></span>
+<span><span class="co">#&gt; Standard-errors: IID </span></span>
+<span><span class="co">#&gt;              Estimate Std. Error   t value Pr(&gt;|t|)    </span></span>
+<span><span class="co">#&gt; (Intercept) -0.360182   1.033416 -0.348536 0.727611    </span></span>
+<span><span class="co">#&gt; fit_educ     0.105836   0.080982  1.306912 0.191949    </span></span>
+<span><span class="co">#&gt; fit_exper    0.016153   0.007595  2.126850 0.034008 *  </span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">#&gt; RMSE: 0.666683   Adj. R2: 0.007512</span></span>
+<span><span class="co">#&gt; F-test (1st stage), educ : stat =  4.46617, p = 0.00421 , on 3 and 424 DoF.</span></span>
+<span><span class="co">#&gt; F-test (1st stage), exper: stat = 55.04436, p &lt; 2.2e-16 , on 3 and 424 DoF.</span></span>
+<span><span class="co">#&gt;                Wu-Hausman: stat =  0.00392, p = 0.996088, on 2 and 423 DoF.</span></span>
+<span><span class="co">#&gt;                    Sargan: stat =  1.16824, p = 0.279764, on 1 DoF.</span></span>
+<span><span class="fu"><a href="../reference/fsw.html">fsw</a></span><span class="op">(</span><span class="va">mod4</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Model sample size:  428 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Sanderson-Windmeijer conditional F-statistics for first stage model:</span></span>
+<span><span class="co">#&gt;        F value d.f. Residual d.f.   Pr(&gt;F)    </span></span>
+<span><span class="co">#&gt; educ   6.69425    2           424 0.001373 ** </span></span>
+<span><span class="co">#&gt; exper 81.81237    2           424  &lt; 2e-16 ***</span></span>
+<span><span class="co">#&gt; ---</span></span>
+<span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="comparison-with-f-statistic-from-lfe-package">Comparison with F-statistic from lfe package<a class="anchor" aria-label="anchor" href="#comparison-with-f-statistic-from-lfe-package"></a>
+</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">modst2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lfe/man/felm.html" class="external-link">felm</a></span><span class="op">(</span><span class="va">lwage</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span></span>
 <span>                 <span class="fl">0</span> <span class="op">|</span> <span class="op">(</span><span class="va">educ</span> <span class="op">|</span> <span class="va">exper</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">kidslt6</span> <span class="op">+</span> <span class="va">kidsge6</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">modst2</span><span class="op">)</span></span>
@@ -182,10 +320,10 @@
 <h2 id="comparison-with-output-from-ivreg2">Comparison with output from ivreg2<a class="anchor" aria-label="anchor" href="#comparison-with-output-from-ivreg2"></a>
 </h2>
 <p>Code run using Stata version 16.1.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="kw">use</span> http:<span class="co">//fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">// ssc install ivreg2</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>ivreg2 lwage (educ exper = age kidslt6 kidsge6) <span class="kw">if</span> !<span class="fu">missing</span>(lwage, educ, exper, age, kidslt6, kidsge6), first</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode stata"><code class="sourceCode stata"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="kw">use</span> http:<span class="co">//fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta, clear</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">// ssc install ivreg2</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>ivreg2 lwage (educ exper = age kidslt6 kidsge6) <span class="kw">if</span> !<span class="fu">missing</span>(lwage, educ, exper, age, kidslt6, kidsge6), first</span></code></pre></div>
 <pre><code>First-stage regressions
 -----------------------
 
@@ -324,7 +462,7 @@ Excluded instruments: age kidslt6 kidsge6
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Tom Palmer, Wes Spiller, Eleanor Sanderson.</p>
+  <p>Developed by Tom Palmer, Wes Spiller, Eleanor Sanderson, Nicolai Vitt.</p>
 </div>
 
 <div class="pkgdown-footer-right">

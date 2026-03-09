@@ -3,8 +3,47 @@
 ``` r
 library(haven)
 library(ivreg)
+#> Registered S3 methods overwritten by 'ivreg':
+#>   method              from
+#>   anova.ivreg         AER 
+#>   hatvalues.ivreg     AER 
+#>   model.matrix.ivreg  AER 
+#>   predict.ivreg       AER 
+#>   print.ivreg         AER 
+#>   print.summary.ivreg AER 
+#>   summary.ivreg       AER 
+#>   terms.ivreg         AER 
+#>   update.ivreg        AER 
+#>   vcov.ivreg          AER
+library(AER)
+#> Loading required package: car
+#> Loading required package: carData
+#> Loading required package: lmtest
+#> Loading required package: zoo
+#> 
+#> Attaching package: 'zoo'
+#> The following objects are masked from 'package:base':
+#> 
+#>     as.Date, as.Date.numeric
+#> Loading required package: sandwich
+#> Loading required package: survival
+#> 
+#> Attaching package: 'AER'
+#> The following objects are masked from 'package:ivreg':
+#> 
+#>     ivreg, ivreg.fit
+library(estimatr)
+library(fixest)
 library(lfe)
 #> Loading required package: Matrix
+#> 
+#> Attaching package: 'lfe'
+#> The following object is masked from 'package:fixest':
+#> 
+#>     fepois
+#> The following object is masked from 'package:lmtest':
+#> 
+#>     waldtest
 library(OneSampleMR)
 ```
 
@@ -13,12 +52,12 @@ library(OneSampleMR)
 ``` r
 url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
 dat <- haven::read_dta(url)
-mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
+mod <- ivreg::ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
 summary(mod)
 #> 
 #> Call:
-#> ivreg(formula = lwage ~ educ + exper | age + kidslt6 + kidsge6, 
-#>     data = dat)
+#> ivreg::ivreg(formula = lwage ~ educ + exper | age + kidslt6 + 
+#>     kidsge6, data = dat)
 #> 
 #> Residuals:
 #>      Min       1Q   Median       3Q      Max 
@@ -43,6 +82,105 @@ summary(mod)
 #> Multiple R-Squared: 0.1482,  Adjusted R-squared: 0.1442 
 #> Wald test: 3.034 on 2 and 425 DF,  p-value: 0.04917
 fsw(mod)
+#> 
+#> Model sample size:  428 
+#> 
+#> Sanderson-Windmeijer conditional F-statistics for first stage model:
+#>        F value d.f. Residual d.f.   Pr(>F)    
+#> educ   6.69425    2           424 0.001373 ** 
+#> exper 81.81237    2           424  < 2e-16 ***
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+## Run fsw() on AER::ivreg() model object
+
+``` r
+mod2 <- AER::ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
+summary(mod2)
+#> 
+#> Call:
+#> AER::ivreg(formula = lwage ~ educ + exper | age + kidslt6 + kidsge6, 
+#>     data = dat)
+#> 
+#> Residuals:
+#>      Min       1Q   Median       3Q      Max 
+#> -3.04973 -0.30711  0.05531  0.38952  2.27672 
+#> 
+#> Coefficients:
+#>              Estimate Std. Error t value Pr(>|t|)  
+#> (Intercept) -0.360182   1.033416  -0.349    0.728  
+#> educ         0.105836   0.080982   1.307    0.192  
+#> exper        0.016153   0.007595   2.127    0.034 *
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> 
+#> Residual standard error: 0.669 on 425 degrees of freedom
+#> Multiple R-Squared: 0.1482,  Adjusted R-squared: 0.1442 
+#> Wald test: 3.034 on 2 and 425 DF,  p-value: 0.04917
+fsw(mod2)
+#> 
+#> Model sample size:  428 
+#> 
+#> Sanderson-Windmeijer conditional F-statistics for first stage model:
+#>        F value d.f. Residual d.f.   Pr(>F)    
+#> educ   6.69425    2           424 0.001373 ** 
+#> exper 81.81237    2           424  < 2e-16 ***
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+## Run fsw() on estimatr::iv_robust() model object
+
+``` r
+library(estimatr)
+mod3 <- iv_robust(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat, se_type = "classical")
+tidy(mod3)
+#>          term    estimate   std.error  statistic    p.value     conf.low
+#> 1 (Intercept) -0.36018214 1.033415610 -0.3485356 0.72761056 -2.391424035
+#> 2        educ  0.10583608 0.080981803  1.3069119 0.19194932 -0.053338627
+#> 3       exper  0.01615273 0.007594673  2.1268499 0.03400801  0.001224933
+#>    conf.high  df outcome
+#> 1 1.67105975 425   lwage
+#> 2 0.26501080 425   lwage
+#> 3 0.03108053 425   lwage
+fsw(mod3)
+#> 
+#> Model sample size:  428 
+#> 
+#> Sanderson-Windmeijer conditional F-statistics for first stage model:
+#>        F value d.f. Residual d.f.   Pr(>F)    
+#> educ   6.69425    2           424 0.001373 ** 
+#> exper 81.81237    2           424  < 2e-16 ***
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+## Run fsw() on fixest::feols() model object
+
+``` r
+library(fixest)
+mod4 <- feols(lwage ~ 1 | educ + exper ~ age + kidslt6 + kidsge6, data = dat)
+#> NOTE: 325 observations removed because of NA values (LHS: 325).
+summary(mod4)
+#> TSLS estimation - Dep. Var.: lwage
+#>                   Endo.    : educ, exper
+#>                   Instr.   : age, kidslt6, kidsge6
+#> Second stage: Dep. Var.: lwage
+#> Observations: 428
+#> Standard-errors: IID 
+#>              Estimate Std. Error   t value Pr(>|t|)    
+#> (Intercept) -0.360182   1.033416 -0.348536 0.727611    
+#> fit_educ     0.105836   0.080982  1.306912 0.191949    
+#> fit_exper    0.016153   0.007595  2.126850 0.034008 *  
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#> RMSE: 0.666683   Adj. R2: 0.007512
+#> F-test (1st stage), educ : stat =  4.46617, p = 0.00421 , on 3 and 424 DoF.
+#> F-test (1st stage), exper: stat = 55.04436, p < 2.2e-16 , on 3 and 424 DoF.
+#>                Wu-Hausman: stat =  0.00392, p = 0.996088, on 2 and 423 DoF.
+#>                    Sargan: stat =  1.16824, p = 0.279764, on 1 DoF.
+fsw(mod4)
 #> 
 #> Model sample size:  428 
 #> 
