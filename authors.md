@@ -15,7 +15,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/remlapmot/OneSampleMR/blob/v0.1.7/inst/CITATION)
+[`inst/CITATION`](https://github.com/remlapmot/OneSampleMR/blob/main/inst/CITATION)
 
 Palmer T, Spiller W, Sanderson E (2023). *OneSampleMR: One Sample
 Mendelian Randomization and Instrumental Variable Analyses*. MRC

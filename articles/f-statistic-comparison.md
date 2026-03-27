@@ -163,10 +163,13 @@ library(fixest)
 mod4 <- feols(lwage ~ 1 | educ + exper ~ age + kidslt6 + kidsge6, data = dat)
 #> NOTE: 325 observations removed because of NA values (LHS: 325).
 summary(mod4)
-#> TSLS estimation - Dep. Var.: lwage
-#>                   Endo.    : educ, exper
-#>                   Instr.   : age, kidslt6, kidsge6
-#> Second stage: Dep. Var.: lwage
+#> TSLS estimation
+#> |- D.V.   : lwage
+#> |- Endo.  : educ, exper
+#> |- Instr. : age, kidslt6, kidsge6
+#> |
+#> |=> Second Stage
+#> |   Dep. Var.: lwage
 #> Observations: 428
 #> Standard-errors: IID 
 #>              Estimate Std. Error   t value Pr(>|t|)    
