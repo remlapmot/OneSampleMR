@@ -1,3 +1,4 @@
+#' @keywords internal
 #' @aliases onesamplemr OneSampleMR
 "_PACKAGE"
 
