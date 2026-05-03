@@ -31,6 +31,9 @@ Useful links:
 
 Authors:
 
+- Tom Palmer <remlapmot@hotmail.com>
+  ([ORCID](https://orcid.org/0000-0003-4655-4511))
+
 - Wes Spiller <wes.spiller@bristol.ac.uk>
   ([ORCID](https://orcid.org/0000-0002-8169-5531))
 

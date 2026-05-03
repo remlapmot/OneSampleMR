@@ -1,6 +1,7 @@
 # Comparison fits of the multiplicative structural mean model
 
 ``` r
+
 library(OneSampleMR)
 ```
 
@@ -10,6 +11,7 @@ library(OneSampleMR)
   example data.
 
 ``` r
+
 set.seed(12345)
 n    <- 5000
 psi0 <- 0.5
@@ -25,6 +27,7 @@ dat  <- data.frame(Z, X, Y)
   [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md).
 
 ``` r
+
 fit02 <- msmm(Y ~ X | Z, data = dat)
 summary(fit02)
 #> 
@@ -65,6 +68,7 @@ summary(fit02)
 - Comparison fit using the alternative GMM moment conditions.
 
 ``` r
+
 fit03 <- msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
 summary(fit03)
 #> 
@@ -106,6 +110,7 @@ summary(fit03)
   squares.
 
 ``` r
+
 fit04 <- msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
 summary(fit04)
 #> 
@@ -170,6 +175,7 @@ summary(fit04)
   using two-stage least squares.
 
 ``` r
+
 fit05 <- msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
 summary(fit05)
 #> 

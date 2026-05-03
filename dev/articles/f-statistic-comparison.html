@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">OneSampleMR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.6.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.7.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -239,10 +239,13 @@
 <span><span class="va">mod4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://lrberge.github.io/fixest/reference/feols.html" class="external-link">feols</a></span><span class="op">(</span><span class="va">lwage</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">educ</span> <span class="op">+</span> <span class="va">exper</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">kidslt6</span> <span class="op">+</span> <span class="va">kidsge6</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span><span class="co">#&gt; NOTE: 325 observations removed because of NA values (LHS: 325).</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod4</span><span class="op">)</span></span>
-<span><span class="co">#&gt; TSLS estimation - Dep. Var.: lwage</span></span>
-<span><span class="co">#&gt;                   Endo.    : educ, exper</span></span>
-<span><span class="co">#&gt;                   Instr.   : age, kidslt6, kidsge6</span></span>
-<span><span class="co">#&gt; Second stage: Dep. Var.: lwage</span></span>
+<span><span class="co">#&gt; TSLS estimation</span></span>
+<span><span class="co">#&gt; |- D.V.   : lwage</span></span>
+<span><span class="co">#&gt; |- Endo.  : educ, exper</span></span>
+<span><span class="co">#&gt; |- Instr. : age, kidslt6, kidsge6</span></span>
+<span><span class="co">#&gt; |</span></span>
+<span><span class="co">#&gt; |=&gt; Second Stage</span></span>
+<span><span class="co">#&gt; |   Dep. Var.: lwage</span></span>
 <span><span class="co">#&gt; Observations: 428</span></span>
 <span><span class="co">#&gt; Standard-errors: IID </span></span>
 <span><span class="co">#&gt;              Estimate Std. Error   t value Pr(&gt;|t|)    </span></span>

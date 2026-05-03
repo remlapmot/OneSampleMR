@@ -1,6 +1,7 @@
 # Comparison of conditional F-statistics
 
 ``` r
+
 library(haven)
 library(ivreg)
 #> Registered S3 methods overwritten by 'ivreg':
@@ -50,6 +51,7 @@ library(OneSampleMR)
 ## Run fsw() on ivreg() model object
 
 ``` r
+
 url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
 dat <- haven::read_dta(url)
 mod <- ivreg::ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
@@ -96,6 +98,7 @@ fsw(mod)
 ## Run fsw() on AER::ivreg() model object
 
 ``` r
+
 mod2 <- AER::ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
 summary(mod2)
 #> 
@@ -133,6 +136,7 @@ fsw(mod2)
 ## Run fsw() on estimatr::iv_robust() model object
 
 ``` r
+
 library(estimatr)
 mod3 <- iv_robust(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat, se_type = "classical")
 tidy(mod3)
@@ -159,14 +163,18 @@ fsw(mod3)
 ## Run fsw() on fixest::feols() model object
 
 ``` r
+
 library(fixest)
 mod4 <- feols(lwage ~ 1 | educ + exper ~ age + kidslt6 + kidsge6, data = dat)
 #> NOTE: 325 observations removed because of NA values (LHS: 325).
 summary(mod4)
-#> TSLS estimation - Dep. Var.: lwage
-#>                   Endo.    : educ, exper
-#>                   Instr.   : age, kidslt6, kidsge6
-#> Second stage: Dep. Var.: lwage
+#> TSLS estimation
+#> |- D.V.   : lwage
+#> |- Endo.  : educ, exper
+#> |- Instr. : age, kidslt6, kidsge6
+#> |
+#> |=> Second Stage
+#> |   Dep. Var.: lwage
 #> Observations: 428
 #> Standard-errors: IID 
 #>              Estimate Std. Error   t value Pr(>|t|)    
@@ -195,6 +203,7 @@ fsw(mod4)
 ## Comparison with F-statistic from lfe package
 
 ``` r
+
 modst2 <- felm(lwage ~ 1 |
                  0 | (educ | exper ~ age + kidslt6 + kidsge6), data = dat)
 summary(modst2)

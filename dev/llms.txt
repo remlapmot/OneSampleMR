@@ -26,12 +26,14 @@ CRAN Packages
 Install the package from CRAN using
 
 ``` r
+
 install.packages("OneSampleMR")
 ```
 
 To check for updates run
 
 ``` r
+
 update.packages()
 ```
 
@@ -58,6 +60,7 @@ Install the development version of the package from source from GitHub
 using
 
 ``` r
+
 # install.packages("remotes") # uncomment on first run
 remotes::install_github("remlapmot/OneSampleMR")
 ```
@@ -66,6 +69,7 @@ To check for and install updates to the development version run the
 previous command again or run
 
 ``` r
+
 remotes::update_packages()
 ```
 
@@ -73,12 +77,14 @@ A binary of the development version of the package (for Windows, macOS,
 and Ubuntu Jammy Jellyfish) can be installed from r-universe using
 
 ``` r
+
 install.packages('OneSampleMR', repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 which can be updated using
 
 ``` r
+
 update.packages(repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
@@ -86,11 +92,6 @@ update.packages(repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-p
 
 ## All functions
 
-- [`OneSampleMR-package`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-package.md)
-  [`onesamplemr`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-package.md)
-  [`OneSampleMR`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-package.md)
-  : OneSampleMR: One Sample Mendelian Randomization and Instrumental
-  Variable Analyses
 - [`asmm`](https://remlapmot.github.io/OneSampleMR/dev/reference/asmm.md)
   : Additive structural mean model
 - [`fsw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)

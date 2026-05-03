@@ -2,8 +2,14 @@
 
 ## OneSampleMR (development version)
 
+- Bump roxygen2 to 8.0.0.
+
+## OneSampleMR 0.1.7
+
+CRAN release: 2026-03-09
+
 - [`fsw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
-  can now calculate Sanderson-Windmiejer conditional F statistics for
+  can now calculate Sanderson-Windmeijer conditional F statistics for
   models fitted by
   [`AER::ivreg()`](https://rdrr.io/pkg/AER/man/ivreg.html),
   [`estimatr::iv_robust()`](https://declaredesign.org/r/estimatr/reference/iv_robust.html),

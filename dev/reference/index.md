@@ -2,11 +2,6 @@
 
 ## All functions
 
-- [`OneSampleMR-package`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-package.md)
-  [`onesamplemr`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-package.md)
-  [`OneSampleMR`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-package.md)
-  : OneSampleMR: One Sample Mendelian Randomization and Instrumental
-  Variable Analyses
 - [`asmm`](https://remlapmot.github.io/OneSampleMR/dev/reference/asmm.md)
   : Additive structural mean model
 - [`fsw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
