@@ -12,7 +12,7 @@
 #' control function estimators.
 #'
 #' `tsri()` performs GMM estimation to ensure appropriate standard errors
-#' on its estimates similar to that described that described by
+#' on its estimates similar to that described by
 #' Clarke et al. (2015). Terza (2017) described an alternative approach.
 #'
 #' @inheritParams msmm
@@ -608,7 +608,7 @@ tsri <- function(
 #' @return `summary.tsri()` returns an object of class `"summary.tsri"`. A list with the following elements:
 #'
 #' \item{smry}{An object from a call to [gmm::summary.gmm()]}
-#' \item{object}{The object of class `tsps` passed to the function.}
+#' \item{object}{The object of class `tsri` passed to the function.}
 #'
 #' @examples
 #' # See the examples at the bottom of help('tsri')
