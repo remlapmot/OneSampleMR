@@ -25,7 +25,7 @@
 \code{summary.tsri()} returns an object of class \code{"summary.tsri"}. A list with the following elements:
 
 \item{smry}{An object from a call to \code{\link[gmm:summary.gmm]{gmm::summary.gmm()}}}
-\item{object}{The object of class \code{tsps} passed to the function.}
+\item{object}{The object of class \code{tsri} passed to the function.}
 }
 \description{
 S3 print and summary methods for objects of

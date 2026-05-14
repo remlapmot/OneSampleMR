@@ -62,7 +62,7 @@ have length equal to the number of exposures plus 1.}
 An object of class \code{"msmm"}. A list with the following items:
 
 \item{fit}{The object from either a \code{\link[gmm:gmm]{gmm::gmm()}} or \code{\link[ivreg:ivreg]{ivreg::ivreg()}} fit.}
-\item{crrci}{The causal risk ratio/s and it corresponding 95\% confidence
+\item{crrci}{The causal risk ratio/s and its corresponding 95\% confidence
 interval limits.}
 \item{estmethod}{The specified \code{estmethod}.}
 
@@ -151,7 +151,7 @@ American Journal of Epidemiology, 2011, 173, 12, 1392-1403.
 \doi{10.1093/aje/kwr026}
 
 Robins JM. The analysis of randomised and
-nonrandomised AIDS treatment trials using a new approach to
+non-randomised AIDS treatment trials using a new approach to
 causal inference in longitudinal studies.
 In Health Service Research Methodology: A Focus on AIDS
 (L. Sechrest, H. Freeman and A. Mulley, eds.). 1989. 113–159.
