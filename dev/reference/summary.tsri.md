@@ -46,7 +46,7 @@ with the following elements:
 
 - object:
 
-  The object of class `tsps` passed to the function.
+  The object of class `tsri` passed to the function.
 
 ## Examples
 

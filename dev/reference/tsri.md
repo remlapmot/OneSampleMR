@@ -95,8 +95,8 @@ TSRI estimators are sometimes described as a special case of control
 function estimators.
 
 `tsri()` performs GMM estimation to ensure appropriate standard errors
-on its estimates similar to that described that described by Clarke et
-al. (2015). Terza (2017) described an alternative approach.
+on its estimates similar to that described by Clarke et al. (2015).
+Terza (2017) described an alternative approach.
 
 ## References
 
