@@ -49,6 +49,7 @@ Sanderson and Windmeijer (2016) for each endogenous variable
 in the model.
 }
 \examples{
+\dontshow{op <- options(parglm.nthreads = 2L)}
 require(ivreg)
 require(AER)
 require(estimatr)
@@ -73,6 +74,7 @@ fsw(mod1)
 fsw(mod2)
 fsw(mod3)
 fsw(mod4)
+\dontshow{options(op)}
 
 }
 \references{

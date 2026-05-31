@@ -74,6 +74,7 @@ on its estimates similar to that described by
 Clarke et al. (2015). Terza (2017) described an alternative approach.
 }
 \examples{
+\dontshow{op <- options(parglm.nthreads = 2L)}
 # Two-stage residual inclusion estimator
 # with second stage logistic regression
 set.seed(9)
@@ -86,6 +87,7 @@ Y            <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
 dat          <- data.frame(Z, X, Y)
 tsrilogitfit <- tsri(Y ~ X | Z , data = dat, link = "logit")
 summary(tsrilogitfit)
+\dontshow{options(op)}
 }
 \references{
 Bowden J, Vansteelandt S.

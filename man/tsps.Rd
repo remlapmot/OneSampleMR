@@ -69,6 +69,7 @@ the predicted values of the exposure (and possibly measured confounders).
 on its estimates similar to the approach described in Clarke et al. (2015).
 }
 \examples{
+\dontshow{op <- options(parglm.nthreads = 2L)}
 # Two-stage predictor substitution estimator
 # with second stage logistic regression
 set.seed(9)
@@ -81,6 +82,7 @@ Y            <- rbinom(n, 1, plogis(psi0*X + log(m0/(1 - m0))))
 dat          <- data.frame(Z, X, Y)
 tspslogitfit <- tsps(Y ~ X | Z , data = dat, link = "logit")
 summary(tspslogitfit)
+\dontshow{options(op)}
 }
 \references{
 Burgess S, CRP CHD Genetics Collaboration.
