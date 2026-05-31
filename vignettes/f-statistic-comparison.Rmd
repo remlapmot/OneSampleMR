@@ -27,6 +27,7 @@ library(estimatr)
 library(fixest)
 library(lfe)
 library(OneSampleMR)
+options(parglm.nthreads = 2L)
 ```
 
 ## Run fsw() on ivreg() model object

@@ -65,6 +65,7 @@
 #' The Stata Journal, 2017, 17, 4, 916-938.
 #' \doi{10.1177/1536867X1801700409}
 #' @examples
+#' \dontshow{op <- options(parglm.nthreads = 2L)}
 #' # Two-stage residual inclusion estimator
 #' # with second stage logistic regression
 #' set.seed(9)
@@ -77,6 +78,7 @@
 #' dat          <- data.frame(Z, X, Y)
 #' tsrilogitfit <- tsri(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tsrilogitfit)
+#' \dontshow{options(op)}
 #' @export
 tsri <- function(
   formula,

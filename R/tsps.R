@@ -52,6 +52,7 @@
 #' Journal of Health Economics, 2008, 27, 3, 531-543.
 #' \doi{10.1016/j.jhealeco.2007.09.009}
 #' @examples
+#' \dontshow{op <- options(parglm.nthreads = 2L)}
 #' # Two-stage predictor substitution estimator
 #' # with second stage logistic regression
 #' set.seed(9)
@@ -64,6 +65,7 @@
 #' dat          <- data.frame(Z, X, Y)
 #' tspslogitfit <- tsps(Y ~ X | Z , data = dat, link = "logit")
 #' summary(tspslogitfit)
+#' \dontshow{options(op)}
 #' @export
 tsps <- function(
   formula,

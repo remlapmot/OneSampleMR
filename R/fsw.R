@@ -19,6 +19,7 @@
 #' \item{n}{the sample size used for the fitted model.}
 #' }
 #' @examples
+#' \dontshow{op <- options(parglm.nthreads = 2L)}
 #' require(ivreg)
 #' require(AER)
 #' require(estimatr)
@@ -43,6 +44,7 @@
 #' fsw(mod2)
 #' fsw(mod3)
 #' fsw(mod4)
+#' \dontshow{options(op)}
 #'
 #' @references
 #' Sanderson E and Windmeijer F. A weak instrument *F*-test in linear
