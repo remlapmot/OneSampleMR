@@ -1,6 +1,7 @@
 # OneSampleMR (development version)
 
 * Bump roxygen2 to 8.0.0.
+* Replace `stats::lm()` and `stats::glm()` calls with `parglm::parglm()` calls to increase speed
 
 # OneSampleMR 0.1.7
 
