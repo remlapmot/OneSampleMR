@@ -171,17 +171,19 @@ fsw.ivreg <- function(object) {
 
       # Unrestricted model for Wald test:
       # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-      resmod <- stats::lm(
+      resmod <- parglm::parglm(
         stats::as.formula(equations$unrestricted),
-        data = object$model
+        data = object$model,
+        family = stats::gaussian()
       )
       # summary(resmod)
 
       # Restricted model for Wald test:
       # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-      resbase <- stats::lm(
+      resbase <- parglm::parglm(
         stats::as.formula(equations$restricted),
-        data = object$model
+        data = object$model,
+        family = stats::gaussian()
       )
       # summary(resbase)
 
@@ -333,17 +335,19 @@ fsw.ivreg <- function(object) {
 
       # Unrestricted model for Wald test:
       # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-      resmod <- stats::lm(
+      resmod <- parglm::parglm(
         stats::as.formula(equations$unrestricted),
-        data = object$model
+        data = object$model,
+        family = stats::gaussian()
       )
       # summary(resmod)
 
       # Restricted model for Wald test:
       # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-      resbase <- stats::lm(
+      resbase <- parglm::parglm(
         stats::as.formula(equations$restricted),
-        data = object$model
+        data = object$model,
+        family = stats::gaussian()
       )
       # summary(resbase)
 
@@ -503,12 +507,12 @@ fsw.iv_robust <- function(object) {
 
     # Unrestricted model for Wald test:
     # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-    resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = dat)
+    resmod <- parglm::parglm(stats::as.formula(equations$unrestricted), data = dat, family = stats::gaussian())
     # summary(resmod)
 
     # Restricted model for Wald test:
     # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-    resbase <- stats::lm(stats::as.formula(equations$restricted), data = dat)
+    resbase <- parglm::parglm(stats::as.formula(equations$restricted), data = dat, family = stats::gaussian())
     # summary(resbase)
 
     # Compute conditional F-Statistic using Wald test for restricted vs unrestricted model:
@@ -648,12 +652,12 @@ fsw.fixest <- function(object) {
 
     # Unrestricted model for Wald test:
     # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-    resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = dat)
+    resmod <- parglm::parglm(stats::as.formula(equations$unrestricted), data = dat, family = stats::gaussian())
     # summary(resmod)
 
     # Restricted model for Wald test:
     # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-    resbase <- stats::lm(stats::as.formula(equations$restricted), data = dat)
+    resbase <- parglm::parglm(stats::as.formula(equations$restricted), data = dat, family = stats::gaussian())
     # summary(resbase)
 
     # Compute conditional F-Statistic using Wald test for restricted vs unrestricted model:

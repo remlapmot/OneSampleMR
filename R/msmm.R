@@ -60,8 +60,8 @@
 #'
 #' If `estmethod` is `"tsls"` or `"tslsalt"`:
 #'
-#' \item{stage1}{An object containing the first stage regression from an
-#' [stats::lm()] fit.}
+#' \item{stage1}{An object containing the first stage regression from a
+#' [parglm::parglm()] fit.}
 #' @references
 #' Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.
 #' New York, Cambridge University Press. ISBN:1107667275
@@ -296,7 +296,7 @@ msmm_tsls <- function(x, y, z) {
   exposure <- y * x
 
   # first stage
-  stage1 <- stats::lm(exposure ~ z)
+  stage1 <- parglm::parglm(exposure ~ z, family = stats::gaussian())
 
   # tsls fit
   fit <- ivreg::ivreg(outcome ~ exposure | z)
@@ -337,7 +337,7 @@ msmm_tsls_alt <- function(x, y, z) {
   exposure <- y * (1 - x)
 
   # first stage
-  stage1 <- stats::lm(exposure ~ z)
+  stage1 <- parglm::parglm(exposure ~ z, family = stats::gaussian())
 
   # tsls fit
   fit <- ivreg::ivreg(outcome ~ exposure | z)

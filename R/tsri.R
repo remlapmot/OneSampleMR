@@ -190,29 +190,29 @@ tsri <- function(
 
   # initial values
   if (is.null(t0)) {
-    stage1 <- stats::lm(X[, 2] ~ -1 + Z)
+    stage1 <- parglm::parglm(X[, 2] ~ -1 + Z, family = stats::gaussian())
     t0 <- stats::coef(stage1)
     res <- stats::residuals(stage1)
     if (tsri_env$anycovs) {
       res <- cbind(res, covariates)
     }
     if (link == "identity") {
-      stage2 <- stats::lm(Y ~ X[, 2] + res)
+      stage2 <- parglm::parglm(Y ~ X[, 2] + res, family = stats::gaussian())
     } else if (link == "logadd") {
-      stage2 <- stats::glm(
+      stage2 <- parglm::parglm(
         Y ~ X[, 2] + res,
         family = stats::poisson(link = "log")
       )
     } else if (link == "logmult") {
       Ystar <- Y
       Ystar[Y == 0] <- 0.001
-      stage2 <- stats::glm(
+      stage2 <- parglm::parglm(
         Ystar ~ X[, 2] + res,
         family = stats::Gamma(link = "log"),
-        control = list(maxit = 1E5)
+        control = parglm::parglm.control(maxit = 1E5)
       )
     } else if (link == "logit") {
-      stage2 <- stats::glm(
+      stage2 <- parglm::parglm(
         Y ~ X[, 2] + res,
         family = stats::binomial(link = "logit")
       )
@@ -305,7 +305,7 @@ tsri <- function(
 
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
+      stage1 <- parglm::parglm(X ~ Z, family = stats::gaussian())
       res <- as.matrix(stats::residuals(stage1))
       res <- cbind(X, res)
     }
@@ -376,7 +376,7 @@ tsri <- function(
 
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
+      stage1 <- parglm::parglm(X ~ Z, family = stats::gaussian())
       res <- as.matrix(stats::residuals(stage1))
       res <- cbind(X, res)
     }
@@ -451,7 +451,7 @@ tsri <- function(
 
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
+      stage1 <- parglm::parglm(X ~ Z, family = stats::gaussian())
       res <- as.matrix(stats::residuals(stage1))
       res <- cbind(X, res)
     }
@@ -530,7 +530,7 @@ tsri <- function(
 
     # generate first stage residuals
     if (length(tsri_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
+      stage1 <- parglm::parglm(X ~ Z, family = stats::gaussian())
       res <- as.matrix(stats::residuals(stage1))
       res <- cbind(X, res)
     }

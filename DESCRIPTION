@@ -33,6 +33,7 @@ Imports:
     ivreg (>= 0.6-5),
     lmtest,
     msm,
+    parglm,
     rlang (>= 1.0.0)
 Suggests:
     AER,

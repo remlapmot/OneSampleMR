@@ -176,26 +176,26 @@ tsps <- function(
 
   # initial values
   if (is.null(t0)) {
-    stage1 <- stats::lm(X[, 2] ~ -1 + Z)
+    stage1 <- parglm::parglm(X[, 2] ~ -1 + Z, family = stats::gaussian())
     t0 <- stats::coef(stage1)
     xhat <- stats::fitted.values(stage1)
     if (tsps_env$anycovs) {
       xhat <- cbind(xhat, covariates)
     }
     if (link == "identity") {
-      stage2 <- stats::lm(Y ~ xhat)
+      stage2 <- parglm::parglm(Y ~ xhat, family = stats::gaussian())
     } else if (link == "logadd") {
-      stage2 <- stats::glm(Y ~ xhat, family = stats::poisson(link = "log"))
+      stage2 <- parglm::parglm(Y ~ xhat, family = stats::poisson(link = "log"))
     } else if (link == "logmult") {
       Ystar <- Y
       Ystar[Y == 0] <- 0.001
-      stage2 <- stats::glm(
+      stage2 <- parglm::parglm(
         Ystar ~ xhat,
         family = stats::Gamma(link = "log"),
-        control = list(maxit = 1E5)
+        control = parglm::parglm.control(maxit = 1E5)
       )
     } else if (link == "logit") {
-      stage2 <- stats::glm(Y ~ xhat, family = stats::binomial(link = "logit"))
+      stage2 <- parglm::parglm(Y ~ xhat, family = stats::binomial(link = "logit"))
     }
     t0 <- c(t0, stats::coef(stage2))
   }
@@ -274,7 +274,7 @@ tsps <- function(
 
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
+      stage1 <- parglm::parglm(X ~ Z, family = stats::gaussian())
       xhat <- as.matrix(stats::fitted.values(stage1))
     }
 
@@ -337,7 +337,7 @@ tsps <- function(
 
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
+      stage1 <- parglm::parglm(X ~ Z, family = stats::gaussian())
       xhat <- as.matrix(stats::fitted.values(stage1))
     }
 
@@ -404,7 +404,7 @@ tsps <- function(
 
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
+      stage1 <- parglm::parglm(X ~ Z, family = stats::gaussian())
       xhat <- as.matrix(stats::fitted.values(stage1))
     }
 
@@ -476,7 +476,7 @@ tsps <- function(
 
     # generate first stage predicted values
     if (length(tsps_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
+      stage1 <- parglm::parglm(X ~ Z, family = stats::gaussian())
       xhat <- as.matrix(stats::fitted.values(stage1))
     }
 
