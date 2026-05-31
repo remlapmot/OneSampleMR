@@ -249,11 +249,11 @@ test_that("Multiple instrument example with covariates - logmult link", {
   skip_on_cran()
 
   dat$Y[dat$Y == 0] <- 0.001
-  fit32 <- tsps(
+  fit32 <- suppressWarnings(tsps(
     Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
     data = dat,
     link = "logmult"
-  )
+  ))
   expect_output(print(fit32))
   smry32 <- summary(fit32)
   expect_output(print(smry32))

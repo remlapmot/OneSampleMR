@@ -299,11 +299,11 @@ test_that("Multiple instrument example with covariates - logadd link", {
 test_that("Multiple instrument example with covariates - logmult link", {
   skip_on_cran()
 
-  fit32 <- tsri(
+  fit32 <- suppressWarnings(tsri(
     Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
     data = dat,
     link = "logmult"
-  )
+  ))
   expect_output(print(fit32))
   smry32 <- summary(fit32)
   expect_output(print(smry32))
