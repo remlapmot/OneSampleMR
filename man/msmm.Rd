@@ -73,8 +73,8 @@ its 95\% confidence interval limits.}
 
 If \code{estmethod} is \code{"tsls"} or \code{"tslsalt"}:
 
-\item{stage1}{An object containing the first stage regression from an
-\code{\link[stats:lm]{stats::lm()}} fit.}
+\item{stage1}{An object containing the first stage regression from a
+\code{\link[parglm:parglm]{parglm::parglm()}} fit.}
 }
 \description{
 Function providing several methods to estimate the multiplicative
