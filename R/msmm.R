@@ -314,10 +314,11 @@ msmm_tsls <- function(x, y, z) {
   logcrrse <- msm::deltamethod(~ log(-1 / x2), beta, estvar)
 
   # crr with 95% CI
+  z975 <- stats::qnorm(0.975)
   crrci <- unname(c(
     -1 / beta[2],
-    exp(logcrr - 1.96 * logcrrse),
-    exp(logcrr + 1.96 * logcrrse)
+    exp(logcrr - z975 * logcrrse),
+    exp(logcrr + z975 * logcrrse)
   ))
 
   # baseline risk
@@ -355,10 +356,11 @@ msmm_tsls_alt <- function(x, y, z) {
   logcrrse <- msm::deltamethod(~ log(-1 * x2), beta, estvar)
 
   # crr with 95% CI
+  z975 <- stats::qnorm(0.975)
   crrci <- unname(c(
     -1 * beta[2],
-    exp(logcrr - 1.96 * logcrrse),
-    exp(logcrr + 1.96 * logcrrse)
+    exp(logcrr - z975 * logcrrse),
+    exp(logcrr + z975 * logcrrse)
   ))
 
   # list of results to return
