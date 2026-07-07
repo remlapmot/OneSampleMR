@@ -2,6 +2,20 @@
 
 * Bump roxygen2 to 8.0.0.
 
+* Fixed a bug in `fsw()` for models fitted by `ivreg::ivreg()` which reported conditional F statistics for the wrong variables when exogenous covariates were listed before the exposures in the model formula
+
+* Fixed a bug in `tsps()` and `tsri()` which produced incorrect estimates when exogenous covariates were listed before the exposure or the instruments in the model formula
+
+* `tsps()` and `tsri()` now give a clear error message when more than one exposure is specified, when a variable is named `y` (which is reserved for internal use), and their print methods no longer error when a user specified unnamed `t0` is used with a log-link or logit-link model
+
+* `fsw()` now detects ordered factor exposures, and its factor exposure error message is restored for the `ivreg::ivreg()` method and fixed for the `fixest::feols()` method
+
+* `msmm()` now gives its intended error message for non-integer outcomes and a corrected message for negative outcomes
+
+* `tsps()` and `tsri()` are now roughly 2 times faster because the first stage regression is computed once instead of on every evaluation of the GMM moment functions, and the moment conditions in all three GMM based estimators are now vectorised
+
+* Internal refactoring: the four `fsw()` methods now share a common engine, the eight `tsps()`/`tsri()` moment functions are reduced to one per estimator, and dead code has been removed
+
 # OneSampleMR 0.1.7
 
 * `fsw()` can now calculate Sanderson-Windmeijer conditional F statistics for models fitted by `AER::ivreg()`, `estimatr::iv_robust()`, and `fixest::feols()` (thanks @nvitt)
