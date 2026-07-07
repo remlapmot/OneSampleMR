@@ -231,9 +231,10 @@ msmm <- function(
   estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
 
   # check y greater than or equal to 0
-  ygr0chck <- sum(Y < 0)
-  if (as.logical(ygr0chck)) {
-    stop("All of the values of the outcome must be greater than 0.")
+  if (any(Y < 0)) {
+    stop(
+      "All of the values of the outcome must be greater than or equal to 0."
+    )
   }
 
   # check y all integers

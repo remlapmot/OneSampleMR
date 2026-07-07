@@ -893,3 +893,18 @@ test_that("Adjusting for covariate", {
   fit26 <- msmm(Y ~ E1 + E2 + C | G1 + G2 + G3 + C, data = dat)
   expect_equal(log(fit26$crrci[1, 1]), .184, tolerance = .01)
 })
+
+test_that("Clear error message for negative outcome values", {
+  set.seed(9)
+  n <- 1000
+  Z <- rbinom(n, 1, 0.5)
+  X <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+  m0 <- plogis(1 + 0.8 * X - 0.39 * Z)
+  Y <- rbinom(n, 1, plogis(0.5 * X + log(m0 / (1 - m0))))
+  dat <- data.frame(Z, X, Y)
+  dat$Y[1] <- -1
+  expect_error(
+    msmm(Y ~ X | Z, data = dat),
+    "greater than or equal to 0"
+  )
+})
