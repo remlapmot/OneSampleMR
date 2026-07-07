@@ -237,8 +237,9 @@ msmm <- function(
   }
 
   # check y all integers
+  # (all.equal() returns a character string, not FALSE, on mismatch)
   yintchck <- all.equal(Y, as.integer(Y), check.attributes = FALSE)
-  if (!yintchck) {
+  if (!isTRUE(yintchck)) {
     stop("All of the values of the outcome must be integers.")
   }
 

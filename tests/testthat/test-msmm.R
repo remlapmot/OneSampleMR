@@ -785,10 +785,24 @@ test_that("Methods fail for non-integer Y", {
   Y <- rbinom(n, 1, plogis(psi0 * X + log(m0 / (1 - m0))))
   dat <- data.frame(Z, X, Y)
   dat$Y[1] <- 1.5
-  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "gmm"))
-  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt"))
-  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "tsls"))
-  expect_error(msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt"))
+  # check for the intended error message, not e.g. the "invalid argument
+  # type" error previously raised by ! applied to the output of all.equal()
+  expect_error(
+    msmm(Y ~ X | Z, data = dat, estmethod = "gmm"),
+    "must be integers"
+  )
+  expect_error(
+    msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt"),
+    "must be integers"
+  )
+  expect_error(
+    msmm(Y ~ X | Z, data = dat, estmethod = "tsls"),
+    "must be integers"
+  )
+  expect_error(
+    msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt"),
+    "must be integers"
+  )
 })
 
 # Multiple exposure example ----
