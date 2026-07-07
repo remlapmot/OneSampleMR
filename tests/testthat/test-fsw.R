@@ -1204,3 +1204,13 @@ test_that("fixest::feols fsw matches Stata ivreg2 output", {
   expect_equal(condf$fswres[1, 3], 424, tolerance = 1)
   expect_equal(condf$fswres[2, 3], 424, tolerance = 1)
 })
+
+test_that("fixest::feols fsw errors for a factor exposure", {
+  skip_if_not_installed("fixest")
+  simulated_data$expfct2 <- as.factor(rbinom(n, 1, p = 0.4))
+  mod <- fixest::feols(
+    alc_deaths ~ age | log_dpw + expfct2 ~ dpw_main_grs + edu_main_grs,
+    data = simulated_data
+  )
+  expect_error(fsw(mod), "is a factor")
+})

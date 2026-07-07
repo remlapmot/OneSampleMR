@@ -572,13 +572,18 @@ fsw.fixest <- function(object) {
   )
   nexogenous <- length(namesexog)
 
-  # Error for factor variables among endogenous variables:
+  dat <- get_data(object)
+
+  # Error for factor variables among endogenous variables
+  # (checked via the model formula because a factor variable has different
+  # column names in the model matrix than in the data):
+  namesendogterms <- intersect(all.vars(object$iv_endo_fml), colnames(dat))
   endogfcterrmsg <- paste(
     "One or more of your exposure variables is a factor.",
     "Please convert to numeric with say as.numeric(),",
-    "refit your iv_robust() model, and rerun fsw()."
+    "refit your feols() model, and rerun fsw()."
   )
-  if (any(vapply(get_data(object)[namesendog], is.factor, logical(1)))) {
+  if (any(vapply(dat[namesendogterms], is.factor, logical(1)))) {
     stop(endogfcterrmsg)
   }
 
@@ -596,8 +601,6 @@ fsw.fixest <- function(object) {
 
   # Create equations of the unrestricted and restricted models compared in the Wald test:
   equations <- wald_equations(nexogenous, instrplus, exogplus)
-
-  dat <- get_data(object)
 
   # Obtain conditional F statistic for each endogenous explanatory variables:
   fswres <- sapply(namesendog, function(endogoutcome) {
