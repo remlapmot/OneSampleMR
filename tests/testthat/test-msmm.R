@@ -942,3 +942,23 @@ test_that("tsls CRR confidence limits use the 0.975 normal quantile", {
     ignore_attr = TRUE
   )
 })
+
+test_that("Estimates are unaffected by an exposure named y", {
+  skip_on_cran()
+  set.seed(123456)
+  n <- 1000
+  G1 <- rbinom(n, 2, 0.5)
+  G2 <- rbinom(n, 2, 0.3)
+  G3 <- rbinom(n, 2, 0.4)
+  U <- runif(n)
+  X1 <- rbinom(n, 1, plogis(0.7 * G1 + U))
+  X2 <- rbinom(n, 1, plogis(G2 - G3 + U))
+  Y <- rbinom(n, 1, plogis(-2 + 0.5 * X1 + 0.3 * X2 + U))
+  dat <- data.frame(G1, G2, G3, X1, X2, Y)
+  fit <- msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat)
+  daty <- dat
+  names(daty)[names(daty) == "X1"] <- "y"
+  fity <- msmm(Y ~ y + X2 | G1 + G2 + G3, data = daty)
+  expect_equal(unname(fit$crrci), unname(fity$crrci))
+  expect_equal(unname(fit$ey0ci), unname(fity$ey0ci))
+})

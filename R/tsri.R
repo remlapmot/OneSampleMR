@@ -167,6 +167,16 @@ tsri <- function(
   znames <- colnames(Z)[-1]
   covariatenames <- intersect(xnames, znames)
 
+  # the column name "y" is reserved for the outcome in the data.frame
+  # passed to the gmm fit; a variable with the same name would be silently
+  # renamed and lookups by name would retrieve the outcome instead
+  if ("y" %in% c(xnames, znames)) {
+    stop(
+      "Please rename the variable \"y\" in your model; ",
+      "that name is reserved for internal use."
+    )
+  }
+
   tsri_env <- new.env(parent = emptyenv())
   tsri_env$anycovs <- FALSE
   if (!identical(covariatenames, character(0))) {

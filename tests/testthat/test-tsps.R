@@ -362,3 +362,16 @@ test_that("Clear error message with more than one exposure", {
     "Only 1 exposure variable is allowed."
   )
 })
+
+test_that("Clear error message for a variable named y", {
+  set.seed(9)
+  n <- 100
+  Z <- rbinom(n, 1, 0.5)
+  y <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+  Y2 <- rbinom(n, 1, plogis(0.5 * y))
+  dat2 <- data.frame(Z, y, Y2)
+  expect_error(
+    tsps(Y2 ~ y | Z, data = dat2),
+    "reserved for internal use"
+  )
+})

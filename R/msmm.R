@@ -375,7 +375,9 @@ msmm_tsls_alt <- function(x, y, z) {
 
 msmmMoments <- function(theta, x) {
   # extract variables from x
-  Y <- as.matrix(x[, "y"])
+  # (positionally: the outcome is the first column of the data.frame built
+  # in msmm_gmm(), even if an exposure or instrument is also named "y")
+  Y <- as.matrix(x[, 1L])
   xcolstop <- length(theta)
   X <- as.matrix(x[, 2:xcolstop])
   zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
@@ -432,7 +434,9 @@ msmm_gmm <- function(x, y, z, xnames, t0) {
 
 msmmAltMoments <- function(theta, x) {
   # extract variables from x
-  Y <- as.matrix(x[, "y"])
+  # (positionally: the outcome is the first column of the data.frame built
+  # in msmm_gmm_alt(), even if an exposure or instrument is also named "y")
+  Y <- as.matrix(x[, 1L])
   xcolstop <- length(theta)
   X <- cbind(rep(1, nrow(x)), as.matrix(x[, 2:xcolstop]))
   zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
