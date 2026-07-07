@@ -383,18 +383,12 @@ msmmMoments <- function(theta, x) {
   zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
   zcolstop <- ncol(x)
   Z <- as.matrix(x[, zcolstart:zcolstop])
-  nZ <- zcolstop - zcolstart + 1
-  nZp1 <- nZ + 1
 
   linearpredictor <- -1 * X %*% as.matrix(theta[-1])
 
-  # moments
-  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
-  moments[, 1] <- (Y * exp(linearpredictor) - theta[1])
-  for (i in 1:nZ) {
-    j <- i + 1
-    moments[, j] <- (Y * exp(linearpredictor) - theta[1]) * Z[, i]
-  }
+  # moments: the base moment multiplied by a constant and each instrument
+  basemoment <- as.vector(Y * exp(linearpredictor)) - theta[1]
+  moments <- unname(basemoment * cbind(1, Z))
   return(moments)
 }
 
@@ -442,18 +436,12 @@ msmmAltMoments <- function(theta, x) {
   zcolstart <- 1 + length(theta) # 1 is y, length(theta) is nX
   zcolstop <- ncol(x)
   Z <- as.matrix(x[, zcolstart:zcolstop])
-  nZ <- zcolstop - zcolstart + 1
-  nZp1 <- nZ + 1
 
   linearpredictor <- -1 * X %*% as.matrix(theta)
 
-  # moments
-  moments <- matrix(nrow = nrow(x), ncol = nZp1, NA)
-  moments[, 1] <- (Y * exp(linearpredictor) - 1)
-  for (i in 1:nZ) {
-    j <- i + 1
-    moments[, j] <- (Y * exp(linearpredictor) - 1) * Z[, i]
-  }
+  # moments: the base moment multiplied by a constant and each instrument
+  basemoment <- as.vector(Y * exp(linearpredictor)) - 1
+  moments <- unname(basemoment * cbind(1, Z))
   return(moments)
 }
 
