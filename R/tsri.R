@@ -259,6 +259,15 @@ tsri <- function(
   Ztopass <- as.data.frame(Z[, zcolorder, drop = FALSE])
   colnames(Ztopass) <- zcolorder
 
+  # the first stage residuals do not depend on theta, so compute them once
+  # here rather than on every evaluation of the gmm moment functions below
+  stage1fit <- stats::lm(Xtopass[[1]] ~ as.matrix(Ztopass))
+  resfixed <- cbind(Xtopass[[1]], as.matrix(stats::residuals(stage1fit)))
+  if (tsri_env$anycovs) {
+    resfixed <- cbind(resfixed, Ztopass[, tsri_env$covariatenames])
+  }
+  tsri_env$res <- resfixed
+
   # functions for tsri fit
   tsri_gmm <- function(x, y, z, xnames, t0, link) {
     x <- as.matrix(x)
@@ -325,16 +334,9 @@ tsri <- function(
     thetastage2rescov <- thetastage2[3:length(thetastage2)]
     thetacov <- thetastage2[4:length(thetastage2)]
 
-    # generate first stage residuals
-    if (length(tsri_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
-      res <- as.matrix(stats::residuals(stage1))
-      res <- cbind(X, res)
-    }
-
-    if (tsri_env$anycovs) {
-      res <- cbind(res, covariates)
-    }
+    # first stage residuals (precomputed in tsri() because they do not
+    # depend on theta)
+    res <- tsri_env$res
 
     linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
 
@@ -396,16 +398,9 @@ tsri <- function(
     thetastage2rescov <- thetastage2[3:length(thetastage2)]
     thetacov <- thetastage2[4:length(thetastage2)]
 
-    # generate first stage residuals
-    if (length(tsri_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
-      res <- as.matrix(stats::residuals(stage1))
-      res <- cbind(X, res)
-    }
-
-    if (tsri_env$anycovs) {
-      res <- cbind(res, covariates)
-    }
+    # first stage residuals (precomputed in tsri() because they do not
+    # depend on theta)
+    res <- tsri_env$res
 
     linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
 
@@ -471,16 +466,9 @@ tsri <- function(
     thetastage2rescov <- thetastage2[3:length(thetastage2)]
     thetacov <- thetastage2[4:length(thetastage2)]
 
-    # generate first stage residuals
-    if (length(tsri_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
-      res <- as.matrix(stats::residuals(stage1))
-      res <- cbind(X, res)
-    }
-
-    if (tsri_env$anycovs) {
-      res <- cbind(res, covariates)
-    }
+    # first stage residuals (precomputed in tsri() because they do not
+    # depend on theta)
+    res <- tsri_env$res
 
     linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
 
@@ -550,16 +538,9 @@ tsri <- function(
     thetastage2rescov <- thetastage2[3:length(thetastage2)]
     thetacov <- thetastage2[4:length(thetastage2)]
 
-    # generate first stage residuals
-    if (length(tsri_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
-      res <- as.matrix(stats::residuals(stage1))
-      res <- cbind(X, res)
-    }
-
-    if (tsri_env$anycovs) {
-      res <- cbind(res, covariates)
-    }
+    # first stage residuals (precomputed in tsri() because they do not
+    # depend on theta)
+    res <- tsri_env$res
 
     linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
 

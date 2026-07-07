@@ -231,6 +231,16 @@ tsps <- function(
   Ztopass <- as.data.frame(Z[, zcolorder, drop = FALSE])
   colnames(Ztopass) <- zcolorder
 
+  # the first stage predicted values do not depend on theta, so compute
+  # them once here rather than on every evaluation of the gmm moment
+  # functions below
+  stage1fit <- stats::lm(Xtopass[[1]] ~ as.matrix(Ztopass))
+  xhatfixed <- as.matrix(stats::fitted.values(stage1fit))
+  if (tsps_env$anycovs) {
+    xhatfixed <- cbind(xhatfixed, Ztopass[, tsps_env$covariatenames])
+  }
+  tsps_env$xhat <- xhatfixed
+
   # functions for the tsps fit
   tsps_gmm <- function(x, y, z, xnames, t0, link) {
     x <- as.matrix(x)
@@ -293,15 +303,9 @@ tsps <- function(
     thetaend <- length(theta)
     thetastage2 <- theta[stage2start:thetaend]
 
-    # generate first stage predicted values
-    if (length(tsps_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
-      xhat <- as.matrix(stats::fitted.values(stage1))
-    }
-
-    if (tsps_env$anycovs) {
-      xhat <- cbind(xhat, covariates)
-    }
+    # first stage predicted values (precomputed in tsps() because they do
+    # not depend on theta)
+    xhat <- tsps_env$xhat
 
     linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
 
@@ -356,15 +360,9 @@ tsps <- function(
     thetaend <- length(theta)
     thetastage2 <- theta[stage2start:thetaend]
 
-    # generate first stage predicted values
-    if (length(tsps_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
-      xhat <- as.matrix(stats::fitted.values(stage1))
-    }
-
-    if (tsps_env$anycovs) {
-      xhat <- cbind(xhat, covariates)
-    }
+    # first stage predicted values (precomputed in tsps() because they do
+    # not depend on theta)
+    xhat <- tsps_env$xhat
 
     linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
 
@@ -423,15 +421,9 @@ tsps <- function(
     thetaend <- length(theta)
     thetastage2 <- theta[stage2start:thetaend]
 
-    # generate first stage predicted values
-    if (length(tsps_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
-      xhat <- as.matrix(stats::fitted.values(stage1))
-    }
-
-    if (tsps_env$anycovs) {
-      xhat <- cbind(xhat, covariates)
-    }
+    # first stage predicted values (precomputed in tsps() because they do
+    # not depend on theta)
+    xhat <- tsps_env$xhat
 
     linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
 
@@ -495,15 +487,9 @@ tsps <- function(
     thetaend <- length(theta)
     thetastage2 <- theta[stage2start:thetaend]
 
-    # generate first stage predicted values
-    if (length(tsps_env$xnames) == 1) {
-      stage1 <- stats::lm(X ~ Z)
-      xhat <- as.matrix(stats::fitted.values(stage1))
-    }
-
-    if (tsps_env$anycovs) {
-      xhat <- cbind(xhat, covariates)
-    }
+    # first stage predicted values (precomputed in tsps() because they do
+    # not depend on theta)
+    xhat <- tsps_env$xhat
 
     linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
 
