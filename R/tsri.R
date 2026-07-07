@@ -195,6 +195,7 @@ tsri <- function(
   }
 
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
+  tsri_env$link <- link
 
   # check y binary
   if (link == "logit" && !all(Y %in% 0:1)) {
@@ -282,21 +283,17 @@ tsri <- function(
       t0 <- rep(0, ncol(x) + 1)
     }
 
-    # gmm fit
-    if (link == "identity") {
-      fit <- gmm::gmm(tsriIdentityMoments, x = dat, t0 = t0, vcov = "iid")
-    } else if (link == "logadd") {
-      fit <- gmm::gmm(tsriLogaddMoments, x = dat, t0 = t0, vcov = "iid")
-    } else if (link == "logmult") {
+    # gmm fit (tsriMoments reads the link function from tsri_env)
+    if (link == "logmult") {
       fit <- gmm::gmm(
-        tsriLogmultMoments,
+        tsriMoments,
         x = dat,
         t0 = t0,
         vcov = "iid",
         itermax = 1E7
       )
-    } else if (link == "logit") {
-      fit <- gmm::gmm(tsriLogitMoments, x = dat, t0 = t0, vcov = "iid")
+    } else {
+      fit <- gmm::gmm(tsriMoments, x = dat, t0 = t0, vcov = "iid")
     }
 
     if (fit$algoInfo$convergence != 0) {
@@ -312,15 +309,13 @@ tsri <- function(
     return(reslist)
   }
 
-  tsriIdentityMoments <- function(theta, x) {
+  tsriMoments <- function(theta, x) {
     # extract variables from x
     Y <- as.matrix(x[, "y"])
     X <- x[, tsri_env$xnames]
     Z <- as.matrix(x[, tsri_env$znames])
-    nZ <- ncol(Z)
     if (tsri_env$anycovs) {
       covariates <- x[, tsri_env$covariatenames]
-      ncovariates <- length(tsri_env$covariatenames)
       Z <- as.matrix(cbind(Z, covariates))
     }
     Zwithcons <- as.matrix(cbind(rep(1, nrow(x)), Z))
@@ -331,257 +326,43 @@ tsri <- function(
     thetastage2 <- theta[stage2start:thetaend]
     thetacausal <- thetastage2[2]
     thetares <- thetastage2[3]
-    thetastage2rescov <- thetastage2[3:length(thetastage2)]
-    thetacov <- thetastage2[4:length(thetastage2)]
+
+    # first stage linear predictor and residual
+    linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
+    stage1express <- as.vector(X - linearpredictor)
+
+    # second stage linear predictor
+    eta2 <- theta[stage2start] +
+      thetacausal * X +
+      thetares * (X - as.matrix(linearpredictor))
+    if (tsri_env$anycovs) {
+      thetacov <- thetastage2[4:length(thetastage2)]
+      eta2 <- eta2 + as.matrix(covariates) %*% as.matrix(thetacov)
+    }
+    eta2 <- as.vector(eta2)
+
+    # second stage residual on the scale of the specified link function
+    Yvec <- as.vector(Y)
+    stage2express <- switch(
+      tsri_env$link,
+      identity = Yvec - eta2,
+      logadd = Yvec - exp(eta2),
+      logmult = Yvec * exp(-1 * eta2) - 1,
+      logit = Yvec - stats::plogis(eta2)
+    )
 
     # first stage residuals (precomputed in tsri() because they do not
     # depend on theta)
-    res <- tsri_env$res
+    res <- as.matrix(tsri_env$res)
 
-    linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
-
-    # moments
-    moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
-
-    moments[, 1] <- (X - linearpredictor)
-
-    for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor) * Zwithcons[, i]
-    }
-
-    if (tsri_env$anycovs) {
-      stage2express <- (Y -
-        (theta[stage2start] +
-          thetacausal * X +
-          thetares * (X - as.matrix(linearpredictor)) +
-          as.matrix(covariates) %*% as.matrix(thetacov)))
-    } else {
-      stage2express <- (Y -
-        (theta[stage2start] +
-          thetacausal * X +
-          thetares * (X - as.matrix(linearpredictor))))
-    }
-
-    thetastart <- stage2start + 1
-
-    moments[, stage2start] <- stage2express
-
-    start3 <- stage2start + 1
-    j <- 1
-    for (i in start3:thetaend) {
-      moments[, i] <- (stage2express) * res[, j]
-      j <- j + 1
-    }
-
-    return(moments)
-  }
-
-  tsriLogaddMoments <- function(theta, x) {
-    # extract variables from x
-    Y <- as.matrix(x[, "y"])
-    X <- x[, tsri_env$xnames]
-    Z <- as.matrix(x[, tsri_env$znames])
-    nZ <- ncol(Z)
-    if (tsri_env$anycovs) {
-      covariates <- x[, tsri_env$covariatenames]
-      ncovariates <- length(tsri_env$covariatenames)
-      Z <- as.matrix(cbind(Z, covariates))
-    }
-    Zwithcons <- as.matrix(cbind(rep(1, nrow(x)), Z))
-    stage1end <- ncol(Zwithcons)
-    thetastage1 <- theta[1:stage1end]
-    stage2start <- stage1end + 1
-    thetaend <- length(theta)
-    thetastage2 <- theta[stage2start:thetaend]
-    thetacausal <- thetastage2[2]
-    thetares <- thetastage2[3]
-    thetastage2rescov <- thetastage2[3:length(thetastage2)]
-    thetacov <- thetastage2[4:length(thetastage2)]
-
-    # first stage residuals (precomputed in tsri() because they do not
-    # depend on theta)
-    res <- tsri_env$res
-
-    linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
-
-    # moments
-    moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
-
-    moments[, 1] <- (X - linearpredictor)
-
-    for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor) * Zwithcons[, i]
-    }
-
-    if (tsri_env$anycovs) {
-      stage2express <- (Y -
-        exp(
-          theta[stage2start] +
-            thetacausal * X +
-            thetares * (X - as.matrix(linearpredictor)) +
-            as.matrix(covariates) %*% as.matrix(thetacov)
-        ))
-    } else {
-      stage2express <- (Y -
-        exp(
-          theta[stage2start] +
-            thetacausal * X +
-            thetares * (X - as.matrix(linearpredictor))
-        ))
-    }
-
-    thetastart <- stage2start + 1
-
-    moments[, stage2start] <- stage2express
-
-    start3 <- stage2start + 1
-    j <- 1
-    for (i in start3:thetaend) {
-      moments[, i] <- (stage2express) * res[, j]
-      j <- j + 1
-    }
-
-    return(moments)
-  }
-
-  tsriLogmultMoments <- function(theta, x) {
-    # extract variables from x
-    Y <- as.matrix(x[, "y"])
-    X <- x[, tsri_env$xnames]
-    Z <- as.matrix(x[, tsri_env$znames])
-    nZ <- ncol(Z)
-    if (tsri_env$anycovs) {
-      covariates <- x[, tsri_env$covariatenames]
-      ncovariates <- length(tsri_env$covariatenames)
-      Z <- as.matrix(cbind(Z, covariates))
-    }
-    Zwithcons <- as.matrix(cbind(rep(1, nrow(x)), Z))
-    stage1end <- ncol(Zwithcons)
-    thetastage1 <- theta[1:stage1end]
-    stage2start <- stage1end + 1
-    thetaend <- length(theta)
-    thetastage2 <- theta[stage2start:thetaend]
-    thetacausal <- thetastage2[2]
-    thetares <- thetastage2[3]
-    thetastage2rescov <- thetastage2[3:length(thetastage2)]
-    thetacov <- thetastage2[4:length(thetastage2)]
-
-    # first stage residuals (precomputed in tsri() because they do not
-    # depend on theta)
-    res <- tsri_env$res
-
-    linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
-
-    # moments
-    moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
-
-    moments[, 1] <- (X - linearpredictor)
-
-    for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor) * Zwithcons[, i]
-    }
-
-    if (tsri_env$anycovs) {
-      stage2express <- (Y *
-        exp(
-          -1 *
-            (theta[stage2start] +
-              thetacausal * X +
-              thetares * (X - as.matrix(linearpredictor)) +
-              as.matrix(covariates) %*% as.matrix(thetacov))
-        ) -
-        1)
-    } else {
-      stage2express <- (Y *
-        exp(
-          -1 *
-            (theta[stage2start] +
-              thetacausal * X +
-              thetares * (X - as.matrix(linearpredictor)))
-        ) -
-        1)
-    }
-
-    thetastart <- stage2start + 1
-
-    moments[, stage2start] <- stage2express
-
-    start3 <- stage2start + 1
-    j <- 1
-    for (i in start3:thetaend) {
-      moments[, i] <- (stage2express) * res[, j]
-      j <- j + 1
-    }
-
-    return(moments)
-  }
-
-  tsriLogitMoments <- function(theta, x) {
-    # extract variables from x
-    Y <- as.matrix(x[, "y"])
-    X <- x[, tsri_env$xnames]
-    Z <- as.matrix(x[, tsri_env$znames])
-    nZ <- ncol(Z)
-    if (tsri_env$anycovs) {
-      covariates <- x[, tsri_env$covariatenames]
-      ncovariates <- length(tsri_env$covariatenames)
-      Z <- as.matrix(cbind(Z, covariates))
-    }
-    Zwithcons <- as.matrix(cbind(rep(1, nrow(x)), Z))
-    stage1end <- ncol(Zwithcons)
-    thetastage1 <- theta[1:stage1end]
-    stage2start <- stage1end + 1
-    thetaend <- length(theta)
-    thetastage2 <- theta[stage2start:thetaend]
-    thetacausal <- thetastage2[2]
-    thetares <- thetastage2[3]
-    thetastage2rescov <- thetastage2[3:length(thetastage2)]
-    thetacov <- thetastage2[4:length(thetastage2)]
-
-    # first stage residuals (precomputed in tsri() because they do not
-    # depend on theta)
-    res <- tsri_env$res
-
-    linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
-
-    # moments
-    moments <- matrix(nrow = nrow(x), ncol = length(theta), NA)
-
-    moments[, 1] <- (X - linearpredictor)
-
-    for (i in 2:stage1end) {
-      moments[, i] <- (X - linearpredictor) * Zwithcons[, i]
-    }
-
-    if (tsri_env$anycovs) {
-      stage2express <- (Y -
-        stats::plogis(
-          theta[stage2start] +
-            thetacausal * X +
-            thetares * (X - as.matrix(linearpredictor)) +
-            as.matrix(covariates) %*% as.matrix(thetacov)
-        ))
-    } else {
-      stage2express <- (Y -
-        stats::plogis(
-          theta[stage2start] +
-            thetacausal * X +
-            thetares * (X - as.matrix(linearpredictor))
-        ))
-    }
-
-    thetastart <- stage2start + 1
-
-    moments[, stage2start] <- stage2express
-
-    start3 <- stage2start + 1
-    j <- 1
-    for (i in start3:thetaend) {
-      moments[, i] <- (stage2express) * res[, j]
-      j <- j + 1
-    }
-
-    return(moments)
+    # moments: the first stage residual multiplied by a constant and each
+    # instrument (and covariate), then the second stage residual multiplied
+    # by a constant, the exposure, the first stage residuals, and any
+    # covariates
+    unname(cbind(
+      stage1express * Zwithcons,
+      stage2express * cbind(1, res)
+    ))
   }
 
   # gmm fit
