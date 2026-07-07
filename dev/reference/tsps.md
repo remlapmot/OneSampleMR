@@ -141,17 +141,17 @@ summary(tspslogitfit)
 #> GMM fit summary:
 #> 
 #> Call:
-#> gmm::gmm(g = tspsLogitMoments, x = dat, t0 = t0, vcov = "iid")
+#> gmm::gmm(g = tspsMoments, x = dat, t0 = t0, vcov = "iid")
 #> 
 #> 
 #> Method:  twoStep 
 #> 
 #> Coefficients:
-#>               Estimate    Std. Error  t value     Pr(>|t|)  
-#> Z(Intercept)  1.7647e-01  1.7169e-02  1.0278e+01  8.8297e-25
-#> ZZ            5.4740e-01  2.6249e-02  2.0854e+01  1.4138e-96
-#> (Intercept)   9.7133e-01  1.4042e-01  6.9173e+00  4.6027e-12
-#> xhat          6.1451e-01  2.7464e-01  2.2375e+00  2.5256e-02
+#>                     Estimate    Std. Error  t value     Pr(>|t|)  
+#> Zstage1(Intercept)  1.7647e-01  1.7169e-02  1.0278e+01  8.8297e-25
+#> Zstage1Z            5.4740e-01  2.6249e-02  2.0854e+01  1.4138e-96
+#> (Intercept)         9.7133e-01  1.4042e-01  6.9173e+00  4.6027e-12
+#> xhat                6.1451e-01  2.7464e-01  2.2375e+00  2.5256e-02
 #> 
 #> J-Test: degrees of freedom is 0 
 #>                 J-test               P-value            
@@ -164,11 +164,11 @@ summary(tspslogitfit)
 #> Gradian eval. =  NA 
 #> 
 #> Estimates with 95% CI limits:
-#>              Estimate   0.025  0.975
-#> Z(Intercept)   0.1765 0.14282 0.2101
-#> ZZ             0.5474 0.49595 0.5988
-#> (Intercept)    0.9713 0.69611 1.2465
-#> xhat           0.6145 0.07622 1.1528
+#>                    Estimate   0.025  0.975
+#> Zstage1(Intercept)   0.1765 0.14282 0.2101
+#> Zstage1Z             0.5474 0.49595 0.5988
+#> (Intercept)          0.9713 0.69611 1.2465
+#> xhat                 0.6145 0.07622 1.1528
 #> 
 #> Causal odds ratio with 95% CI limits:
 #>             Estimate 0.025 0.975
