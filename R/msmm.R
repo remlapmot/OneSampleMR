@@ -160,7 +160,6 @@ msmm <- function(
 
   # code from beginning for ivreg::ivreg()
   ## set up model.frame() call
-  cl <- match.call()
   if (missing(data)) {
     data <- environment(formula)
   }
@@ -175,8 +174,6 @@ msmm <- function(
   ## handle instruments for backward compatibility
   if (!missing(instruments)) {
     formula <- Formula::as.Formula(formula, instruments)
-    cl$instruments <- NULL
-    cl$formula <- formula(formula)
   } else {
     formula <- Formula::as.Formula(formula)
   }
@@ -207,7 +204,6 @@ msmm <- function(
   mf <- eval(mf, parent.frame())
   ## extract response, terms, model matrices
   Y <- stats::model.response(mf, "numeric")
-  mt <- stats::terms(formula, data = data)
   mtX <- stats::terms(formula, data = data, rhs = 1)
   X <- stats::model.matrix(mtX, mf, contrasts)
   if (length(formula)[2] < 2L) {

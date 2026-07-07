@@ -97,7 +97,6 @@ tsri <- function(
 
   # code from beginning for ivreg::ivreg()
   ## set up model.frame() call
-  cl <- match.call()
   if (missing(data)) {
     data <- environment(formula)
   }
@@ -112,8 +111,6 @@ tsri <- function(
   ## handle instruments for backward compatibility
   if (!missing(instruments)) {
     formula <- Formula::as.Formula(formula, instruments)
-    cl$instruments <- NULL
-    cl$formula <- formula(formula)
   } else {
     formula <- Formula::as.Formula(formula)
   }
@@ -144,7 +141,6 @@ tsri <- function(
   mf <- eval(mf, parent.frame())
   ## extract response, terms, model matrices
   Y <- stats::model.response(mf, "numeric")
-  mt <- stats::terms(formula, data = data)
   mtX <- stats::terms(formula, data = data, rhs = 1)
   X <- stats::model.matrix(mtX, mf, contrasts)
   if (length(formula)[2] < 2L) {
@@ -270,7 +266,7 @@ tsri <- function(
   tsri_env$res <- resfixed
 
   # functions for tsri fit
-  tsri_gmm <- function(x, y, z, xnames, t0, link) {
+  tsri_gmm <- function(x, y, z, t0, link) {
     x <- as.matrix(x)
 
     if (!identical(tsri_env$covariatenames, character(0))) {
@@ -370,7 +366,6 @@ tsri <- function(
     x = Xtopass,
     y = Y,
     z = Ztopass,
-    xnames = xnames,
     t0 = t0,
     link = link
   )
