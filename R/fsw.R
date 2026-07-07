@@ -75,11 +75,10 @@ fsw.ivreg <- function(object) {
     # Number of excluded instruments:
     ninstruments <- length(object$instruments)
 
-    # Number of exogenous explanatory variables:
-    nexogenous <- length(object$exogenous) - 1
-
-    # Names of endogenous variables:
-    namesendog <- labels(object$terms$regressors)[1:nendog]
+    # Names of endogenous variables (object$endogenous holds their model
+    # matrix indices by name, so this is robust to the term order in the
+    # formula, e.g. covariates listed before the exposures):
+    namesendog <- names(object$endogenous)
 
     # Error for factor variables among endogenous variables:
     endogfcterrmsg <- paste(
@@ -92,7 +91,11 @@ fsw.ivreg <- function(object) {
     }
 
     # Names of exogenous explanatory variables:
-    namesexog <- labels(object$terms$regressors)[-(1:nendog)]
+    namesregressors <- labels(object$terms$regressors)
+    namesexog <- namesregressors[!(namesregressors %in% namesendog)]
+
+    # Number of exogenous explanatory variables:
+    nexogenous <- length(namesexog)
 
     # Names of excluded instruments:
     namesinstruments <- names(object$instruments)

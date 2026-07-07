@@ -23,6 +23,32 @@ test_that("Check run after ivreg model", {
   expect_equal(res$fswres[2, 1], 3.450, tolerance = 1e-2)
 })
 
+test_that("Results are invariant to the order of terms in the formula", {
+  set.seed(12345)
+  n <- 4000
+  z1 <- rnorm(n)
+  z2 <- rnorm(n)
+  w1 <- rnorm(n)
+  w2 <- rnorm(n)
+  u <- rnorm(n)
+  x1 <- z1 + z2 + 0.2 * u + 0.1 * w1 + rnorm(n)
+  x2 <- z1 + 0.94 * z2 - 0.3 * u + 0.1 * w2 + rnorm(n)
+  y <- x1 + x2 + w1 + w2 + u
+  dat <- data.frame(w1, w2, x1, x2, y, z1, z2)
+  # exposures first, covariates first, and interleaved
+  mod1 <- ivreg::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
+  mod2 <- ivreg::ivreg(y ~ w1 + w2 + x1 + x2 | z1 + z2 + w1 + w2, data = dat)
+  mod3 <- ivreg::ivreg(y ~ w1 + x1 + w2 + x2 | z1 + z2 + w1 + w2, data = dat)
+  res1 <- fsw(mod1)
+  res2 <- fsw(mod2)
+  res3 <- fsw(mod3)
+  expect_equal(res1$namesendog, c("x1", "x2"))
+  expect_equal(res2$namesendog, c("x1", "x2"))
+  expect_equal(res3$namesendog, c("x1", "x2"))
+  expect_equal(res1$fswres, res2$fswres)
+  expect_equal(res1$fswres, res3$fswres)
+})
+
 test_that("Check run with ivreg model object with transformations of outcome", {
   object <- ivreg(
     log(packs) ~ rprice + rincome | salestax + cigtax + packsdiff,
