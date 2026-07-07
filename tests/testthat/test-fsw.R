@@ -1104,9 +1104,35 @@ test_that("Test fsw() when exposure is class factor", {
       dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve,
     data = simulated_data
   )
-  expect_error({
-    fsw(tsls_sim3)
-  })
+  expect_error(
+    {
+      fsw(tsls_sim3)
+    },
+    "is a factor"
+  )
+})
+
+test_that("Test fsw() when exposure is an ordered factor", {
+  simulated_data$expord <- factor(
+    rbinom(n, 1, p = 0.4),
+    ordered = TRUE
+  )
+  tsls_sim3b <- ivreg::ivreg(
+    alc_deaths ~ log_dpw +
+      eduyears +
+      expord +
+      age +
+      sex +
+      bileve |
+      dpw_main_grs + edu_main_grs + inter_grs + age + sex + bileve,
+    data = simulated_data
+  )
+  expect_error(
+    {
+      fsw(tsls_sim3b)
+    },
+    "is a factor"
+  )
 })
 
 # Expect no error if a binary exposure is numeric

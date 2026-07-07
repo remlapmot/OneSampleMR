@@ -80,13 +80,19 @@ fsw.ivreg <- function(object) {
     # formula, e.g. covariates listed before the exposures):
     namesendog <- names(object$endogenous)
 
-    # Error for factor variables among endogenous variables:
+    # Error for factor variables among endogenous variables
+    # (checked via the term labels because a factor variable has different
+    # column names in the model matrix than in the model frame):
+    namesendogterms <- setdiff(
+      labels(object$terms$regressors),
+      labels(object$terms$instruments)
+    )
     endogfcterrmsg <- paste(
       "One or more of your exposure variables is a factor.",
       "Please convert to numeric with say as.numeric(),",
       "refit your ivreg() model, and rerun fsw()."
     )
-    if ("factor" %in% lapply(object$model[namesendog], class)) {
+    if (any(vapply(object$model[namesendogterms], is.factor, logical(1)))) {
       stop(endogfcterrmsg)
     }
 
@@ -248,9 +254,9 @@ fsw.ivreg <- function(object) {
     endogfcterrmsg <- paste(
       "One or more of your exposure variables is a factor.",
       "Please convert to numeric with say as.numeric(),",
-      "refit your iv_robust() model, and rerun fsw()."
+      "refit your ivreg() model, and rerun fsw()."
     )
-    if ("factor" %in% lapply(object$model[namesendog], class)) {
+    if (any(vapply(object$model[namesendog], is.factor, logical(1)))) {
       stop(endogfcterrmsg)
     }
 
@@ -417,7 +423,7 @@ fsw.iv_robust <- function(object) {
     "Please convert to numeric with say as.numeric(),",
     "refit your iv_robust() model, and rerun fsw()."
   )
-  if ("factor" %in% lapply(get_data(object)[namesendog], class)) {
+  if (any(vapply(get_data(object)[namesendog], is.factor, logical(1)))) {
     stop(endogfcterrmsg)
   }
 
@@ -572,7 +578,7 @@ fsw.fixest <- function(object) {
     "Please convert to numeric with say as.numeric(),",
     "refit your iv_robust() model, and rerun fsw()."
   )
-  if ("factor" %in% lapply(get_data(object)[namesendog], class)) {
+  if (any(vapply(get_data(object)[namesendog], is.factor, logical(1)))) {
     stop(endogfcterrmsg)
   }
 
