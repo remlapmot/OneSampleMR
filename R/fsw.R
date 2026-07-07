@@ -64,21 +64,15 @@ fsw.ivreg <- function(object) {
   if (!is.null(object$endogenous)) {
     ### Object is from ivreg::ivreg
 
-    # Number of endogenous variables:
-    nendog <- length(object$endogenous)
-
-    # Error for less than 2 endogenous variables:
-    if (nendog < 2) {
-      stop("The number of exposures must be 2 or more.")
-    }
-
-    # Number of excluded instruments:
-    ninstruments <- length(object$instruments)
-
     # Names of endogenous variables (object$endogenous holds their model
     # matrix indices by name, so this is robust to the term order in the
     # formula, e.g. covariates listed before the exposures):
     namesendog <- names(object$endogenous)
+
+    # Error for less than 2 endogenous variables:
+    if (length(namesendog) < 2) {
+      stop("The number of exposures must be 2 or more.")
+    }
 
     # Error for factor variables among endogenous variables
     # (checked via the term labels because a factor variable has different
@@ -87,131 +81,16 @@ fsw.ivreg <- function(object) {
       labels(object$terms$regressors),
       labels(object$terms$instruments)
     )
-    endogfcterrmsg <- paste(
-      "One or more of your exposure variables is a factor.",
-      "Please convert to numeric with say as.numeric(),",
-      "refit your ivreg() model, and rerun fsw()."
-    )
-    if (any(vapply(object$model[namesendogterms], is.factor, logical(1)))) {
-      stop(endogfcterrmsg)
-    }
+    fsw_factor_check(object$model, namesendogterms, "ivreg()")
 
     # Names of exogenous explanatory variables:
     namesregressors <- labels(object$terms$regressors)
     namesexog <- namesregressors[!(namesregressors %in% namesendog)]
 
-    # Number of exogenous explanatory variables:
-    nexogenous <- length(namesexog)
-
     # Names of excluded instruments:
     namesinstruments <- names(object$instruments)
 
-    # Sample size:
-    n <- object$n
-
-    # Create plus-separated string of excluded instruments (e.g. "z1 + z2 + ..."):
-    instrplus <- paste(namesinstruments, collapse = " + ")
-
-    # Create plus-separated string of exogenous explanatory variables (if any):
-    exogplus <- NULL
-    if (nexogenous > 0) {
-      exogplus <- paste(namesexog, collapse = " + ")
-    }
-
-    # Create equations of the unrestricted and restricted models compared in the Wald test:
-    equations <- wald_equations(nexogenous, instrplus, exogplus)
-
-    # Obtain conditional F statistic for each endogenous explanatory variables:
-    fswres <- sapply(namesendog, function(endogoutcome) {
-      # Names of other endogenous explanatory variables:
-      endogothers <- namesendog[!(namesendog %in% endogoutcome)]
-
-      # Create conditional model equation:
-      if (nexogenous > 0) {
-        # with exogenous explanatory variables
-        # Create condit. model equation (endog. expl. var regressed against other endog. expl. vars and exog. vars, instrumented with excl. instruments)
-        modelstr <- paste(
-          endogoutcome,
-          "~",
-          paste(endogothers, collapse = " + "),
-          "+",
-          exogplus,
-          "|",
-          instrplus,
-          "+",
-          exogplus
-        )
-      } else {
-        # without exogenous explanatory variables
-        # Create condit. model equation (endog. expl. var regressed against other endog. expl. vars, instrumented with excl. instruments)
-        modelstr <- paste(
-          endogoutcome,
-          "~",
-          paste(endogothers, collapse = " + "),
-          "|",
-          instrplus
-        )
-      }
-
-      # Convert condit. model equation to formula:
-      modelfor <- stats::as.formula(modelstr)
-      # Estimate condit. model using iv_robust:
-      condmod <- try(ivreg::ivreg(modelfor, data = object$model), silent = TRUE)
-
-      # Error message if condit. model estimation fails:
-      condmoderrmsg <- paste(
-        "The IV regression of one of the exposures",
-        "on the other/s has failed.",
-        "This is most likely because you have a transformation",
-        "on one or more of the exposure or instrumental variables.",
-        "Please create the transformed variable/s in your",
-        "data.frame and refit,",
-        "e.g. instead of creating your ivreg object from",
-        "ivreg(y ~ log(x1) + x2 | z1 + z2 + z3)",
-        "please create dat$logx1 = log(x1) in your data.frame",
-        "and fit ivreg(y ~ logx1 + x2 | z1 + z2 + z3)."
-      )
-      if (inherits(condmod, "try-error")) {
-        stop(condmoderrmsg)
-      }
-
-      # Residuals of the condit. model:
-      condres <- condmod$residuals
-
-      # Unrestricted model for Wald test:
-      # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-      resmod <- stats::lm(
-        stats::as.formula(equations$unrestricted),
-        data = object$model
-      )
-      # summary(resmod)
-
-      # Restricted model for Wald test:
-      # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-      resbase <- stats::lm(
-        stats::as.formula(equations$restricted),
-        data = object$model
-      )
-      # summary(resbase)
-
-      # Compute conditional F-Statistic using Wald test for restricted vs unrestricted model:
-      fsw_wald_test(resbase, resmod, nendog)
-    })
-
-    # Prepare results vectors:
-    fswres <- t(fswres)
-    rownames(fswres) <- namesendog
-    colnames(fswres) <- c("F value", "d.f.", "Residual d.f.", "Pr(>F)")
-
-    # Define and return output:
-    output <- list(
-      fswres = fswres,
-      namesendog = namesendog,
-      nendog = nendog,
-      n = n
-    )
-    class(output) <- append("fsw", class(output))
-    return(output)
+    fitter <- function(modelfor, dat) ivreg::ivreg(modelfor, data = dat)
   } else {
     ### Object is from AER::ivreg
 
@@ -233,32 +112,16 @@ fsw.ivreg <- function(object) {
       "term.labels"
     )
 
-    # Number of endogenous variables:
-    nendog <- length(xvars[!xvars %in% zvars])
-
-    # Error for less than 2 endogenous variables:
-    if (nendog < 2) {
-      stop("The number of exposures must be 2 or more.")
-    }
-
-    # Number of excluded instruments:
-    ninstruments <- length(zvars[!zvars %in% xvars])
-
-    # Number of exogenous explanatory variables:
-    nexogenous <- length(xvars[xvars %in% zvars])
-
     # Names of endogenous variables:
     namesendog <- xvars[!xvars %in% zvars]
 
-    # Error for factor variables among endogenous variables:
-    endogfcterrmsg <- paste(
-      "One or more of your exposure variables is a factor.",
-      "Please convert to numeric with say as.numeric(),",
-      "refit your ivreg() model, and rerun fsw()."
-    )
-    if (any(vapply(object$model[namesendog], is.factor, logical(1)))) {
-      stop(endogfcterrmsg)
+    # Error for less than 2 endogenous variables:
+    if (length(namesendog) < 2) {
+      stop("The number of exposures must be 2 or more.")
     }
+
+    # Error for factor variables among endogenous variables:
+    fsw_factor_check(object$model, namesendog, "ivreg()")
 
     # Names of exogenous explanatory variables:
     namesexog <- xvars[xvars %in% zvars]
@@ -266,115 +129,24 @@ fsw.ivreg <- function(object) {
     # Names of excluded instruments:
     namesinstruments <- zvars[!zvars %in% xvars]
 
-    # Sample size:
-    n <- object$n
-
-    # Create plus-separated string of excluded instruments (e.g. "z1 + z2 + ..."):
-    instrplus <- paste(namesinstruments, collapse = " + ")
-
-    # Create plus-separated string of exogenous explanatory variables (if any):
-    exogplus <- NULL
-    if (nexogenous > 0) {
-      exogplus <- paste(namesexog, collapse = " + ")
-    }
-
-    # Create equations of the unrestricted and restricted models compared in the Wald test:
-    equations <- wald_equations(nexogenous, instrplus, exogplus)
-
-    # Obtain conditional F statistic for each endogenous explanatory variables:
-    fswres <- sapply(namesendog, function(endogoutcome) {
-      # Names of other endogenous explanatory variables:
-      endogothers <- namesendog[!(namesendog %in% endogoutcome)]
-
-      # Create conditional model equation:
-      if (nexogenous > 0) {
-        # with exogenous explanatory variables
-        # Create plus-separated string of exogenous explanatory variables:
-        exogplus <- paste(namesexog, collapse = " + ")
-        # Create condit. model equation (endog. expl. var regressed against other endog. expl. vars and exog. vars, instrumented with excl. instruments)
-        modelstr <- paste(
-          endogoutcome,
-          "~",
-          paste(endogothers, collapse = " + "),
-          "+",
-          exogplus,
-          "|",
-          instrplus,
-          "+",
-          exogplus
-        )
-      } else {
-        # without exogenous explanatory variables
-        # Create condit. model equation (endog. expl. var regressed against other endog. expl. vars, instrumented with excl. instruments)
-        modelstr <- paste(
-          endogoutcome,
-          "~",
-          paste(endogothers, collapse = " + "),
-          "|",
-          instrplus
-        )
-      }
-
-      # Convert condit. model equation to formula:
-      modelfor <- stats::as.formula(modelstr)
-      # Estimate condit. model using iv_robust:
-      condmod <- try(AER::ivreg(modelfor, data = object$model), silent = TRUE)
-
-      # Error message if condit. model estimation fails:
-      condmoderrmsg <- paste(
-        "The IV regression of one of the exposures",
-        "on the other/s has failed.",
-        "This is most likely because you have a transformation",
-        "on one or more of the exposure or instrumental variables.",
-        "Please create the transformed variable/s in your",
-        "data.frame and refit,",
-        "e.g. instead of creating your iv_robust object from",
-        "ivreg(y ~ log(x1) + x2 | z1 + z2 + z3)",
-        "please create dat$logx1 = log(x1) in your data.frame",
-        "and fit ivreg(y ~ logx1 + x2 | z1 + z2 + z3)."
-      )
-      if (inherits(condmod, "try-error")) {
-        stop(condmoderrmsg)
-      }
-
-      # Residuals of the condit. model:
-      condres <- condmod$residuals
-
-      # Unrestricted model for Wald test:
-      # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-      resmod <- stats::lm(
-        stats::as.formula(equations$unrestricted),
-        data = object$model
-      )
-      # summary(resmod)
-
-      # Restricted model for Wald test:
-      # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-      resbase <- stats::lm(
-        stats::as.formula(equations$restricted),
-        data = object$model
-      )
-      # summary(resbase)
-
-      # Compute conditional F-Statistic using Wald test for restricted vs unrestricted model:
-      fsw_wald_test(resbase, resmod, nendog)
-    })
-
-    # Prepare results vectors:
-    fswres <- t(fswres)
-    rownames(fswres) <- namesendog
-    colnames(fswres) <- c("F value", "d.f.", "Residual d.f.", "Pr(>F)")
-
-    # Define and return output:
-    output <- list(
-      fswres = fswres,
-      namesendog = namesendog,
-      nendog = nendog,
-      n = n
-    )
-    class(output) <- append("fsw", class(output))
-    return(output)
+    fitter <- function(modelfor, dat) AER::ivreg(modelfor, data = dat)
   }
+
+  fsw_common(
+    namesendog = namesendog,
+    namesexog = namesexog,
+    namesinstruments = namesinstruments,
+    dat = object$model,
+    n = object$n,
+    fitter = fitter,
+    formulafun = fsw_condformula,
+    residfun = function(condmod, dat, endogoutcome) condmod$residuals,
+    condmoderrmsg = fsw_condmoderrmsg(
+      "ivreg",
+      "ivreg(y ~ log(x1) + x2 | z1 + z2 + z3)",
+      "ivreg(y ~ logx1 + x2 | z1 + z2 + z3)"
+    )
+  )
 }
 
 
@@ -400,144 +172,39 @@ fsw.iv_robust <- function(object) {
     "term.labels"
   )
 
-  # Number of endogenous variables:
-  nendog <- length(xvars[!xvars %in% zvars])
-
-  # Error for less than 2 endogenous variables:
-  if (nendog < 2) {
-    stop("The number of exposures must be 2 or more.")
-  }
-
-  # Number of excluded instruments:
-  ninstruments <- length(zvars[!zvars %in% xvars])
-
-  # Number of exogenous explanatory variables:
-  nexogenous <- length(xvars[xvars %in% zvars])
-
   # Names of endogenous variables:
   namesendog <- xvars[!xvars %in% zvars]
 
-  # Error for factor variables among endogenous variables:
-  endogfcterrmsg <- paste(
-    "One or more of your exposure variables is a factor.",
-    "Please convert to numeric with say as.numeric(),",
-    "refit your iv_robust() model, and rerun fsw()."
-  )
-  if (any(vapply(get_data(object)[namesendog], is.factor, logical(1)))) {
-    stop(endogfcterrmsg)
+  # Error for less than 2 endogenous variables:
+  if (length(namesendog) < 2) {
+    stop("The number of exposures must be 2 or more.")
   }
-
-  # Names of exogenous explanatory variables:
-  namesexog <- xvars[xvars %in% zvars]
-
-  # Names of excluded instruments:
-  namesinstruments <- zvars[!zvars %in% xvars]
-
-  # Sample size:
-  n <- object$nobs
-
-  # Create plus-separated string of excluded instruments (e.g. "z1 + z2 + ..."):
-  instrplus <- paste(namesinstruments, collapse = " + ")
-
-  # Create plus-separated string of exogenous explanatory variables (if any):
-  exogplus <- NULL
-  if (nexogenous > 0) {
-    exogplus <- paste(namesexog, collapse = " + ")
-  }
-
-  # Create equations of the unrestricted and restricted models compared in the Wald test:
-  equations <- wald_equations(nexogenous, instrplus, exogplus)
 
   dat <- get_data(object)
 
-  # Obtain conditional F statistic for each endogenous explanatory variables:
-  fswres <- sapply(namesendog, function(endogoutcome) {
-    # Names of other endogenous explanatory variables:
-    endogothers <- namesendog[!(namesendog %in% endogoutcome)]
+  # Error for factor variables among endogenous variables:
+  fsw_factor_check(dat, namesendog, "iv_robust()")
 
-    # Create conditional model equation:
-    if (nexogenous > 0) {
-      # with exogenous explanatory variables
-      # Create condit. model equation (endog. expl. var regressed against other endog. expl. vars and exog. vars, instrumented with excl. instruments)
-      modelstr <- paste(
-        endogoutcome,
-        "~",
-        paste(endogothers, collapse = " + "),
-        "+",
-        exogplus,
-        "|",
-        instrplus,
-        "+",
-        exogplus
-      )
-    } else {
-      # without exogenous explanatory variables
-      # Create condit. model equation (endog. expl. var regressed against other endog. expl. vars, instrumented with excl. instruments)
-      modelstr <- paste(
-        endogoutcome,
-        "~",
-        paste(endogothers, collapse = " + "),
-        "|",
-        instrplus
-      )
-    }
-
-    # Convert condit. model equation to formula:
-    modelfor <- stats::as.formula(modelstr)
-    # Estimate condit. model using iv_robust:
-    condmod <- try(
-      estimatr::iv_robust(modelfor, data = dat, se_type = "classical"),
-      silent = TRUE
-    )
-
-    # Error message if condit. model estimation fails:
-    condmoderrmsg <- paste(
-      "The IV regression of one of the exposures",
-      "on the other/s has failed.",
-      "This is most likely because you have a transformation",
-      "on one or more of the exposure or instrumental variables.",
-      "Please create the transformed variable/s in your",
-      "data.frame and refit,",
-      "e.g. instead of creating your iv_robust object from",
-      "iv_robust(y ~ log(x1) + x2 | z1 + z2 + z3)",
-      "please create dat$logx1 = log(x1) in your data.frame",
-      "and fit iv_robust(y ~ logx1 + x2 | z1 + z2 + z3)."
-    )
-    if (inherits(condmod, "try-error")) {
-      stop(condmoderrmsg)
-    }
-
-    # Residuals of the condit. model:
-    condres <- dat[[endogoutcome]] - condmod$fitted.values
-
-    # Unrestricted model for Wald test:
-    # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-    resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = dat)
-    # summary(resmod)
-
-    # Restricted model for Wald test:
-    # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-    resbase <- stats::lm(stats::as.formula(equations$restricted), data = dat)
-    # summary(resbase)
-
-    # Compute conditional F-Statistic using Wald test for restricted vs unrestricted model:
-    fsw_wald_test(resbase, resmod, nendog)
-  })
-
-  # Prepare results vectors:
-  fswres <- t(fswres)
-  rownames(fswres) <- namesendog
-  colnames(fswres) <- c("F value", "d.f.", "Residual d.f.", "Pr(>F)")
-
-  # Define and return output:
-  output <- list(
-    fswres = fswres,
+  fsw_common(
     namesendog = namesendog,
-    nendog = nendog,
-    n = n
+    namesexog = xvars[xvars %in% zvars],
+    namesinstruments = zvars[!zvars %in% xvars],
+    dat = dat,
+    n = object$nobs,
+    fitter = function(modelfor, dat) {
+      estimatr::iv_robust(modelfor, data = dat, se_type = "classical")
+    },
+    formulafun = fsw_condformula,
+    residfun = function(condmod, dat, endogoutcome) {
+      # iv_robust objects do not contain residuals:
+      dat[[endogoutcome]] - condmod$fitted.values
+    },
+    condmoderrmsg = fsw_condmoderrmsg(
+      "iv_robust",
+      "iv_robust(y ~ log(x1) + x2 | z1 + z2 + z3)",
+      "iv_robust(y ~ logx1 + x2 | z1 + z2 + z3)"
+    )
   )
-  class(output) <- append("fsw", class(output))
-  return(output)
 }
 
 
@@ -552,25 +219,13 @@ fsw.fixest <- function(object) {
     )
   }
 
-  # Names and number of endogenous variables:
+  # Names of endogenous variables:
   namesendog <- object$iv_endo_names
-  nendog <- length(object$iv_endo_names)
 
   # Error for less than 2 endogenous variables:
-  if (nendog < 2) {
+  if (length(namesendog) < 2) {
     stop("The number of exposures must be 2 or more.")
   }
-
-  # Names and number of excluded instruments:
-  namesinstruments <- object$iv_inst_names
-  ninstruments <- object$iv_n_inst
-
-  # Names and number of exogenous explanatory variables:
-  namesexog <- attr(
-    stats::terms(Formula::Formula(object$fml), rhs = 1),
-    "term.labels"
-  )
-  nexogenous <- length(namesexog)
 
   dat <- get_data(object)
 
@@ -578,17 +233,56 @@ fsw.fixest <- function(object) {
   # (checked via the model formula because a factor variable has different
   # column names in the model matrix than in the data):
   namesendogterms <- intersect(all.vars(object$iv_endo_fml), colnames(dat))
-  endogfcterrmsg <- paste(
-    "One or more of your exposure variables is a factor.",
-    "Please convert to numeric with say as.numeric(),",
-    "refit your feols() model, and rerun fsw()."
-  )
-  if (any(vapply(dat[namesendogterms], is.factor, logical(1)))) {
-    stop(endogfcterrmsg)
-  }
+  fsw_factor_check(dat, namesendogterms, "feols()")
 
-  # Sample size:
-  n <- object$nobs
+  fsw_common(
+    namesendog = namesendog,
+    namesexog = attr(
+      stats::terms(Formula::Formula(object$fml), rhs = 1),
+      "term.labels"
+    ),
+    namesinstruments = object$iv_inst_names,
+    dat = dat,
+    n = object$nobs,
+    fitter = function(modelfor, dat) fixest::feols(modelfor, data = dat),
+    formulafun = fsw_condformula_fixest,
+    residfun = function(condmod, dat, endogoutcome) condmod$residuals,
+    condmoderrmsg = fsw_condmoderrmsg(
+      "fixest",
+      "feols(y ~ 1 | log(x1) + x2 ~ z1 + z2 + z3)",
+      "feols(y ~ 1 | logx1 + x2 ~ z1 + z2 + z3)"
+    )
+  )
+}
+
+
+#' Compute the conditional F-statistics and assemble the fsw object.
+#' This is the shared workhorse for all fsw methods; the method specific
+#' behaviour is passed in via the fitter, formulafun, and residfun functions.
+#' @param namesendog character vector of the endogenous variable names
+#' @param namesexog character vector of the exogenous explanatory variable names
+#' @param namesinstruments character vector of the excluded instrument names
+#' @param dat the data used to fit the model (complete cases)
+#' @param n the sample size used for the fitted model
+#' @param fitter function(formula, dat) fitting the conditional IV model
+#' @param formulafun function building the conditional model equation string
+#' @param residfun function(condmod, dat, endogoutcome) returning the
+#' residuals of the conditional model
+#' @param condmoderrmsg error message if the conditional model fit fails
+#' @noRd
+fsw_common <- function(
+  namesendog,
+  namesexog,
+  namesinstruments,
+  dat,
+  n,
+  fitter,
+  formulafun,
+  residfun,
+  condmoderrmsg
+) {
+  nendog <- length(namesendog)
+  nexogenous <- length(namesexog)
 
   # Create plus-separated string of excluded instruments (e.g. "z1 + z2 + ..."):
   instrplus <- paste(namesinstruments, collapse = " + ")
@@ -602,77 +296,54 @@ fsw.fixest <- function(object) {
   # Create equations of the unrestricted and restricted models compared in the Wald test:
   equations <- wald_equations(nexogenous, instrplus, exogplus)
 
-  # Obtain conditional F statistic for each endogenous explanatory variables:
+  # Obtain conditional F statistic for each endogenous explanatory variable:
   fswres <- sapply(namesendog, function(endogoutcome) {
     # Names of other endogenous explanatory variables:
     endogothers <- namesendog[!(namesendog %in% endogoutcome)]
 
-    # Create conditional model equation:
-    if (nexogenous > 0) {
-      # with exogenous explanatory variables
-      # Create condit. model equation (endog. expl. var regressed against other endog. expl. vars and exog. vars, instrumented with excl. instruments)
-      modelstr <- paste(
-        endogoutcome,
-        "~",
-        exogplus,
-        "|",
-        paste(endogothers, collapse = " + "),
-        "~",
-        instrplus
-      )
-    } else {
-      # without exogenous explanatory variables
-      # Create condit. model equation (endog. expl. var regressed against other endog. expl. vars, instrumented with excl. instruments)
-      modelstr <- paste(
-        endogoutcome,
-        "~",
-        "1 |",
-        paste(endogothers, collapse = " + "),
-        "~",
-        instrplus
-      )
-    }
-
-    # Convert condit. model equation to formula:
+    # Create condit. model equation (endog. expl. var regressed against
+    # other endog. expl. vars and any exog. vars, instrumented with excl.
+    # instruments) and convert to formula:
+    modelstr <- formulafun(
+      endogoutcome,
+      endogothers,
+      nexogenous,
+      instrplus,
+      exogplus
+    )
     modelfor <- stats::as.formula(modelstr)
-    # Estimate condit. model using feols:
-    condmod <- try(fixest::feols(modelfor, data = dat), silent = TRUE)
+
+    # Estimate condit. model:
+    condmod <- try(fitter(modelfor, dat), silent = TRUE)
 
     # Error message if condit. model estimation fails:
-    condmoderrmsg <- paste(
-      "The IV regression of one of the exposures",
-      "on the other/s has failed.",
-      "This is most likely because you have a transformation",
-      "on one or more of the exposure or instrumental variables.",
-      "Please create the transformed variable/s in your",
-      "data.frame and refit,",
-      "e.g. instead of creating your fixest object from",
-      "feols(y ~ 1 | log(x1) + x2 ~ z1 + z2 + z3)",
-      "please create dat$logx1 = log(x1) in your data.frame",
-      "and fit feols(y ~ 1 | logx1 + x2 ~ z1 + z2 + z3)."
-    )
     if (inherits(condmod, "try-error")) {
       stop(condmoderrmsg)
     }
 
-    # Residuals of the condit. model:
-    condres <- condmod$residuals
+    # Residuals of the condit. model (used by the lm() fits below through
+    # the environment of the Wald test equation formulas):
+    condres <- residfun(condmod, dat, endogoutcome)
 
     # Unrestricted model for Wald test:
     # Estimate regression of condit. residuals against instruments (and any exogenous regressors):
-    resmod <- stats::lm(stats::as.formula(equations$unrestricted), data = dat)
-    # summary(resmod)
+    resmod <- stats::lm(
+      stats::as.formula(equations$unrestricted),
+      data = dat
+    )
 
     # Restricted model for Wald test:
     # Estimate regression of condit. residuals against intercept (and any exogenous regressors):
-    resbase <- stats::lm(stats::as.formula(equations$restricted), data = dat)
-    # summary(resbase)
+    resbase <- stats::lm(
+      stats::as.formula(equations$restricted),
+      data = dat
+    )
 
     # Compute conditional F-Statistic using Wald test for restricted vs unrestricted model:
     fsw_wald_test(resbase, resmod, nendog)
   })
 
-  # Prepare results vector:
+  # Prepare results matrix:
   fswres <- t(fswres)
   rownames(fswres) <- namesendog
   colnames(fswres) <- c("F value", "d.f.", "Residual d.f.", "Pr(>F)")
@@ -685,7 +356,118 @@ fsw.fixest <- function(object) {
     n = n
   )
   class(output) <- append("fsw", class(output))
-  return(output)
+  output
+}
+
+
+#' Stop with an informative error if any endogenous variable is a factor
+#' (is.factor() is TRUE for ordered factors as well)
+#' @param dat the data used to fit the model
+#' @param namesendogterms term level names of the endogenous variables
+#' @param refitname name of the fitting function for the error message
+#' @noRd
+fsw_factor_check <- function(dat, namesendogterms, refitname) {
+  if (any(vapply(dat[namesendogterms], is.factor, logical(1)))) {
+    stop(paste(
+      "One or more of your exposure variables is a factor.",
+      "Please convert to numeric with say as.numeric(),",
+      sprintf("refit your %s model, and rerun fsw().", refitname)
+    ))
+  }
+}
+
+
+#' Create the conditional model equation string for two-part IV formulas
+#' as used by ivreg::ivreg(), AER::ivreg(), and estimatr::iv_robust()
+#' @param endogoutcome the endogenous variable used as the outcome
+#' @param endogothers the other endogenous variables
+#' @param nexogenous number of exogenous explanatory variables
+#' @param instrplus plus-separated string of excluded instruments
+#' @param exogplus plus-separated string of exogenous explanatory variables
+#' @noRd
+fsw_condformula <- function(
+  endogoutcome,
+  endogothers,
+  nexogenous,
+  instrplus,
+  exogplus
+) {
+  if (nexogenous > 0) {
+    paste(
+      endogoutcome,
+      "~",
+      paste(endogothers, collapse = " + "),
+      "+",
+      exogplus,
+      "|",
+      instrplus,
+      "+",
+      exogplus
+    )
+  } else {
+    paste(
+      endogoutcome,
+      "~",
+      paste(endogothers, collapse = " + "),
+      "|",
+      instrplus
+    )
+  }
+}
+
+
+#' Create the conditional model equation string in the three-part
+#' formula syntax used by fixest::feols()
+#' @inheritParams fsw_condformula
+#' @noRd
+fsw_condformula_fixest <- function(
+  endogoutcome,
+  endogothers,
+  nexogenous,
+  instrplus,
+  exogplus
+) {
+  if (nexogenous > 0) {
+    paste(
+      endogoutcome,
+      "~",
+      exogplus,
+      "|",
+      paste(endogothers, collapse = " + "),
+      "~",
+      instrplus
+    )
+  } else {
+    paste(
+      endogoutcome,
+      "~",
+      "1 |",
+      paste(endogothers, collapse = " + "),
+      "~",
+      instrplus
+    )
+  }
+}
+
+
+#' Create the error message for a failed conditional model fit
+#' @param objname class of the fitted model object for the error message
+#' @param badexample example call with a transformed variable
+#' @param goodexample example call with the transformed variable precomputed
+#' @noRd
+fsw_condmoderrmsg <- function(objname, badexample, goodexample) {
+  paste(
+    "The IV regression of one of the exposures",
+    "on the other/s has failed.",
+    "This is most likely because you have a transformation",
+    "on one or more of the exposure or instrumental variables.",
+    "Please create the transformed variable/s in your",
+    "data.frame and refit,",
+    sprintf("e.g. instead of creating your %s object from", objname),
+    badexample,
+    "please create dat$logx1 = log(x1) in your data.frame",
+    sprintf("and fit %s.", goodexample)
+  )
 }
 
 
