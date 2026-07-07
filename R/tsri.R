@@ -179,6 +179,11 @@ tsri <- function(
   tsri_env$covariatenames <- covariatenames
   tsri_env$ncovs <- length(covariatenames)
 
+  # check for only 1 exposure
+  if (length(tsri_env$xnames) != 1) {
+    stop("Only 1 exposure variable is allowed.")
+  }
+
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
   # check y binary

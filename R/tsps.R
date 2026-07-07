@@ -165,6 +165,11 @@ tsps <- function(
   tsps_env$znames <- znames[!(znames %in% covariatenames)]
   tsps_env$covariatenames <- covariatenames
 
+  # check for only 1 exposure
+  if (length(tsps_env$xnames) != 1) {
+    stop("Only 1 exposure variable is allowed.")
+  }
+
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
 
   # check y binary

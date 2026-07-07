@@ -398,3 +398,20 @@ test_that("Print methods work with a user specified unnamed t0", {
   expect_output(print(fit))
   expect_output(print(summary(fit)))
 })
+
+test_that("Clear error message with more than one exposure", {
+  set.seed(123456)
+  n <- 1000
+  G1 <- rbinom(n, 2, 0.5)
+  G2 <- rbinom(n, 2, 0.3)
+  G3 <- rbinom(n, 2, 0.4)
+  U <- runif(n)
+  X1 <- 0.7 * G1 + G2 + U + rnorm(n)
+  X2 <- G2 - G3 + U + rnorm(n)
+  Y <- X1 + X2 + U + rnorm(n)
+  dat2 <- data.frame(G1, G2, G3, X1, X2, Y)
+  expect_error(
+    tsri(Y ~ X1 + X2 | G1 + G2 + G3, data = dat2),
+    "Only 1 exposure variable is allowed."
+  )
+})
