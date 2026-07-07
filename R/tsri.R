@@ -638,9 +638,13 @@ print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\nEstimates with 95% CI limits:\n")
   print(x$estci, digits = digits, ...)
 
+  # the second stage rows cannot be located if the coefficients are
+  # unnamed, e.g. from a user specified unnamed t0
   rowstart <- which(rownames(x$estci) == "(Intercept)")
   rowstop <- nrow(x$estci)
-  if (x$link %in% c("logadd", "logmult", "logit")) {
+  if (
+    length(rowstart) == 1 && x$link %in% c("logadd", "logmult", "logit")
+  ) {
     parname <- "Causal odds ratio"
     if (x$link %in% c("logadd", "logmult")) {
       parname <- "Causal risk ratio"
@@ -666,9 +670,14 @@ print.summary.tsri <- function(
   cat("\nEstimates with 95% CI limits:\n")
   print(x$object$estci, digits = digits, ...)
 
+  # the second stage rows cannot be located if the coefficients are
+  # unnamed, e.g. from a user specified unnamed t0
   rowstart <- which(rownames(x$object$estci) == "(Intercept)")
   rowstop <- nrow(x$object$estci)
-  if (x$object$link %in% c("logadd", "logmult", "logit")) {
+  if (
+    length(rowstart) == 1 &&
+      x$object$link %in% c("logadd", "logmult", "logit")
+  ) {
     parname <- "Causal odds ratio"
     if (x$object$link %in% c("logadd", "logmult")) {
       parname <- "Causal risk ratio"

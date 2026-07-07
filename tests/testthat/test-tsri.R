@@ -377,3 +377,24 @@ test_that("Results are invariant to the order of terms in the formula", {
     ignore_attr = TRUE
   )
 })
+
+test_that("Print methods work with a user specified unnamed t0", {
+  skip_on_cran()
+  set.seed(9)
+  n <- 1000
+  Z <- rbinom(n, 1, 0.5)
+  X <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+  m0 <- plogis(1 + 0.8 * X - 0.39 * Z)
+  Y <- rbinom(n, 1, plogis(0.5 * X + log(m0 / (1 - m0))))
+  dat2 <- data.frame(Z, X, Y)
+  stage1 <- lm(X ~ Z, data = dat2)
+  stage2 <- glm(
+    Y ~ X + residuals(stage1),
+    family = binomial,
+    data = dat2
+  )
+  t0 <- unname(c(coef(stage1), coef(stage2)))
+  fit <- tsri(Y ~ X | Z, data = dat2, link = "logit", t0 = t0)
+  expect_output(print(fit))
+  expect_output(print(summary(fit)))
+})
