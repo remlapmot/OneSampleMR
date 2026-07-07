@@ -908,3 +908,18 @@ test_that("Clear error message for negative outcome values", {
     "greater than or equal to 0"
   )
 })
+
+test_that("gmmalt method returns a complete msmm object", {
+  skip_on_cran()
+  set.seed(9)
+  n <- 1000
+  Z <- rbinom(n, 1, 0.5)
+  X <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+  m0 <- plogis(1 + 0.8 * X - 0.39 * Z)
+  Y <- rbinom(n, 1, plogis(0.5 * X + log(m0 / (1 - m0))))
+  dat <- data.frame(Z, X, Y)
+  fit <- msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
+  expect_s3_class(fit, "msmm")
+  expect_named(fit, c("fit", "crrci", "ey0ci", "estmethod"))
+  expect_equal(fit$estmethod, "gmmalt")
+})

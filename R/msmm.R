@@ -481,6 +481,7 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
   ey0ci <- expests[1, ]
 
   reslist <- list(fit = fit, crrci = crrci, ey0ci = ey0ci, estmethod = "gmmalt")
+  return(reslist)
 }
 
 #' Summarizing MSMM Fits
