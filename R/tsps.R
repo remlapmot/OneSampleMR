@@ -176,7 +176,14 @@ tsps <- function(
 
   # initial values
   if (is.null(t0)) {
-    stage1 <- stats::lm(X[, 2] ~ -1 + Z)
+    # select columns by name, in the order the moment functions use
+    # (instruments then covariates), so that the starting values are
+    # correct regardless of the order of terms in the formula
+    Zstage1 <- Z[,
+      c("(Intercept)", tsps_env$znames, tsps_env$covariatenames),
+      drop = FALSE
+    ]
+    stage1 <- stats::lm(X[, tsps_env$xnames] ~ -1 + Zstage1)
     t0 <- stats::coef(stage1)
     xhat <- stats::fitted.values(stage1)
     if (tsps_env$anycovs) {
@@ -203,12 +210,11 @@ tsps <- function(
   Xtopass <- as.data.frame(X[, tsps_env$xnames])
   colnames(Xtopass) <- tsps_env$xnames
 
-  Ztopass <- as.data.frame(Z[, -1])
-  if (tsps_env$anycovs) {
-    colnames(Ztopass) <- c(tsps_env$znames, tsps_env$covariatenames)
-  } else {
-    colnames(Ztopass) <- tsps_env$znames
-  }
+  # select columns by name so that the instrument and covariate data keep
+  # their correct labels regardless of the order of terms in the formula
+  zcolorder <- c(tsps_env$znames, tsps_env$covariatenames)
+  Ztopass <- as.data.frame(Z[, zcolorder, drop = FALSE])
+  colnames(Ztopass) <- zcolorder
 
   # functions for the tsps fit
   tsps_gmm <- function(x, y, z, xnames, t0, link) {

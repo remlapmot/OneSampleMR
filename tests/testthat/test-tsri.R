@@ -347,3 +347,33 @@ test_that("Multiple instrument example with covariates - logit link", {
   betamanual <- c(betamanual, coef(stage2))
   expect_equal(fit33$estci[, 1], betamanual, ignore_attr = TRUE)
 })
+
+test_that("Results are invariant to the order of terms in the formula", {
+  skip_on_cran()
+
+  # exposure/instruments first, covariates first, and interleaved
+  fit40 <- tsri(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat)
+  fit41 <- tsri(Y ~ C1 + C2 + X | C1 + C2 + G1 + G2 + G3, data = dat)
+  fit42 <- tsri(Y ~ C1 + X + C2 | G1 + C1 + G2 + C2 + G3, data = dat)
+
+  # manual fit for comparison
+  stage1 <- lm(X ~ G1 + G2 + G3 + C1 + C2, data = dat)
+  betamanual <- coef(stage1)
+  res <- residuals(stage1)
+  stage2 <- lm(Y ~ X + res + C1 + C2)
+  betamanual <- c(betamanual, coef(stage2))
+
+  expect_equal(fit40$estci[, 1], betamanual, ignore_attr = TRUE)
+  expect_equal(
+    sort(fit41$estci[, 1]),
+    sort(fit40$estci[, 1]),
+    tolerance = 1e-5,
+    ignore_attr = TRUE
+  )
+  expect_equal(
+    sort(fit42$estci[, 1]),
+    sort(fit40$estci[, 1]),
+    tolerance = 1e-5,
+    ignore_attr = TRUE
+  )
+})

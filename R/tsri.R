@@ -190,30 +190,38 @@ tsri <- function(
 
   # initial values
   if (is.null(t0)) {
-    stage1 <- stats::lm(X[, 2] ~ -1 + Z)
+    # select columns by name, in the order the moment functions use
+    # (instruments then covariates), so that the starting values are
+    # correct regardless of the order of terms in the formula
+    Zstage1 <- Z[,
+      c("(Intercept)", tsri_env$znames, tsri_env$covariatenames),
+      drop = FALSE
+    ]
+    Xexposure <- X[, tsri_env$xnames]
+    stage1 <- stats::lm(Xexposure ~ -1 + Zstage1)
     t0 <- stats::coef(stage1)
     res <- stats::residuals(stage1)
     if (tsri_env$anycovs) {
       res <- cbind(res, covariates)
     }
     if (link == "identity") {
-      stage2 <- stats::lm(Y ~ X[, 2] + res)
+      stage2 <- stats::lm(Y ~ Xexposure + res)
     } else if (link == "logadd") {
       stage2 <- stats::glm(
-        Y ~ X[, 2] + res,
+        Y ~ Xexposure + res,
         family = stats::poisson(link = "log")
       )
     } else if (link == "logmult") {
       Ystar <- Y
       Ystar[Y == 0] <- 0.001
       stage2 <- stats::glm(
-        Ystar ~ X[, 2] + res,
+        Ystar ~ Xexposure + res,
         family = stats::Gamma(link = "log"),
         control = list(maxit = 1E5)
       )
     } else if (link == "logit") {
       stage2 <- stats::glm(
-        Y ~ X[, 2] + res,
+        Y ~ Xexposure + res,
         family = stats::binomial(link = "logit")
       )
     }
@@ -230,12 +238,11 @@ tsri <- function(
   Xtopass <- as.data.frame(X[, tsri_env$xnames])
   colnames(Xtopass) <- tsri_env$xnames
 
-  Ztopass <- as.data.frame(Z[, -1])
-  if (tsri_env$anycovs) {
-    colnames(Ztopass) <- c(tsri_env$znames, tsri_env$covariatenames)
-  } else {
-    colnames(Ztopass) <- tsri_env$znames
-  }
+  # select columns by name so that the instrument and covariate data keep
+  # their correct labels regardless of the order of terms in the formula
+  zcolorder <- c(tsri_env$znames, tsri_env$covariatenames)
+  Ztopass <- as.data.frame(Z[, zcolorder, drop = FALSE])
+  colnames(Ztopass) <- zcolorder
 
   # functions for tsri fit
   tsri_gmm <- function(x, y, z, xnames, t0, link) {
