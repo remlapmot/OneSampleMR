@@ -1,4 +1,4 @@
-# OneSampleMR (development version)
+# OneSampleMR 0.1.8
 
 * Bump roxygen2 to 8.0.0.
 
