@@ -22,7 +22,7 @@ causal risk ratios and causal odds ratios in Mendelian randomization
 analyses. American Journal of Epidemiology, 2011, 173, 12, 1392-1403.
 [doi:10.1093/aje/kwr026](https://doi.org/10.1093/aje/kwr026)
 
-Robins JM. The analysis of randomised and nonrandomised AIDS treatment
+Robins JM. The analysis of randomised and non-randomised AIDS treatment
 trials using a new approach to causal inference in longitudinal studies.
 In Health Service Research Methodology: A Focus on AIDS (L. Sechrest, H.
 Freeman and A. Mulley, eds.). 1989. 113–159. US Public Health Service,

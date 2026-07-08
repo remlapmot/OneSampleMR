@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Comparison of conditional F-statistics • OneSampleMR</title>
 <script src="../lightswitch.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Comparison of conditional F-statistics">
@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">OneSampleMR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -238,13 +238,11 @@
 <span><span class="va">mod4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://lrberge.github.io/fixest/reference/feols.html" class="external-link">feols</a></span><span class="op">(</span><span class="va">lwage</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">|</span> <span class="va">educ</span> <span class="op">+</span> <span class="va">exper</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">kidslt6</span> <span class="op">+</span> <span class="va">kidsge6</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span><span class="co">#&gt; NOTE: 325 observations removed because of NA values (LHS: 325).</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod4</span><span class="op">)</span></span>
-<span><span class="co">#&gt; TSLS estimation</span></span>
+<span><span class="co">#&gt; TSLS estimation: Second stage</span></span>
 <span><span class="co">#&gt; |- D.V.   : lwage</span></span>
 <span><span class="co">#&gt; |- Endo.  : educ, exper</span></span>
 <span><span class="co">#&gt; |- Instr. : age, kidslt6, kidsge6</span></span>
-<span><span class="co">#&gt; |</span></span>
-<span><span class="co">#&gt; |=&gt; Second Stage</span></span>
-<span><span class="co">#&gt; |   Dep. Var.: lwage</span></span>
+<span><span class="co">#&gt; Dep. Var.: lwage</span></span>
 <span><span class="co">#&gt; Observations: 428</span></span>
 <span><span class="co">#&gt; Standard-errors: IID </span></span>
 <span><span class="co">#&gt;              Estimate Std. Error   t value Pr(&gt;|t|)    </span></span>
@@ -469,7 +467,7 @@ Excluded instruments: age kidslt6 kidsge6
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
