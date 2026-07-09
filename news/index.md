@@ -2,6 +2,8 @@
 
 ## OneSampleMR 0.1.8
 
+CRAN release: 2026-07-08
+
 - Bump roxygen2 to 8.0.0.
 
 - Fixed a bug in
