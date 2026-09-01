@@ -47,6 +47,14 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: ${{ matrix.config.rspm || 'true' }}
 
+      - name: Install libintl (gettext) for macOS source builds
+        if: runner.os == 'macOS'
+        run: |
+          arch=$(uname -m)
+          curl -fLO "https://mac.r-project.org/bin/darwin20/${arch}/gettext-0.22.5-darwin.20-${arch}.tar.xz"
+          sudo tar -xJf "gettext-0.22.5-darwin.20-${arch}.tar.xz" -C /
+        shell: bash
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
