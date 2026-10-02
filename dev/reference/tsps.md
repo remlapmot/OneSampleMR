@@ -154,8 +154,8 @@ summary(tspslogitfit)
 #> xhat                6.1451e-01  2.7464e-01  2.2375e+00  2.5256e-02
 #> 
 #> J-Test: degrees of freedom is 0 
-#>                 J-test                P-value             
-#> Test E(g)=0:    8.67645206779774e-23  *******             
+#>                 J-test               P-value            
+#> Test E(g)=0:    8.6661572346798e-23  *******            
 #> 
 #> #############
 #> Information related to the numerical optimization
