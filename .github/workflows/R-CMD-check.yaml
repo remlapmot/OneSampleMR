@@ -25,7 +25,6 @@ jobs:
         config:
           - { os: macos-26, r: "release" }
           - { os: macos-15, r: "release" }
-          - { os: macos-14, r: "release" }
           - { os: windows-latest, r: "release" }
           - { os: ubuntu-latest, r: "devel", http-user-agent: "release" }
           - { os: ubuntu-latest, r: "release" }
