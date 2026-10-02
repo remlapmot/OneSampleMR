@@ -167,8 +167,8 @@ summary(tsrilogitfit)
 #> res                 4.4657e-01  3.4141e-01  1.3080e+00  1.9086e-01
 #> 
 #> J-Test: degrees of freedom is 0 
-#>                 J-test                P-value             
-#> Test E(g)=0:    4.28905429706042e-23  *******             
+#>                 J-test               P-value            
+#> Test E(g)=0:    4.2942179555234e-23  *******            
 #> 
 #> #############
 #> Information related to the numerical optimization
