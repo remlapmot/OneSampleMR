@@ -36,29 +36,30 @@ summary(fit02)
 #> GMM fit summary:
 #> 
 #> Call:
-#> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid")
+#> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid", control = list(reltol = .Machine$double.eps, 
+#>     maxit = 10000))
 #> 
 #> 
 #> Method:  twoStep 
 #> 
 #> Coefficients:
 #>           Estimate    Std. Error  t value     Pr(>|t|)  
-#> Theta[1]  7.4993e-01  1.2332e-02  6.0810e+01  0.0000e+00
-#> Theta[2]  1.0198e-01  2.8219e-02  3.6140e+00  3.0156e-04
+#> Theta[1]  7.5000e-01  1.2333e-02  6.0815e+01  0.0000e+00
+#> Theta[2]  1.0186e-01  2.8217e-02  3.6100e+00  3.0624e-04
 #> 
 #> J-Test: degrees of freedom is 0 
-#>                 J-test                P-value             
-#> Test E(g)=0:    3.31877269936619e-06  *******             
+#>                 J-test               P-value            
+#> Test E(g)=0:    4.6416358014941e-14  *******            
 #> 
 #> #############
 #> Information related to the numerical optimization
 #> Convergence code =  0 
-#> Function eval. =  61 
+#> Function eval. =  113 
 #> Gradian eval. =  NA 
 #> 
 #> E[Y(0)] with 95% CI:
 #>         0.025  0.975 
-#> 0.7499 0.7258 0.7741 
+#> 0.7500 0.7258 0.7742 
 #> 
 #> Causal risk ratio with 95% CI:
 #>     CRR 0.025 0.975
@@ -77,29 +78,30 @@ summary(fit03)
 #> GMM fit summary:
 #> 
 #> Call:
-#> gmm::gmm(g = msmmAltMoments, x = dat, t0 = t0, vcov = "iid")
+#> gmm::gmm(g = msmmAltMoments, x = dat, t0 = t0, vcov = "iid", 
+#>     control = list(reltol = .Machine$double.eps, maxit = 10000))
 #> 
 #> 
 #> Method:  twoStep 
 #> 
 #> Coefficients:
 #>           Estimate     Std. Error   t value      Pr(>|t|)   
-#> Theta[1]  -2.8759e-01   1.6444e-02  -1.7489e+01   1.7357e-68
-#> Theta[2]   1.0173e-01   2.8217e-02   3.6053e+00   3.1178e-04
+#> Theta[1]  -2.8768e-01   1.6443e-02  -1.7495e+01   1.5612e-68
+#> Theta[2]   1.0186e-01   2.8217e-02   3.6100e+00   3.0624e-04
 #> 
 #> J-Test: degrees of freedom is 0 
 #>                 J-test                P-value             
-#> Test E(g)=0:    3.75832932731903e-06  *******             
+#> Test E(g)=0:    2.31885397656017e-14  *******             
 #> 
 #> #############
 #> Information related to the numerical optimization
 #> Convergence code =  0 
-#> Function eval. =  55 
+#> Function eval. =  109 
 #> Gradian eval. =  NA 
 #> 
 #> E[Y(0)] with 95% CI:
 #>         0.025  0.975 
-#> 0.7501 0.7263 0.7746 
+#> 0.7500 0.7262 0.7746 
 #> 
 #> Causal risk ratio with 95% CI:
 #>     CRR 0.025 0.975

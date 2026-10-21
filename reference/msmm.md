@@ -72,7 +72,7 @@ msmm(
 - t0:
 
   A vector of starting values for the gmm optimizer. This should have
-  length equal to the number of exposures plus 1.
+  length equal to the number of exposures and covariates plus 1.
 
 - ...:
 
@@ -91,19 +91,25 @@ An object of class `"msmm"`. A list with the following items:
 
 - crrci:
 
-  The causal risk ratio/s and its corresponding 95% confidence interval
-  limits.
+  The causal risk ratio/s of the exposure/s and the corresponding 95%
+  confidence interval limits.
 
 - estmethod:
 
   The specified `estmethod`.
+
+- covariates:
+
+  A character vector of the names of any covariates (variables in both
+  the exposure and instrument parts of the formula).
 
 If `estmethod` is `"tsls"`, `"gmm"`, or `"gmmalt"`:
 
 - ey0ci:
 
   The estimate of the treatment/exposure free potential outcome and its
-  95% confidence interval limits.
+  95% confidence interval limits. If there are covariates this is the
+  estimate when the covariates take the value 0.
 
 If `estmethod` is `"tsls"` or `"tslsalt"`:
 
@@ -124,6 +130,15 @@ Mullahy (1997) and then discussed in several articles by Windmeijer
 (1997, 2002) and Cameron and Trivedi (2013). This was implemented in the
 user-written Stata command `ivpois` (Nichols, 2007) and then implemented
 in official Stata in the `ivpoisson` command (StataCorp., 2013).
+
+Covariates are adjusted for by including them in both the exposure and
+the instrument parts of the formula, as in `y ~ x + w | z1 + z2 + w`, in
+the same way as for
+[`ivreg::ivreg()`](https://zeileis.github.io/ivreg/reference/ivreg.html).
+This corresponds to a log-linear model for the exposure-free potential
+outcome mean in the covariates, and is the same model as fitted by
+`ivpoisson gmm y w (x = z1 z2), multiplicative` in Stata. Covariates are
+not supported by the `"tsls"` and `"tslsalt"` methods.
 
 ## References
 
@@ -193,33 +208,34 @@ summary(fit)
 #> GMM fit summary:
 #> 
 #> Call:
-#> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid")
+#> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid", control = list(reltol = .Machine$double.eps, 
+#>     maxit = 10000))
 #> 
 #> 
 #> Method:  twoStep 
 #> 
 #> Coefficients:
 #>           Estimate     Std. Error   t value      Pr(>|t|)   
-#> Theta[1]   7.2784e-01   2.5893e-02   2.8110e+01  7.4591e-174
-#> Theta[2]   1.3107e-01   6.0307e-02   2.1733e+00   2.9754e-02
+#> Theta[1]   7.2771e-01   2.5892e-02   2.8106e+01  8.2956e-174
+#> Theta[2]   1.3147e-01   6.0324e-02   2.1793e+00   2.9307e-02
 #> 
 #> J-Test: degrees of freedom is 0 
 #>                 J-test                P-value             
-#> Test E(g)=0:    1.73561467137432e-06  *******             
+#> Test E(g)=0:    7.90426044659617e-14  *******             
 #> 
 #> #############
 #> Information related to the numerical optimization
 #> Convergence code =  0 
-#> Function eval. =  63 
+#> Function eval. =  117 
 #> Gradian eval. =  NA 
 #> 
 #> E[Y(0)] with 95% CI:
 #>         0.025  0.975 
-#> 0.7278 0.6771 0.7786 
+#> 0.7277 0.6770 0.7785 
 #> 
 #> Causal risk ratio with 95% CI:
 #>    CRR 0.025 0.975
-#> X 1.14 1.013 1.283
+#> X 1.14 1.013 1.284
 #> 
 
 # Multiple instrument example
@@ -243,36 +259,72 @@ summary(fit2)
 #> GMM fit summary:
 #> 
 #> Call:
-#> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid")
+#> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid", control = list(reltol = .Machine$double.eps, 
+#>     maxit = 10000))
 #> 
 #> 
 #> Method:  twoStep 
 #> 
 #> Coefficients:
 #>           Estimate    Std. Error  t value     Pr(>|t|)  
-#> Theta[1]  0.18250038  0.05196181  3.51220233  0.00044441
-#> Theta[2]  0.45163610  0.41838256  1.07948119  0.28037327
+#> Theta[1]  0.18267553  0.05199355  3.51342687  0.00044237
+#> Theta[2]  0.45022789  0.41808131  1.07689074  0.28152908
 #> 
 #> J-Test: degrees of freedom is 2 
 #>                 J-test   P-value
-#> Test E(g)=0:    0.27121  0.87319
+#> Test E(g)=0:    0.27078  0.87338
 #> 
 #> Initial values of the coefficients
 #>  Theta[1]  Theta[2] 
-#> 0.1831035 0.4392681 
+#> 0.1832454 0.4380268 
 #> 
 #> #############
 #> Information related to the numerical optimization
 #> Convergence code =  0 
-#> Function eval. =  59 
+#> Function eval. =  117 
 #> Gradian eval. =  NA 
 #> 
 #> E[Y(0)] with 95% CI:
 #>           0.025   0.975 
-#> 0.18250 0.08066 0.28434 
+#> 0.18268 0.08077 0.28458 
 #> 
 #> Causal risk ratio with 95% CI:
 #>     CRR  0.025 0.975
-#> X 1.571 0.6919 3.567
+#> X 1.569 0.6913  3.56
+#> 
+
+# Adjusting for a covariate
+set.seed(123456)
+C    <- runif(n)
+pX   <- plogis(0.7*G1 + G2 - G3 + U + C)
+X    <- rbinom(n, 1, pX)
+pY   <- plogis(-2 + psi0*X + U + C)
+Y    <- rbinom(n, 1, pY)
+dat3 <- data.frame(G1, G2, G3, X, Y, C)
+fit3 <- msmm(Y ~ X + C | G1 + G2 + G3 + C, data = dat3)
+#> Warning: The covariance matrix of the coefficients is singular
+fit3
+#> 
+#> Estimation method: gmm
+#> 
+#> Method
+#>  twoStep 
+#> 
+#> Objective function value:  36.12854 
+#> 
+#>   Theta[1]    Theta[2]    Theta[3]  
+#> 1.6204e-09  1.6407e+02  7.9073e+02  
+#> 
+#> Convergence code =  0 
+#> 
+#> E[Y(0)] when the covariates are 0 with 95% CI:
+#>             0.025    0.975 
+#> 1.62e-09     -Inf      Inf 
+#> 
+#> Causal risk ratio with 95% CI:
+#>         CRR 0.025 0.975
+#> X 1.791e+71     0   Inf
+#> 
+#> Adjusted for: C 
 #> 
 ```

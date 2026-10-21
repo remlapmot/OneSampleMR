@@ -140,14 +140,12 @@ fsw(mod2)
 library(estimatr)
 mod3 <- iv_robust(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat, se_type = "classical")
 tidy(mod3)
-#>          term    estimate   std.error  statistic    p.value     conf.low
-#> 1 (Intercept) -0.36018214 1.033415610 -0.3485356 0.72761056 -2.391424035
-#> 2        educ  0.10583608 0.080981803  1.3069119 0.19194932 -0.053338627
-#> 3       exper  0.01615273 0.007594673  2.1268499 0.03400801  0.001224933
-#>    conf.high  df outcome
-#> 1 1.67105975 425   lwage
-#> 2 0.26501080 425   lwage
-#> 3 0.03108053 425   lwage
+#> # A tibble: 3 × 9
+#>   term     estimate std.error statistic p.value conf.low conf.high    df outcome
+#>   <chr>       <dbl>     <dbl>     <dbl>   <dbl>    <dbl>     <dbl> <dbl> <chr>  
+#> 1 (Interc…  -0.360    1.03       -0.349  0.728  -2.39       1.67     425 lwage  
+#> 2 educ       0.106    0.0810      1.31   0.192  -0.0533     0.265    425 lwage  
+#> 3 exper      0.0162   0.00759     2.13   0.0340  0.00122    0.0311   425 lwage
 fsw(mod3)
 #> 
 #> Model sample size:  428 

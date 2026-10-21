@@ -9,7 +9,7 @@ structural mean model (MSMM) of Robins (1989)."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">OneSampleMR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@ structural mean model (MSMM) of Robins (1989)."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Multiplicative structural mean model</h1>
-      <small class="dont-index">Source: <a href="https://github.com/remlapmot/OneSampleMR/blob/main/R/msmm.R" class="external-link"><code>R/msmm.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/remlapmot/OneSampleMR/blob/v0.1.9/R/msmm.R" class="external-link"><code>R/msmm.R</code></a></small>
       <div class="d-none name"><code>msmm.Rd</code></div>
     </div>
 
@@ -119,7 +119,7 @@ as the outcome and \(Y*(1-X)\) as the exposure.</p></li>
 
 <dt id="arg-t-">t0<a class="anchor" aria-label="anchor" href="#arg-t-"></a></dt>
 <dd><p>A vector of starting values for the gmm optimizer. This should
-have length equal to the number of exposures plus 1.</p></dd>
+have length equal to the number of exposures and covariates plus 1.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -133,17 +133,22 @@ have length equal to the number of exposures plus 1.</p></dd>
 <dd><p>The object from either a <code><a href="https://rdrr.io/pkg/gmm/man/gmm.html" class="external-link">gmm::gmm()</a></code> or <code><a href="https://zeileis.github.io/ivreg/reference/ivreg.html" class="external-link">ivreg::ivreg()</a></code> fit.</p></dd>
 
 <dt>crrci</dt>
-<dd><p>The causal risk ratio/s and its corresponding 95% confidence
-interval limits.</p></dd>
+<dd><p>The causal risk ratio/s of the exposure/s and the corresponding
+95% confidence interval limits.</p></dd>
 
 <dt>estmethod</dt>
 <dd><p>The specified <code>estmethod</code>.</p></dd>
+
+<dt>covariates</dt>
+<dd><p>A character vector of the names of any covariates
+(variables in both the exposure and instrument parts of the formula).</p></dd>
 
 
 </dl><p>If <code>estmethod</code> is <code>"tsls"</code>, <code>"gmm"</code>, or <code>"gmmalt"</code>:</p>
 <dl><dt>ey0ci</dt>
 <dd><p>The estimate of the treatment/exposure free potential outcome and
-its 95% confidence interval limits.</p></dd>
+its 95% confidence interval limits. If there are covariates this is the
+estimate when the covariates take the value 0.</p></dd>
 
 
 </dl><p>If <code>estmethod</code> is <code>"tsls"</code> or <code>"tslsalt"</code>:</p>
@@ -163,6 +168,12 @@ then discussed in several articles by Windmeijer (1997, 2002) and Cameron
 and Trivedi (2013). This was implemented in the user-written Stata command <code>ivpois</code>
 (Nichols, 2007) and then implemented in official Stata in the <code>ivpoisson</code>
 command (StataCorp., 2013).</p>
+<p>Covariates are adjusted for by including them in both the exposure and the
+instrument parts of the formula, as in <code>y ~ x + w | z1 + z2 + w</code>, in the same
+way as for <code><a href="https://zeileis.github.io/ivreg/reference/ivreg.html" class="external-link">ivreg::ivreg()</a></code>. This corresponds to a log-linear model for the
+exposure-free potential outcome mean in the covariates, and is the same
+model as fitted by <code>ivpoisson gmm y w (x = z1 z2), multiplicative</code> in Stata.
+Covariates are not supported by the <code>"tsls"</code> and <code>"tslsalt"</code> methods.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -227,33 +238,34 @@ data. CEMMAP working paper CWP14/02. 2002.
 <span class="r-out co"><span class="r-pr">#&gt;</span> GMM fit summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid", control = list(reltol = .Machine$double.eps, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     maxit = 10000))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Method:  twoStep </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Estimate     Std. Error   t value      Pr(&gt;|t|)   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Theta[1]   7.2784e-01   2.5893e-02   2.8110e+01  7.4591e-174</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Theta[2]   1.3107e-01   6.0307e-02   2.1733e+00   2.9754e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Theta[1]   7.2771e-01   2.5892e-02   2.8106e+01  8.2956e-174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Theta[2]   1.3147e-01   6.0324e-02   2.1793e+00   2.9307e-02</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> J-Test: degrees of freedom is 0 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 J-test                P-value             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Test E(g)=0:    1.73561467137432e-06  *******             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Test E(g)=0:    7.90426044659617e-14  *******             </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> #############</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Information related to the numerical optimization</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence code =  0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function eval. =  63 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function eval. =  117 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Gradian eval. =  NA </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> E[Y(0)] with 95% CI:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         0.025  0.975 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.7278 0.6771 0.7786 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.7277 0.6770 0.7785 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Causal risk ratio with 95% CI:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    CRR 0.025 0.975</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X 1.14 1.013 1.283</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X 1.14 1.013 1.284</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Multiple instrument example</span></span></span>
@@ -277,37 +289,73 @@ data. CEMMAP working paper CWP14/02. 2002.
 <span class="r-out co"><span class="r-pr">#&gt;</span> GMM fit summary:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid", control = list(reltol = .Machine$double.eps, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     maxit = 10000))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Method:  twoStep </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Estimate    Std. Error  t value     Pr(&gt;|t|)  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Theta[1]  0.18250038  0.05196181  3.51220233  0.00044441</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Theta[2]  0.45163610  0.41838256  1.07948119  0.28037327</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Theta[1]  0.18267553  0.05199355  3.51342687  0.00044237</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Theta[2]  0.45022789  0.41808131  1.07689074  0.28152908</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> J-Test: degrees of freedom is 2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                 J-test   P-value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Test E(g)=0:    0.27121  0.87319</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Test E(g)=0:    0.27078  0.87338</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Initial values of the coefficients</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Theta[1]  Theta[2] </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.1831035 0.4392681 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.1832454 0.4380268 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> #############</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Information related to the numerical optimization</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Convergence code =  0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Function eval. =  59 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Function eval. =  117 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Gradian eval. =  NA </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> E[Y(0)] with 95% CI:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           0.025   0.975 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.18250 0.08066 0.28434 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.18268 0.08077 0.28458 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Causal risk ratio with 95% CI:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     CRR  0.025 0.975</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> X 1.571 0.6919 3.567</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X 1.569 0.6913  3.56</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Adjusting for a covariate</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123456</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">C</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pX</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html" class="external-link">plogis</a></span><span class="op">(</span><span class="fl">0.7</span><span class="op">*</span><span class="va">G1</span> <span class="op">+</span> <span class="va">G2</span> <span class="op">-</span> <span class="va">G3</span> <span class="op">+</span> <span class="va">U</span> <span class="op">+</span> <span class="va">C</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">X</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">1</span>, <span class="va">pX</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pY</span>   <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html" class="external-link">plogis</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span> <span class="op">+</span> <span class="va">psi0</span><span class="op">*</span><span class="va">X</span> <span class="op">+</span> <span class="va">U</span> <span class="op">+</span> <span class="va">C</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">Y</span>    <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">1</span>, <span class="va">pY</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dat3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">G1</span>, <span class="va">G2</span>, <span class="va">G3</span>, <span class="va">X</span>, <span class="va">Y</span>, <span class="va">C</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit3</span> <span class="op">&lt;-</span> <span class="fu">msmm</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X</span> <span class="op">+</span> <span class="va">C</span> <span class="op">|</span> <span class="va">G1</span> <span class="op">+</span> <span class="va">G2</span> <span class="op">+</span> <span class="va">G3</span> <span class="op">+</span> <span class="va">C</span>, data <span class="op">=</span> <span class="va">dat3</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The covariance matrix of the coefficients is singular</span>
+<span class="r-in"><span><span class="va">fit3</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimation method: gmm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Method</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  twoStep </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Objective function value:  36.12854 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Theta[1]    Theta[2]    Theta[3]  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.6204e-09  1.6407e+02  7.9073e+02  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Convergence code =  0 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> E[Y(0)] when the covariates are 0 with 95% CI:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             0.025    0.975 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.62e-09     -Inf      Inf </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Causal risk ratio with 95% CI:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         CRR 0.025 0.975</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> X 1.791e+71     0   Inf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Adjusted for: C </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

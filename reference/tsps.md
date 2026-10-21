@@ -56,7 +56,10 @@ tsps(
 - t0:
 
   A vector of starting values for the gmm optimizer. This should have
-  length equal to the number of exposures plus 1.
+  length equal to the number of first stage parameters (the intercept,
+  the instruments, and any covariates) plus the number of second stage
+  parameters. By default the starting values are the estimates from
+  fitting the two stages sequentially.
 
 - link:
 
@@ -148,14 +151,14 @@ summary(tspslogitfit)
 #> 
 #> Coefficients:
 #>                     Estimate    Std. Error  t value     Pr(>|t|)  
-#> Zstage1(Intercept)  1.7647e-01  1.7169e-02  1.0278e+01  8.8297e-25
-#> Zstage1Z            5.4740e-01  2.6249e-02  2.0854e+01  1.4138e-96
+#> stage1:(Intercept)  1.7647e-01  1.7169e-02  1.0278e+01  8.8297e-25
+#> stage1:Z            5.4740e-01  2.6249e-02  2.0854e+01  1.4138e-96
 #> (Intercept)         9.7133e-01  1.4042e-01  6.9173e+00  4.6027e-12
-#> xhat                6.1451e-01  2.7464e-01  2.2375e+00  2.5256e-02
+#> X                   6.1451e-01  2.7464e-01  2.2375e+00  2.5256e-02
 #> 
 #> J-Test: degrees of freedom is 0 
-#>                 J-test               P-value            
-#> Test E(g)=0:    8.6661572346798e-23  *******            
+#>                 J-test                P-value             
+#> Test E(g)=0:    8.67645206779774e-23  *******             
 #> 
 #> #############
 #> Information related to the numerical optimization
@@ -165,14 +168,13 @@ summary(tspslogitfit)
 #> 
 #> Estimates with 95% CI limits:
 #>                    Estimate   0.025  0.975
-#> Zstage1(Intercept)   0.1765 0.14282 0.2101
-#> Zstage1Z             0.5474 0.49595 0.5988
+#> stage1:(Intercept)   0.1765 0.14282 0.2101
+#> stage1:Z             0.5474 0.49595 0.5988
 #> (Intercept)          0.9713 0.69611 1.2465
-#> xhat                 0.6145 0.07622 1.1528
+#> X                    0.6145 0.07622 1.1528
 #> 
 #> Causal odds ratio with 95% CI limits:
-#>             Estimate 0.025 0.975
-#> (Intercept)    2.641 2.006 3.478
-#> xhat           1.849 1.079 3.167
+#>   Estimate 0.025 0.975
+#> X    1.849 1.079 3.167
 #> 
 ```
