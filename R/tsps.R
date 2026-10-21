@@ -206,12 +206,16 @@ tsps <- function(
     } else if (link == "logadd") {
       stage2 <- stats::glm(Y ~ xhat, family = stats::poisson(link = "log"))
     } else if (link == "logmult") {
-      Ystar <- Y
-      Ystar[Y == 0] <- 0.001
+      # solve the second stage estimating equations exactly, starting from
+      # the (quasi-)Poisson regression estimates
       stage2 <- stats::glm(
-        Ystar ~ xhat,
-        family = stats::Gamma(link = "log"),
-        control = list(maxit = 1E5)
+        Y ~ xhat,
+        family = stats::quasipoisson(link = "log")
+      )
+      stage2$coefficients <- logmult_coef(
+        Y,
+        stats::model.matrix(stage2),
+        stats::coef(stage2)
       )
     } else if (link == "logit") {
       stage2 <- stats::glm(Y ~ xhat, family = stats::binomial(link = "logit"))
@@ -253,19 +257,12 @@ tsps <- function(
     }
 
     # gmm fit (tspsMoments reads the link function from tsps_env)
-    if (link == "logmult") {
-      fit <- gmm::gmm(
-        tspsMoments,
-        x = dat,
-        t0 = t0,
-        vcov = "iid",
-        itermax = 1E7
-      )
-    } else {
-      fit <- gmm::gmm(tspsMoments, x = dat, t0 = t0, vcov = "iid")
-    }
+    fit <- gmm::gmm(tspsMoments, x = dat, t0 = t0, vcov = "iid")
 
-    if (fit$algoInfo$convergence != 0) {
+    # the model is exactly identified, so the minimum of the gmm objective
+    # function is 0; the optimizer can report non-convergence when it has
+    # reached this minimum but cannot further shrink its simplex
+    if (fit$algoInfo$convergence != 0 && fit$objective > 1e-10) {
       warning(
         "The GMM fit has not converged, perhaps try different initial parameter values"
       )

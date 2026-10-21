@@ -278,6 +278,33 @@ test_that("Multiple instrument example with covariates - logmult link", {
   dat$Y[dat$Y == 0.001] <- 0
 })
 
+test_that("logmult link converges to the exact solution for a binary outcome", {
+  skip_on_cran()
+
+  expect_no_warning(
+    fit <- tsps(
+      Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+      data = dat,
+      link = "logmult"
+    )
+  )
+
+  # the second stage estimating equations solved directly
+  stage1 <- lm(X ~ G1 + G2 + G3 + C1 + C2, data = dat)
+  r <- cbind(1, fitted.values(stage1), dat$C1, dat$C2)
+  b <- OneSampleMR:::logmult_coef(dat$Y, r, rep(0, ncol(r)))
+  expect_equal(
+    unname(fit$estci[-(1:6), 1]),
+    b,
+    tolerance = 1e-6
+  )
+  expect_equal(
+    colSums(r * as.vector(dat$Y * exp(-r %*% b) - 1)),
+    rep(0, ncol(r)),
+    tolerance = 1e-8
+  )
+})
+
 test_that("Multiple instrument example with covariates - logit link", {
   skip_on_cran()
 
