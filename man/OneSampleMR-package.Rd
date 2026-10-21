@@ -7,7 +7,7 @@
 \alias{OneSampleMR}
 \title{OneSampleMR: One Sample Mendelian Randomization and Instrumental Variable Analyses}
 \description{
-Useful functions for one-sample (individual level data) Mendelian randomization and instrumental variable analyses. The package includes implementations of; the Sanderson and Windmeijer (2016) \doi{10.1016/j.jeconom.2015.06.004} conditional F-statistic, the multiplicative structural mean model Hernán and Robins (2006) \doi{10.1097/01.ede.0000222409.00878.37}, and two-stage predictor substitution and two-stage residual inclusion estimators explained by Terza et al. (2008) \doi{10.1016/j.jhealeco.2007.09.009}.
+Useful functions for one-sample (individual level data) Mendelian randomization and instrumental variable analyses. The package includes implementations of; the Sanderson and Windmeijer (2016) \doi{10.1016/j.jeconom.2015.06.004} conditional F-statistic, the multiplicative structural mean model Hernán and Robins (2006) \doi{10.1097/01.ede.0000222409.00878.37}, the logistic structural mean model Vansteelandt and Goetghebeur (2003) \doi{10.1046/j.1369-7412.2003.00417.x}, and two-stage predictor substitution and two-stage residual inclusion estimators explained by Terza et al. (2008) \doi{10.1016/j.jhealeco.2007.09.009}.
 }
 \seealso{
 Useful links:
