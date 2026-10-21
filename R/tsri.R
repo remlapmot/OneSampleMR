@@ -15,8 +15,8 @@
 #' on its estimates similar to that described by
 #' Clarke et al. (2015). Terza (2017) described an alternative approach.
 #'
-#' @inheritParams msmm
 #' @inheritParams tsps
+#' @inheritParams msmm
 #' @return
 #' An object of class `"tsri"` with the following elements
 #' \describe{
@@ -183,7 +183,6 @@ tsri <- function(
   tsri_env$xnames <- xnames[!(xnames %in% covariatenames)]
   tsri_env$znames <- znames[!(znames %in% covariatenames)]
   tsri_env$covariatenames <- covariatenames
-  tsri_env$ncovs <- length(covariatenames)
 
   # check for only 1 exposure
   if (length(tsri_env$xnames) != 1) {
@@ -242,14 +241,23 @@ tsri <- function(
       )
     }
     t0 <- c(t0, stats::coef(stage2))
-
-    if (!tsri_env$anycovs) {
-      xindex <- length(t0) - 1
-    } else {
-      xindex <- length(t0) - 1 - tsri_env$ncovs
-    }
-    names(t0)[xindex] <- tsri_env$xnames
   }
+
+  # label the parameters, also when the user has specified t0
+  parnames <- c(
+    paste0(
+      "stage1:",
+      c("(Intercept)", tsri_env$znames, tsri_env$covariatenames)
+    ),
+    "(Intercept)",
+    tsri_env$xnames,
+    "stage1:residuals",
+    tsri_env$covariatenames
+  )
+  if (length(t0) != length(parnames)) {
+    stop("t0 must have length ", length(parnames), ".")
+  }
+  names(t0) <- parnames
 
   Xtopass <- as.data.frame(X[, tsri_env$xnames])
   colnames(Xtopass) <- tsri_env$xnames

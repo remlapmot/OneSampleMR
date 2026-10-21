@@ -11,6 +11,11 @@
 #' on its estimates similar to the approach described in Clarke et al. (2015).
 #'
 #' @inheritParams msmm
+#' @param t0 A vector of starting values for the gmm optimizer. This should
+#'   have length equal to the number of first stage parameters (the intercept,
+#'   the instruments, and any covariates) plus the number of second stage
+#'   parameters. By default the starting values are the estimates from fitting
+#'   the two stages sequentially.
 #' @param link character; one of `"identity"` (the default), `"logadd"`, `"logmult"`, `"logit"`.
 #'  This is the link function for the second stage model. `"identity"` corresponds to linear
 #'  regression; `"logadd"` is log-additive and corresponds to Poisson / log-binomial regression;
@@ -222,6 +227,21 @@ tsps <- function(
     }
     t0 <- c(t0, stats::coef(stage2))
   }
+
+  # label the parameters, also when the user has specified t0
+  parnames <- c(
+    paste0(
+      "stage1:",
+      c("(Intercept)", tsps_env$znames, tsps_env$covariatenames)
+    ),
+    "(Intercept)",
+    tsps_env$xnames,
+    tsps_env$covariatenames
+  )
+  if (length(t0) != length(parnames)) {
+    stop("t0 must have length ", length(parnames), ".")
+  }
+  names(t0) <- parnames
 
   Xtopass <- as.data.frame(X[, tsps_env$xnames])
   colnames(Xtopass) <- tsps_env$xnames

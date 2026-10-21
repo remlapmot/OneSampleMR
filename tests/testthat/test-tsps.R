@@ -305,6 +305,31 @@ test_that("logmult link converges to the exact solution for a binary outcome", {
   )
 })
 
+test_that("Parameters are labelled by stage and variable name", {
+  skip_on_cran()
+
+  labels <- c(
+    "stage1:(Intercept)", "stage1:G1", "stage1:G2", "stage1:G3",
+    "stage1:C1", "stage1:C2",
+    "(Intercept)", "X", "C1", "C2"
+  )
+  fit <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat)
+  expect_identical(rownames(fit$estci), labels)
+
+  # the same labels are used when the user specifies unnamed t0
+  fitt0 <- tsps(
+    Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+    data = dat,
+    t0 = unname(fit$estci[, 1])
+  )
+  expect_identical(rownames(fitt0$estci), labels)
+
+  expect_error(
+    tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, t0 = c(0, 0)),
+    "t0 must have length 10"
+  )
+})
+
 test_that("Multiple instrument example with covariates - logit link", {
   skip_on_cran()
 

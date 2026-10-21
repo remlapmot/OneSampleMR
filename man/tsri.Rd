@@ -38,7 +38,10 @@ contain \code{NA}s. The default is set by the \code{na.action} option.}
 \code{\link[stats:model.matrix]{stats::model.matrix()}}.}
 
 \item{t0}{A vector of starting values for the gmm optimizer. This should
-have length equal to the number of exposures plus 1.}
+have length equal to the number of first stage parameters (the intercept,
+the instruments, and any covariates) plus the number of second stage
+parameters. By default the starting values are the estimates from fitting
+the two stages sequentially.}
 
 \item{link}{character; one of \code{"identity"} (the default), \code{"logadd"}, \code{"logmult"}, \code{"logit"}.
 This is the link function for the second stage model. \code{"identity"} corresponds to linear
