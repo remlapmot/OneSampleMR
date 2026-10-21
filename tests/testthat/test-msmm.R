@@ -17,6 +17,18 @@ test_that("Stata output check", {
     estmethod = "gmmalt"
   )
   expect_equal(log(fit1$crrci["tcost", 1]), log(1.036), tolerance = 0.05)
+  # the model is exactly identified, so the estimates and standard errors
+  # should match the Stata output below closely
+  expect_equal(
+    unname(gmm::coef.gmm(fit1$fit)[c(1, 6)]),
+    c(.2654423, .0352185),
+    tolerance = 1e-4
+  )
+  expect_equal(
+    unname(sqrt(diag(stats::vcov(fit1$fit)))[6]),
+    .0098182,
+    tolerance = 1e-4
+  )
   # fit2 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
   #                cbd + ptn + worker + weekend + pt,
   #              data = dat)
@@ -591,6 +603,28 @@ test_that("Stata output check", {
 # ------------------------------------------------------------------------------*
 # Instruments for equation 1: ptn worker weekend _cons
 
+# Exactly identified fits solve the estimating equations ----
+test_that("Single instrument fits converge to the root of the estimating equations", {
+  skip_on_cran()
+  set.seed(9)
+  n <- 1000
+  Z <- rbinom(n, 1, 0.5)
+  X <- rbinom(n, 1, 0.7 * Z + 0.2 * (1 - Z))
+  m0 <- plogis(1 + 0.8 * X - 0.39 * Z)
+  Y <- rbinom(n, 1, plogis(0.5 * X + log(m0 / (1 - m0))))
+  dat <- data.frame(Z, X, Y)
+
+  # G-estimating equation for the MSMM with a single instrument
+  ee <- function(psi) mean((Z - mean(Z)) * Y * exp(-psi * X))
+  root <- stats::uniroot(ee, c(-2, 2), tol = 1e-12)$root
+
+  fit <- msmm(Y ~ X | Z, data = dat)
+  expect_equal(unname(gmm::coef.gmm(fit$fit)[2]), root, tolerance = 1e-6)
+
+  fitalt <- msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
+  expect_equal(unname(gmm::coef.gmm(fitalt$fit)[2]), root, tolerance = 1e-6)
+})
+
 # Single instrument example ----
 test_that("Single instrument example", {
   skip_on_cran()
@@ -825,10 +859,10 @@ test_that("Multiple exposure example", {
   dat <- data.frame(G1, G2, G3, X1, X2, Y)
 
   fit21 <- msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat)
-  expect_equal(log(fit21$crrci[1, 1]), 0.08, tolerance = 0.02)
+  expect_equal(log(fit21$crrci[1, 1]), 0.0837, tolerance = 0.01)
 
   fit22 <- msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "gmm")
-  expect_equal(log(fit22$crrci[1, 1]), 0.08, tolerance = 0.02)
+  expect_equal(log(fit22$crrci[1, 1]), 0.0837, tolerance = 0.01)
 
   fit23 <- msmm(Y ~ X1 + X2 | G1 + G2 + G3, data = dat, estmethod = "gmmalt")
   expect_equal(log(fit23$crrci[1, 1]), 0.08, tolerance = 0.1)
@@ -863,7 +897,7 @@ test_that("Multiple exposure example with different variable names", {
   R <- Y
   dat <- data.frame(G1, G2, G3, E1, E2, R)
   fit24 <- msmm(Y ~ E1 + E2 | G1 + G2 + G3, data = dat)
-  expect_equal(log(fit24$crrci[1, 1]), 0.08, tolerance = 0.01)
+  expect_equal(log(fit24$crrci[1, 1]), 0.0837, tolerance = 0.01)
 })
 
 # Example adjusting for a covariate ----
@@ -891,7 +925,7 @@ test_that("Adjusting for covariate", {
   fit25 <- msmm(Y ~ E1 + C | G1 + G2 + G3 + C, data = dat)
   expect_equal(log(fit25$crrci[1, 1]), .173, tolerance = .01)
   fit26 <- msmm(Y ~ E1 + E2 + C | G1 + G2 + G3 + C, data = dat)
-  expect_equal(log(fit26$crrci[1, 1]), .184, tolerance = .01)
+  expect_equal(log(fit26$crrci[1, 1]), .196, tolerance = .01)
 })
 
 test_that("Clear error message for negative outcome values", {

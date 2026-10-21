@@ -397,7 +397,13 @@ msmm_gmm <- function(x, y, z, xnames, t0) {
   }
 
   # gmm fit
-  fit <- gmm::gmm(msmmMoments, x = dat, t0 = t0, vcov = "iid")
+  fit <- gmm::gmm(
+    msmmMoments,
+    x = dat,
+    t0 = t0,
+    vcov = "iid",
+    control = list(reltol = .Machine$double.eps, maxit = 1E4)
+  )
 
   if (fit$algoInfo$convergence != 0) {
     warning(
@@ -450,7 +456,13 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
   }
 
   # gmm fit
-  fit <- gmm::gmm(msmmAltMoments, x = dat, t0 = t0, vcov = "iid")
+  fit <- gmm::gmm(
+    msmmAltMoments,
+    x = dat,
+    t0 = t0,
+    vcov = "iid",
+    control = list(reltol = .Machine$double.eps, maxit = 1E4)
+  )
 
   if (fit$algoInfo$convergence != 0) {
     warning(
