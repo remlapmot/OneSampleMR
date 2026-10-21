@@ -10,6 +10,8 @@
 
 * The print and summary methods for `tsps()` and `tsri()` fits now only exponentiate the exposure parameter in the causal risk ratio or causal odds ratio table. Previously all the second stage parameters were exponentiated and presented as causal ratios, including the intercept, any covariates, and, for `tsri()`, the coefficient of the first stage residuals.
 
+* `msmm()` now distinguishes covariates (variables included in both the exposure and instrument parts of the formula) from exposures. The causal risk ratio table (`crrci`) now only contains the exposures; previously it also reported the exponentiated covariate coefficients as causal risk ratios. The covariate adjusted model itself is unchanged, and is the same model as fitted by Stata's `ivpoisson gmm, multiplicative` with exogenous covariates. The returned object has a new `covariates` element, the print methods list the covariates adjusted for and note that `E[Y(0)]` is then estimated at covariate values of 0, and covariate adjustment is documented with an example in `?msmm`. Covariates with the `"tsls"` and `"tslsalt"` methods now give a clear error message.
+
 # OneSampleMR 0.1.8
 
 * Bump roxygen2 to 8.0.0.
