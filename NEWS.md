@@ -1,5 +1,7 @@
 # OneSampleMR (development version)
 
+* New function `lsmm()` fits the double logistic structural mean model (LSMM) of Vansteelandt and Goetghebeur (2003), which estimates a causal odds ratio, by two-step GMM with multiple instruments as described by Clarke et al. (2015). It has `print()` and `summary()` methods, the summary includes the Hansen J-test of the overidentifying restrictions, and covariates are handled as in `msmm()`. It is the same estimator as the `ivlsmm` command in the Stata package ivonesamplemr, and its estimates agree with `ivlsmm`.
+
 * `tsps()` and `tsri()` with `link = "logmult"` now converge to the solution of the estimating equations. Previously the GMM optimizer often stopped at its iteration limit, giving slightly inaccurate estimates and a non-convergence warning. The starting values are now obtained by solving the second stage estimating equations exactly by Newton-Raphson, rather than from a gamma regression with zero outcomes replaced by 0.001. The estimates now agree with the Stata commands `ivtsps` and `ivtsri` in the ivonesamplemr package.
 
 * `tsps()` and `tsri()` no longer give a spurious non-convergence warning when the optimizer has reached the minimum of the GMM objective function (which is 0 because these models are exactly identified).
