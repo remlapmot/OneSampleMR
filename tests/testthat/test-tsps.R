@@ -330,6 +330,34 @@ test_that("Parameters are labelled by stage and variable name", {
   )
 })
 
+test_that("Only the exposure parameter is exponentiated in the output", {
+  skip_on_cran()
+
+  # the rows of the causal ratio table, which follow its heading and column
+  # names and end before the trailing blank line
+  causal_rows <- function(out) {
+    start <- grep("^Causal (risk|odds) ratio", out)
+    out[(start + 2):(length(out) - 1)]
+  }
+
+  for (link in c("logadd", "logmult", "logit")) {
+    fit <- tsps(
+      Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+      data = dat,
+      link = link
+    )
+    rows <- causal_rows(capture.output(print(fit)))
+    expect_length(rows, 1)
+    expect_match(rows, "^X ")
+    rows <- causal_rows(capture.output(print(summary(fit))))
+    expect_length(rows, 1)
+    expect_match(rows, "^X ")
+  }
+
+  fit <- tsps(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat)
+  expect_no_match(capture.output(print(fit)), "^Causal")
+})
+
 test_that("Multiple instrument example with covariates - logit link", {
   skip_on_cran()
 
