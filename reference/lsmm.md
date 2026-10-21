@@ -151,9 +151,9 @@ fit
 #> Objective function value:  0.0002256856 
 #> 
 #> assoc:(Intercept)            assoc:X           assoc:G1           assoc:G2  
-#>        -1.3845855          0.4111755         -0.0016541         -0.0030709  
+#>        -1.3845855          0.4111755         -0.0016541         -0.0030708  
 #>          assoc:G3                  X            E[Y(0)]  
-#>         0.0040531          0.3908401          0.2024624  
+#>         0.0040530          0.3908403          0.2024624  
 #> 
 #> Convergence code =  0 
 #> 
@@ -181,10 +181,10 @@ summary(fit)
 #>                    Estimate     Std. Error   t value      Pr(>|t|)   
 #> assoc:(Intercept)  -1.3846e+00   1.5007e-01  -9.2263e+00   2.8027e-20
 #> assoc:X             4.1118e-01   1.8523e-01   2.2198e+00   2.6430e-02
-#> assoc:G1           -1.6541e-03   3.4843e-02  -4.7472e-02   9.6214e-01
-#> assoc:G2           -3.0709e-03   6.5309e-02  -4.7021e-02   9.6250e-01
-#> assoc:G3            4.0531e-03   8.6035e-02   4.7109e-02   9.6243e-01
-#> X                   3.9084e-01   3.8207e-01   1.0230e+00   3.0633e-01
+#> assoc:G1           -1.6541e-03   3.4843e-02  -4.7471e-02   9.6214e-01
+#> assoc:G2           -3.0708e-03   6.5309e-02  -4.7020e-02   9.6250e-01
+#> assoc:G3            4.0530e-03   8.6035e-02   4.7109e-02   9.6243e-01
+#> X                   3.9084e-01   3.8207e-01   1.0230e+00   3.0632e-01
 #> E[Y(0)]             2.0246e-01   4.4323e-02   4.5679e+00   4.9262e-06
 #> 
 #> J-Test: degrees of freedom is 2 
@@ -195,7 +195,7 @@ summary(fit)
 #> Information related to the numerical optimization
 #> Convergence code =  0 
 #> Function eval. =  271 
-#> Gradian eval. =  102 
+#> Gradian eval. =  106 
 #> 
 #> E[Y(0)] with 95% CI:
 #>         0.025  0.975 
