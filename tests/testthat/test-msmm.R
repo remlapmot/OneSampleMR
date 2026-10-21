@@ -29,6 +29,11 @@ test_that("Stata output check", {
     .0098182,
     tolerance = 1e-4
   )
+  # cbd, ptn, worker, and weekend are covariates, so the causal risk ratio
+  # is only reported for tcost
+  expect_identical(rownames(fit1$crrci), "tcost")
+  expect_identical(fit1$covariates, c("cbd", "ptn", "worker", "weekend"))
+  expect_output(print(fit1), "Adjusted for: cbd, ptn, worker, weekend")
   # fit2 <- msmm(trips ~ cbd + ptn + worker + weekend + tcost |
   #                cbd + ptn + worker + weekend + pt,
   #              data = dat)
@@ -926,6 +931,23 @@ test_that("Adjusting for covariate", {
   expect_equal(log(fit25$crrci[1, 1]), .173, tolerance = .01)
   fit26 <- msmm(Y ~ E1 + E2 + C | G1 + G2 + G3 + C, data = dat)
   expect_equal(log(fit26$crrci[1, 1]), .196, tolerance = .01)
+  expect_identical(rownames(fit26$crrci), c("E1", "E2"))
+  expect_identical(fit26$covariates, "C")
+
+  fit27 <- msmm(Y ~ E1 + C | G1 + G2 + G3 + C, data = dat, estmethod = "gmmalt")
+  expect_identical(rownames(fit27$crrci), "E1")
+  expect_output(print(summary(fit27)), "Adjusted for: C")
+  expect_output(print(fit27), "E\\[Y\\(0\\)\\] when the covariates are 0")
+
+  dat$E1 <- as.integer(dat$E1)
+  expect_error(
+    msmm(Y ~ E1 + C | G1 + G2 + G3 + C, data = dat, estmethod = "tsls"),
+    "Covariates are not supported with tsls and tslsalt"
+  )
+  expect_error(
+    msmm(Y ~ C | G1 + G2 + G3 + C, data = dat),
+    "At least one exposure"
+  )
 })
 
 test_that("Clear error message for negative outcome values", {
@@ -954,7 +976,7 @@ test_that("gmmalt method returns a complete msmm object", {
   dat <- data.frame(Z, X, Y)
   fit <- msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
   expect_s3_class(fit, "msmm")
-  expect_named(fit, c("fit", "crrci", "ey0ci", "estmethod"))
+  expect_named(fit, c("fit", "crrci", "ey0ci", "estmethod", "covariates"))
   expect_equal(fit$estmethod, "gmmalt")
 })
 
