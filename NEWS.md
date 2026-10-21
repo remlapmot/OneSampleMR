@@ -8,6 +8,8 @@
 
 * The parameters in the output of `tsps()` and `tsri()` are now labelled by stage and variable name. First stage parameters are prefixed `stage1:`, the second stage exposure and covariate parameters take their variable names (previously, e.g., `xhatxhat` and `xhatcovariates` for `tsps()`), and the first stage residual in `tsri()` is labelled `stage1:residuals` (previously `resres`). The same labels are used when the user specifies `t0`, and `tsps()` and `tsri()` now give a clear error message if `t0` has the wrong length. The documentation of `t0` has been corrected.
 
+* The print and summary methods for `tsps()` and `tsri()` fits now only exponentiate the exposure parameter in the causal risk ratio or causal odds ratio table. Previously all the second stage parameters were exponentiated and presented as causal ratios, including the intercept, any covariates, and, for `tsri()`, the coefficient of the first stage residuals.
+
 # OneSampleMR 0.1.8
 
 * Bump roxygen2 to 8.0.0.
