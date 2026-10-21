@@ -4,6 +4,8 @@
 
 * `tsps()` and `tsri()` no longer give a spurious non-convergence warning when the optimizer has reached the minimum of the GMM objective function (which is 0 because these models are exactly identified).
 
+* `msmm()` with `estmethod = "gmm"` or `"gmmalt"` now uses a tighter convergence tolerance for the Nelder-Mead optimizer (`reltol = .Machine$double.eps`, `maxit = 1E4`), so that the estimates converge to the minimum of the GMM objective function. Previously the default tolerance could stop the optimizer early, so estimates depended on the starting values and could differ in the second or third decimal place from the solution of the estimating equations. Estimates from exactly identified models now agree with `ivtools::ivglm()` G-estimation and with Stata's `ivpoisson gmm, multiplicative`.
+
 # OneSampleMR 0.1.8
 
 * Bump roxygen2 to 8.0.0.
