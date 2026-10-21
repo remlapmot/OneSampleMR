@@ -10,10 +10,14 @@ authors:
 - family-names: "Sanderson"
   given-names: "Eleanor"
   orcid: "https://orcid.org/0000-0001-5188-5775"
+- family-names: "Vitt"
+  given-names: "Nicolai"
+  orcid: "https://orcid.org/0000-0002-5988-9372"
 title: "OneSampleMR - R package for one-sample Mendelian randomization and instrumental variable analyses"
 type: software
-version: 0.1.0
-date-released: 2021-10-25
+version: 0.1.8
+date-released: 2026-07-08
+doi: "10.32614/CRAN.package.OneSampleMR"
 url: "https://CRAN.R-project.org/package=OneSampleMR"
 repository-code: "https://github.com/remlapmot/OneSampleMR"
 license: GPL-3.0
