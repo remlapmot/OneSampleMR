@@ -14,6 +14,13 @@
 #' (Nichols, 2007) and then implemented in official Stata in the `ivpoisson`
 #' command (StataCorp., 2013).
 #'
+#' Covariates are adjusted for by including them in both the exposure and the
+#' instrument parts of the formula, as in `y ~ x + w | z1 + z2 + w`, in the same
+#' way as for [ivreg::ivreg()]. This corresponds to a log-linear model for the
+#' exposure-free potential outcome mean in the covariates, and is the same
+#' model as fitted by `ivpoisson gmm y w (x = z1 z2), multiplicative` in Stata.
+#' Covariates are not supported by the `"tsls"` and `"tslsalt"` methods.
+#'
 #' @param formula,instruments formula specification(s) of the regression
 #' relationship and the instruments. Either \code{instruments} is missing and
 #' \code{formula} has three parts as in \code{y ~ x1 + x2 | z1 + z2 + z3}
@@ -44,19 +51,22 @@
 #'    Clarke et al. (2015). For binary \eqn{Y} and \eqn{X} this uses \eqn{Y*X}
 #'    as the outcome and \eqn{Y*(1-X)} as the exposure.
 #' @param t0 A vector of starting values for the gmm optimizer. This should
-#' have length equal to the number of exposures plus 1.
+#' have length equal to the number of exposures and covariates plus 1.
 #' @param ... further arguments passed to or from other methods.
 #' @return An object of class `"msmm"`. A list with the following items:
 #'
 #' \item{fit}{The object from either a [gmm::gmm()] or [ivreg::ivreg()] fit.}
-#' \item{crrci}{The causal risk ratio/s and its corresponding 95% confidence
-#' interval limits.}
+#' \item{crrci}{The causal risk ratio/s of the exposure/s and the corresponding
+#' 95% confidence interval limits.}
 #' \item{estmethod}{The specified `estmethod`.}
+#' \item{covariates}{A character vector of the names of any covariates
+#' (variables in both the exposure and instrument parts of the formula).}
 #'
 #' If `estmethod` is `"tsls"`, `"gmm"`, or `"gmmalt"`:
 #'
 #' \item{ey0ci}{The estimate of the treatment/exposure free potential outcome and
-#' its 95% confidence interval limits.}
+#' its 95% confidence interval limits. If there are covariates this is the
+#' estimate when the covariates take the value 0.}
 #'
 #' If `estmethod` is `"tsls"` or `"tslsalt"`:
 #'
@@ -140,6 +150,17 @@
 #' dat2 <- data.frame(G1, G2, G3, X, Y)
 #' fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
 #' summary(fit2)
+#'
+#' # Adjusting for a covariate
+#' set.seed(123456)
+#' C    <- runif(n)
+#' pX   <- plogis(0.7*G1 + G2 - G3 + U + C)
+#' X    <- rbinom(n, 1, pX)
+#' pY   <- plogis(-2 + psi0*X + U + C)
+#' Y    <- rbinom(n, 1, pY)
+#' dat3 <- data.frame(G1, G2, G3, X, Y, C)
+#' fit3 <- msmm(Y ~ X + C | G1 + G2 + G3 + C, data = dat3)
+#' fit3
 #' @export
 msmm <- function(
   formula,
@@ -224,7 +245,22 @@ msmm <- function(
   xnames <- colnames(X)
   xnames <- xnames[-1]
 
+  # covariates are the variables in both the exposure and instrument parts
+  # of the formula
+  covariatenames <- intersect(xnames, colnames(Z)[-1])
+  exposurenames <- setdiff(xnames, covariatenames)
+  if (length(exposurenames) == 0) {
+    stop(
+      "At least one exposure (a variable in the exposure part but not ",
+      "the instrument part of the formula) must be specified."
+    )
+  }
+
   estmethod <- match.arg(estmethod, c("gmm", "gmmalt", "tsls", "tslsalt"))
+
+  if (estmethod %in% c("tsls", "tslsalt") && length(covariatenames) > 0) {
+    stop("Covariates are not supported with tsls and tslsalt.")
+  }
 
   # check y greater than or equal to 0
   if (any(Y < 0)) {
@@ -284,6 +320,13 @@ msmm <- function(
   if (estmethod == "tslsalt") {
     output <- msmm_tsls_alt(x = X[, -1], y = Y, z = Z[, -1])
   }
+
+  # the causal risk ratios are only for the exposures, not the covariates
+  # (covariates are not allowed with the tsls methods)
+  if (length(covariatenames) > 0) {
+    output$crrci <- output$crrci[exposurenames, , drop = FALSE]
+  }
+  output$covariates <- covariatenames
 
   class(output) <- append("msmm", class(output))
   output
@@ -397,7 +440,13 @@ msmm_gmm <- function(x, y, z, xnames, t0) {
   }
 
   # gmm fit
-  fit <- gmm::gmm(msmmMoments, x = dat, t0 = t0, vcov = "iid")
+  fit <- gmm::gmm(
+    msmmMoments,
+    x = dat,
+    t0 = t0,
+    vcov = "iid",
+    control = list(reltol = .Machine$double.eps, maxit = 1E4)
+  )
 
   if (fit$algoInfo$convergence != 0) {
     warning(
@@ -450,7 +499,13 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
   }
 
   # gmm fit
-  fit <- gmm::gmm(msmmAltMoments, x = dat, t0 = t0, vcov = "iid")
+  fit <- gmm::gmm(
+    msmmAltMoments,
+    x = dat,
+    t0 = t0,
+    vcov = "iid",
+    control = list(reltol = .Machine$double.eps, maxit = 1E4)
+  )
 
   if (fit$algoInfo$convergence != 0) {
     warning(
@@ -525,13 +580,21 @@ print.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
     gmm::print.gmm(x$fit)
   }
 
+  hascovs <- length(x$covariates) > 0
   if (x$estmethod != "tslsalt") {
-    cat("\nE[Y(0)] with 95% CI:\n")
+    if (hascovs) {
+      cat("\nE[Y(0)] when the covariates are 0 with 95% CI:\n")
+    } else {
+      cat("\nE[Y(0)] with 95% CI:\n")
+    }
     print(x$ey0ci, digits = digits, ...)
   }
 
   cat("\nCausal risk ratio with 95% CI:\n")
   print(x$crrci, digits = digits, ...)
+  if (hascovs) {
+    cat("\nAdjusted for:", paste(x$covariates, collapse = ", "), "\n")
+  }
 
   cat("\n")
   invisible(x)
@@ -561,13 +624,21 @@ print.summary.msmm <- function(
     gmm::print.summary.gmm(x$smry)
   }
 
+  hascovs <- length(x$object$covariates) > 0
   if (x$object$estmethod != "tslsalt") {
-    cat("\nE[Y(0)] with 95% CI:\n")
+    if (hascovs) {
+      cat("\nE[Y(0)] when the covariates are 0 with 95% CI:\n")
+    } else {
+      cat("\nE[Y(0)] with 95% CI:\n")
+    }
     print(x$object$ey0ci, digits = digits, ...)
   }
 
   cat("\nCausal risk ratio with 95% CI:\n")
   print(x$object$crrci, digits = digits, ...)
+  if (hascovs) {
+    cat("\nAdjusted for:", paste(x$object$covariates, collapse = ", "), "\n")
+  }
 
   cat("\n")
   invisible(x)

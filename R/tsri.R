@@ -15,8 +15,8 @@
 #' on its estimates similar to that described by
 #' Clarke et al. (2015). Terza (2017) described an alternative approach.
 #'
-#' @inheritParams msmm
 #' @inheritParams tsps
+#' @inheritParams msmm
 #' @return
 #' An object of class `"tsri"` with the following elements
 #' \describe{
@@ -183,7 +183,6 @@ tsri <- function(
   tsri_env$xnames <- xnames[!(xnames %in% covariatenames)]
   tsri_env$znames <- znames[!(znames %in% covariatenames)]
   tsri_env$covariatenames <- covariatenames
-  tsri_env$ncovs <- length(covariatenames)
 
   # check for only 1 exposure
   if (length(tsri_env$xnames) != 1) {
@@ -224,12 +223,16 @@ tsri <- function(
         family = stats::poisson(link = "log")
       )
     } else if (link == "logmult") {
-      Ystar <- Y
-      Ystar[Y == 0] <- 0.001
+      # solve the second stage estimating equations exactly, starting from
+      # the (quasi-)Poisson regression estimates
       stage2 <- stats::glm(
-        Ystar ~ Xexposure + res,
-        family = stats::Gamma(link = "log"),
-        control = list(maxit = 1E5)
+        Y ~ Xexposure + res,
+        family = stats::quasipoisson(link = "log")
+      )
+      stage2$coefficients <- logmult_coef(
+        Y,
+        stats::model.matrix(stage2),
+        stats::coef(stage2)
       )
     } else if (link == "logit") {
       stage2 <- stats::glm(
@@ -238,14 +241,23 @@ tsri <- function(
       )
     }
     t0 <- c(t0, stats::coef(stage2))
-
-    if (!tsri_env$anycovs) {
-      xindex <- length(t0) - 1
-    } else {
-      xindex <- length(t0) - 1 - tsri_env$ncovs
-    }
-    names(t0)[xindex] <- tsri_env$xnames
   }
+
+  # label the parameters, also when the user has specified t0
+  parnames <- c(
+    paste0(
+      "stage1:",
+      c("(Intercept)", tsri_env$znames, tsri_env$covariatenames)
+    ),
+    "(Intercept)",
+    tsri_env$xnames,
+    "stage1:residuals",
+    tsri_env$covariatenames
+  )
+  if (length(t0) != length(parnames)) {
+    stop("t0 must have length ", length(parnames), ".")
+  }
+  names(t0) <- parnames
 
   Xtopass <- as.data.frame(X[, tsri_env$xnames])
   colnames(Xtopass) <- tsri_env$xnames
@@ -280,19 +292,12 @@ tsri <- function(
     }
 
     # gmm fit (tsriMoments reads the link function from tsri_env)
-    if (link == "logmult") {
-      fit <- gmm::gmm(
-        tsriMoments,
-        x = dat,
-        t0 = t0,
-        vcov = "iid",
-        itermax = 1E7
-      )
-    } else {
-      fit <- gmm::gmm(tsriMoments, x = dat, t0 = t0, vcov = "iid")
-    }
+    fit <- gmm::gmm(tsriMoments, x = dat, t0 = t0, vcov = "iid")
 
-    if (fit$algoInfo$convergence != 0) {
+    # the model is exactly identified, so the minimum of the gmm objective
+    # function is 0; the optimizer can report non-convergence when it has
+    # reached this minimum but cannot further shrink its simplex
+    if (fit$algoInfo$convergence != 0 && fit$objective > 1e-10) {
       warning(
         "The GMM fit has not converged, perhaps try different initial parameter values"
       )
@@ -410,20 +415,7 @@ print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\nEstimates with 95% CI limits:\n")
   print(x$estci, digits = digits, ...)
 
-  # the second stage rows cannot be located if the coefficients are
-  # unnamed, e.g. from a user specified unnamed t0
-  rowstart <- which(rownames(x$estci) == "(Intercept)")
-  rowstop <- nrow(x$estci)
-  if (
-    length(rowstart) == 1 && x$link %in% c("logadd", "logmult", "logit")
-  ) {
-    parname <- "Causal odds ratio"
-    if (x$link %in% c("logadd", "logmult")) {
-      parname <- "Causal risk ratio"
-    }
-    cat("\n", parname, " with 95% CI limits:\n", sep = "")
-    print(exp(x$estci[rowstart:rowstop, ]), digits = digits, ...)
-  }
+  print_causal_ratio(x$estci, x$link, digits = digits, ...)
 
   cat("\n")
   invisible(x)
@@ -442,21 +434,7 @@ print.summary.tsri <- function(
   cat("\nEstimates with 95% CI limits:\n")
   print(x$object$estci, digits = digits, ...)
 
-  # the second stage rows cannot be located if the coefficients are
-  # unnamed, e.g. from a user specified unnamed t0
-  rowstart <- which(rownames(x$object$estci) == "(Intercept)")
-  rowstop <- nrow(x$object$estci)
-  if (
-    length(rowstart) == 1 &&
-      x$object$link %in% c("logadd", "logmult", "logit")
-  ) {
-    parname <- "Causal odds ratio"
-    if (x$object$link %in% c("logadd", "logmult")) {
-      parname <- "Causal risk ratio"
-    }
-    cat("\n", parname, " with 95% CI limits:\n", sep = "")
-    print(exp(x$object$estci[rowstart:rowstop, ]), digits = digits, ...)
-  }
+  print_causal_ratio(x$object$estci, x$object$link, digits = digits, ...)
 
   cat("\n")
   invisible(x)

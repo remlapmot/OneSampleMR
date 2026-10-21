@@ -54,7 +54,7 @@ as the outcome and \eqn{Y*(1-X)} as the exposure.
 }}
 
 \item{t0}{A vector of starting values for the gmm optimizer. This should
-have length equal to the number of exposures plus 1.}
+have length equal to the number of exposures and covariates plus 1.}
 
 \item{...}{further arguments passed to or from other methods.}
 }
@@ -62,14 +62,17 @@ have length equal to the number of exposures plus 1.}
 An object of class \code{"msmm"}. A list with the following items:
 
 \item{fit}{The object from either a \code{\link[gmm:gmm]{gmm::gmm()}} or \code{\link[ivreg:ivreg]{ivreg::ivreg()}} fit.}
-\item{crrci}{The causal risk ratio/s and its corresponding 95\% confidence
-interval limits.}
+\item{crrci}{The causal risk ratio/s of the exposure/s and the corresponding
+95\% confidence interval limits.}
 \item{estmethod}{The specified \code{estmethod}.}
+\item{covariates}{A character vector of the names of any covariates
+(variables in both the exposure and instrument parts of the formula).}
 
 If \code{estmethod} is \code{"tsls"}, \code{"gmm"}, or \code{"gmmalt"}:
 
 \item{ey0ci}{The estimate of the treatment/exposure free potential outcome and
-its 95\% confidence interval limits.}
+its 95\% confidence interval limits. If there are covariates this is the
+estimate when the covariates take the value 0.}
 
 If \code{estmethod} is \code{"tsls"} or \code{"tslsalt"}:
 
@@ -91,6 +94,13 @@ then discussed in several articles by Windmeijer (1997, 2002) and Cameron
 and Trivedi (2013). This was implemented in the user-written Stata command \code{ivpois}
 (Nichols, 2007) and then implemented in official Stata in the \code{ivpoisson}
 command (StataCorp., 2013).
+
+Covariates are adjusted for by including them in both the exposure and the
+instrument parts of the formula, as in \code{y ~ x + w | z1 + z2 + w}, in the same
+way as for \code{\link[ivreg:ivreg]{ivreg::ivreg()}}. This corresponds to a log-linear model for the
+exposure-free potential outcome mean in the covariates, and is the same
+model as fitted by \verb{ivpoisson gmm y w (x = z1 z2), multiplicative} in Stata.
+Covariates are not supported by the \code{"tsls"} and \code{"tslsalt"} methods.
 }
 \examples{
 # Single instrument example
@@ -121,6 +131,17 @@ Y    <- rbinom(n, 1, pY)
 dat2 <- data.frame(G1, G2, G3, X, Y)
 fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
 summary(fit2)
+
+# Adjusting for a covariate
+set.seed(123456)
+C    <- runif(n)
+pX   <- plogis(0.7*G1 + G2 - G3 + U + C)
+X    <- rbinom(n, 1, pX)
+pY   <- plogis(-2 + psi0*X + U + C)
+Y    <- rbinom(n, 1, pY)
+dat3 <- data.frame(G1, G2, G3, X, Y, C)
+fit3 <- msmm(Y ~ X + C | G1 + G2 + G3 + C, data = dat3)
+fit3
 }
 \references{
 Cameron AC, Trivedi PK. Regression analysis of count data. 2nd ed. 2013.

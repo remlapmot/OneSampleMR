@@ -11,6 +11,11 @@
 #' on its estimates similar to the approach described in Clarke et al. (2015).
 #'
 #' @inheritParams msmm
+#' @param t0 A vector of starting values for the gmm optimizer. This should
+#'   have length equal to the number of first stage parameters (the intercept,
+#'   the instruments, and any covariates) plus the number of second stage
+#'   parameters. By default the starting values are the estimates from fitting
+#'   the two stages sequentially.
 #' @param link character; one of `"identity"` (the default), `"logadd"`, `"logmult"`, `"logit"`.
 #'  This is the link function for the second stage model. `"identity"` corresponds to linear
 #'  regression; `"logadd"` is log-additive and corresponds to Poisson / log-binomial regression;
@@ -206,18 +211,37 @@ tsps <- function(
     } else if (link == "logadd") {
       stage2 <- stats::glm(Y ~ xhat, family = stats::poisson(link = "log"))
     } else if (link == "logmult") {
-      Ystar <- Y
-      Ystar[Y == 0] <- 0.001
+      # solve the second stage estimating equations exactly, starting from
+      # the (quasi-)Poisson regression estimates
       stage2 <- stats::glm(
-        Ystar ~ xhat,
-        family = stats::Gamma(link = "log"),
-        control = list(maxit = 1E5)
+        Y ~ xhat,
+        family = stats::quasipoisson(link = "log")
+      )
+      stage2$coefficients <- logmult_coef(
+        Y,
+        stats::model.matrix(stage2),
+        stats::coef(stage2)
       )
     } else if (link == "logit") {
       stage2 <- stats::glm(Y ~ xhat, family = stats::binomial(link = "logit"))
     }
     t0 <- c(t0, stats::coef(stage2))
   }
+
+  # label the parameters, also when the user has specified t0
+  parnames <- c(
+    paste0(
+      "stage1:",
+      c("(Intercept)", tsps_env$znames, tsps_env$covariatenames)
+    ),
+    "(Intercept)",
+    tsps_env$xnames,
+    tsps_env$covariatenames
+  )
+  if (length(t0) != length(parnames)) {
+    stop("t0 must have length ", length(parnames), ".")
+  }
+  names(t0) <- parnames
 
   Xtopass <- as.data.frame(X[, tsps_env$xnames])
   colnames(Xtopass) <- tsps_env$xnames
@@ -253,19 +277,12 @@ tsps <- function(
     }
 
     # gmm fit (tspsMoments reads the link function from tsps_env)
-    if (link == "logmult") {
-      fit <- gmm::gmm(
-        tspsMoments,
-        x = dat,
-        t0 = t0,
-        vcov = "iid",
-        itermax = 1E7
-      )
-    } else {
-      fit <- gmm::gmm(tspsMoments, x = dat, t0 = t0, vcov = "iid")
-    }
+    fit <- gmm::gmm(tspsMoments, x = dat, t0 = t0, vcov = "iid")
 
-    if (fit$algoInfo$convergence != 0) {
+    # the model is exactly identified, so the minimum of the gmm objective
+    # function is 0; the optimizer can report non-convergence when it has
+    # reached this minimum but cannot further shrink its simplex
+    if (fit$algoInfo$convergence != 0 && fit$objective > 1e-10) {
       warning(
         "The GMM fit has not converged, perhaps try different initial parameter values"
       )
@@ -380,20 +397,7 @@ print.tsps <- function(x, digits = max(3, getOption("digits") - 3), ...) {
   cat("\nEstimates with 95% CI limits:\n")
   print(x$estci, digits = digits, ...)
 
-  # the second stage rows cannot be located if the coefficients are
-  # unnamed, e.g. from a user specified unnamed t0
-  rowstart <- which(rownames(x$estci) == "(Intercept)")
-  rowstop <- nrow(x$estci)
-  if (
-    length(rowstart) == 1 && x$link %in% c("logadd", "logmult", "logit")
-  ) {
-    parname <- "Causal odds ratio"
-    if (x$link %in% c("logadd", "logmult")) {
-      parname <- "Causal risk ratio"
-    }
-    cat("\n", parname, " with 95% CI limits:\n", sep = "")
-    print(exp(x$estci[rowstart:rowstop, ]), digits = digits, ...)
-  }
+  print_causal_ratio(x$estci, x$link, digits = digits, ...)
 
   cat("\n")
   invisible(x)
@@ -412,21 +416,7 @@ print.summary.tsps <- function(
   cat("\nEstimates with 95% CI limits:\n")
   print(x$object$estci, digits = digits, ...)
 
-  # the second stage rows cannot be located if the coefficients are
-  # unnamed, e.g. from a user specified unnamed t0
-  rowstart <- which(rownames(x$object$estci) == "(Intercept)")
-  rowstop <- nrow(x$object$estci)
-  if (
-    length(rowstart) == 1 &&
-      x$object$link %in% c("logadd", "logmult", "logit")
-  ) {
-    parname <- "Causal odds ratio"
-    if (x$object$link %in% c("logadd", "logmult")) {
-      parname <- "Causal risk ratio"
-    }
-    cat("\n", parname, " with 95% CI limits:\n", sep = "")
-    print(exp(x$object$estci[rowstart:rowstop, ]), digits = digits, ...)
-  }
+  print_causal_ratio(x$object$estci, x$object$link, digits = digits, ...)
 
   cat("\n")
   invisible(x)

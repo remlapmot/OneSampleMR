@@ -1,15 +1,17 @@
 bibentry(
   bibtype = "Manual",
   key = "onesamplemr",
-  title = "{OneSampleMR: One Sample Mendelian Randomization and Instrumental Variable
-Analyses}",
+  title = "{OneSampleMR}: One Sample {M}endelian Randomization and Instrumental Variable Analyses",
   author = c(
     person("Tom", "Palmer"),
     person("Wes", "Spiller"),
-    person("Eleanor", "Sanderson")
+    person("Eleanor", "Sanderson"),
+    person("Nicolai", "Vitt")
   ),
-  year = "2023",
+  year = "2026",
+  note = sprintf("R package version %s", meta$Version),
   organization = "MRC Integrative Epidemiology Unit, University of Bristol",
   address = "Bristol, UK",
-  url = "https://remlapmot.github.io/OneSampleMR/",
+  doi = "10.32614/CRAN.package.OneSampleMR",
+  url = "https://remlapmot.github.io/OneSampleMR/"
 )

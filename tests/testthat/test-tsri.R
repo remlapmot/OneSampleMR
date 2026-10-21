@@ -327,6 +327,86 @@ test_that("Multiple instrument example with covariates - logmult link", {
   )
 })
 
+test_that("logmult link converges to the exact solution for a binary outcome", {
+  skip_on_cran()
+
+  expect_no_warning(
+    fit <- tsri(
+      Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+      data = dat,
+      link = "logmult"
+    )
+  )
+
+  # the second stage estimating equations solved directly
+  stage1 <- lm(X ~ G1 + G2 + G3 + C1 + C2, data = dat)
+  r <- cbind(1, dat$X, residuals(stage1), dat$C1, dat$C2)
+  b <- OneSampleMR:::logmult_coef(dat$Y, r, rep(0, ncol(r)))
+  expect_equal(
+    unname(fit$estci[-(1:6), 1]),
+    b,
+    tolerance = 1e-6
+  )
+  expect_equal(
+    colSums(r * as.vector(dat$Y * exp(-r %*% b) - 1)),
+    rep(0, ncol(r)),
+    tolerance = 1e-8
+  )
+})
+
+test_that("Parameters are labelled by stage and variable name", {
+  skip_on_cran()
+
+  labels <- c(
+    "stage1:(Intercept)", "stage1:G1", "stage1:G2", "stage1:G3",
+    "stage1:C1", "stage1:C2",
+    "(Intercept)", "X", "stage1:residuals", "C1", "C2"
+  )
+  fit <- tsri(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat)
+  expect_identical(rownames(fit$estci), labels)
+
+  # the same labels are used when the user specifies unnamed t0
+  fitt0 <- tsri(
+    Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+    data = dat,
+    t0 = unname(fit$estci[, 1])
+  )
+  expect_identical(rownames(fitt0$estci), labels)
+
+  expect_error(
+    tsri(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat, t0 = c(0, 0)),
+    "t0 must have length 11"
+  )
+})
+
+test_that("Only the exposure parameter is exponentiated in the output", {
+  skip_on_cran()
+
+  # the rows of the causal ratio table, which follow its heading and column
+  # names and end before the trailing blank line
+  causal_rows <- function(out) {
+    start <- grep("^Causal (risk|odds) ratio", out)
+    out[(start + 2):(length(out) - 1)]
+  }
+
+  for (link in c("logadd", "logmult", "logit")) {
+    fit <- tsri(
+      Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2,
+      data = dat,
+      link = link
+    )
+    rows <- causal_rows(capture.output(print(fit)))
+    expect_length(rows, 1)
+    expect_match(rows, "^X ")
+    rows <- causal_rows(capture.output(print(summary(fit))))
+    expect_length(rows, 1)
+    expect_match(rows, "^X ")
+  }
+
+  fit <- tsri(Y ~ X + C1 + C2 | G1 + G2 + G3 + C1 + C2, data = dat)
+  expect_no_match(capture.output(print(fit)), "^Causal")
+})
+
 test_that("Multiple instrument example with covariates - logit link", {
   skip_on_cran()
 
