@@ -1,3 +1,7 @@
+# OneSampleMR (development version)
+
+* Use `wooldridge::mroz` instead of downloading *mroz.dta* from `fmwww.bc.edu` in F-statistic vignette and tests
+
 # OneSampleMR v0.1.9
 
 * New function `lsmm()` fits the double logistic structural mean model (LSMM) of Vansteelandt and Goetghebeur (2003), which estimates a causal odds ratio, by two-step GMM with multiple instruments as described by Clarke et al. (2015). It has `print()` and `summary()` methods, the summary includes the Hansen J-test of the overidentifying restrictions, and covariates are handled as in `msmm()`. It is the same estimator as the `ivlsmm` command in the Stata package ivonesamplemr, and its estimates agree with `ivlsmm`.
