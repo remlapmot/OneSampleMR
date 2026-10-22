@@ -127,16 +127,14 @@ test_that("Check approx. equivalence with lfe package", {
 
 
 # Stata ivreg2 example
-if (!testthat:::on_cran()) {
-  url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
-  dat <- haven::read_dta(url)
+if (requireNamespace("wooldridge", quietly = TRUE)) {
+  dat <- wooldridge::mroz
 }
 
 test_that("Compare with Stata ivreg2 output", {
   skip_on_cran()
-  skip_if_not_installed("haven")
+  skip_if_not_installed("wooldridge")
   skip_if_not_installed("lfe")
-  library(haven)
   library(ivreg)
   library(lfe)
   mod <- ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
@@ -1158,9 +1156,8 @@ test_that("Test fsw() when exposure is binary but numeric", {
 
 test_that("AER::ivreg fsw matches Stata ivreg2 output", {
   skip_on_cran()
-  skip_if_not_installed("haven")
+  skip_if_not_installed("wooldridge")
   skip_if_not_installed("AER")
-  library(haven)
   library(AER)
   mod <- AER::ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
   condf <- fsw(mod)
@@ -1172,9 +1169,8 @@ test_that("AER::ivreg fsw matches Stata ivreg2 output", {
 
 test_that("estimatr::iv_robust fsw matches Stata ivreg2 output", {
   skip_on_cran()
-  skip_if_not_installed("haven")
+  skip_if_not_installed("wooldridge")
   skip_if_not_installed("estimatr")
-  library(haven)
   library(estimatr)
   mod <- estimatr::iv_robust(
     lwage ~ educ + exper | age + kidslt6 + kidsge6,
@@ -1190,9 +1186,8 @@ test_that("estimatr::iv_robust fsw matches Stata ivreg2 output", {
 
 test_that("fixest::feols fsw matches Stata ivreg2 output", {
   skip_on_cran()
-  skip_if_not_installed("haven")
+  skip_if_not_installed("wooldridge")
   skip_if_not_installed("fixest")
-  library(haven)
   library(fixest)
   mod <- fixest::feols(
     lwage ~ 1 | educ + exper ~ age + kidslt6 + kidsge6,

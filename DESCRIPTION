@@ -44,7 +44,8 @@ Suggests:
     knitr,
     lfe,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    wooldridge
 VignetteBuilder:
     knitr
 Config/roxygen2/markdown: TRUE

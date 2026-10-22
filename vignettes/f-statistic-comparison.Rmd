@@ -10,7 +10,7 @@ vignette: |
 ```{r, include=FALSE}
 # Only run code chunks if Suggests packages available
 suggestsavailable <-
-  sapply(c("lfe", "haven", "AER", "estimatr", "fixest"), requireNamespace, quietly = TRUE)
+  sapply(c("lfe", "wooldridge", "AER", "estimatr", "fixest"), requireNamespace, quietly = TRUE)
 evalcond <- all(suggestsavailable)
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -20,7 +20,6 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(haven)
 library(ivreg)
 library(AER)
 library(estimatr)
@@ -32,8 +31,7 @@ library(OneSampleMR)
 ## Run fsw() on ivreg() model object
 
 ```{r}
-url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
-dat <- haven::read_dta(url)
+dat <- wooldridge::mroz
 mod <- ivreg::ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
 summary(mod)
 fsw(mod)
