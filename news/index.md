@@ -2,6 +2,8 @@
 
 ## OneSampleMR v0.1.9
 
+CRAN release: 2026-10-21
+
 - New function
   [`lsmm()`](https://remlapmot.github.io/OneSampleMR/reference/lsmm.md)
   fits the double logistic structural mean model (LSMM) of Vansteelandt
