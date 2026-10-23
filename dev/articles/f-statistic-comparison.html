@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">OneSampleMR</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.8.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.9.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,8 +78,7 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://haven.tidyverse.org" class="external-link">haven</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://zeileis.github.io/ivreg/" class="external-link">ivreg</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://zeileis.github.io/ivreg/" class="external-link">ivreg</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Registered S3 methods overwritten by 'ivreg':</span></span>
 <span><span class="co">#&gt;   method              from</span></span>
 <span><span class="co">#&gt;   anova.ivreg         AER </span></span>
@@ -126,8 +125,7 @@
 <h2 id="run-fsw-on-ivreg-model-object">Run fsw() on ivreg() model object<a class="anchor" aria-label="anchor" href="#run-fsw-on-ivreg-model-object"></a>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"</span></span>
-<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">haven</span><span class="fu">::</span><span class="fu"><a href="https://haven.tidyverse.org/reference/read_dta.html" class="external-link">read_dta</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">wooldridge</span><span class="fu">::</span><span class="va"><a href="https://justinmshea.github.io/wooldridge/reference/mroz.html" class="external-link">mroz</a></span></span>
 <span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu">ivreg</span><span class="fu">::</span><span class="fu"><a href="https://zeileis.github.io/ivreg/reference/ivreg.html" class="external-link">ivreg</a></span><span class="op">(</span><span class="va">lwage</span> <span class="op">~</span> <span class="va">educ</span> <span class="op">+</span> <span class="va">exper</span> <span class="op">|</span> <span class="va">age</span> <span class="op">+</span> <span class="va">kidslt6</span> <span class="op">+</span> <span class="va">kidsge6</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">mod</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -247,14 +245,14 @@
 <span><span class="co">#&gt;              Estimate Std. Error   t value Pr(&gt;|t|)    </span></span>
 <span><span class="co">#&gt; (Intercept) -0.360182   1.033416 -0.348536 0.727611    </span></span>
 <span><span class="co">#&gt; fit_educ     0.105836   0.080982  1.306912 0.191949    </span></span>
-<span><span class="co">#&gt; fit_exper    0.016153   0.007595  2.126850 0.034008 *  </span></span>
+<span><span class="co">#&gt; fit_exper    0.016153   0.007595  2.126849 0.034008 *  </span></span>
 <span><span class="co">#&gt; ---</span></span>
 <span><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
 <span><span class="co">#&gt; RMSE: 0.666683   Adj. R2: 0.007512</span></span>
 <span><span class="co">#&gt; F-test (1st stage), educ : stat =  4.46617, p = 0.00421 , on 3 and 424 DoF.</span></span>
 <span><span class="co">#&gt; F-test (1st stage), exper: stat = 55.04436, p &lt; 2.2e-16 , on 3 and 424 DoF.</span></span>
 <span><span class="co">#&gt;                Wu-Hausman: stat =  0.00392, p = 0.996088, on 2 and 423 DoF.</span></span>
-<span><span class="co">#&gt;                    Sargan: stat =  1.16824, p = 0.279764, on 1 DoF.</span></span>
+<span><span class="co">#&gt;                    Sargan: stat =  1.16823, p = 0.279764, on 1 DoF.</span></span>
 <span><span class="fu"><a href="../reference/fsw.html">fsw</a></span><span class="op">(</span><span class="va">mod4</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Model sample size:  428 </span></span>
@@ -309,7 +307,7 @@
 <span><span class="co">#&gt; [1] 2</span></span>
 <span><span class="co">#&gt; attr(,"quantiles")</span></span>
 <span><span class="co">#&gt;                2.5%      97.5%</span></span>
-<span><span class="co">#&gt; educ  -0.0808003007 0.25850072</span></span>
+<span><span class="co">#&gt; educ  -0.0808003207 0.25850067</span></span>
 <span><span class="co">#&gt; exper  0.0008784942 0.03091819</span></span>
 <span><span class="co">#&gt; attr(,"quantiles")attr(,"q")</span></span>
 <span><span class="co">#&gt; [1] 0.025 0.975</span></span>

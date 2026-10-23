@@ -56,7 +56,10 @@ tsri(
 - t0:
 
   A vector of starting values for the gmm optimizer. This should have
-  length equal to the number of exposures plus 1.
+  length equal to the number of first stage parameters (the intercept,
+  the instruments, and any covariates) plus the number of second stage
+  parameters. By default the starting values are the estimates from
+  fitting the two stages sequentially.
 
 - link:
 
@@ -160,15 +163,15 @@ summary(tsrilogitfit)
 #> 
 #> Coefficients:
 #>                     Estimate    Std. Error  t value     Pr(>|t|)  
-#> Zstage1(Intercept)  1.7647e-01  1.7169e-02  1.0278e+01  8.8297e-25
-#> Zstage1Z            5.4740e-01  2.6249e-02  2.0854e+01  1.4138e-96
+#> stage1:(Intercept)  1.7647e-01  1.7169e-02  1.0278e+01  8.8297e-25
+#> stage1:Z            5.4740e-01  2.6249e-02  2.0854e+01  1.4138e-96
 #> (Intercept)         1.0068e+00  1.4482e-01  6.9520e+00  3.6002e-12
 #> X                   6.7047e-01  2.8436e-01  2.3578e+00  1.8382e-02
-#> res                 4.4657e-01  3.4141e-01  1.3080e+00  1.9086e-01
+#> stage1:residuals    4.4657e-01  3.4141e-01  1.3080e+00  1.9086e-01
 #> 
 #> J-Test: degrees of freedom is 0 
-#>                 J-test                P-value             
-#> Test E(g)=0:    4.28905429706042e-23  *******             
+#>                 J-test               P-value            
+#> Test E(g)=0:    4.2942179555234e-23  *******            
 #> 
 #> #############
 #> Information related to the numerical optimization
@@ -178,16 +181,14 @@ summary(tsrilogitfit)
 #> 
 #> Estimates with 95% CI limits:
 #>                    Estimate   0.025  0.975
-#> Zstage1(Intercept)   0.1765  0.1428 0.2101
-#> Zstage1Z             0.5474  0.4959 0.5988
+#> stage1:(Intercept)   0.1765  0.1428 0.2101
+#> stage1:Z             0.5474  0.4959 0.5988
 #> (Intercept)          1.0068  0.7229 1.2906
 #> X                    0.6705  0.1131 1.2278
-#> res                  0.4466 -0.2226 1.1157
+#> stage1:residuals     0.4466 -0.2226 1.1157
 #> 
 #> Causal odds ratio with 95% CI limits:
-#>             Estimate  0.025 0.975
-#> (Intercept)    2.737 2.0605 3.635
-#> X              1.955 1.1198 3.414
-#> res            1.563 0.8005 3.052
+#>   Estimate 0.025 0.975
+#> X    1.955  1.12 3.414
 #> 
 ```

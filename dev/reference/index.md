@@ -7,8 +7,14 @@
 - [`fsw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
   [`print(`*`<fsw>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
   : Conditional F-statistic of Sanderson and Windmeijer (2016)
+- [`lsmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/lsmm.md)
+  : Logistic structural mean model
 - [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md)
   : Multiplicative structural mean model
+- [`summary(`*`<lsmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.lsmm.md)
+  [`print(`*`<lsmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.lsmm.md)
+  [`print(`*`<summary.lsmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.lsmm.md)
+  : Summarizing LSMM Fits
 - [`summary(`*`<msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.msmm.md)
   [`print(`*`<msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.msmm.md)
   [`print(`*`<summary.msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.msmm.md)

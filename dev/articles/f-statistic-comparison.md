@@ -2,7 +2,6 @@
 
 ``` r
 
-library(haven)
 library(ivreg)
 #> Registered S3 methods overwritten by 'ivreg':
 #>   method              from
@@ -52,8 +51,7 @@ library(OneSampleMR)
 
 ``` r
 
-url <- "http://fmwww.bc.edu/ec-p/data/wooldridge/mroz.dta"
-dat <- haven::read_dta(url)
+dat <- wooldridge::mroz
 mod <- ivreg::ivreg(lwage ~ educ + exper | age + kidslt6 + kidsge6, data = dat)
 summary(mod)
 #> 
@@ -176,14 +174,14 @@ summary(mod4)
 #>              Estimate Std. Error   t value Pr(>|t|)    
 #> (Intercept) -0.360182   1.033416 -0.348536 0.727611    
 #> fit_educ     0.105836   0.080982  1.306912 0.191949    
-#> fit_exper    0.016153   0.007595  2.126850 0.034008 *  
+#> fit_exper    0.016153   0.007595  2.126849 0.034008 *  
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> RMSE: 0.666683   Adj. R2: 0.007512
 #> F-test (1st stage), educ : stat =  4.46617, p = 0.00421 , on 3 and 424 DoF.
 #> F-test (1st stage), exper: stat = 55.04436, p < 2.2e-16 , on 3 and 424 DoF.
 #>                Wu-Hausman: stat =  0.00392, p = 0.996088, on 2 and 423 DoF.
-#>                    Sargan: stat =  1.16824, p = 0.279764, on 1 DoF.
+#>                    Sargan: stat =  1.16823, p = 0.279764, on 1 DoF.
 fsw(mod4)
 #> 
 #> Model sample size:  428 
@@ -239,7 +237,7 @@ condfstat(modst2, quantiles = c(0.025, 0.975))
 #> [1] 2
 #> attr(,"quantiles")
 #>                2.5%      97.5%
-#> educ  -0.0808003007 0.25850072
+#> educ  -0.0808003207 0.25850067
 #> exper  0.0008784942 0.03091819
 #> attr(,"quantiles")attr(,"q")
 #> [1] 0.025 0.975

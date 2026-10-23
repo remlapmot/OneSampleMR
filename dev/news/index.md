@@ -1,5 +1,105 @@
 # Changelog
 
+## OneSampleMR (development version)
+
+- Use
+  [`wooldridge::mroz`](https://justinmshea.github.io/wooldridge/reference/mroz.html)
+  instead of downloading *mroz.dta* from `fmwww.bc.edu` in F-statistic
+  vignette and tests
+
+## OneSampleMR v0.1.9
+
+CRAN release: 2026-10-21
+
+- New function
+  [`lsmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/lsmm.md)
+  fits the double logistic structural mean model (LSMM) of Vansteelandt
+  and Goetghebeur (2003), which estimates a causal odds ratio, by
+  two-step GMM with multiple instruments as described by Clarke et
+  al. (2015). It has [`print()`](https://rdrr.io/r/base/print.html) and
+  [`summary()`](https://rdrr.io/r/base/summary.html) methods, the
+  summary includes the Hansen J-test of the overidentifying
+  restrictions, and covariates are handled as in
+  [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md).
+  It is the same estimator as the `ivlsmm` command in the Stata package
+  ivonesamplemr, and its estimates agree with `ivlsmm`.
+
+- [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md)
+  and
+  [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md)
+  with `link = "logmult"` now converge to the solution of the estimating
+  equations. Previously the GMM optimizer often stopped at its iteration
+  limit, giving slightly inaccurate estimates and a non-convergence
+  warning. The starting values are now obtained by solving the second
+  stage estimating equations exactly by Newton-Raphson, rather than from
+  a gamma regression with zero outcomes replaced by 0.001. The estimates
+  now agree with the Stata commands `ivtsps` and `ivtsri` in the
+  ivonesamplemr package.
+
+- [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md)
+  and
+  [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md)
+  no longer give a spurious non-convergence warning when the optimizer
+  has reached the minimum of the GMM objective function (which is 0
+  because these models are exactly identified).
+
+- [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md)
+  with `estmethod = "gmm"` or `"gmmalt"` now uses a tighter convergence
+  tolerance for the Nelder-Mead optimizer
+  (`reltol = .Machine$double.eps`, `maxit = 1E4`), so that the estimates
+  converge to the minimum of the GMM objective function. Previously the
+  default tolerance could stop the optimizer early, so estimates
+  depended on the starting values and could differ in the second or
+  third decimal place from the solution of the estimating equations.
+  Estimates from exactly identified models now agree with
+  `ivtools::ivglm()` G-estimation and with Stata’s
+  `ivpoisson gmm, multiplicative`.
+
+- The parameters in the output of
+  [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md)
+  and
+  [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md)
+  are now labelled by stage and variable name. First stage parameters
+  are prefixed `stage1:`, the second stage exposure and covariate
+  parameters take their variable names (previously, e.g., `xhatxhat` and
+  `xhatcovariates` for
+  [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md)),
+  and the first stage residual in
+  [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md)
+  is labelled `stage1:residuals` (previously `resres`). The same labels
+  are used when the user specifies `t0`, and
+  [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md)
+  and
+  [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md)
+  now give a clear error message if `t0` has the wrong length. The
+  documentation of `t0` has been corrected.
+
+- The print and summary methods for
+  [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md)
+  and
+  [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md)
+  fits now only exponentiate the exposure parameter in the causal risk
+  ratio or causal odds ratio table. Previously all the second stage
+  parameters were exponentiated and presented as causal ratios,
+  including the intercept, any covariates, and, for
+  [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md),
+  the coefficient of the first stage residuals.
+
+- [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md)
+  now distinguishes covariates (variables included in both the exposure
+  and instrument parts of the formula) from exposures. The causal risk
+  ratio table (`crrci`) now only contains the exposures; previously it
+  also reported the exponentiated covariate coefficients as causal risk
+  ratios. The covariate adjusted model itself is unchanged, and is the
+  same model as fitted by Stata’s `ivpoisson gmm, multiplicative` with
+  exogenous covariates. The returned object has a new `covariates`
+  element, the print methods list the covariates adjusted for and note
+  that `E[Y(0)]` is then estimated at covariate values of 0, and
+  covariate adjustment is documented with an example in
+  [`?msmm`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md).
+  Covariates with the `"tsls"` and `"tslsalt"` methods now give a clear
+  error message.
+
 ## OneSampleMR 0.1.8
 
 CRAN release: 2026-07-08

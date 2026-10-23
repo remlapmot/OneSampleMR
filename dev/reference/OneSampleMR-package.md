@@ -7,6 +7,8 @@ implementations of; the Sanderson and Windmeijer (2016)
 conditional F-statistic, the multiplicative structural mean model Hernán
 and Robins (2006)
 [doi:10.1097/01.ede.0000222409.00878.37](https://doi.org/10.1097/01.ede.0000222409.00878.37)
+, the logistic structural mean model Vansteelandt and Goetghebeur (2003)
+[doi:10.1046/j.1369-7412.2003.00417.x](https://doi.org/10.1046/j.1369-7412.2003.00417.x)
 , and two-stage predictor substitution and two-stage residual inclusion
 estimators explained by Terza et al. (2008)
 [doi:10.1016/j.jhealeco.2007.09.009](https://doi.org/10.1016/j.jhealeco.2007.09.009)
