@@ -10,7 +10,12 @@
 
 \method{print}{msmm}(x, digits = max(3, getOption("digits") - 3), ...)
 
-\method{print}{summary.msmm}(x, digits = max(3, getOption("digits") - 3), ...)
+\method{print}{summary.msmm}(
+  x,
+  digits = max(3, getOption("digits") - 3),
+  signif.stars = getOption("show.signif.stars"),
+  ...
+)
 }
 \arguments{
 \item{object}{an object of class \code{"msmm"}.}
@@ -22,10 +27,21 @@ S3 summary and print methods for objects of class \code{msmm} and \code{summary.
 \item{x}{an object of class \code{"summary.msmm"}.}
 
 \item{digits}{the number of significant digits to use when printing.}
+
+\item{signif.stars}{logical; if \code{TRUE}, p-values are additionally
+encoded visually as significance stars.}
 }
 \value{
 \code{summary.msmm()} returns an object of class \code{"summary.msmm"}. A list with the following elements:
 
+\item{call}{The call of the fitted model.}
+\item{estmethod}{The estimation method.}
+\item{coefficients}{A matrix of the parameter estimates, their standard
+errors, Wald test statistics, and p-values.}
+\item{jtest}{For the \code{"gmm"} and \code{"gmmalt"} methods with more instruments
+than exposures and covariates, the Hansen J-statistic of the
+overidentifying restrictions, its degrees of freedom, and p-value;
+otherwise \code{NULL}.}
 \item{smry}{An object from a call to either \code{\link[gmm:summary.gmm]{gmm::summary.gmm()}} or
 \code{\link[ivreg:summary.ivreg]{ivreg::summary.ivreg()}}.}
 \item{object}{The object of class \code{msmm} passed to the function.}

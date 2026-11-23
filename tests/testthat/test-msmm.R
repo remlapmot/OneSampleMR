@@ -976,7 +976,10 @@ test_that("gmmalt method returns a complete msmm object", {
   dat <- data.frame(Z, X, Y)
   fit <- msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
   expect_s3_class(fit, "msmm")
-  expect_named(fit, c("fit", "crrci", "ey0ci", "estmethod", "covariates"))
+  expect_named(
+    fit,
+    c("fit", "crrci", "ey0ci", "estmethod", "covariates", "call", "formula")
+  )
   expect_equal(fit$estmethod, "gmmalt")
 })
 

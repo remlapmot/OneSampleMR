@@ -83,6 +83,14 @@ lsmm <- function(
 ) {
   rlang::check_dots_used()
 
+  # the call and model formula, returned for the formula() and print methods
+  cl <- match.call()
+  fml <- if (missing(instruments)) {
+    formula
+  } else {
+    Formula::as.Formula(formula, instruments)
+  }
+
   # code from beginning for ivreg::ivreg()
   ## set up model.frame() call
   if (missing(data)) {
@@ -258,7 +266,9 @@ lsmm <- function(
     fit = fit,
     corci = corci,
     ey0ci = ey0ci,
-    covariates = covariatenames
+    covariates = covariatenames,
+    call = cl,
+    formula = fml
   )
   class(output) <- "lsmm"
   output
@@ -273,10 +283,18 @@ lsmm <- function(
 #' @param x an object of class `"summary.lsmm"`.
 #' @param digits the number of significant digits to print.
 #' @param ... further arguments passed to or from other methods.
+#' @param signif.stars logical; if `TRUE`, p-values are additionally
+#' encoded visually as significance stars.
 #' @return `summary.lsmm()` returns an object of class `"summary.lsmm"`. A list
 #' with the following elements:
 #'
-#' \item{smry}{An object from a call to [gmm::summary.gmm()]}
+#' \item{call}{The call of the fitted model.}
+#' \item{coefficients}{A matrix of the parameter estimates, their standard
+#' errors, Wald z statistics, and p-values.}
+#' \item{jtest}{If there are more instruments than exposures, the Hansen
+#' J-statistic of the overidentifying restrictions, its degrees of freedom,
+#' and p-value; otherwise `NULL`.}
+#' \item{smry}{An object from a call to [gmm::summary.gmm()].}
 #' \item{object}{The object of class `"lsmm"` passed to the function.}
 #' @examples
 #' # For examples see the examples at the bottom of help('lsmm')
@@ -285,7 +303,13 @@ summary.lsmm <- function(object, ...) {
   smry <- gmm::summary.gmm(object$fit)
   # the weight matrix is not a HAC estimate, so do not report a kernel
   smry$kernel <- NULL
-  res <- list(smry = smry, object = object)
+  res <- list(
+    call = object$call,
+    coefficients = coef_table(stats::coef(object), stats::vcov(object)),
+    jtest = hansen_jtest(object$fit),
+    smry = smry,
+    object = object
+  )
   class(res) <- "summary.lsmm"
   res
 }
@@ -304,11 +328,19 @@ print.lsmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 print.summary.lsmm <- function(
   x,
   digits = max(3, getOption("digits") - 3),
+  signif.stars = getOption("show.signif.stars"),
   ...
 ) {
-  cat("\nGMM fit summary:\n")
-  gmm::print.summary.gmm(x$smry)
-  print_lsmm_results(x$object, digits = digits, ...)
+  print_call(x$call)
+  cat("\nCoefficients:\n")
+  stats::printCoefmat(
+    x$coefficients,
+    digits = digits,
+    signif.stars = signif.stars,
+    ...
+  )
+  print_jtest(x$jtest, digits = digits)
+  print_lsmm_results(x$object, digits = digits)
   invisible(x)
 }
 

@@ -178,6 +178,14 @@ msmm <- function(
 
   rlang::check_dots_used()
 
+  # the call and model formula, returned for the formula() and print methods
+  cl <- match.call()
+  fml <- if (missing(instruments)) {
+    formula
+  } else {
+    Formula::as.Formula(formula, instruments)
+  }
+
   # code from beginning for ivreg::ivreg()
   ## set up model.frame() call
   if (missing(data)) {
@@ -325,7 +333,18 @@ msmm <- function(
   if (length(covariatenames) > 0) {
     output$crrci <- output$crrci[exposurenames, , drop = FALSE]
   }
+  # the tsls methods return an unlabelled vector, so label it in the same way
+  # as for the gmm methods
+  if (estmethod %in% c("tsls", "tslsalt")) {
+    output$crrci <- matrix(
+      output$crrci,
+      nrow = 1,
+      dimnames = list(exposurenames, c("CRR", "0.025", "0.975"))
+    )
+  }
   output$covariates <- covariatenames
+  output$call <- cl
+  output$formula <- fml
 
   class(output) <- append("msmm", class(output))
   output
@@ -437,6 +456,10 @@ msmm_gmm <- function(x, y, z, xnames, t0) {
   if (is.null(t0)) {
     t0 <- rep(0, ncol(x) + 1)
   }
+  if (length(t0) != ncol(x) + 1) {
+    stop("t0 must have length ", ncol(x) + 1, ".")
+  }
+  names(t0) <- c("E[Y(0)]", xnames)
 
   # gmm fit
   fit <- gmm::gmm(
@@ -496,6 +519,10 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
   if (is.null(t0)) {
     t0 <- rep(0, ncol(x) + 1)
   }
+  if (length(t0) != ncol(x) + 1) {
+    stop("t0 must have length ", ncol(x) + 1, ".")
+  }
+  names(t0) <- c("log E[Y(0)]", xnames)
 
   # gmm fit
   fit <- gmm::gmm(
@@ -537,8 +564,18 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
 #'
 #' S3 summary and print methods for objects of class `msmm` and `summary.msmm`.
 #'
+#' @param signif.stars logical; if `TRUE`, p-values are additionally
+#' encoded visually as significance stars.
 #' @return `summary.msmm()` returns an object of class `"summary.msmm"`. A list with the following elements:
 #'
+#' \item{call}{The call of the fitted model.}
+#' \item{estmethod}{The estimation method.}
+#' \item{coefficients}{A matrix of the parameter estimates, their standard
+#' errors, Wald test statistics, and p-values.}
+#' \item{jtest}{For the `"gmm"` and `"gmmalt"` methods with more instruments
+#' than exposures and covariates, the Hansen J-statistic of the
+#' overidentifying restrictions, its degrees of freedom, and p-value;
+#' otherwise `NULL`.}
 #' \item{smry}{An object from a call to either [gmm::summary.gmm()] or
 #' [ivreg::summary.ivreg()].}
 #' \item{object}{The object of class `msmm` passed to the function.}
@@ -548,18 +585,25 @@ msmm_gmm_alt <- function(x, y, z, xnames, t0) {
 #' @export
 summary.msmm <- function(object, ...) {
   if (object$estmethod %in% c("tsls", "tslsalt")) {
-    requireNamespace("ivreg", quietly = TRUE)
     smry <- summary(object$fit)
-  }
-
-  if (object$estmethod %in% c("gmm", "gmmalt")) {
+    coefficients <- stats::coef(smry)
+    jtest <- NULL
+  } else {
     smry <- gmm::summary.gmm(object$fit)
+    coefficients <- coef_table(stats::coef(object), stats::vcov(object))
+    jtest <- hansen_jtest(object$fit)
   }
 
-  res <- list(smry = smry, object = object)
-
-  class(res) <- append(class(res), "summary.msmm")
-  return(res)
+  res <- list(
+    call = object$call,
+    estmethod = object$estmethod,
+    coefficients = coefficients,
+    jtest = jtest,
+    smry = smry,
+    object = object
+  )
+  class(res) <- "summary.msmm"
+  res
 }
 
 #' @rdname summary.msmm
@@ -604,37 +648,37 @@ print.msmm <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 print.summary.msmm <- function(
   x,
   digits = max(3, getOption("digits") - 3),
+  signif.stars = getOption("show.signif.stars"),
   ...
 ) {
-  cat("\n")
-
-  cat("Estimation method:", x$object$estmethod, "\n")
-  if (x$object$estmethod %in% c("tsls", "tslsalt")) {
-    cat("\nStage 1 summary:\n")
-    print(summary(x$object$stage1))
-
-    requireNamespace("ivreg", quietly = TRUE)
-    cat("TSLS fit summary:\n")
-    print(x$smry)
+  print_call(x$call)
+  cat("\nEstimation method:", x$estmethod, "\n")
+  if (x$estmethod %in% c("tsls", "tslsalt")) {
+    cat("\nCoefficients of the two-stage least squares fit of the transformed")
+    cat("\nvariables:\n")
+  } else {
+    cat("\nCoefficients:\n")
   }
-
-  if (x$object$estmethod %in% c("gmm", "gmmalt")) {
-    cat("\nGMM fit summary:\n")
-    gmm::print.summary.gmm(x$smry)
-  }
+  stats::printCoefmat(
+    x$coefficients,
+    digits = digits,
+    signif.stars = signif.stars,
+    ...
+  )
+  print_jtest(x$jtest, digits = digits)
 
   hascovs <- length(x$object$covariates) > 0
-  if (x$object$estmethod != "tslsalt") {
+  if (x$estmethod != "tslsalt") {
     if (hascovs) {
       cat("\nE[Y(0)] when the covariates are 0 with 95% CI:\n")
     } else {
       cat("\nE[Y(0)] with 95% CI:\n")
     }
-    print(x$object$ey0ci, digits = digits, ...)
+    print(x$object$ey0ci, digits = digits)
   }
 
   cat("\nCausal risk ratio with 95% CI:\n")
-  print(x$object$crrci, digits = digits, ...)
+  print(x$object$crrci, digits = digits)
   if (hascovs) {
     cat("\nAdjusted for:", paste(x$object$covariates, collapse = ", "), "\n")
   }

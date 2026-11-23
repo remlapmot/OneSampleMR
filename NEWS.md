@@ -6,6 +6,12 @@
 
 * Fixed the covariate adjustment example in `?msmm`, in which the covariate was generated from the same random numbers as one of the instruments, so that the fit did not converge.
 
+* New `coef()`, `vcov()`, `confint()`, `nobs()`, and `formula()` methods for the objects returned by `msmm()`, `lsmm()`, `tsps()`, and `tsri()` (see `?OneSampleMR-methods`). The fitted objects now also contain the `call` and `formula`.
+
+* The `summary()` methods for these objects now report the call, a coefficient table formatted with `printCoefmat()` with Wald z statistics and p-values, and, for overidentified GMM fits of `msmm()` and `lsmm()`, the Hansen J-test of the overidentifying restrictions. The summary objects have new `call`, `coefficients`, and (for `msmm()` and `lsmm()`) `jtest` elements.
+
+* The parameters of `msmm()` with `estmethod = "gmm"` or `"gmmalt"` are now labelled (`E[Y(0)]` or `log E[Y(0)]`, then the exposures and covariates) instead of `Theta[1]`, `Theta[2]`, ..., and `msmm()` gives a clear error message if `t0` has the wrong length. For the `"tsls"` and `"tslsalt"` methods `crrci` is now a labelled matrix, as for the GMM methods.
+
 * `tsps()` and `tsri()` are roughly twice as fast. The first stage regression is now fitted once with `.lm.fit()`, the second stage starting values are obtained with `glm.fit()` or `.lm.fit()` on the model matrices instead of by resolving formulas, and the GMM moment functions work directly on the model matrices instead of extracting columns from a data frame on every evaluation. As a result a variable named `y` can now be used in their formulas. The estimates are unchanged.
 
 * `lsmm()` is faster, because its first GMM step no longer computes an unused HAC variance matrix, and its starting values are obtained with `.lm.fit()` and `glm.fit()` on the model matrices.

@@ -3,5 +3,6 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom stats coef confint formula nobs vcov
 ## usethis namespace: end
 NULL

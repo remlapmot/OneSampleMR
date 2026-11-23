@@ -95,6 +95,14 @@ tsri <- function(
 
   rlang::check_dots_used()
 
+  # the call and model formula, returned for the formula() and print methods
+  cl <- match.call()
+  fml <- if (missing(instruments)) {
+    formula
+  } else {
+    Formula::as.Formula(formula, instruments)
+  }
+
   # code from beginning for ivreg::ivreg()
   ## set up model.frame() call
   if (missing(data)) {
@@ -278,7 +286,13 @@ tsri <- function(
   estci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)
   colnames(estci)[1] <- "Estimate"
 
-  output <- list(fit = fit, estci = estci, link = link)
+  output <- list(
+    fit = fit,
+    estci = estci,
+    link = link,
+    call = cl,
+    formula = fml
+  )
   class(output) <- append("tsri", class(output))
   output
 }
@@ -294,21 +308,30 @@ tsri <- function(
 #' @param digits the number of significant digits to use when printing.
 #' @param ... further arguments passed to or from other methods.
 #'
+#' @param signif.stars logical; if `TRUE`, p-values are additionally
+#' encoded visually as significance stars.
 #' @return `summary.tsri()` returns an object of class `"summary.tsri"`. A list with the following elements:
 #'
-#' \item{smry}{An object from a call to [gmm::summary.gmm()]}
+#' \item{call}{The call of the fitted model.}
+#' \item{link}{The second stage link function.}
+#' \item{coefficients}{A matrix of the parameter estimates, their standard
+#' errors, Wald z statistics, and p-values.}
+#' \item{smry}{An object from a call to [gmm::summary.gmm()].}
 #' \item{object}{The object of class `tsri` passed to the function.}
 #'
 #' @examples
 #' # See the examples at the bottom of help('tsri')
 #' @export
 summary.tsri <- function(object, ...) {
-  smry <- gmm::summary.gmm(object$fit)
-
-  res <- list(smry = smry, object = object)
-
-  class(res) <- append(class(res), "summary.tsri")
-  return(res)
+  res <- list(
+    call = object$call,
+    link = object$link,
+    coefficients = coef_table(stats::coef(object), stats::vcov(object)),
+    smry = gmm::summary.gmm(object$fit),
+    object = object
+  )
+  class(res) <- "summary.tsri"
+  res
 }
 
 #' @rdname summary.tsri
@@ -331,16 +354,19 @@ print.tsri <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 print.summary.tsri <- function(
   x,
   digits = max(3, getOption("digits") - 3),
+  signif.stars = getOption("show.signif.stars"),
   ...
 ) {
-  cat("\nGMM fit summary:\n")
-  gmm::print.summary.gmm(x$smry)
-
-  cat("\nEstimates with 95% CI limits:\n")
-  print(x$object$estci, digits = digits, ...)
-
-  print_causal_ratio(x$object$estci, x$object$link, digits = digits, ...)
-
+  print_call(x$call)
+  cat("\nSecond stage model link function:", x$link, "\n")
+  cat("\nCoefficients:\n")
+  stats::printCoefmat(
+    x$coefficients,
+    digits = digits,
+    signif.stars = signif.stars,
+    ...
+  )
+  print_causal_ratio(x$object$estci, x$link, digits = digits)
   cat("\n")
   invisible(x)
 }

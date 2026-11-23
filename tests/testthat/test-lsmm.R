@@ -84,7 +84,7 @@ test_that("Parameters are labelled and causal odds ratios are for exposures only
   expect_output(print(fit), "E\\[Y\\(0\\)\\] when the covariates are 0")
   smry <- summary(fit)
   expect_s3_class(smry, "summary.lsmm")
-  expect_output(print(smry), "J-Test")
+  expect_output(print(smry), "Hansen J-test")
   expect_output(print(smry), "Adjusted for: C")
 
   fit0 <- lsmm(Y ~ X | G1 + G2 + G3, data = dat)
