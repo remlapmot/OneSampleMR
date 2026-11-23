@@ -2,7 +2,7 @@
 % Please edit documentation in R/tsps.R
 \name{tsps}
 \alias{tsps}
-\title{Two-stage predictor substitution (TSPS) estimators}
+\title{Two-Stage Predictor Substitution (TSPS) Estimators}
 \usage{
 tsps(
   formula,

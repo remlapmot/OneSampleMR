@@ -1,4 +1,4 @@
-#' Logistic structural mean model
+#' Logistic Structural Mean Model
 #'
 #' Function to estimate the double logistic structural mean model (LSMM) of
 #' Vansteelandt and Goetghebeur (2003) by the generalized method of moments

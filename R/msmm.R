@@ -1,4 +1,4 @@
-#' Multiplicative structural mean model
+#' Multiplicative Structural Mean Model
 #'
 #' Function providing several methods to estimate the multiplicative
 #' structural mean model (MSMM) of Robins (1989).
@@ -152,7 +152,6 @@
 #' summary(fit2)
 #'
 #' # Adjusting for a covariate
-#' set.seed(123456)
 #' C    <- runif(n)
 #' pX   <- plogis(0.7*G1 + G2 - G3 + U + C)
 #' X    <- rbinom(n, 1, pX)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/msmm.R
 \name{msmm}
 \alias{msmm}
-\title{Multiplicative structural mean model}
+\title{Multiplicative Structural Mean Model}
 \usage{
 msmm(
   formula,
@@ -133,7 +133,6 @@ fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
 summary(fit2)
 
 # Adjusting for a covariate
-set.seed(123456)
 C    <- runif(n)
 pX   <- plogis(0.7*G1 + G2 - G3 + U + C)
 X    <- rbinom(n, 1, pX)

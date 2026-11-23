@@ -1,4 +1,4 @@
-#' Two-stage residual inclusion (TSRI) estimators
+#' Two-Stage Residual Inclusion (TSRI) Estimators
 #'
 #' An excellent description of TSRI estimators is given by Terza et al.
 #' (2008). TSRI estimators proceed by fitting a first stage model of the

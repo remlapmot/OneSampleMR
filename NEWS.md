@@ -1,5 +1,11 @@
 # OneSampleMR (development version)
 
+* The help page titles now consistently use title case.
+
+* The examples in `?fsw` now only use the suggested packages AER, estimatr, and fixest if they are installed.
+
+* Fixed the covariate adjustment example in `?msmm`, in which the covariate was generated from the same random numbers as one of the instruments, so that the fit did not converge.
+
 * Use `wooldridge::mroz` instead of downloading *mroz.dta* from `fmwww.bc.edu` in F-statistic vignette and tests
 
 # OneSampleMR v0.1.9

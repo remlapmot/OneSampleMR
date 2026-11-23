@@ -1,4 +1,4 @@
-#' Two-stage predictor substitution (TSPS) estimators
+#' Two-Stage Predictor Substitution (TSPS) Estimators
 #'
 #' Terza et al. (2008) give an excellent description of TSPS estimators.
 #' They proceed by fitting a first stage model of the

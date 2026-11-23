@@ -2,7 +2,7 @@
 % Please edit documentation in R/lsmm.R
 \name{lsmm}
 \alias{lsmm}
-\title{Logistic structural mean model}
+\title{Logistic Structural Mean Model}
 \usage{
 lsmm(
   formula,

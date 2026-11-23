@@ -2,7 +2,7 @@
 % Please edit documentation in R/tsri.R
 \name{tsri}
 \alias{tsri}
-\title{Two-stage residual inclusion (TSRI) estimators}
+\title{Two-Stage Residual Inclusion (TSRI) Estimators}
 \usage{
 tsri(
   formula,

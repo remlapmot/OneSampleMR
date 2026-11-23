@@ -1,4 +1,4 @@
-#' Conditional F-statistic of Sanderson and Windmeijer (2016)
+#' Conditional F-Statistic of Sanderson and Windmeijer (2016)
 #'
 #' `fsw` calculates the conditional F-statistic of
 #' Sanderson and Windmeijer (2016) for each endogenous variable
@@ -19,10 +19,6 @@
 #' \item{n}{the sample size used for the fitted model.}
 #' }
 #' @examples
-#' require(ivreg)
-#' require(AER)
-#' require(estimatr)
-#' require(fixest)
 #' set.seed(12345)
 #' n   <- 4000
 #' z1  <- rnorm(n)
@@ -35,14 +31,22 @@
 #' y   <- x1 + x2 + w1 + w2 + u
 #' dat <- data.frame(w1, w2, x1, x2, y, z1, z2)
 #' mod1 <- ivreg::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
-#' mod2 <- AER::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
-#' mod3 <- estimatr::iv_robust(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2,
-#'         data = dat, se_type = "classical")
-#' mod4 <- fixest::feols(y ~ w1 + w2 | x1 + x2 ~ z1 + z2, data = dat)
 #' fsw(mod1)
-#' fsw(mod2)
-#' fsw(mod3)
-#' fsw(mod4)
+#'
+#' # The same model fitted with the suggested packages AER, estimatr, and fixest
+#' if (requireNamespace("AER", quietly = TRUE)) {
+#'   mod2 <- AER::ivreg(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2, data = dat)
+#'   fsw(mod2)
+#' }
+#' if (requireNamespace("estimatr", quietly = TRUE)) {
+#'   mod3 <- estimatr::iv_robust(y ~ x1 + x2 + w1 + w2 | z1 + z2 + w1 + w2,
+#'     data = dat, se_type = "classical")
+#'   fsw(mod3)
+#' }
+#' if (requireNamespace("fixest", quietly = TRUE)) {
+#'   mod4 <- fixest::feols(y ~ w1 + w2 | x1 + x2 ~ z1 + z2, data = dat)
+#'   fsw(mod4)
+#' }
 #'
 #' @references
 #' Sanderson E and Windmeijer F. A weak instrument *F*-test in linear

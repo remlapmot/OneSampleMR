@@ -2,7 +2,7 @@
 % Please edit documentation in R/asmm.R
 \name{asmm}
 \alias{asmm}
-\title{Additive structural mean model}
+\title{Additive Structural Mean Model}
 \description{
 \code{asmm} is not a function. This helpfile is to note that the additive structural mean model (ASMM)
 is simply fit with a linear IV estimator, such as available in \code{\link[ivreg:ivreg]{ivreg::ivreg()}}.
