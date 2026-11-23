@@ -17,6 +17,7 @@ analyses, including implementations of:
   * Logistic structural mean model (Robins, 1989; [Vansteelandt and Goetghebeur, 2003](https://doi.org/10.1046/j.1369-7412.2003.00417.x))
   * Two-stage predictor substitution estimators ([Terza, 2008](https://doi.org/10.1016/j.jhealeco.2007.09.009))
   * Two-stage residual inclusion estimators ([Terza, 2008](https://doi.org/10.1016/j.jhealeco.2007.09.009))
+* Estimation within quantiles of the first stage residuals and in moving windows, to explore nonlinear exposure-outcome relationships ([Burgess et al., 2014](https://doi.org/10.1097/EDE.0000000000000161))
 
 **OneSampleMR** was included in the R Views November 2021 "Top 40" New CRAN Packages [here](https://rviews.rstudio.com/2021/12/21/november-2021-top-40-new-cran-packages/)!
 
