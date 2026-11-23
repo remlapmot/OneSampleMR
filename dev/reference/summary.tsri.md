@@ -13,7 +13,12 @@ summary(object, ...)
 print(x, digits = max(3, getOption("digits") - 3), ...)
 
 # S3 method for class 'summary.tsri'
-print(x, digits = max(3, getOption("digits") - 3), ...)
+print(
+  x,
+  digits = max(3, getOption("digits") - 3),
+  signif.stars = getOption("show.signif.stars"),
+  ...
+)
 ```
 
 ## Arguments
@@ -34,15 +39,33 @@ print(x, digits = max(3, getOption("digits") - 3), ...)
 
   the number of significant digits to use when printing.
 
+- signif.stars:
+
+  logical; if `TRUE`, p-values are additionally encoded visually as
+  significance stars.
+
 ## Value
 
 `summary.tsri()` returns an object of class `"summary.tsri"`. A list
 with the following elements:
 
+- call:
+
+  The call of the fitted model.
+
+- link:
+
+  The second stage link function.
+
+- coefficients:
+
+  A matrix of the parameter estimates, their standard errors, Wald z
+  statistics, and p-values.
+
 - smry:
 
   An object from a call to
-  [`gmm::summary.gmm()`](https://rdrr.io/pkg/gmm/man/summary.html)
+  [`gmm::summary.gmm()`](https://rdrr.io/pkg/gmm/man/summary.html).
 
 - object:
 

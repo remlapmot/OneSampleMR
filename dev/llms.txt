@@ -95,15 +95,36 @@ update.packages(repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-p
 
 ## All functions
 
+- [`coef(`*`<msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`coef(`*`<lsmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`coef(`*`<tsps>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`coef(`*`<tsri>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`vcov(`*`<msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`vcov(`*`<lsmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`vcov(`*`<tsps>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`vcov(`*`<tsri>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`confint(`*`<msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`confint(`*`<lsmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`confint(`*`<tsps>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`confint(`*`<tsri>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`nobs(`*`<msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`nobs(`*`<lsmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`nobs(`*`<tsps>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`nobs(`*`<tsri>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`formula(`*`<msmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`formula(`*`<lsmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`formula(`*`<tsps>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  [`formula(`*`<tsri>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/OneSampleMR-methods.md)
+  : Methods for Fitted Models
 - [`asmm`](https://remlapmot.github.io/OneSampleMR/dev/reference/asmm.md)
-  : Additive structural mean model
+  : Additive Structural Mean Model
 - [`fsw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
   [`print(`*`<fsw>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
-  : Conditional F-statistic of Sanderson and Windmeijer (2016)
+  : Conditional F-Statistic of Sanderson and Windmeijer (2016)
 - [`lsmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/lsmm.md)
-  : Logistic structural mean model
+  : Logistic Structural Mean Model
 - [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md)
-  : Multiplicative structural mean model
+  : Multiplicative Structural Mean Model
 - [`summary(`*`<lsmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.lsmm.md)
   [`print(`*`<lsmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.lsmm.md)
   [`print(`*`<summary.lsmm>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.lsmm.md)
@@ -121,9 +142,9 @@ update.packages(repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-p
   [`print(`*`<summary.tsri>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/summary.tsri.md)
   : Summarizing TSRI Fits
 - [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md)
-  : Two-stage predictor substitution (TSPS) estimators
+  : Two-Stage Predictor Substitution (TSPS) Estimators
 - [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md)
-  : Two-stage residual inclusion (TSRI) estimators
+  : Two-Stage Residual Inclusion (TSRI) Estimators
 
 # Articles
 

@@ -2,6 +2,83 @@
 
 ## OneSampleMR (development version)
 
+- The help page titles now consistently use title case.
+
+- The examples in
+  [`?fsw`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
+  now only use the suggested packages AER, estimatr, and fixest if they
+  are installed.
+
+- Fixed the covariate adjustment example in
+  [`?msmm`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md),
+  in which the covariate was generated from the same random numbers as
+  one of the instruments, so that the fit did not converge.
+
+- New [`coef()`](https://rdrr.io/r/stats/coef.html),
+  [`vcov()`](https://rdrr.io/r/stats/vcov.html),
+  [`confint()`](https://rdrr.io/r/stats/confint.html),
+  [`nobs()`](https://rdrr.io/r/stats/nobs.html), and
+  [`formula()`](https://rdrr.io/r/stats/formula.html) methods for the
+  objects returned by
+  [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md),
+  [`lsmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/lsmm.md),
+  [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md),
+  and
+  [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md)
+  (see `?OneSampleMR-methods`). The fitted objects now also contain the
+  `call` and `formula`.
+
+- The [`summary()`](https://rdrr.io/r/base/summary.html) methods for
+  these objects now report the call, a coefficient table formatted with
+  [`printCoefmat()`](https://rdrr.io/r/stats/printCoefmat.html) with
+  Wald z statistics and p-values, and, for overidentified GMM fits of
+  [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md)
+  and
+  [`lsmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/lsmm.md),
+  the Hansen J-test of the overidentifying restrictions. The summary
+  objects have new `call`, `coefficients`, and (for
+  [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md)
+  and
+  [`lsmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/lsmm.md))
+  `jtest` elements.
+
+- The parameters of
+  [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md)
+  with `estmethod = "gmm"` or `"gmmalt"` are now labelled (`E[Y(0)]` or
+  `log E[Y(0)]`, then the exposures and covariates) instead of
+  `Theta[1]`, `Theta[2]`, …, and
+  [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md)
+  gives a clear error message if `t0` has the wrong length. For the
+  `"tsls"` and `"tslsalt"` methods `crrci` is now a labelled matrix, as
+  for the GMM methods.
+
+- [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md)
+  and
+  [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md)
+  are roughly twice as fast. The first stage regression is now fitted
+  once with [`.lm.fit()`](https://rdrr.io/r/stats/lmfit.html), the
+  second stage starting values are obtained with
+  [`glm.fit()`](https://rdrr.io/r/stats/glm.html) or
+  [`.lm.fit()`](https://rdrr.io/r/stats/lmfit.html) on the model
+  matrices instead of by resolving formulas, and the GMM moment
+  functions work directly on the model matrices instead of extracting
+  columns from a data frame on every evaluation. As a result a variable
+  named `y` can now be used in their formulas. The estimates are
+  unchanged.
+
+- [`lsmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/lsmm.md)
+  is faster, because its first GMM step no longer computes an unused HAC
+  variance matrix, and its starting values are obtained with
+  [`.lm.fit()`](https://rdrr.io/r/stats/lmfit.html) and
+  [`glm.fit()`](https://rdrr.io/r/stats/glm.html) on the model matrices.
+
+- The Newton-Raphson step used to obtain the starting values for the
+  `logmult` link of
+  [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md)
+  and
+  [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md)
+  now uses a Cholesky factorization of the Hessian.
+
 - Use
   [`wooldridge::mroz`](https://justinmshea.github.io/wooldridge/reference/mroz.html)
   instead of downloading *mroz.dta* from `fmwww.bc.edu` in F-statistic
