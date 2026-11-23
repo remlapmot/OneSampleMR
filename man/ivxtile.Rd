@@ -22,6 +22,8 @@ ivxtile(
   x,
   xlab = "Median of exposure in quantile",
   ylab = "Estimated causal effect",
+  ylim = NULL,
+  legend = "topleft",
   ...
 )
 }
@@ -51,6 +53,12 @@ which it is estimated, for example the log causal risk ratio for
 \item{digits}{the number of significant digits to use when printing.}
 
 \item{xlab, ylab}{axis labels.}
+
+\item{ylim}{the y-axis limits. By default the range of the confidence
+limits, extended upwards to leave space for the legend.}
+
+\item{legend}{the position of the legend, as for \code{\link[graphics:legend]{graphics::legend()}}, or
+\code{NULL} for no legend.}
 }
 \value{
 An object of class \code{"ivxtile"}, a data frame with one row for

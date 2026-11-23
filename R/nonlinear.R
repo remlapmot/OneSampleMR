@@ -289,31 +289,45 @@ print.ivmw <- function(x, digits = max(3, getOption("digits") - 3), ...) {
 
 #' @rdname ivxtile
 #' @param xlab,ylab axis labels.
+#' @param ylim the y-axis limits. By default the range of the confidence
+#' limits, extended upwards to leave space for the legend.
+#' @param legend the position of the legend, as for [graphics::legend()], or
+#' `NULL` for no legend.
 #' @export
 plot.ivxtile <- function(
   x,
   xlab = "Median of exposure in quantile",
   ylab = "Estimated causal effect",
+  ylim = NULL,
+  legend = "topleft",
   ...
 ) {
-  nonlinear_plot(x, xlab = xlab, ylab = ylab, ...)
+  nonlinear_plot(x, xlab = xlab, ylab = ylab, ylim = ylim, legend = legend, ...)
 }
 
 #' @rdname ivmw
-#' @param xlab,ylab axis labels.
+#' @inheritParams plot.ivxtile
 #' @export
 plot.ivmw <- function(
   x,
   xlab = "Median of exposure in moving window",
   ylab = "Estimated causal effect",
+  ylim = NULL,
+  legend = "topleft",
   ...
 ) {
-  nonlinear_plot(x, xlab = xlab, ylab = ylab, ...)
+  nonlinear_plot(x, xlab = xlab, ylab = ylab, ylim = ylim, legend = legend, ...)
 }
 
-nonlinear_plot <- function(x, xlab, ylab, ...) {
+nonlinear_plot <- function(x, xlab, ylab, ylim, legend, ...) {
   x <- x[order(x$medexposure), ]
-  ylim <- range(c(x$lowci, x$uppci), na.rm = TRUE)
+  if (is.null(ylim)) {
+    ylim <- range(c(x$lowci, x$uppci), na.rm = TRUE)
+    # leave space above the lines for the legend
+    if (!is.null(legend)) {
+      ylim[2] <- ylim[2] + 0.25 * diff(ylim)
+    }
+  }
   graphics::plot(
     x$medexposure,
     x$beta,
@@ -326,12 +340,14 @@ nonlinear_plot <- function(x, xlab, ylab, ...) {
   )
   graphics::lines(x$medexposure, x$lowci, col = "grey60", lwd = 2)
   graphics::lines(x$medexposure, x$uppci, col = "grey60", lwd = 2)
-  graphics::legend(
-    "topleft",
-    legend = c("Estimated causal effect", "95% CI limits"),
-    col = c("black", "grey60"),
-    lwd = 2,
-    bty = "n"
-  )
+  if (!is.null(legend)) {
+    graphics::legend(
+      legend,
+      legend = c("Estimated causal effect", "95% CI limits"),
+      col = c("black", "grey60"),
+      lwd = 2,
+      bty = "n"
+    )
+  }
   invisible(x)
 }

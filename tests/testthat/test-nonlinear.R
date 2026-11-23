@@ -38,6 +38,8 @@ test_that("ivxtile() fits the estimator within quantile groups", {
   expect_output(print(res), "within quantiles")
   pdf(NULL)
   expect_silent(plot(res))
+  expect_silent(plot(res, ylim = c(-1, 2), legend = "bottomright"))
+  expect_silent(plot(res, legend = NULL))
   dev.off()
 })
 
