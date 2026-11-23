@@ -6,6 +6,8 @@
 
 * Fixed the covariate adjustment example in `?msmm`, in which the covariate was generated from the same random numbers as one of the instruments, so that the fit did not converge.
 
+* Fixed the p-values of `fsw()`, which used the number of endogenous variables, K, as the numerator degrees of freedom instead of L - K + 1, where L is the number of excluded instruments. The reported conditional F-statistics and degrees of freedom were correct, and the p-values were only affected when L - K + 1 differed from K.
+
 * New `coef()`, `vcov()`, `confint()`, `nobs()`, and `formula()` methods for the objects returned by `msmm()`, `lsmm()`, `tsps()`, and `tsri()` (see `?OneSampleMR-methods`). The fitted objects now also contain the `call` and `formula`.
 
 * The `summary()` methods for these objects now report the call, a coefficient table formatted with `printCoefmat()` with Wald z statistics and p-values, and, for overidentified GMM fits of `msmm()` and `lsmm()`, the Hansen J-test of the overidentifying restrictions. The summary objects have new `call`, `coefficients`, and (for `msmm()` and `lsmm()`) `jtest` elements.

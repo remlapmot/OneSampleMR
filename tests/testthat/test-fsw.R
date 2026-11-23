@@ -1209,3 +1209,24 @@ test_that("fixest::feols fsw errors for a factor exposure", {
   )
   expect_error(fsw(mod), "is a factor")
 })
+
+test_that("p-values use L - K + 1 numerator degrees of freedom", {
+  # 2 exposures and 4 instruments, so that L - K + 1 = 3 differs from K = 2,
+  # and weak instruments so that the p-values are not close to 0
+  set.seed(20261123)
+  n <- 500
+  z <- matrix(rnorm(n * 4), n)
+  u <- rnorm(n)
+  x1 <- 0.08 * z[, 1] + 0.05 * z[, 2] + u + rnorm(n)
+  x2 <- 0.05 * z[, 3] + 0.08 * z[, 4] - u + rnorm(n)
+  y <- x1 + x2 + u + rnorm(n)
+  dat <- data.frame(y, x1, x2, z1 = z[, 1], z2 = z[, 2], z3 = z[, 3], z4 = z[, 4])
+  res <- fsw(ivreg(y ~ x1 + x2 | z1 + z2 + z3 + z4, data = dat))$fswres
+  expect_equal(unname(res[, "d.f."]), c(3, 3))
+  expect_equal(
+    unname(res[, "Pr(>F)"]),
+    stats::pf(res[, "F value"], 3, res[, "Residual d.f."], lower.tail = FALSE),
+    ignore_attr = TRUE
+  )
+  expect_true(all(res[, "Pr(>F)"] > 0.001))
+})

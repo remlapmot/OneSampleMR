@@ -540,8 +540,8 @@ fsw_wald_test <- function(restricted, unrestricted, nendog) {
   fswdf <- wldtst$Df[2L] - (nendog - 1)
   # Residual degrees of freedom:
   fswresdf <- wldtst$Res.Df[2L]
-  # P-value:
-  fswp <- stats::pf(fsw, nendog, wldtst$Res.Df[2L], lower.tail = FALSE)
+  # P-value, with L - K + 1 numerator degrees of freedom:
+  fswp <- stats::pf(fsw, fswdf, wldtst$Res.Df[2L], lower.tail = FALSE)
 
   return(cbind(fsw, fswdf, fswresdf, fswp))
 }
