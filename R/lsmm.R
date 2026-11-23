@@ -187,15 +187,12 @@ lsmm <- function(
   # starting values: logistic regression for the association model, and
   # two-stage residual inclusion logistic regression for the causal model
   if (is.null(t0)) {
-    stage1 <- stats::lm(
-      X[, exposurenames] ~ Z[, c(instrumentnames, covariatenames)]
-    )
-    res <- stats::residuals(stage1)
-    amfit <- stats::glm(Y ~ -1 + A1, family = stats::binomial)
-    cmfit <- stats::glm(Y ~ C + res, family = stats::binomial)
+    res <- stats::.lm.fit(Z1, X[, exposurenames, drop = FALSE])$residuals
+    amfit <- stats::glm.fit(A1, Y, family = stats::binomial())
+    cmfit <- stats::glm.fit(cbind(1, C, res), Y, family = stats::binomial())
     t0 <- c(
-      stats::coef(amfit),
-      stats::coef(cmfit)[1 + seq_len(nc)],
+      amfit$coefficients,
+      cmfit$coefficients[1 + seq_len(nc)],
       mean(Y)
     )
   }
@@ -216,6 +213,8 @@ lsmm <- function(
     t0 = t0,
     gradv = lsmmGradient,
     weightsMatrix = w0,
+    # only the step 1 estimates are used, so avoid computing a HAC variance
+    vcov = "TrueFixed",
     method = "BFGS",
     control = list(reltol = 1e-14, maxit = 1E4)
   )

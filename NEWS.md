@@ -6,6 +6,12 @@
 
 * Fixed the covariate adjustment example in `?msmm`, in which the covariate was generated from the same random numbers as one of the instruments, so that the fit did not converge.
 
+* `tsps()` and `tsri()` are roughly twice as fast. The first stage regression is now fitted once with `.lm.fit()`, the second stage starting values are obtained with `glm.fit()` or `.lm.fit()` on the model matrices instead of by resolving formulas, and the GMM moment functions work directly on the model matrices instead of extracting columns from a data frame on every evaluation. As a result a variable named `y` can now be used in their formulas. The estimates are unchanged.
+
+* `lsmm()` is faster, because its first GMM step no longer computes an unused HAC variance matrix, and its starting values are obtained with `.lm.fit()` and `glm.fit()` on the model matrices.
+
+* The Newton-Raphson step used to obtain the starting values for the `logmult` link of `tsps()` and `tsri()` now uses a Cholesky factorization of the Hessian.
+
 * Use `wooldridge::mroz` instead of downloading *mroz.dta* from `fmwww.bc.edu` in F-statistic vignette and tests
 
 # OneSampleMR v0.1.9

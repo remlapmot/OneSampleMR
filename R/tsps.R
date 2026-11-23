@@ -155,34 +155,15 @@ tsps <- function(
   znames <- colnames(Z)[-1]
   covariatenames <- intersect(xnames, znames)
 
-  # the column name "y" is reserved for the outcome in the data.frame
-  # passed to the gmm fit; a variable with the same name would be silently
-  # renamed and lookups by name would retrieve the outcome instead
-  if ("y" %in% c(xnames, znames)) {
-    stop(
-      "Please rename the variable \"y\" in your model; ",
-      "that name is reserved for internal use."
-    )
-  }
-
-  tsps_env <- new.env(parent = emptyenv())
-  tsps_env$anycovs <- FALSE
-  if (!identical(covariatenames, character(0))) {
-    tsps_env$anycovs <- TRUE
-    covariates <- X[, covariatenames]
-  }
-
-  tsps_env$xnames <- xnames[!(xnames %in% covariatenames)]
-  tsps_env$znames <- znames[!(znames %in% covariatenames)]
-  tsps_env$covariatenames <- covariatenames
+  exposurenames <- setdiff(xnames, covariatenames)
+  instrumentnames <- setdiff(znames, covariatenames)
 
   # check for only 1 exposure
-  if (length(tsps_env$xnames) != 1) {
+  if (length(exposurenames) != 1) {
     stop("Only 1 exposure variable is allowed.")
   }
 
   link <- match.arg(link, c("identity", "logadd", "logmult", "logit"))
-  tsps_env$link <- link
 
   # check y binary
   if (link == "logit" && !all(Y %in% 0:1)) {
@@ -191,171 +172,104 @@ tsps <- function(
     )
   }
 
-  # initial values
+  # model matrices, with the first stage regressors in the order of the
+  # first stage parameters (intercept, instruments, then covariates)
+  xvec <- X[, exposurenames]
+  Zstage1 <- Z[,
+    c("(Intercept)", instrumentnames, covariatenames),
+    drop = FALSE
+  ]
+  covs <- Z[, covariatenames, drop = FALSE]
+  k1 <- ncol(Zstage1)
+
+  # the first stage does not depend on the second stage parameters, so fit
+  # it once here; its predicted values are the second stage regressors
+  stage1 <- stats::.lm.fit(Zstage1, xvec)
+  xhat <- xvec - stage1$residuals
+  R2 <- cbind(1, xhat, covs)
+
+  # initial values: the sequential two-stage estimates
   if (is.null(t0)) {
-    # select columns by name, in the order the moment functions use
-    # (instruments then covariates), so that the starting values are
-    # correct regardless of the order of terms in the formula
-    Zstage1 <- Z[,
-      c("(Intercept)", tsps_env$znames, tsps_env$covariatenames),
-      drop = FALSE
-    ]
-    stage1 <- stats::lm(X[, tsps_env$xnames] ~ -1 + Zstage1)
-    t0 <- stats::coef(stage1)
-    xhat <- stats::fitted.values(stage1)
-    if (tsps_env$anycovs) {
-      xhat <- cbind(xhat, covariates)
-    }
-    if (link == "identity") {
-      stage2 <- stats::lm(Y ~ xhat)
-    } else if (link == "logadd") {
-      stage2 <- stats::glm(Y ~ xhat, family = stats::poisson(link = "log"))
-    } else if (link == "logmult") {
+    stage2 <- switch(
+      link,
+      identity = stats::.lm.fit(R2, Y)$coefficients,
+      logadd = stats::glm.fit(
+        R2,
+        Y,
+        family = stats::poisson(link = "log")
+      )$coefficients,
       # solve the second stage estimating equations exactly, starting from
       # the (quasi-)Poisson regression estimates
-      stage2 <- stats::glm(
-        Y ~ xhat,
-        family = stats::quasipoisson(link = "log")
-      )
-      stage2$coefficients <- logmult_coef(
+      logmult = logmult_coef(
         Y,
-        stats::model.matrix(stage2),
-        stats::coef(stage2)
-      )
-    } else if (link == "logit") {
-      stage2 <- stats::glm(Y ~ xhat, family = stats::binomial(link = "logit"))
-    }
-    t0 <- c(t0, stats::coef(stage2))
+        R2,
+        stats::glm.fit(
+          R2,
+          Y,
+          family = stats::quasipoisson(link = "log")
+        )$coefficients
+      ),
+      logit = stats::glm.fit(
+        R2,
+        Y,
+        family = stats::binomial(link = "logit")
+      )$coefficients
+    )
+    t0 <- c(stage1$coefficients, stage2)
   }
 
   # label the parameters, also when the user has specified t0
   parnames <- c(
     paste0(
       "stage1:",
-      c("(Intercept)", tsps_env$znames, tsps_env$covariatenames)
+      c("(Intercept)", instrumentnames, covariatenames)
     ),
     "(Intercept)",
-    tsps_env$xnames,
-    tsps_env$covariatenames
+    exposurenames,
+    covariatenames
   )
   if (length(t0) != length(parnames)) {
     stop("t0 must have length ", length(parnames), ".")
   }
   names(t0) <- parnames
 
-  Xtopass <- as.data.frame(X[, tsps_env$xnames])
-  colnames(Xtopass) <- tsps_env$xnames
-
-  # select columns by name so that the instrument and covariate data keep
-  # their correct labels regardless of the order of terms in the formula
-  zcolorder <- c(tsps_env$znames, tsps_env$covariatenames)
-  Ztopass <- as.data.frame(Z[, zcolorder, drop = FALSE])
-  colnames(Ztopass) <- zcolorder
-
-  # the first stage predicted values do not depend on theta, so compute
-  # them once here rather than on every evaluation of the gmm moment
-  # functions below
-  stage1fit <- stats::lm(Xtopass[[1]] ~ as.matrix(Ztopass))
-  xhatfixed <- as.matrix(stats::fitted.values(stage1fit))
-  if (tsps_env$anycovs) {
-    xhatfixed <- cbind(xhatfixed, Ztopass[, tsps_env$covariatenames])
-  }
-  tsps_env$xhat <- xhatfixed
-
-  # functions for the tsps fit
-  tsps_gmm <- function(x, y, z, t0, link) {
-    x <- as.matrix(x)
-
-    if (!identical(tsps_env$covariatenames, character(0))) {
-      x <- x[, !(colnames(x) %in% tsps_env$covariatenames), drop = FALSE]
-    }
-
-    dat <- data.frame(y, x, z)
-
-    if (is.null(t0)) {
-      t0 <- rep(0, ncol(x) + 1)
-    }
-
-    # gmm fit (tspsMoments reads the link function from tsps_env)
-    fit <- gmm::gmm(tspsMoments, x = dat, t0 = t0, vcov = "iid")
-
-    # the model is exactly identified, so the minimum of the gmm objective
-    # function is 0; the optimizer can report non-convergence when it has
-    # reached this minimum but cannot further shrink its simplex
-    if (fit$algoInfo$convergence != 0 && fit$objective > 1e-10) {
-      warning(
-        "The GMM fit has not converged, perhaps try different initial parameter values"
-      )
-    }
-
-    estci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)
-    colnames(estci)[1] <- "Estimate"
-
-    reslist <- list(fit = fit, estci = estci, link = link)
-    return(reslist)
-  }
-
+  # moment conditions: the first stage residual multiplied by the first
+  # stage regressors, then the second stage residual, on the scale of the
+  # link function, multiplied by the second stage regressors; the data are
+  # taken from the enclosing environment rather than from x
   tspsMoments <- function(theta, x) {
-    # extract variables from x
-    Y <- as.matrix(x[, "y"])
-    X <- x[, tsps_env$xnames]
-    Z <- as.matrix(x[, tsps_env$znames])
-    if (tsps_env$anycovs) {
-      covariates <- x[, tsps_env$covariatenames]
-      Z <- as.matrix(cbind(Z, covariates))
+    linearpredictor <- drop(Zstage1 %*% theta[1:k1])
+    theta2 <- theta[-(1:k1)]
+    eta2 <- theta2[1] + theta2[2] * linearpredictor
+    if (ncol(covs) > 0) {
+      eta2 <- eta2 + drop(covs %*% theta2[-(1:2)])
     }
-    Zwithcons <- as.matrix(cbind(rep(1, nrow(x)), Z))
-    stage1end <- ncol(Zwithcons)
-    thetastage1 <- theta[1:stage1end]
-    stage2start <- stage1end + 1
-    thetaend <- length(theta)
-
-    # first stage linear predictor and residual
-    linearpredictor <- Zwithcons %*% as.matrix(thetastage1)
-    stage1express <- as.vector(X - linearpredictor)
-
-    # second stage linear predictor
-    if (tsps_env$anycovs) {
-      stage2linpred <- as.matrix(cbind(linearpredictor, covariates))
-    } else {
-      stage2linpred <- linearpredictor
-    }
-    eta2 <- as.vector(
-      theta[stage2start] +
-        stage2linpred %*% as.matrix(theta[(stage2start + 1):thetaend])
-    )
-
-    # second stage residual on the scale of the specified link function
-    Yvec <- as.vector(Y)
     stage2express <- switch(
-      tsps_env$link,
-      identity = Yvec - eta2,
-      logadd = Yvec - exp(eta2),
-      logmult = Yvec * exp(-1 * eta2) - 1,
-      logit = Yvec - stats::plogis(eta2)
+      link,
+      identity = Y - eta2,
+      logadd = Y - exp(eta2),
+      logmult = Y * exp(-eta2) - 1,
+      logit = Y - stats::plogis(eta2)
     )
-
-    # first stage predicted values (precomputed in tsps() because they do
-    # not depend on theta)
-    xhat <- as.matrix(tsps_env$xhat)
-
-    # moments: the first stage residual multiplied by a constant and each
-    # instrument (and covariate), then the second stage residual multiplied
-    # by a constant and the first stage predicted values (and covariates)
-    unname(cbind(
-      stage1express * Zwithcons,
-      stage2express * cbind(1, xhat)
-    ))
+    unname(cbind((xvec - linearpredictor) * Zstage1, stage2express * R2))
   }
 
   # gmm fit
-  output <- tsps_gmm(
-    x = Xtopass,
-    y = Y,
-    z = Ztopass,
-    t0 = t0,
-    link = link
-  )
+  fit <- gmm::gmm(tspsMoments, x = cbind(Y), t0 = t0, vcov = "iid")
+
+  # the model is exactly identified, so the minimum of the gmm objective
+  # function is 0; the optimizer can report non-convergence when it has
+  # reached this minimum but cannot further shrink its simplex
+  if (fit$algoInfo$convergence != 0 && fit$objective > 1e-10) {
+    warning(
+      "The GMM fit has not converged, perhaps try different initial parameter values"
+    )
+  }
+
+  estci <- cbind(gmm::coef.gmm(fit), gmm::confint.gmm(fit)$test)
+  colnames(estci)[1] <- "Estimate"
+
+  output <- list(fit = fit, estci = estci, link = link)
   class(output) <- append("tsps", class(output))
   output
 }

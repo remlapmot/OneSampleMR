@@ -6,7 +6,11 @@ logmult_coef <- function(y, r, b, tol = 1e-12, maxit = 100) {
   for (i in seq_len(maxit)) {
     w <- as.vector(y * exp(-r %*% b))
     score <- crossprod(r, w - 1)
-    step <- solve(crossprod(r, w * r), score)
+    # the Newton step solves H step = score, where the Hessian
+    # H = r' diag(w) r is symmetric positive definite, so use its Cholesky
+    # factorization
+    ch <- chol(crossprod(r, w * r))
+    step <- backsolve(ch, forwardsolve(ch, score, upper.tri = TRUE, transpose = TRUE))
     b <- b + as.vector(step)
     if (max(abs(step)) < tol) {
       break
