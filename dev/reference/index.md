@@ -28,6 +28,14 @@
 - [`fsw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
   [`print(`*`<fsw>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
   : Conditional F-Statistic of Sanderson and Windmeijer (2016)
+- [`ivmw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivmw.md)
+  [`print(`*`<ivmw>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivmw.md)
+  [`plot(`*`<ivmw>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivmw.md)
+  : Moving Window Estimation
+- [`ivxtile()`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivxtile.md)
+  [`print(`*`<ivxtile>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivxtile.md)
+  [`plot(`*`<ivxtile>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivxtile.md)
+  : Estimation within Quantiles of the First Stage Residuals
 - [`lsmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/lsmm.md)
   : Logistic Structural Mean Model
 - [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md)

@@ -2,6 +2,26 @@
 
 ## OneSampleMR (development version)
 
+- New functions
+  [`ivxtile()`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivxtile.md)
+  and
+  [`ivmw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivmw.md)
+  explore whether the causal effect varies with the level of the
+  exposure, as described by Burgess et al. (2014), by fitting an IV
+  estimator
+  ([`ivreg::ivreg()`](https://zeileis.github.io/ivreg/reference/ivreg.html),
+  [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md),
+  [`lsmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/lsmm.md),
+  [`tsps()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsps.md),
+  or
+  [`tsri()`](https://remlapmot.github.io/OneSampleMR/dev/reference/tsri.md))
+  within quantile groups of the first stage residuals or within moving
+  windows of observations ordered by the first stage residuals. They
+  have [`print()`](https://rdrr.io/r/base/print.html) and
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) methods and
+  are the equivalents of the `ivxtile` and `ivmw` commands in the Stata
+  package ivonesamplemr.
+
 - The help page titles now consistently use title case.
 
 - The examples in
@@ -13,6 +33,14 @@
   [`?msmm`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md),
   in which the covariate was generated from the same random numbers as
   one of the instruments, so that the fit did not converge.
+
+- Fixed the p-values of
+  [`fsw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md),
+  which used the number of endogenous variables, K, as the numerator
+  degrees of freedom instead of L - K + 1, where L is the number of
+  excluded instruments. The reported conditional F-statistics and
+  degrees of freedom were correct, and the p-values were only affected
+  when L - K + 1 differed from K.
 
 - New [`coef()`](https://rdrr.io/r/stats/coef.html),
   [`vcov()`](https://rdrr.io/r/stats/vcov.html),

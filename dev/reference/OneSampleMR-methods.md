@@ -153,5 +153,5 @@ nobs(fit)
 #> [1] 1000
 formula(fit)
 #> Y ~ X | G1 + G2 + G3
-#> <environment: 0x59fbb27a7698>
+#> <environment: 0x6186504002b0>
 ```

@@ -17,6 +17,9 @@ implementations of:
     2008](https://doi.org/10.1016/j.jhealeco.2007.09.009))
   - Two-stage residual inclusion estimators ([Terza,
     2008](https://doi.org/10.1016/j.jhealeco.2007.09.009))
+- Estimation within quantiles of the first stage residuals and in moving
+  windows, to explore nonlinear exposure-outcome relationships ([Burgess
+  et al., 2014](https://doi.org/10.1097/EDE.0000000000000161))
 
 **OneSampleMR** was included in the R Views November 2021 “Top 40” New
 CRAN Packages
@@ -121,6 +124,14 @@ update.packages(repos = c('https://remlapmot.r-universe.dev', 'https://cloud.r-p
 - [`fsw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
   [`print(`*`<fsw>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/fsw.md)
   : Conditional F-Statistic of Sanderson and Windmeijer (2016)
+- [`ivmw()`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivmw.md)
+  [`print(`*`<ivmw>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivmw.md)
+  [`plot(`*`<ivmw>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivmw.md)
+  : Moving Window Estimation
+- [`ivxtile()`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivxtile.md)
+  [`print(`*`<ivxtile>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivxtile.md)
+  [`plot(`*`<ivxtile>`*`)`](https://remlapmot.github.io/OneSampleMR/dev/reference/ivxtile.md)
+  : Estimation within Quantiles of the First Stage Residuals
 - [`lsmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/lsmm.md)
   : Logistic Structural Mean Model
 - [`msmm()`](https://remlapmot.github.io/OneSampleMR/dev/reference/msmm.md)

@@ -98,8 +98,8 @@ fsw(mod1)
 #> 
 #> Sanderson-Windmeijer conditional F-statistics for first stage model:
 #>    F value d.f. Residual d.f.   Pr(>F)  
-#> x1 3.42466    1          3995 0.032656 *
-#> x2 3.42443    1          3995 0.032663 *
+#> x1 3.42466    1          3995 0.064303 .
+#> x2 3.42443    1          3995 0.064312 .
 #> ---
 #> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> 
@@ -128,8 +128,8 @@ if (requireNamespace("AER", quietly = TRUE)) {
 #> 
 #> Sanderson-Windmeijer conditional F-statistics for first stage model:
 #>    F value d.f. Residual d.f.   Pr(>F)  
-#> x1 3.42466    1          3995 0.032656 *
-#> x2 3.42443    1          3995 0.032663 *
+#> x1 3.42466    1          3995 0.064303 .
+#> x2 3.42443    1          3995 0.064312 .
 #> ---
 #> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> 
@@ -143,8 +143,8 @@ if (requireNamespace("estimatr", quietly = TRUE)) {
 #> 
 #> Sanderson-Windmeijer conditional F-statistics for first stage model:
 #>    F value d.f. Residual d.f.   Pr(>F)  
-#> x1 3.42466    1          3995 0.032656 *
-#> x2 3.42443    1          3995 0.032663 *
+#> x1 3.42466    1          3995 0.064303 .
+#> x2 3.42443    1          3995 0.064312 .
 #> ---
 #> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> 
@@ -157,8 +157,8 @@ if (requireNamespace("fixest", quietly = TRUE)) {
 #> 
 #> Sanderson-Windmeijer conditional F-statistics for first stage model:
 #>    F value d.f. Residual d.f.   Pr(>F)  
-#> x1 3.42466    1          3995 0.032656 *
-#> x2 3.42443    1          3995 0.032663 *
+#> x1 3.42466    1          3995 0.064303 .
+#> x2 3.42443    1          3995 0.064312 .
 #> ---
 #> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> 
