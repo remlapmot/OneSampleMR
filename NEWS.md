@@ -1,4 +1,4 @@
-# OneSampleMR (development version)
+# OneSampleMR v0.2.0
 
 * New functions `ivxtile()` and `ivmw()` explore whether the causal effect varies with the level of the exposure, as described by Burgess et al. (2014), by fitting an IV estimator (`ivreg::ivreg()`, `msmm()`, `lsmm()`, `tsps()`, or `tsri()`) within quantile groups of the first stage residuals or within moving windows of observations ordered by the first stage residuals. They have `print()` and `plot()` methods and are the equivalents of the `ivxtile` and `ivmw` commands in the Stata package ivonesamplemr.
 
