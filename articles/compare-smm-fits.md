@@ -31,31 +31,17 @@ dat  <- data.frame(Z, X, Y)
 fit02 <- msmm(Y ~ X | Z, data = dat)
 summary(fit02)
 #> 
+#> Call:
+#> msmm(formula = Y ~ X | Z, data = dat)
+#> 
 #> Estimation method: gmm 
 #> 
-#> GMM fit summary:
-#> 
-#> Call:
-#> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid", control = list(reltol = .Machine$double.eps, 
-#>     maxit = 10000))
-#> 
-#> 
-#> Method:  twoStep 
-#> 
 #> Coefficients:
-#>           Estimate    Std. Error  t value     Pr(>|t|)  
-#> Theta[1]  7.5000e-01  1.2333e-02  6.0815e+01  0.0000e+00
-#> Theta[2]  1.0186e-01  2.8217e-02  3.6100e+00  3.0624e-04
-#> 
-#> J-Test: degrees of freedom is 0 
-#>                 J-test               P-value            
-#> Test E(g)=0:    4.6416358014941e-14  *******            
-#> 
-#> #############
-#> Information related to the numerical optimization
-#> Convergence code =  0 
-#> Function eval. =  113 
-#> Gradian eval. =  NA 
+#>         Estimate Std. Error z value Pr(>|z|)    
+#> E[Y(0)]  0.75000    0.01233   60.81  < 2e-16 ***
+#> X        0.10186    0.02822    3.61 0.000306 ***
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> E[Y(0)] with 95% CI:
 #>         0.025  0.975 
@@ -73,31 +59,17 @@ summary(fit02)
 fit03 <- msmm(Y ~ X | Z, data = dat, estmethod = "gmmalt")
 summary(fit03)
 #> 
+#> Call:
+#> msmm(formula = Y ~ X | Z, data = dat, estmethod = "gmmalt")
+#> 
 #> Estimation method: gmmalt 
 #> 
-#> GMM fit summary:
-#> 
-#> Call:
-#> gmm::gmm(g = msmmAltMoments, x = dat, t0 = t0, vcov = "iid", 
-#>     control = list(reltol = .Machine$double.eps, maxit = 10000))
-#> 
-#> 
-#> Method:  twoStep 
-#> 
 #> Coefficients:
-#>           Estimate     Std. Error   t value      Pr(>|t|)   
-#> Theta[1]  -2.8768e-01   1.6443e-02  -1.7495e+01   1.5612e-68
-#> Theta[2]   1.0186e-01   2.8217e-02   3.6100e+00   3.0624e-04
-#> 
-#> J-Test: degrees of freedom is 0 
-#>                 J-test                P-value             
-#> Test E(g)=0:    2.31885397656017e-14  *******             
-#> 
-#> #############
-#> Information related to the numerical optimization
-#> Convergence code =  0 
-#> Function eval. =  109 
-#> Gradian eval. =  NA 
+#>             Estimate Std. Error z value Pr(>|z|)    
+#> log E[Y(0)] -0.28768    0.01644  -17.50  < 2e-16 ***
+#> X            0.10186    0.02822    3.61 0.000306 ***
+#> ---
+#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
 #> E[Y(0)] with 95% CI:
 #>         0.025  0.975 
@@ -116,61 +88,26 @@ summary(fit03)
 fit04 <- msmm(Y ~ X | Z, data = dat, estmethod = "tsls")
 summary(fit04)
 #> 
+#> Call:
+#> msmm(formula = Y ~ X | Z, data = dat, estmethod = "tsls")
+#> 
 #> Estimation method: tsls 
 #> 
-#> Stage 1 summary:
-#> 
-#> Call:
-#> stats::lm(formula = exposure ~ z)
-#> 
-#> Residuals:
-#>     Min      1Q  Median      3Q     Max 
-#> -0.6206 -0.1873 -0.1873  0.3794  0.8127 
-#> 
-#> Coefficients:
-#>             Estimate Std. Error t value Pr(>|t|)    
-#> (Intercept) 0.187272   0.008878   21.09   <2e-16 ***
-#> z           0.433336   0.012474   34.74   <2e-16 ***
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> Residual standard error: 0.441 on 4998 degrees of freedom
-#> Multiple R-squared:  0.1945, Adjusted R-squared:  0.1943 
-#> F-statistic:  1207 on 1 and 4998 DF,  p-value: < 2.2e-16
-#> 
-#> TSLS fit summary:
-#> 
-#> Call:
-#> ivreg::ivreg(formula = outcome ~ exposure | z)
-#> 
-#> Residuals:
-#>     Min      1Q  Median      3Q     Max 
-#> -0.7500  0.1532  0.1532  0.2500  0.2500 
-#> 
-#> Coefficients:
+#> Coefficients of the two-stage least squares fit of the transformed
+#> variables:
 #>             Estimate Std. Error t value Pr(>|t|)    
 #> (Intercept)  0.75000    0.01173   63.95   <2e-16 ***
 #> exposure    -0.90315    0.02545  -35.49   <2e-16 ***
-#> 
-#> Diagnostic tests:
-#>                   df1  df2 statistic p-value    
-#> Weak instruments    1 4998    1206.9  <2e-16 ***
-#> Wu-Hausman          1 4997     147.1  <2e-16 ***
-#> Sargan              0   NA        NA      NA    
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> Residual standard error: 0.3898 on 4998 degrees of freedom
-#> Multiple R-Squared: 0.3569,  Adjusted R-squared: 0.3567 
-#> Wald test:  1260 on 1 and 4998 DF,  p-value: < 2.2e-16 
-#> 
 #> 
 #> E[Y(0)] with 95% CI:
 #>         2.5 % 97.5 % 
 #>  0.750  0.727  0.773 
 #> 
 #> Causal risk ratio with 95% CI:
-#> [1] 1.107 1.048 1.170
+#>     CRR 0.025 0.975
+#> X 1.107 1.048  1.17
 ```
 
 - Comparison fit using the alternative transformed variables approach
@@ -181,55 +118,20 @@ summary(fit04)
 fit05 <- msmm(Y ~ X | Z, data = dat, estmethod = "tslsalt")
 summary(fit05)
 #> 
+#> Call:
+#> msmm(formula = Y ~ X | Z, data = dat, estmethod = "tslsalt")
+#> 
 #> Estimation method: tslsalt 
 #> 
-#> Stage 1 summary:
-#> 
-#> Call:
-#> stats::lm(formula = exposure ~ z)
-#> 
-#> Residuals:
-#>     Min      1Q  Median      3Q     Max 
-#> -0.5809 -0.1895 -0.1895  0.4191  0.8105 
-#> 
-#> Coefficients:
-#>              Estimate Std. Error t value Pr(>|t|)    
-#> (Intercept)  0.580867   0.008959   64.84   <2e-16 ***
-#> z           -0.391369   0.012587  -31.09   <2e-16 ***
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> Residual standard error: 0.445 on 4998 degrees of freedom
-#> Multiple R-squared:  0.1621, Adjusted R-squared:  0.1619 
-#> F-statistic: 966.8 on 1 and 4998 DF,  p-value: < 2.2e-16
-#> 
-#> TSLS fit summary:
-#> 
-#> Call:
-#> ivreg::ivreg(formula = outcome ~ exposure | z)
-#> 
-#> Residuals:
-#>     Min      1Q  Median      3Q     Max 
-#> -0.8304  0.1696  0.1696  0.2768  0.2768 
-#> 
-#> Coefficients:
+#> Coefficients of the two-stage least squares fit of the transformed
+#> variables:
 #>             Estimate Std. Error t value Pr(>|t|)    
 #> (Intercept)  0.83043    0.01341   61.94   <2e-16 ***
 #> exposure    -1.10723    0.03120  -35.49   <2e-16 ***
-#> 
-#> Diagnostic tests:
-#>                   df1  df2 statistic p-value    
-#> Weak instruments    1 4998     966.8  <2e-16 ***
-#> Wu-Hausman          1 4997     354.2  <2e-16 ***
-#> Sargan              0   NA        NA      NA    
 #> ---
 #> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 #> 
-#> Residual standard error: 0.4316 on 4998 degrees of freedom
-#> Multiple R-Squared: 0.2282,  Adjusted R-squared: 0.2281 
-#> Wald test:  1260 on 1 and 4998 DF,  p-value: < 2.2e-16 
-#> 
-#> 
 #> Causal risk ratio with 95% CI:
-#> [1] 1.107 1.048 1.170
+#>     CRR 0.025 0.975
+#> X 1.107 1.048  1.17
 ```

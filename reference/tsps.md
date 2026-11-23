@@ -1,4 +1,4 @@
-# Two-stage predictor substitution (TSPS) estimators
+# Two-Stage Predictor Substitution (TSPS) Estimators
 
 Terza et al. (2008) give an excellent description of TSPS estimators.
 They proceed by fitting a first stage model of the exposure regressed
@@ -141,37 +141,19 @@ dat          <- data.frame(Z, X, Y)
 tspslogitfit <- tsps(Y ~ X | Z , data = dat, link = "logit")
 summary(tspslogitfit)
 #> 
-#> GMM fit summary:
-#> 
 #> Call:
-#> gmm::gmm(g = tspsMoments, x = dat, t0 = t0, vcov = "iid")
+#> tsps(formula = Y ~ X | Z, data = dat, link = "logit")
 #> 
-#> 
-#> Method:  twoStep 
+#> Second stage model link function: logit 
 #> 
 #> Coefficients:
-#>                     Estimate    Std. Error  t value     Pr(>|t|)  
-#> stage1:(Intercept)  1.7647e-01  1.7169e-02  1.0278e+01  8.8297e-25
-#> stage1:Z            5.4740e-01  2.6249e-02  2.0854e+01  1.4138e-96
-#> (Intercept)         9.7133e-01  1.4042e-01  6.9173e+00  4.6027e-12
-#> X                   6.1451e-01  2.7464e-01  2.2375e+00  2.5256e-02
-#> 
-#> J-Test: degrees of freedom is 0 
-#>                 J-test                P-value             
-#> Test E(g)=0:    8.67645206779774e-23  *******             
-#> 
-#> #############
-#> Information related to the numerical optimization
-#> Convergence code =  0 
-#> Function eval. =  169 
-#> Gradian eval. =  NA 
-#> 
-#> Estimates with 95% CI limits:
-#>                    Estimate   0.025  0.975
-#> stage1:(Intercept)   0.1765 0.14282 0.2101
-#> stage1:Z             0.5474 0.49595 0.5988
-#> (Intercept)          0.9713 0.69611 1.2465
-#> X                    0.6145 0.07622 1.1528
+#>                    Estimate Std. Error z value Pr(>|z|)    
+#> stage1:(Intercept)  0.17647    0.01717  10.278  < 2e-16 ***
+#> stage1:Z            0.54740    0.02625  20.854  < 2e-16 ***
+#> (Intercept)         0.97133    0.14042   6.917  4.6e-12 ***
+#> X                   0.61451    0.27464   2.237   0.0253 *  
+#> ---
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> 
 #> Causal odds ratio with 95% CI limits:
 #>   Estimate 0.025 0.975

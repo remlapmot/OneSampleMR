@@ -1,4 +1,4 @@
-# Multiplicative structural mean model
+# Multiplicative Structural Mean Model
 
 Function providing several methods to estimate the multiplicative
 structural mean model (MSMM) of Robins (1989).
@@ -203,31 +203,17 @@ dat  <- data.frame(Z, X, Y)
 fit  <- msmm(Y ~ X | Z, data = dat)
 summary(fit)
 #> 
+#> Call:
+#> msmm(formula = Y ~ X | Z, data = dat)
+#> 
 #> Estimation method: gmm 
 #> 
-#> GMM fit summary:
-#> 
-#> Call:
-#> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid", control = list(reltol = .Machine$double.eps, 
-#>     maxit = 10000))
-#> 
-#> 
-#> Method:  twoStep 
-#> 
 #> Coefficients:
-#>           Estimate     Std. Error   t value      Pr(>|t|)   
-#> Theta[1]   7.2771e-01   2.5892e-02   2.8106e+01  8.2956e-174
-#> Theta[2]   1.3147e-01   6.0324e-02   2.1793e+00   2.9307e-02
-#> 
-#> J-Test: degrees of freedom is 0 
-#>                 J-test                P-value             
-#> Test E(g)=0:    7.90426044659617e-14  *******             
-#> 
-#> #############
-#> Information related to the numerical optimization
-#> Convergence code =  0 
-#> Function eval. =  117 
-#> Gradian eval. =  NA 
+#>         Estimate Std. Error z value Pr(>|z|)    
+#> E[Y(0)]  0.72771    0.02589  28.106   <2e-16 ***
+#> X        0.13147    0.06032   2.179   0.0293 *  
+#> ---
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> 
 #> E[Y(0)] with 95% CI:
 #>         0.025  0.975 
@@ -254,35 +240,20 @@ dat2 <- data.frame(G1, G2, G3, X, Y)
 fit2 <- msmm(Y ~ X | G1 + G2 + G3, data = dat2)
 summary(fit2)
 #> 
+#> Call:
+#> msmm(formula = Y ~ X | G1 + G2 + G3, data = dat2)
+#> 
 #> Estimation method: gmm 
 #> 
-#> GMM fit summary:
-#> 
-#> Call:
-#> gmm::gmm(g = msmmMoments, x = dat, t0 = t0, vcov = "iid", control = list(reltol = .Machine$double.eps, 
-#>     maxit = 10000))
-#> 
-#> 
-#> Method:  twoStep 
-#> 
 #> Coefficients:
-#>           Estimate    Std. Error  t value     Pr(>|t|)  
-#> Theta[1]  0.18267553  0.05199355  3.51342687  0.00044237
-#> Theta[2]  0.45022789  0.41808131  1.07689074  0.28152908
+#>         Estimate Std. Error z value Pr(>|z|)    
+#> E[Y(0)]  0.18268    0.05199   3.513 0.000442 ***
+#> X        0.45023    0.41808   1.077 0.281529    
+#> ---
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> 
-#> J-Test: degrees of freedom is 2 
-#>                 J-test   P-value
-#> Test E(g)=0:    0.27078  0.87338
-#> 
-#> Initial values of the coefficients
-#>  Theta[1]  Theta[2] 
-#> 0.1832454 0.4380268 
-#> 
-#> #############
-#> Information related to the numerical optimization
-#> Convergence code =  0 
-#> Function eval. =  117 
-#> Gradian eval. =  NA 
+#> Hansen J-test of the overidentifying restrictions:
+#> J = 0.2708 on 2 degrees of freedom, p-value: 0.8734
 #> 
 #> E[Y(0)] with 95% CI:
 #>           0.025   0.975 
@@ -294,7 +265,6 @@ summary(fit2)
 #> 
 
 # Adjusting for a covariate
-set.seed(123456)
 C    <- runif(n)
 pX   <- plogis(0.7*G1 + G2 - G3 + U + C)
 X    <- rbinom(n, 1, pX)
@@ -302,7 +272,6 @@ pY   <- plogis(-2 + psi0*X + U + C)
 Y    <- rbinom(n, 1, pY)
 dat3 <- data.frame(G1, G2, G3, X, Y, C)
 fit3 <- msmm(Y ~ X + C | G1 + G2 + G3 + C, data = dat3)
-#> Warning: The covariance matrix of the coefficients is singular
 fit3
 #> 
 #> Estimation method: gmm
@@ -310,20 +279,20 @@ fit3
 #> Method
 #>  twoStep 
 #> 
-#> Objective function value:  36.12854 
+#> Objective function value:  0.002002657 
 #> 
-#>   Theta[1]    Theta[2]    Theta[3]  
-#> 1.6204e-09  1.6407e+02  7.9073e+02  
+#> E[Y(0)]        X        C  
+#> 0.19212  0.45435  0.54891  
 #> 
 #> Convergence code =  0 
 #> 
 #> E[Y(0)] when the covariates are 0 with 95% CI:
-#>             0.025    0.975 
-#> 1.62e-09     -Inf      Inf 
+#>         0.025  0.975 
+#> 0.1921 0.1183 0.2659 
 #> 
 #> Causal risk ratio with 95% CI:
-#>         CRR 0.025 0.975
-#> X 1.791e+71     0   Inf
+#>     CRR  0.025 0.975
+#> X 1.575 0.9767  2.54
 #> 
 #> Adjusted for: C 
 #> 

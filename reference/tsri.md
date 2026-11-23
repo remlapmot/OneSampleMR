@@ -1,4 +1,4 @@
-# Two-stage residual inclusion (TSRI) estimators
+# Two-Stage Residual Inclusion (TSRI) Estimators
 
 An excellent description of TSRI estimators is given by Terza et al.
 (2008). TSRI estimators proceed by fitting a first stage model of the
@@ -153,39 +153,20 @@ dat          <- data.frame(Z, X, Y)
 tsrilogitfit <- tsri(Y ~ X | Z , data = dat, link = "logit")
 summary(tsrilogitfit)
 #> 
-#> GMM fit summary:
-#> 
 #> Call:
-#> gmm::gmm(g = tsriMoments, x = dat, t0 = t0, vcov = "iid")
+#> tsri(formula = Y ~ X | Z, data = dat, link = "logit")
 #> 
-#> 
-#> Method:  twoStep 
+#> Second stage model link function: logit 
 #> 
 #> Coefficients:
-#>                     Estimate    Std. Error  t value     Pr(>|t|)  
-#> stage1:(Intercept)  1.7647e-01  1.7169e-02  1.0278e+01  8.8297e-25
-#> stage1:Z            5.4740e-01  2.6249e-02  2.0854e+01  1.4138e-96
-#> (Intercept)         1.0068e+00  1.4482e-01  6.9520e+00  3.6002e-12
-#> X                   6.7047e-01  2.8436e-01  2.3578e+00  1.8382e-02
-#> stage1:residuals    4.4657e-01  3.4141e-01  1.3080e+00  1.9086e-01
-#> 
-#> J-Test: degrees of freedom is 0 
-#>                 J-test               P-value            
-#> Test E(g)=0:    4.2942179555234e-23  *******            
-#> 
-#> #############
-#> Information related to the numerical optimization
-#> Convergence code =  0 
-#> Function eval. =  208 
-#> Gradian eval. =  NA 
-#> 
-#> Estimates with 95% CI limits:
-#>                    Estimate   0.025  0.975
-#> stage1:(Intercept)   0.1765  0.1428 0.2101
-#> stage1:Z             0.5474  0.4959 0.5988
-#> (Intercept)          1.0068  0.7229 1.2906
-#> X                    0.6705  0.1131 1.2278
-#> stage1:residuals     0.4466 -0.2226 1.1157
+#>                    Estimate Std. Error z value Pr(>|z|)    
+#> stage1:(Intercept)  0.17647    0.01717  10.278  < 2e-16 ***
+#> stage1:Z            0.54740    0.02625  20.854  < 2e-16 ***
+#> (Intercept)         1.00679    0.14482   6.952  3.6e-12 ***
+#> X                   0.67047    0.28436   2.358   0.0184 *  
+#> stage1:residuals    0.44657    0.34141   1.308   0.1909    
+#> ---
+#> Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 #> 
 #> Causal odds ratio with 95% CI limits:
 #>   Estimate 0.025 0.975

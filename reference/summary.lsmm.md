@@ -13,7 +13,12 @@ summary(object, ...)
 print(x, digits = max(3, getOption("digits") - 3), ...)
 
 # S3 method for class 'summary.lsmm'
-print(x, digits = max(3, getOption("digits") - 3), ...)
+print(
+  x,
+  digits = max(3, getOption("digits") - 3),
+  signif.stars = getOption("show.signif.stars"),
+  ...
+)
 ```
 
 ## Arguments
@@ -34,15 +39,35 @@ print(x, digits = max(3, getOption("digits") - 3), ...)
 
   the number of significant digits to print.
 
+- signif.stars:
+
+  logical; if `TRUE`, p-values are additionally encoded visually as
+  significance stars.
+
 ## Value
 
 `summary.lsmm()` returns an object of class `"summary.lsmm"`. A list
 with the following elements:
 
+- call:
+
+  The call of the fitted model.
+
+- coefficients:
+
+  A matrix of the parameter estimates, their standard errors, Wald z
+  statistics, and p-values.
+
+- jtest:
+
+  If there are more instruments than exposures, the Hansen J-statistic
+  of the overidentifying restrictions, its degrees of freedom, and
+  p-value; otherwise `NULL`.
+
 - smry:
 
   An object from a call to
-  [`gmm::summary.gmm()`](https://rdrr.io/pkg/gmm/man/summary.html)
+  [`gmm::summary.gmm()`](https://rdrr.io/pkg/gmm/man/summary.html).
 
 - object:
 

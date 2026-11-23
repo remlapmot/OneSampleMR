@@ -12,7 +12,12 @@ summary(object, ...)
 print(x, digits = max(3, getOption("digits") - 3), ...)
 
 # S3 method for class 'summary.msmm'
-print(x, digits = max(3, getOption("digits") - 3), ...)
+print(
+  x,
+  digits = max(3, getOption("digits") - 3),
+  signif.stars = getOption("show.signif.stars"),
+  ...
+)
 ```
 
 ## Arguments
@@ -36,10 +41,35 @@ print(x, digits = max(3, getOption("digits") - 3), ...)
 
   the number of significant digits to use when printing.
 
+- signif.stars:
+
+  logical; if `TRUE`, p-values are additionally encoded visually as
+  significance stars.
+
 ## Value
 
 `summary.msmm()` returns an object of class `"summary.msmm"`. A list
 with the following elements:
+
+- call:
+
+  The call of the fitted model.
+
+- estmethod:
+
+  The estimation method.
+
+- coefficients:
+
+  A matrix of the parameter estimates, their standard errors, Wald test
+  statistics, and p-values.
+
+- jtest:
+
+  For the `"gmm"` and `"gmmalt"` methods with more instruments than
+  exposures and covariates, the Hansen J-statistic of the
+  overidentifying restrictions, its degrees of freedom, and p-value;
+  otherwise `NULL`.
 
 - smry:
 
