@@ -29,6 +29,8 @@ plot(
   x,
   xlab = "Median of exposure in moving window",
   ylab = "Estimated causal effect",
+  ylim = NULL,
+  legend = "topleft",
   ...
 )
 ```
@@ -92,6 +94,17 @@ plot(
 - xlab, ylab:
 
   axis labels.
+
+- ylim:
+
+  the y-axis limits. By default the range of the confidence limits,
+  extended upwards to leave space for the legend.
+
+- legend:
+
+  the position of the legend, as for
+  [`graphics::legend()`](https://rdrr.io/r/graphics/legend.html), or
+  `NULL` for no legend.
 
 ## Value
 

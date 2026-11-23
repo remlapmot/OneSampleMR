@@ -18,9 +18,10 @@
   within quantile groups of the first stage residuals or within moving
   windows of observations ordered by the first stage residuals. They
   have [`print()`](https://rdrr.io/r/base/print.html) and
-  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) methods and
-  are the equivalents of the `ivxtile` and `ivmw` commands in the Stata
-  package ivonesamplemr.
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) methods (the
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) methods have
+  `ylim` and `legend` arguments) and are the equivalents of the
+  `ivxtile` and `ivmw` commands in the Stata package ivonesamplemr.
 
 - The help page titles now consistently use title case.
 

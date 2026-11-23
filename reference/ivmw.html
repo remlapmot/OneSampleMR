@@ -85,6 +85,8 @@ ivonesamplemr.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  xlab <span class="op">=</span> <span class="st">"Median of exposure in moving window"</span>,</span>
 <span>  ylab <span class="op">=</span> <span class="st">"Estimated causal effect"</span>,</span>
+<span>  ylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  legend <span class="op">=</span> <span class="st">"topleft"</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -140,6 +142,16 @@ which it is estimated, for example the log causal risk ratio for
 
 <dt id="arg-xlab-ylab">xlab, ylab<a class="anchor" aria-label="anchor" href="#arg-xlab-ylab"></a></dt>
 <dd><p>axis labels.</p></dd>
+
+
+<dt id="arg-ylim">ylim<a class="anchor" aria-label="anchor" href="#arg-ylim"></a></dt>
+<dd><p>the y-axis limits. By default the range of the confidence
+limits, extended upwards to leave space for the legend.</p></dd>
+
+
+<dt id="arg-legend">legend<a class="anchor" aria-label="anchor" href="#arg-legend"></a></dt>
+<dd><p>the position of the legend, as for <code><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">graphics::legend()</a></code>, or
+<code>NULL</code> for no legend.</p></dd>
 
 </dl></div>
     <div class="section level2">
