@@ -2,6 +2,8 @@
 
 ## OneSampleMR v0.2.0
 
+CRAN release: 2026-11-24
+
 - New functions
   [`ivxtile()`](https://remlapmot.github.io/OneSampleMR/reference/ivxtile.md)
   and
